@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Manager — K Beauty Premium Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #F4F5F7; --card: #FFF; --text: #1A1A1A; --text-mid: #555;
+  --rose: #D4596A; --rose-light: #FFF0F2; --rose-dark: #B8344A;
+  --border: #E0E0E0; --green: #38A169; --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+.top-bar {
+  background: var(--text); color: #fff; padding: 16px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 100;
+}
+.top-bar h1 { font-size: 1.2rem; font-weight: 600; }
+.top-bar h1 span { color: var(--rose); }
+.top-bar .badge { background: var(--rose); padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
+
+.layout { max-width: 1100px; margin: 24px auto; padding: 0 16px; display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+
+/* ── FORM PANEL ── */
+.form-panel {
+  background: var(--card); border-radius: 12px; padding: 24px;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  position: sticky; top: 80px; align-self: start;
+}
+.form-panel h2 { font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--rose-light); }
+
+.form-row { margin-bottom: 14px; }
+.form-row label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-mid); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-row input, .form-row select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 0.88rem; font-family: 'Outfit', sans-serif;
+  outline: none; transition: border-color 0.2s;
+}
+.form-row input:focus, .form-row select:focus { border-color: var(--rose); }
+.form-row input::placeholder { color: #bbb; }
+.form-row small { font-size: 0.7rem; color: #999; margin-top: 2px; display: block; }
+
+.form-row-half { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.checkbox-row input { width: 16px; height: 16px; accent-color: var(--rose); }
+.checkbox-row label { font-size: 0.85rem; margin: 0; text-transform: none; letter-spacing: 0; }
+
+.btn-add {
+  width: 100%; padding: 12px; background: var(--rose); color: #fff;
+  border: none; border-radius: 8px; font-size: 0.92rem; font-weight: 600;
+  font-family: 'Outfit', sans-serif; cursor: pointer; transition: background 0.2s;
+}
+.btn-add:hover { background: var(--rose-dark); }
+
+.btn-secondary {
+  width: 100%; padding: 10px; background: transparent; color: var(--rose);
+  border: 1px solid var(--rose); border-radius: 8px; font-size: 0.85rem;
+  font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer;
+  transition: all 0.2s; margin-top: 8px;
+}
+.btn-secondary:hover { background: var(--rose-light); }
+
+/* ── RIGHT PANEL ── */
+.right-panel { display: flex; flex-direction: column; gap: 20px; }
+
+/* Category selector */
+.cat-selector {
+  background: var(--card); border-radius: 12px; padding: 16px;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.cat-btn {
+  padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px;
+  background: var(--card); font-size: 0.82rem; font-family: 'Outfit', sans-serif;
+  cursor: pointer; transition: all 0.2s; color: var(--text-mid);
+}
+.cat-btn:hover { border-color: var(--rose); color: var(--rose); }
+.cat-btn.active { background: var(--rose); color: #fff; border-color: var(--rose); }
+
+/* Product list */
+.product-list {
+  background: var(--card); border-radius: 12px; padding: 20px;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.product-list h2 { font-size: 1.1rem; margin-bottom: 14px; }
+.product-list-count { font-size: 0.78rem; color: var(--text-mid); font-weight: 400; }
+
+.plist-item {
+  display: grid; grid-template-columns: 50px 1fr 80px 60px 80px;
+  gap: 12px; align-items: center; padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0; font-size: 0.85rem;
+}
+.plist-item:last-child { border-bottom: none; }
+.plist-img {
+  width: 50px; height: 50px; border-radius: 6px;
+  background: linear-gradient(135deg, #f5f0eb, #ede5dc);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.plist-img img { width: 100%; height: 100%; object-fit: contain; }
+.plist-img .mini-placeholder { font-size: 1.2rem; opacity: 0.3; }
+.plist-name { font-weight: 500; line-height: 1.3; }
+.plist-price { font-weight: 700; }
+.plist-badge {
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; text-align: center;
+}
+.plist-badge.hot { background: #FED7D7; color: #E53E3E; }
+.plist-badge.new { background: #C6F6D5; color: #38A169; }
+.plist-badge.deal { background: #FEFCBF; color: #D69E2E; }
+.plist-actions { display: flex; gap: 6px; }
+.plist-actions button {
+  padding: 4px 8px; border: none; border-radius: 4px;
+  font-size: 0.72rem; font-family: 'Outfit', sans-serif; cursor: pointer;
+}
+.btn-edit { background: #EBF8FF; color: #3182CE; }
+.btn-del { background: #FED7D7; color: #E53E3E; }
+
+/* Export area */
+.export-panel {
+  background: var(--card); border-radius: 12px; padding: 20px;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.export-panel h2 { font-size: 1.1rem; margin-bottom: 12px; }
+.export-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-export {
+  padding: 10px 20px; background: var(--green); color: #fff;
+  border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+  font-family: 'Outfit', sans-serif; cursor: pointer; transition: opacity 0.2s;
+}
+.btn-export:hover { opacity: 0.9; }
+.btn-export.outline { background: transparent; color: var(--green); border: 1px solid var(--green); }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; padding: 12px 24px; border-radius: 8px;
+  font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; z-index: 999; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+.empty-state { text-align: center; padding: 40px; color: var(--text-mid); }
+.empty-state p { font-size: 0.9rem; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .form-panel { position: static; }
+  .plist-item { grid-template-columns: 40px 1fr 60px; }
+  .plist-badge, .plist-actions { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>K <span>Beauty</span> Premium — <span style="font-weight:300">Product Manager</span></h1>
+  <span class="badge">ADMIN</span>
+</div>
+
+<div class="layout">
+
+  <!-- FORM -->
+  <div class="form-panel">
+    <h2 id="formTitle">➕ Add New Product</h2>
+
+    <div class="form-row">
+      <label>Category</label>
+      <select id="fCategory">
+        <option value="skincare">🧴 Skincare</option>
+        <option value="serums">💎 Serums & Essences</option>
+        <option value="facemasks">🎭 Face Masks</option>
+        <option value="sunscreen">☀️ Sunscreen / SPF</option>
+        <option value="makeup">💄 Makeup</option>
+        <option value="lipcare">👄 Lip Care</option>
+        <option value="haircare">💇 Hair Care</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Product Name</label>
+      <input type="text" id="fName" placeholder="e.g. COSRX Snail Mucin 96%">
+    </div>
+
+    <div class="form-row-half">
+      <div class="form-row">
+        <label>Current Price ($)</label>
+        <input type="number" id="fPrice" step="0.01" placeholder="14.72">
+      </div>
+      <div class="form-row">
+        <label>Original Price ($)</label>
+        <input type="number" id="fOrigPrice" step="0.01" placeholder="25.00 (optional)">
+        <small>Leave empty if no discount</small>
+      </div>
+    </div>
+
+    <div class="form-row-half">
+      <div class="form-row">
+        <label>Rating (1-5)</label>
+        <input type="number" id="fRating" step="0.1" min="1" max="5" placeholder="4.8">
+      </div>
+      <div class="form-row">
+        <label>Review Count</label>
+        <input type="text" id="fReviews" placeholder="87,420">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Badge</label>
+      <select id="fBadge">
+        <option value="">None</option>
+        <option value="Best Seller">🔥 Best Seller</option>
+        <option value="New">🆕 New</option>
+        <option value="Deal">💰 Deal</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Product Image URL</label>
+      <input type="text" id="fImage" placeholder="https://m.media-amazon.com/images/I/...">
+      <small>Paste the Amazon product image URL here</small>
+    </div>
+
+    <div class="form-row">
+      <label>Amazon Affiliate Link</label>
+      <input type="text" id="fUrl" placeholder="https://www.amazon.com/dp/ASIN?tag=YOUR-TAG">
+      <small>Your Amazon Associates affiliate link</small>
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="fPrime" checked>
+      <label for="fPrime">✓ Prime FREE Delivery</label>
+    </div>
+
+    <button class="btn-add" id="btnAdd" onclick="addProduct()">Add Product</button>
+    <button class="btn-secondary" id="btnClear" onclick="clearForm()">Clear Form</button>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+
+    <!-- Category tabs -->
+    <div class="cat-selector" id="catTabs"></div>
+
+    <!-- Product list -->
+    <div class="product-list">
+      <h2>Products <span class="product-list-count" id="listCount"></span></h2>
+      <div id="productList"></div>
+    </div>
+
+    <!-- Export -->
+    <div class="export-panel">
+      <h2>📦 Export / Import</h2>
+      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:12px;">
+        Download JSON files to put in your <code>/data</code> folder, or download all as a zip-ready package.
+      </p>
+      <div class="export-btns">
+        <button class="btn-export" onclick="exportCurrent()">Download Current Category JSON</button>
+        <button class="btn-export outline" onclick="exportAll()">Download All Categories JSON</button>
+        <label class="btn-export outline" style="display:inline-block;cursor:pointer;">
+          Import JSON
+          <input type="file" accept=".json" onchange="importJSON(event)" style="display:none;">
+        </label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA STORE ──
+const CATEGORIES = {
+  skincare:  "🧴 Skincare",
+  serums:    "💎 Serums",
+  facemasks: "🎭 Face Masks",
+  sunscreen: "☀️ Sunscreen",
+  makeup:    "💄 Makeup",
+  lipcare:   "👄 Lip Care",
+  haircare:  "💇 Hair Care",
+};
+
+let data = {};
+let activeCategory = "skincare";
+let editingIndex = -1;
+
+// ── INIT: Load from JSON files or localStorage draft ──
+async function init() {
+  // Try loading from JSON files first
+  for (const key of Object.keys(CATEGORIES)) {
+    try {
+      const saved = sessionStorage.getItem(`kb_${key}`);
+      if (saved) {
+        data[key] = JSON.parse(saved);
+      } else {
+        const resp = await fetch(`data/${key}.json`);
+        if (resp.ok) {
+          data[key] = await resp.json();
+        } else {
+          data[key] = [];
+        }
+      }
+    } catch(e) {
+      data[key] = [];
+    }
+  }
+
+  buildCatTabs();
+  switchCategory("skincare");
+}
+
+function saveToSession() {
+  for (const key of Object.keys(data)) {
+    sessionStorage.setItem(`kb_${key}`, JSON.stringify(data[key]));
+  }
+}
+
+// ── CATEGORY TABS ──
+function buildCatTabs() {
+  const container = document.getElementById("catTabs");
+  container.innerHTML = Object.entries(CATEGORIES).map(([key, label]) =>
+    `<button class="cat-btn ${key === activeCategory ? 'active' : ''}" onclick="switchCategory('${key}')">${label}</button>`
+  ).join("");
+}
+
+function switchCategory(key) {
+  activeCategory = key;
+  document.getElementById("fCategory").value = key;
+  buildCatTabs();
+  renderList();
+}
+
+// ── RENDER PRODUCT LIST ──
+function renderList() {
+  const list = document.getElementById("productList");
+  const products = data[activeCategory] || [];
+  document.getElementById("listCount").textContent = `(${products.length})`;
+
+  if (products.length === 0) {
+    list.innerHTML = `<div class="empty-state"><p>No products yet. Add your first product!</p></div>`;
+    return;
+  }
+
+  list.innerHTML = products.map((p, i) => {
+    const hasImg = p.image && p.image.trim();
+    const imgHTML = hasImg
+      ? `<img src="${p.image}" alt="">`
+      : `<span class="mini-placeholder">📦</span>`;
+
+    let badgeHTML = "";
+    if (p.badge) {
+      const cls = p.badge === "Best Seller" ? "hot" : p.badge === "New" ? "new" : "deal";
+      badgeHTML = `<span class="plist-badge ${cls}">${p.badge}</span>`;
+    }
+
+    return `
+      <div class="plist-item">
+        <div class="plist-img">${imgHTML}</div>
+        <div class="plist-name">${p.name}</div>
+        <div class="plist-price">$${p.price.toFixed(2)}</div>
+        ${badgeHTML || '<div></div>'}
+        <div class="plist-actions">
+          <button class="btn-edit" onclick="editProduct(${i})">Edit</button>
+          <button class="btn-del" onclick="deleteProduct(${i})">Del</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// ── ADD / EDIT PRODUCT ──
+function addProduct() {
+  const name = document.getElementById("fName").value.trim();
+  const price = parseFloat(document.getElementById("fPrice").value);
+  const category = document.getElementById("fCategory").value;
+
+  if (!name) return showToast("Product name is required");
+  if (isNaN(price) || price <= 0) return showToast("Valid price is required");
+
+  const origPrice = parseFloat(document.getElementById("fOrigPrice").value) || null;
+  const rating = parseFloat(document.getElementById("fRating").value) || 4.5;
+  const reviews = document.getElementById("fReviews").value.trim() || "0";
+  const badge = document.getElementById("fBadge").value;
+  const image = document.getElementById("fImage").value.trim();
+  const url = document.getElementById("fUrl").value.trim() || "#";
+  const prime = document.getElementById("fPrime").checked;
+
+  const product = {
+    id: name.toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30),
+    name, price,
+    originalPrice: origPrice,
+    rating: Math.min(5, Math.max(1, rating)),
+    reviews, badge, image, url, prime
+  };
+
+  if (!data[category]) data[category] = [];
+
+  if (editingIndex >= 0) {
+    product.id = data[category][editingIndex].id; // keep original id
+    data[category][editingIndex] = product;
+    editingIndex = -1;
+    document.getElementById("formTitle").textContent = "➕ Add New Product";
+    document.getElementById("btnAdd").textContent = "Add Product";
+    showToast("Product updated!");
+  } else {
+    data[category].push(product);
+    showToast("Product added!");
+  }
+
+  saveToSession();
+  if (category !== activeCategory) switchCategory(category);
+  else renderList();
+  clearForm();
+}
+
+function editProduct(index) {
+  const p = data[activeCategory][index];
+  editingIndex = index;
+
+  document.getElementById("fCategory").value = activeCategory;
+  document.getElementById("fName").value = p.name;
+  document.getElementById("fPrice").value = p.price;
+  document.getElementById("fOrigPrice").value = p.originalPrice || "";
+  document.getElementById("fRating").value = p.rating;
+  document.getElementById("fReviews").value = p.reviews;
+  document.getElementById("fBadge").value = p.badge || "";
+  document.getElementById("fImage").value = p.image || "";
+  document.getElementById("fUrl").value = p.url || "";
+  document.getElementById("fPrime").checked = p.prime !== false;
+
+  document.getElementById("formTitle").textContent = "✏️ Edit Product";
+  document.getElementById("btnAdd").textContent = "Save Changes";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function deleteProduct(index) {
+  if (!confirm("Delete this product?")) return;
+  data[activeCategory].splice(index, 1);
+  saveToSession();
+  renderList();
+  showToast("Product deleted");
+}
+
+function clearForm() {
+  document.getElementById("fName").value = "";
+  document.getElementById("fPrice").value = "";
+  document.getElementById("fOrigPrice").value = "";
+  document.getElementById("fRating").value = "";
+  document.getElementById("fReviews").value = "";
+  document.getElementById("fBadge").value = "";
+  document.getElementById("fImage").value = "";
+  document.getElementById("fUrl").value = "";
+  document.getElementById("fPrime").checked = true;
+  editingIndex = -1;
+  document.getElementById("formTitle").textContent = "➕ Add New Product";
+  document.getElementById("btnAdd").textContent = "Add Product";
+}
+
+// ── EXPORT ──
+function exportCurrent() {
+  const products = data[activeCategory] || [];
+  downloadJSON(products, `${activeCategory}.json`);
+  showToast(`Downloaded ${activeCategory}.json`);
+}
+
+function exportAll() {
+  for (const key of Object.keys(data)) {
+    downloadJSON(data[key] || [], `${key}.json`);
+  }
+  showToast("All category JSON files downloaded!");
+}
+
+function downloadJSON(obj, filename) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── IMPORT ──
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) throw new Error("Not an array");
+      data[activeCategory] = imported;
+      saveToSession();
+      renderList();
+      showToast(`Imported ${imported.length} products into ${activeCategory}`);
+    } catch(err) {
+      showToast("Invalid JSON file");
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+// ── INIT ──
+init();
+</script>
+</body>
+</html>
