@@ -34,7 +34,7 @@ const CATEGORY_META = {
 
 // ── Render a single product card HTML ──
 function renderProductCard(product, btnText) {
-  const btnLabel = btnText || "View on Amazon";
+  const btnLabel = btnText || "Buy Now";
   const badgeMap = { "Best Seller": "badge-hot", "New": "badge-new", "Deal": "badge-sale" };
   const badgeClass = badgeMap[product.badge] || "";
   const badgeHTML = product.badge ? `<span class="product-badge ${badgeClass}">${product.badge}</span>` : "";
