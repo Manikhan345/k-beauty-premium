@@ -1,8 +1,8 @@
 [
   {
     "id": "mise_serum",
-    "name": "Mise en Scène Perfect Repair Hair Serum Original",
-    "price": 8.70,
+    "name": "Mise en ScÃ¨ne Perfect Repair Hair Serum Original",
+    "price": 8.7,
     "originalPrice": null,
     "rating": 4.8,
     "reviews": "34,500",
@@ -14,7 +14,7 @@
   {
     "id": "cp1_vinegar",
     "name": "CP-1 Raspberry Treatment Hair Vinegar",
-    "price": 10.40,
+    "price": 10.4,
     "originalPrice": null,
     "rating": 4.4,
     "reviews": "11,200",
@@ -25,9 +25,9 @@
   },
   {
     "id": "ryo_shampoo",
-    "name": "Ryo Hair Loss Expert Care Shampoo — Oily Scalp",
-    "price": 16.50,
-    "originalPrice": 22.00,
+    "name": "Ryo Hair Loss Expert Care Shampoo â Oily Scalp",
+    "price": 16.5,
+    "originalPrice": 22,
     "rating": 4.5,
     "reviews": "7,890",
     "badge": "",
@@ -38,7 +38,7 @@
   {
     "id": "moremo_water",
     "name": "Moremo Water Treatment Miracle 10",
-    "price": 14.20,
+    "price": 14.2,
     "originalPrice": null,
     "rating": 4.7,
     "reviews": "15,670",
@@ -50,8 +50,8 @@
   {
     "id": "daenggimeo_shampoo",
     "name": "Daeng Gi Meo Ri Ki Gold Premium Shampoo",
-    "price": 21.80,
-    "originalPrice": 28.00,
+    "price": 21.8,
+    "originalPrice": 28,
     "rating": 4.4,
     "reviews": "9,340",
     "badge": "",
@@ -61,8 +61,8 @@
   },
   {
     "id": "mise_perfect_serum7",
-    "name": "Mise en Scène Perfect Serum 7 — Rose Perfume",
-    "price": 9.80,
+    "name": "Mise en ScÃ¨ne Perfect Serum 7 â Rose Perfume",
+    "price": 9.8,
     "originalPrice": null,
     "rating": 4.6,
     "reviews": "18,200",
@@ -74,8 +74,8 @@
   {
     "id": "cp1_silk_treatment",
     "name": "CP-1 Premium Silk Ampoule Hair Treatment",
-    "price": 12.50,
-    "originalPrice": 16.00,
+    "price": 12.5,
+    "originalPrice": 16,
     "rating": 4.5,
     "reviews": "8,400",
     "badge": "Deal",
@@ -86,7 +86,7 @@
   {
     "id": "ryo_damage_care",
     "name": "Ryo Damage Care & Nourishing Conditioner",
-    "price": 14.90,
+    "price": 14.9,
     "originalPrice": null,
     "rating": 4.3,
     "reviews": "6,200",
@@ -97,8 +97,8 @@
   },
   {
     "id": "moremo_recovery",
-    "name": "Moremo Recovery Balm B — Damage Treatment",
-    "price": 16.80,
+    "name": "Moremo Recovery Balm B â Damage Treatment",
+    "price": 16.8,
     "originalPrice": null,
     "rating": 4.6,
     "reviews": "12,300",
@@ -110,8 +110,8 @@
   {
     "id": "lador_keratin",
     "name": "La'dor Keratin Power Fill Up Hair Ampoule",
-    "price": 11.90,
-    "originalPrice": 15.00,
+    "price": 11.9,
+    "originalPrice": 15,
     "rating": 4.4,
     "reviews": "7,100",
     "badge": "Deal",
@@ -122,7 +122,7 @@
   {
     "id": "innisfree_scalp",
     "name": "Innisfree Green Tea Mint Fresh Scalp Scaler",
-    "price": 10.80,
+    "price": 10.8,
     "originalPrice": null,
     "rating": 4.3,
     "reviews": "5,600",
@@ -134,8 +134,8 @@
   {
     "id": "amorepacific_shampoo",
     "name": "AMOREPACIFIC Treatment Enzyme Peeling Shampoo",
-    "price": 28.50,
-    "originalPrice": 36.00,
+    "price": 28.5,
+    "originalPrice": 36,
     "rating": 4.7,
     "reviews": "3,400",
     "badge": "",
@@ -145,8 +145,8 @@
   },
   {
     "id": "kundal_honey",
-    "name": "Kundal Honey & Macadamia Nature Shampoo — Cherry Blossom",
-    "price": 13.40,
+    "name": "Kundal Honey & Macadamia Nature Shampoo â Cherry Blossom",
+    "price": 13.4,
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "14,800",
@@ -158,7 +158,7 @@
   {
     "id": "holika_biotin_shampoo",
     "name": "Holika Holika Biotin Damage Care Shampoo",
-    "price": 11.60,
+    "price": 11.6,
     "originalPrice": null,
     "rating": 4.2,
     "reviews": "4,900",
@@ -170,8 +170,8 @@
   {
     "id": "lador_wonder_balm",
     "name": "La'dor Wonder Balm Hair Treatment Essence",
-    "price": 13.80,
-    "originalPrice": 18.00,
+    "price": 13.8,
+    "originalPrice": 18,
     "rating": 4.5,
     "reviews": "6,700",
     "badge": "",
@@ -181,14 +181,26 @@
   },
   {
     "id": "moremo_shampoo_r",
-    "name": "Moremo Scalp Shampoo R — Clear & Cool",
-    "price": 15.90,
+    "name": "Moremo Scalp Shampoo R â Clear & Cool",
+    "price": 15.9,
     "originalPrice": null,
     "rating": 4.4,
     "reviews": "5,200",
     "badge": "New",
     "image": "",
     "url": "#",
+    "prime": true
+  },
+  {
+    "id": "ouai_medium_hair_shampoo_and_c",
+    "name": "OUAI Medium Hair Shampoo and Conditioner Set - Sulfate-Free Shampoo and Conditioner for Women & Men - Made with Keratin, Shea Butter & Avocado Oil - Free of Parabens & Phthalates (10 Fl Oz)",
+    "price": 64,
+    "originalPrice": null,
+    "rating": 4.4,
+    "reviews": "6,186",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/514BPEXk52L._SL1500_.jpg",
+    "url": "https://amzn.to/4bENX6i",
     "prime": true
   }
 ]
