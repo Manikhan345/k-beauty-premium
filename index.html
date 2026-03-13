@@ -8,253 +8,87 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-/* ── HOMEPAGE-SPECIFIC STYLES ── */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-
-.category-section {
-  margin: 30px 0;
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
-  animation: fadeUp 0.5s ease-out both;
-}
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--rose-light);
-}
-.category-header h2 {
-  font-family: 'Noto Serif Display', serif;
-  font-size: 1.4rem;
-  font-weight: 600;
-}
-.category-header a {
-  color: var(--rose);
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-.category-header a:hover { color: var(--rose-dark); }
-
-.product-scroll {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
+.category-section { margin: 30px 0; background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); animation: fadeUp 0.5s ease-out both; }
+.category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid var(--accent-light); }
+.category-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.4rem; font-weight: 600; }
+.category-header a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: color 0.2s; }
+.category-header a:hover { color: var(--accent-dark); }
+.product-scroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 .product-scroll::-webkit-scrollbar { height: 4px; }
 .product-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.product-scroll .product-card {
-  min-width: 200px;
-  max-width: 200px;
-  scroll-snap-align: start;
-}
-
-.promo {
-  margin: 30px 0;
-  background: linear-gradient(135deg, var(--rose), #E88DA0);
-  border-radius: var(--radius);
-  padding: 40px 30px;
-  text-align: center;
-  color: #fff;
-}
+.product-scroll .product-card { min-width: 220px; max-width: 220px; scroll-snap-align: start; }
+.promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
 .promo h2 { font-family: 'Noto Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
 .promo p { font-weight: 300; opacity: 0.9; margin-bottom: 16px; }
-.promo .cta {
-  display: inline-block; padding: 12px 32px;
-  background: #fff; color: var(--rose);
-  border-radius: 50px; font-weight: 600;
-  text-decoration: none; transition: transform 0.2s;
-}
+.promo .cta { display: inline-block; padding: 12px 32px; background: #fff; color: var(--accent-dark); border-radius: 50px; font-weight: 600; text-decoration: none; transition: transform 0.2s; }
 .promo .cta:hover { transform: scale(1.05); }
-
-/* Loading state */
-.loading-placeholder {
-  display: flex; gap: 16px; padding: 10px 0;
-}
-.loading-card {
-  min-width: 200px; height: 300px;
-  background: linear-gradient(110deg, #f0ebe5 8%, #f8f4ef 18%, #f0ebe5 33%);
-  border-radius: 10px;
-  background-size: 200% 100%;
-  animation: shimmer 1.5s linear infinite;
-}
+.loading-placeholder { display: flex; gap: 16px; padding: 10px 0; }
+.loading-card { min-width: 220px; height: 340px; background: linear-gradient(110deg, var(--warm-cream) 8%, #f8f4ef 18%, var(--warm-cream) 33%); border-radius: 10px; background-size: 200% 100%; animation: shimmer 1.5s linear infinite; }
 @keyframes shimmer { to { background-position-x: -200%; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-.category-section:nth-child(2) { animation-delay: .05s; }
-.category-section:nth-child(3) { animation-delay: .1s; }
-.category-section:nth-child(4) { animation-delay: .15s; }
-.category-section:nth-child(5) { animation-delay: .2s; }
-.category-section:nth-child(6) { animation-delay: .25s; }
-.category-section:nth-child(7) { animation-delay: .3s; }
-
-@media (max-width: 768px) {
-  .category-section { padding: 16px; margin: 20px 0; }
-  .category-header h2 { font-size: 1.15rem; }
-  .product-scroll .product-card { min-width: 160px; max-width: 160px; }
-  .promo { padding: 24px 16px; }
-  .promo h2 { font-size: 1.3rem; }
-}
+.category-section:nth-child(2) { animation-delay: .05s; } .category-section:nth-child(3) { animation-delay: .1s; } .category-section:nth-child(4) { animation-delay: .15s; } .category-section:nth-child(5) { animation-delay: .2s; } .category-section:nth-child(6) { animation-delay: .25s; } .category-section:nth-child(7) { animation-delay: .3s; }
+@media (max-width: 768px) { .category-section { padding: 16px; margin: 20px 0; } .category-header h2 { font-size: 1.15rem; } .product-scroll .product-card { min-width: 180px; max-width: 180px; } .promo { padding: 24px 16px; } .promo h2 { font-size: 1.3rem; } }
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
 <header class="header">
+  <img src="header-banner.jpeg" alt="" class="header-bg">
+  <div class="header-overlay"></div>
   <div class="header-inner">
     <h1>K <span>Beauty</span> Premium</h1>
     <p class="header-sub">Korean Skincare & Beauty Products</p>
-    <div class="search-wrap">
-      <input type="text" placeholder="Search products..." id="searchInput" onkeyup="filterHomepage()">
-      <span class="search-icon">🔍</span>
-    </div>
+    <div class="search-wrap"><input type="text" placeholder="Search products..." id="searchInput" onkeyup="filterHomepage()"><span class="search-icon">🔍</span></div>
   </div>
 </header>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="active">All</a>
-    <a href="#" data-page="skincare">Skincare</a>
-    <a href="#" data-page="serums">Serums & Essences</a>
-    <a href="#" data-page="facemasks">Face Masks</a>
-    <a href="#" data-page="sunscreen">Sunscreen</a>
-    <a href="#" data-page="makeup">Makeup</a>
-    <a href="#" data-page="lipcare">Lip Care</a>
-    <a href="#" data-page="haircare">Hair Care</a>
-  </div>
-</nav>
-
-<!-- MAIN CONTENT — populated dynamically -->
+<nav class="nav"><div class="nav-inner">
+  <a href="index.html" class="active">All</a>
+  <a href="#" data-page="skincare">Skincare</a>
+  <a href="#" data-page="serums">Serums & Essences</a>
+  <a href="#" data-page="facemasks">Face Masks</a>
+  <a href="#" data-page="sunscreen">Sunscreen</a>
+  <a href="#" data-page="makeup">Makeup</a>
+  <a href="#" data-page="lipcare">Lip Care</a>
+  <a href="#" data-page="haircare">Hair Care</a>
+</div></nav>
 <main class="container" id="mainContent"></main>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-grid">
-    <div>
-      <h3>Subscribe for Updates</h3>
-      <p>Get the latest K-beauty product launches, deals, and skincare tips.</p>
-      <div class="email-form">
-        <input type="email" placeholder="Enter your email">
-        <button>Subscribe</button>
-      </div>
-    </div>
-    <div class="footer-links">
-      <h3>Categories</h3>
-      <a href="#" data-page="skincare">Skincare</a>
-      <a href="#" data-page="serums">Serums & Essences</a>
-      <a href="#" data-page="facemasks">Face Masks</a>
-      <a href="#" data-page="sunscreen">Sunscreen / SPF</a>
-      <a href="#" data-page="makeup">Makeup</a>
-      <a href="#" data-page="lipcare">Lip Care</a>
-      <a href="#" data-page="haircare">Hair Care</a>
-    </div>
-    <div class="footer-links">
-      <h3>More Pages</h3>
-      <a href="#" data-page="about">About Us</a>
-      <a href="#" data-page="contact">Contact</a>
-      <a href="#" data-page="privacy">Privacy Policy</a>
-      <a href="#" data-page="terms">Terms of Service</a>
-      <a href="#" data-page="disclosure">Affiliate Disclosure</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2026 K Beauty Premium. All rights reserved.</p>
-    <p class="affiliate-disclosure">As an Amazon Associate, we earn from qualifying purchases. Product prices and availability are subject to change.</p>
-  </div>
-</footer>
-
+<footer class="footer"><div class="footer-grid">
+  <div><h3>Subscribe for Updates</h3><p>Get the latest K-beauty product launches, deals, and skincare tips.</p><div class="email-form"><input type="email" placeholder="Enter your email"><button>Subscribe</button></div></div>
+  <div class="footer-links"><h3>Categories</h3><a href="#" data-page="skincare">Skincare</a><a href="#" data-page="serums">Serums & Essences</a><a href="#" data-page="facemasks">Face Masks</a><a href="#" data-page="sunscreen">Sunscreen / SPF</a><a href="#" data-page="makeup">Makeup</a><a href="#" data-page="lipcare">Lip Care</a><a href="#" data-page="haircare">Hair Care</a></div>
+  <div class="footer-links"><h3>More Pages</h3><a href="#" data-page="about">About Us</a><a href="#" data-page="contact">Contact</a><a href="#" data-page="privacy">Privacy Policy</a><a href="#" data-page="terms">Terms of Service</a><a href="#" data-page="disclosure">Affiliate Disclosure</a></div>
+</div><div class="footer-bottom"><p>&copy; 2026 K Beauty Premium. All rights reserved.</p><p class="affiliate-disclosure">As an Amazon Associate, we earn from qualifying purchases. Product prices and availability are subject to change.</p></div></footer>
 <button class="back-top" id="backToTop">↑</button>
-
 <script src="shared.js"></script>
 <script>
-// ── Homepage: load first 5 products from each category JSON ──
-const HOMEPAGE_LIMIT = 5; // products shown per category on homepage
-
+var HOMEPAGE_LIMIT = 5;
 async function buildHomepage() {
-  const main = document.getElementById("mainContent");
-  const categories = Object.keys(CATEGORY_META);
-  const promoAfter = 3; // insert promo banner after 3rd category
-
-  for (let i = 0; i < categories.length; i++) {
-    const key = categories[i];
-    const meta = CATEGORY_META[key];
-    const pageUrl = SITE_PAGES[key];
-
-    // Create section with loading state
-    const section = document.createElement("section");
-    section.className = "category-section";
-    section.id = key;
-    section.innerHTML = `
-      <div class="category-header">
-        <h2>${meta.title}</h2>
-        <a href="${pageUrl}">View More →</a>
-      </div>
-      <div class="product-scroll" id="scroll-${key}">
-        <div class="loading-placeholder">
-          <div class="loading-card"></div>
-          <div class="loading-card"></div>
-          <div class="loading-card"></div>
-          <div class="loading-card"></div>
-          <div class="loading-card"></div>
-        </div>
-      </div>
-    `;
+  var main = document.getElementById("mainContent");
+  var categories = Object.keys(CATEGORY_META);
+  for (var i = 0; i < categories.length; i++) {
+    var key = categories[i], meta = CATEGORY_META[key], pageUrl = SITE_PAGES[key];
+    var section = document.createElement("section");
+    section.className = "category-section"; section.id = key;
+    section.innerHTML = '<div class="category-header"><h2>' + meta.title + '</h2><a href="' + pageUrl + '">View More →</a></div><div class="product-scroll" id="scroll-' + key + '"><div class="loading-placeholder"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div></div>';
     main.appendChild(section);
-
-    // Insert promo banner after 3rd category
-    if (i === promoAfter - 1) {
-      const promo = document.createElement("div");
-      promo.className = "promo";
-      promo.innerHTML = `
-        <h2>Your K-Beauty Routine Starts Here</h2>
-        <p>Discover the best Korean skincare products loved by millions worldwide</p>
-        <a href="${SITE_PAGES.skincare}" class="cta">Shop Best Sellers</a>
-      `;
+    if (i === 2) {
+      var promo = document.createElement("div"); promo.className = "promo";
+      promo.innerHTML = '<h2>Your K-Beauty Routine Starts Here</h2><p>Discover the best Korean skincare products loved by millions worldwide</p><a href="' + SITE_PAGES.skincare + '" class="cta">Shop Best Sellers</a>';
       main.appendChild(promo);
     }
   }
-
-  // Now fetch all data and populate
-  for (const key of categories) {
-    const meta = CATEGORY_META[key];
-    const products = await fetchProducts(meta.file);
-    const container = document.getElementById(`scroll-${key}`);
-
-    if (products.length > 0) {
-      const limited = products.slice(0, HOMEPAGE_LIMIT);
-      container.innerHTML = limited.map(p => renderProductCard(p, "Buy Now")).join("");
-    } else {
-      container.innerHTML = `<p style="color:var(--text-light);padding:20px;">No products found.</p>`;
-    }
+  for (var j = 0; j < categories.length; j++) {
+    var k = categories[j], m = CATEGORY_META[k];
+    var products = await fetchProducts(m.file);
+    var container = document.getElementById("scroll-" + k);
+    if (products.length > 0) { container.innerHTML = products.slice(0, HOMEPAGE_LIMIT).map(function(p) { return renderProductCard(p, "Buy Now"); }).join(""); }
+    else { container.innerHTML = '<p style="color:var(--text-light);padding:20px;">No products found.</p>'; }
   }
 }
-
-// ── Homepage search ──
 function filterHomepage() {
-  const q = document.getElementById("searchInput").value.toLowerCase().trim();
-  document.querySelectorAll(".product-card").forEach(function(c) {
-    const n = c.querySelector(".product-name").textContent.toLowerCase();
-    c.style.display = (!q || n.includes(q)) ? "" : "none";
-  });
-  document.querySelectorAll(".category-section").forEach(function(s) {
-    const visible = s.querySelectorAll('.product-card:not([style*="display: none"])');
-    s.style.display = (q && visible.length === 0) ? "none" : "";
-  });
+  var q = document.getElementById("searchInput").value.toLowerCase().trim();
+  document.querySelectorAll(".product-card").forEach(function(c) { c.style.display = (!q || c.querySelector(".product-name").textContent.toLowerCase().includes(q)) ? "" : "none"; });
+  document.querySelectorAll(".category-section").forEach(function(s) { var v = s.querySelectorAll('.product-card:not([style*="display: none"])'); s.style.display = (q && v.length === 0) ? "none" : ""; });
 }
-
-// ── Init ──
 buildHomepage();
 </script>
 </body>
