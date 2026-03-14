@@ -81,7 +81,7 @@ async function buildHomepage() {
     var k = categories[j], m = CATEGORY_META[k];
     var products = await fetchProducts(m.file);
     var container = document.getElementById("scroll-" + k);
-    if (products.length > 0) { container.innerHTML = products.slice(0, HOMEPAGE_LIMIT).map(function(p) { return renderProductCard(p, "Buy Now"); }).join(""); }
+    if (products.length > 0) { container.innerHTML = products.slice(0, HOMEPAGE_LIMIT).map(function(p) { return renderProductCard(p); }).join(""); }
     else { container.innerHTML = '<p style="color:var(--text-light);padding:20px;">No products found.</p>'; }
   }
 }
