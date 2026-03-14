@@ -42,7 +42,7 @@ var BADGE_MAP = {
 };
 
 function renderProductCard(product, btnText) {
-  var btnLabel = btnText || "Buy Now";
+  var btnLabel = btnText || "View On Amazon";
   var badgeClass = BADGE_MAP[product.badge] || "";
   var badgeHTML = product.badge ? '<span class="product-badge ' + badgeClass + '">' + product.badge + '</span>' : "";
 
