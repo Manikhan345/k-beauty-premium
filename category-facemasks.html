@@ -44,26 +44,10 @@
 </style>
 </head>
 <body>
-<header class="header">
-  <img src="header-banner.jpeg" alt="" class="header-bg">
-  <div class="header-overlay"></div>
-  <div class="header-inner">
-    <h1><a href="index.html">K <span>Beauty</span> Premium</a></h1>
-    <p class="header-sub">Korean Skincare & Beauty Products</p>
-    
-  </div>
-</header>
-<nav class="nav"><div class="nav-inner">
-    <a href="index.html">All</a>
-    <a href="category-skincare.html">Skincare</a>
-    <a href="category-serums.html">Serums & Essences</a>
-    <a href="category-facemasks.html" class="active">Face Masks</a>
-    <a href="category-sunscreen.html">Sunscreen</a>
-    <a href="category-makeup.html">Makeup</a>
-    <a href="category-lipcare.html">Lip Care</a>
-    <a href="category-haircare.html">Hair Care</a>
-<div class="search-wrap"><input type="text" placeholder="Search products..." id="searchInput" onkeyup="filterCategoryProducts()"><span class="search-icon">🔍</span></div>  
-</div></nav>
+
+<div id="siteHeader"></div>
+<div id="siteNav"></div>
+
 <div class="breadcrumb"><a href="index.html">Home</a> › <span>Face Masks</span></div>
 <div class="category-title"><h2 id="catTitle">🎭 Face Masks</h2><span class="result-count">Loading...</span></div>
 <div class="sort-bar">
@@ -86,13 +70,16 @@
     <div class="sidebar-card"><div class="ad-slot">📢 Ad Space<br><small>AdSense will appear here</small></div></div>
   </aside>
 </div>
-<footer class="footer"><div class="footer-grid">
-<div><h3>Subscribe for Updates</h3><p>Get the latest K-beauty product launches, deals, and skincare tips.</p><div class="email-form"><input type="email" placeholder="Enter your email"><button>Subscribe</button></div><p style="margin-top:18px;font-size:1rem;"><a href="mailto:hello@kbeauty.fun" style="color:rgba(255,255,255,0.6);text-decoration:none;">📧 hello@kbeauty.fun</a></p><p style="font-size:1rem;"><a href="tel:+15551234567" style="color:rgba(255,255,255,0.6);text-decoration:none;">📞 +1 (555) 123-4567</a></p></div>  <div class="footer-links"><h3>Categories</h3><a href="category-skincare.html">Skincare</a><a href="category-serums.html">Serums & Essences</a><a href="category-facemasks.html">Face Masks</a><a href="category-sunscreen.html">Sunscreen / SPF</a><a href="category-makeup.html">Makeup</a><a href="category-lipcare.html">Lip Care</a><a href="category-haircare.html">Hair Care</a></div>
-  <div class="footer-links"><h3>More Pages</h3><a href="#" data-page="about">About Us</a><a href="#" data-page="contact">Contact</a><a href="#" data-page="privacy">Privacy Policy</a><a href="#" data-page="terms">Terms of Service</a><a href="#" data-page="disclosure">Affiliate Disclosure</a></div>
-</div><div class="footer-bottom"><p>&copy; 2026 K Beauty Premium. All rights reserved.</p><p class="affiliate-disclosure">As an Amazon Associate, we earn from qualifying purchases. Product prices and availability are subject to change.</p></div></footer>
-<button class="back-top" id="backToTop">↑</button>
+
+<div id="siteFooter"></div>
+
 <script>var CATEGORY_KEY = "facemasks";</script>
 <script src="shared.js"></script>
 <script src="category.js"></script>
+<script>
+renderHeader();
+renderNav("facemasks", "filterCategoryProducts");
+renderFooter();
+</script>
 </body>
 </html>

@@ -27,40 +27,26 @@
 .loading-card { min-width: 220px; height: 340px; background: linear-gradient(110deg, var(--warm-cream) 8%, #f8f4ef 18%, var(--warm-cream) 33%); border-radius: 10px; background-size: 200% 100%; animation: shimmer 1.5s linear infinite; }
 @keyframes shimmer { to { background-position-x: -200%; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.category-section:nth-child(2) { animation-delay: .05s; } .category-section:nth-child(3) { animation-delay: .1s; } .category-section:nth-child(4) { animation-delay: .15s; } .category-section:nth-child(5) { animation-delay: .2s; } .category-section:nth-child(6) { animation-delay: .25s; } .category-section:nth-child(7) { animation-delay: .3s; }
 @media (max-width: 768px) { .category-section { padding: 16px; margin: 20px 0; } .category-header h2 { font-size: 1.15rem; } .product-scroll .product-card { min-width: 180px; max-width: 180px; } .promo { padding: 24px 16px; } .promo h2 { font-size: 1.3rem; } }
 </style>
 </head>
 <body>
-<header class="header">
-  <img src="header-banner.jpeg" alt="" class="header-bg">
-  <div class="header-overlay"></div>
-  <div class="header-inner">
-    <h1>K <span>Beauty</span> Premium</h1>
-    <p class="header-sub">Korean Skincare & Beauty Products</p>
-  </div>
-</header>
-<nav class="nav"><div class="nav-inner">
-  <a href="index.html" class="active">All</a>
-  <a href="#" data-page="skincare">Skincare</a>
-  <a href="#" data-page="serums">Serums & Essences</a>
-  <a href="#" data-page="facemasks">Face Masks</a>
-  <a href="#" data-page="sunscreen">Sunscreen</a>
-  <a href="#" data-page="makeup">Makeup</a>
-  <a href="#" data-page="lipcare">Lip Care</a>
-  <a href="#" data-page="haircare">Hair Care</a>
-  <div class="search-wrap"><input type="text" placeholder="Search products..." id="searchInput" onkeyup="filterHomepage()"><span class="search-icon">🔍</span></div>
 
-</div></nav>
+<!-- These 3 divs are filled by shared.js -->
+<div id="siteHeader"></div>
+<div id="siteNav"></div>
+
 <main class="container" id="mainContent"></main>
-<footer class="footer"><div class="footer-grid">
-<div><h3>Subscribe for Updates</h3><p>Get the latest K-beauty product launches, deals, and skincare tips.</p><div class="email-form"><input type="email" placeholder="Enter your email"><button>Subscribe</button></div><p style="margin-top:18px;font-size:1rem;"><a href="mailto:hello@kbeauty.fun" style="color:rgba(255,255,255,0.6);text-decoration:none;">📧 hello@kbeauty.fun</a></p><p style="font-size:1rem;"><a href="tel:+15551234567" style="color:rgba(255,255,255,0.6);text-decoration:none;">📞 +1 (555) 123-4567</a></p></div>  <div class="footer-links"><h3>Categories</h3><a href="#" data-page="skincare">Skincare</a><a href="#" data-page="serums">Serums & Essences</a><a href="#" data-page="facemasks">Face Masks</a><a href="#" data-page="sunscreen">Sunscreen / SPF</a><a href="#" data-page="makeup">Makeup</a><a href="#" data-page="lipcare">Lip Care</a><a href="#" data-page="haircare">Hair Care</a></div>
-  <div class="footer-links"><h3>More Pages</h3><a href="#" data-page="about">About Us</a><a href="#" data-page="contact">Contact</a><a href="#" data-page="privacy">Privacy Policy</a><a href="#" data-page="terms">Terms of Service</a><a href="#" data-page="disclosure">Affiliate Disclosure</a></div>
-</div><div class="footer-bottom"><p>&copy; 2026 K Beauty Premium. All rights reserved.</p><p class="affiliate-disclosure">As an Amazon Associate, we earn from qualifying purchases. Product prices and availability are subject to change.</p></div></footer>
-<button class="back-top" id="backToTop">↑</button>
+
+<div id="siteFooter"></div>
+
 <script src="shared.js"></script>
 <script>
-var HOMEPAGE_LIMIT = 5;
+renderHeader();
+renderNav("home", "filterHomepage");
+renderFooter();
+
+var HOMEPAGE_LIMIT = 4;
 async function buildHomepage() {
   var main = document.getElementById("mainContent");
   var categories = Object.keys(CATEGORY_META);
@@ -68,7 +54,7 @@ async function buildHomepage() {
     var key = categories[i], meta = CATEGORY_META[key], pageUrl = SITE_PAGES[key];
     var section = document.createElement("section");
     section.className = "category-section"; section.id = key;
-    section.innerHTML = '<div class="category-header"><h2>' + meta.title + '</h2><a href="' + pageUrl + '">View More →</a></div><div class="product-scroll" id="scroll-' + key + '"><div class="loading-placeholder"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div></div>';
+    section.innerHTML = '<div class="category-header"><h2>' + meta.title + '</h2><a href="' + pageUrl + '">View More →</a></div><div class="product-scroll" id="scroll-' + key + '"><div class="loading-placeholder"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div></div>';
     main.appendChild(section);
     if (i === 2) {
       var promo = document.createElement("div"); promo.className = "promo";
