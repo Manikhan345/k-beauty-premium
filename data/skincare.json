@@ -9,11 +9,12 @@
     "badge": "Best Seller",
     "image": "https://m.media-amazon.com/images/I/31+ACcHk+yL._SY300_SX300_QL70_FMwebp_.jpg",
     "url": "https://amzn.to/4ux7xZN",
+    "bought": "100K+ bought in past month",
     "prime": true
   },
   {
     "id": "Body Wash",
-    "name": "eos Cashmere Body Wash – Vanilla Cashmere, Moisturizing Body Wash, Creamy Gel Formula, with Shea Butter, Glycerin, Vitamin E, pH Balanced, Sensitive Skin, Vegan, 16 fl oz",
+    "name": "eos Cashmere Body Wash â Vanilla Cashmere, Moisturizing Body Wash, Creamy Gel Formula, with Shea Butter, Glycerin, Vitamin E, pH Balanced, Sensitive Skin, Vegan, 16 fl oz",
     "price": 9.98,
     "originalPrice": null,
     "rating": 4.8,
@@ -38,7 +39,7 @@
   {
     "id": "innisfree_green",
     "name": "The Ordinary Niacinamide 10% + Zinc 1%, Smoothing Serum for Blemish-Prone Skin",
-    "price": 5.10,
+    "price": 5.1,
     "originalPrice": null,
     "rating": 4.7,
     "reviews": "50,436",
@@ -50,7 +51,7 @@
   {
     "id": "etude_collagen",
     "name": "medicube Wrapping Mask Collagen Overnight Peel Off Facial Mask | Elasticity & Hydration Care, Reduces Sagging & Dullness | Hydrolyzed Collagen For Glowing Skin | Korean Skin Care, 2.53 fl.oz",
-    "price": 19.00,
+    "price": 19,
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "16,743",
@@ -62,7 +63,7 @@
   {
     "id": "cosrx_good_morning",
     "name": "COSRX Low pH Good Morning Gel Cleanser",
-    "price": 10.90,
+    "price": 10.9,
     "originalPrice": null,
     "rating": 4.6,
     "reviews": "52,300",
@@ -74,7 +75,7 @@
   {
     "id": "boj_dynasty_cream",
     "name": "Beauty of Joseon Dynasty Cream",
-    "price": 15.30,
+    "price": 15.3,
     "originalPrice": null,
     "rating": 4.7,
     "reviews": "18,900",
@@ -86,8 +87,8 @@
   {
     "id": "pyunkang_essence",
     "name": "Pyunkang Yul Essence Toner",
-    "price": 13.80,
-    "originalPrice": 18.00,
+    "price": 13.8,
+    "originalPrice": 18,
     "rating": 4.5,
     "reviews": "14,200",
     "badge": "Deal",
@@ -98,7 +99,7 @@
   {
     "id": "illiyoon_ceramide",
     "name": "Illiyoon Ceramide Ato Concentrate Cream",
-    "price": 18.50,
+    "price": 18.5,
     "originalPrice": null,
     "rating": 4.8,
     "reviews": "21,400",
@@ -110,8 +111,8 @@
   {
     "id": "skin1004_ampoule",
     "name": "SKIN1004 Madagascar Centella Ampoule",
-    "price": 16.20,
-    "originalPrice": 22.00,
+    "price": 16.2,
+    "originalPrice": 22,
     "rating": 4.6,
     "reviews": "11,600",
     "badge": "Deal",
@@ -122,7 +123,7 @@
   {
     "id": "torriden_dive_in",
     "name": "Torriden DIVE-IN Low Molecular Hyaluronic Acid Serum",
-    "price": 14.90,
+    "price": 14.9,
     "originalPrice": null,
     "rating": 4.7,
     "reviews": "16,800",
@@ -134,8 +135,8 @@
   {
     "id": "round_lab_birch",
     "name": "Round Lab Birch Juice Moisturizing Cream",
-    "price": 19.80,
-    "originalPrice": 26.00,
+    "price": 19.8,
+    "originalPrice": 26,
     "rating": 4.5,
     "reviews": "8,300",
     "badge": "",
@@ -145,9 +146,9 @@
   },
   {
     "id": "belif_aqua_bomb",
-    "name": "Belif The True Cream — Aqua Bomb",
-    "price": 28.50,
-    "originalPrice": 38.00,
+    "name": "Belif The True Cream â Aqua Bomb",
+    "price": 28.5,
+    "originalPrice": 38,
     "rating": 4.6,
     "reviews": "19,700",
     "badge": "Deal",
@@ -158,7 +159,7 @@
   {
     "id": "numbuzin_no5",
     "name": "Numbuzin No.5 Vitamin-Niacinamide Concentrated Pad",
-    "price": 16.90,
+    "price": 16.9,
     "originalPrice": null,
     "rating": 4.4,
     "reviews": "7,400",
@@ -170,7 +171,7 @@
   {
     "id": "isntree_HA_toner",
     "name": "Isntree Hyaluronic Acid Toner",
-    "price": 12.50,
+    "price": 12.5,
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "10,200",
@@ -182,7 +183,7 @@
   {
     "id": "mixsoon_bean",
     "name": "Mixsoon Bean Essence",
-    "price": 13.40,
+    "price": 13.4,
     "originalPrice": null,
     "rating": 4.6,
     "reviews": "9,100",
