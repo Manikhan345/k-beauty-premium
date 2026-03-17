@@ -137,6 +137,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
     </div>
     <div class="form-row"><label>Product Image URL</label><input type="text" id="fImage" placeholder="https://m.media-amazon.com/images/I/..."><small>Paste the Amazon product image URL</small></div>
     <div class="form-row"><label>Amazon Affiliate Link</label><input type="text" id="fUrl" placeholder="https://www.amazon.com/dp/ASIN?tag=YOUR-TAG"></div>
+    <div class="form-row"><label>Bought Tag (optional)</label><input type="text" id="fBought" placeholder="e.g. 20K+ bought in past month"></div>
     <div class="checkbox-row"><input type="checkbox" id="fPrime" checked><label for="fPrime">✓ Prime FREE Delivery</label></div>
     <button class="btn-add" id="btnAdd" onclick="addProduct()">Add Product</button>
     <button class="btn-secondary" onclick="clearForm()">Clear Form</button>
@@ -282,7 +283,7 @@ function addProduct() {
     rating: Math.min(5, Math.max(1, parseFloat(document.getElementById("fRating").value) || 4.5)),
     reviews: document.getElementById("fReviews").value.trim() || "0",
     badge: document.getElementById("fBadge").value, image: document.getElementById("fImage").value.trim(),
-    url: document.getElementById("fUrl").value.trim() || "#", prime: document.getElementById("fPrime").checked
+    url: document.getElementById("fUrl").value.trim() || "#", bought: document.getElementById("fBought").value.trim(), prime: document.getElementById("fPrime").checked
   };
   if (!data[cat]) data[cat] = [];
   if (editingIndex >= 0) {
@@ -303,7 +304,7 @@ function editProduct(i) {
   document.getElementById("fOrigPrice").value = p.originalPrice || "";
   document.getElementById("fRating").value = p.rating; document.getElementById("fReviews").value = p.reviews;
   document.getElementById("fBadge").value = p.badge || ""; document.getElementById("fImage").value = p.image || "";
-  document.getElementById("fUrl").value = p.url || ""; document.getElementById("fPrime").checked = p.prime !== false;
+  document.getElementById("fUrl").value = p.url || ""; document.getElementById("fBought").value = p.bought || ""; document.getElementById("fPrime").checked = p.prime !== false;
   document.getElementById("formTitle").textContent = "✏️ Edit Product";
   document.getElementById("btnAdd").textContent = "Save Changes";
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -316,7 +317,7 @@ function deleteProduct(i) {
 }
 
 function clearForm() {
-  ["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl"].forEach(function(id) { document.getElementById(id).value = ""; });
+  ["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id) { document.getElementById(id).value = ""; });
   document.getElementById("fBadge").value = ""; document.getElementById("fPrime").checked = true; editingIndex = -1;
   document.getElementById("formTitle").textContent = "➕ Add New Product";
   document.getElementById("btnAdd").textContent = "Add Product";
