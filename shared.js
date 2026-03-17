@@ -164,6 +164,7 @@ function renderProductCard(product, btnText) {
   }
 
   var primeHTML = product.prime ? '<div class="prime-tag">✓ Prime FREE Delivery</div>' : "";
+   var boughtHTML = product.bought ? '<div class="bought-tag">' + product.bought + '</div>' : "";
 
   return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '">' +
     badgeHTML +
@@ -172,6 +173,7 @@ function renderProductCard(product, btnText) {
     '<div class="product-rating"><span class="stars">' + stars + '</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
     '<div class="product-price">' + priceHTML + '</div>' +
     primeHTML +
+     boughtHTML +
     '<a href="' + (product.url || "#") + '" class="buy-btn" target="_blank" rel="nofollow noopener">' + btnLabel + '</a>' +
     '</div>';
 }
