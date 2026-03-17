@@ -10,5 +10,53 @@
     "image": "https://m.media-amazon.com/images/I/617F0F8N5UL._SL1500_.jpg",
     "url": "https://amzn.to/3PG9JxQ",
     "prime": true
+  },
+  {
+    "id": "l_oreal_paris_makeup_original_",
+    "name": "L’Oreal Paris Makeup Original Telescopic Mascara, Separating Mascara Volume and Length Formula, Washable, Blackest Black, 0.27 Fl Oz., 1 Count",
+    "price": 11.97,
+    "originalPrice": null,
+    "rating": 4.6,
+    "reviews": "25,662",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/61t7oEEaJfL._SL1282_.jpg",
+    "url": "https://amzn.to/4lyT3nO",
+    "prime": true
+  },
+  {
+    "id": "nyx_professional_makeup_slim_l",
+    "name": "NYX PROFESSIONAL MAKEUP Slim Lip Pencil, Long-Lasting Creamy Lip Liner - Espresso",
+    "price": 5.97,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "49,250",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/61A+7eAdVkL._SL1500_.jpg",
+    "url": "https://amzn.to/4rxlvId",
+    "prime": true
+  },
+  {
+    "id": "covergirl_olay_simply_ageless_",
+    "name": "COVERGIRL & Olay Simply Ageless 3-in-1 Liquid Foundation, Matte Finish, Hyaluronic & Vitamin C Formula, 227 Golden Beige, 1 Count",
+    "price": 9.97,
+    "originalPrice": null,
+    "rating": 4.6,
+    "reviews": "52,639",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/61GO8GLGncL._SL1500_.jpg",
+    "url": "https://amzn.to/4lyH363",
+    "prime": true
+  },
+  {
+    "id": "kiko_milano_3d_hydra_lip_gloss",
+    "name": "KIKO Milano 3D Hydra Lip Gloss – High Shine, Hydrating, Plumping, Non-Sticky, Moisturizing Lip Makeup",
+    "price": 14,
+    "originalPrice": null,
+    "rating": 4.7,
+    "reviews": "21,306",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/81VFe4MKUpL._SL1500_.jpg",
+    "url": "https://amzn.to/4bgJUgs",
+    "prime": true
   }
 ]
