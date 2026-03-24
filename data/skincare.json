@@ -1,5 +1,18 @@
 [
   {
+    "id": "it_cosmetics_confidence_in_a_c",
+    "name": "IT Cosmetics Confidence in a Cream - Hydrating & Anti Aging Face Moisturizer, Visibly Reduces Fine Lines & Wrinkles, Up To 48H Hydration, Repairs Skin Barrier, Squalane & Ceramides, For All Skin Types",
+    "price": 41.65,
+    "originalPrice": null,
+    "rating": 4.6,
+    "reviews": "4,167",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/71PsjmT5JYL._SX522_.jpg",
+    "url": "https://amzn.to/40MdYul",
+    "bought": "3K+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "Shea Better",
     "name": "eos Shea Better Body Lotion Vanilla Cashmere, 24-Hour Moisture Skin Care, Lightweight & Non-Greasy, Natural Shea, Vegan, Vanilla Body Lotion, 16 fl oz",
     "price": 9.97,
@@ -14,7 +27,7 @@
   },
   {
     "id": "Body Wash",
-    "name": "eos Cashmere Body Wash Ã¢ÂÂ Vanilla Cashmere, Moisturizing Body Wash, Creamy Gel Formula, with Shea Butter, Glycerin, Vitamin E, pH Balanced, Sensitive Skin, Vegan, 16 fl oz",
+    "name": "eos Cashmere Body Wash ÃÂ¢ÃÂÃÂ Vanilla Cashmere, Moisturizing Body Wash, Creamy Gel Formula, with Shea Butter, Glycerin, Vitamin E, pH Balanced, Sensitive Skin, Vegan, 16 fl oz",
     "price": 9.98,
     "originalPrice": null,
     "rating": 4.8,
@@ -146,7 +159,7 @@
   },
   {
     "id": "belif_aqua_bomb",
-    "name": "Belif The True Cream Ã¢ÂÂ Aqua Bomb",
+    "name": "Belif The True Cream ÃÂ¢ÃÂÃÂ Aqua Bomb",
     "price": 28.5,
     "originalPrice": 38,
     "rating": 4.6,
