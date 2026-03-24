@@ -164,6 +164,7 @@ function renderProductCard(product, btnText) {
   }
 
   var primeHTML = product.prime ? '<div class="prime-tag">✓ Prime FREE Delivery</div>' : "";
+   var priceNote = '<div style="font-size:0.65rem;color:var(--text-light);margin-bottom:4px;">*Price may vary on Amazon</div>';
    var boughtHTML = product.bought ? '<div class="bought-tag">' + product.bought + '</div>' : "";
 
   return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '">' +
