@@ -291,7 +291,7 @@ function addProduct() {
     document.getElementById("formTitle").textContent = "➕ Add New Product";
     document.getElementById("btnAdd").textContent = "Add Product";
     showToast("Updated! Click 'Push to Live Site' to publish.", "success");
-  } else { data[cat].push(product); showToast("Added! Click 'Push to Live Site' to publish.", "success"); }
+  } else { data[cat].unshift(product); showToast("Added! Click 'Push to Live Site' to publish.", "success"); }
   markDirty(cat);
   if (cat !== activeCategory) switchCategory(cat); else { renderList(); buildCatTabs(); }
   clearForm();
