@@ -173,6 +173,7 @@ function renderProductCard(product, btnText) {
     '<div class="product-name">' + product.name + '</div>' +
     '<div class="product-rating"><span class="stars">' + stars + '</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
     '<div class="product-price">' + priceHTML + '</div>' +
+   priceNote +
     primeHTML +
      boughtHTML +
     '<a href="' + (product.url || "#") + '" class="buy-btn" target="_blank" rel="nofollow noopener">' + btnLabel + '</a>' +
