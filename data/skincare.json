@@ -14,7 +14,7 @@
   },
   {
     "id": "Body Wash",
-    "name": "eos Cashmere Body Wash â Vanilla Cashmere, Moisturizing Body Wash, Creamy Gel Formula, with Shea Butter, Glycerin, Vitamin E, pH Balanced, Sensitive Skin, Vegan, 16 fl oz",
+    "name": "eos Cashmere Body Wash Ã¢ÂÂ Vanilla Cashmere, Moisturizing Body Wash, Creamy Gel Formula, with Shea Butter, Glycerin, Vitamin E, pH Balanced, Sensitive Skin, Vegan, 16 fl oz",
     "price": 9.98,
     "originalPrice": null,
     "rating": 4.8,
@@ -146,7 +146,7 @@
   },
   {
     "id": "belif_aqua_bomb",
-    "name": "Belif The True Cream â Aqua Bomb",
+    "name": "Belif The True Cream Ã¢ÂÂ Aqua Bomb",
     "price": 28.5,
     "originalPrice": 38,
     "rating": 4.6,
@@ -190,6 +190,19 @@
     "badge": "",
     "image": "",
     "url": "#",
+    "prime": true
+  },
+  {
+    "id": "neutrogena_rapid_wrinkle_repai",
+    "name": "Neutrogena Rapid Wrinkle Repair Retinol Face Moisturizer, Daily Anti-Aging Face Cream with Retinol & Hyaluronic Acid to Fight Fine Lines, Wrinkles, & Dark Spots, 1.7 oz",
+    "price": 22.27,
+    "originalPrice": null,
+    "rating": 4.4,
+    "reviews": "34,221",
+    "badge": "",
+    "image": "https://m.media-amazon.com/images/I/81Tempks53L._SL1500_.jpg",
+    "url": "https://amzn.to/4lKoJqy",
+    "bought": "10K+ bought in past month",
     "prime": true
   }
 ]
