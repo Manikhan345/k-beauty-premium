@@ -114,3 +114,5 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .tag-btn.active { background: var(--accent-rose); color: #fff; border-color: var(--accent-rose); }
 /* ── BOUGHT TAG ── */
 .bought-tag { font-size: 0.7rem; color: #C45500; font-weight: 600; margin-bottom: 6px; }
+.product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+.product-card { max-width: 280px; }
