@@ -43,6 +43,17 @@ var BADGE_MAP = {
   "Prime Pick": "badge-prime",
 };
 
+// ── PRODUCT TAGS PER CATEGORY (based on Amazon subcategories) ──
+var CATEGORY_TAGS = {
+  skincare:  ["Cleanser", "Moisturizer", "Toner", "Cream", "Exfoliator", "Eye Care", "Patches", "Sets"],
+  serums:    ["Brightening", "Hydrating", "Anti-Aging", "Acne Care", "Pore Care", "Vitamin C", "Niacinamide", "Snail Mucin"],
+  facemasks: ["Sheet Mask", "Sleeping Mask", "Clay Mask", "Peel-Off", "Pads", "Patches", "Wash-Off", "Hydrogel"],
+  sunscreen: ["Cream", "Gel", "Stick", "Tinted", "Fluid", "Water-Resistant", "Tone-Up", "Matte"],
+  makeup:    ["Foundation", "Lip Tint", "Eye Shadow", "Mascara", "Brow", "Blush", "Powder", "Eyeliner"],
+  lipcare:   ["Lip Mask", "Lip Tint", "Lip Balm", "Lip Gloss", "Lip Serum", "Matte", "Glossy", "Tinted"],
+  haircare:  ["Shampoo", "Treatment", "Hair Serum", "Conditioner", "Scalp Care", "Mask", "Oil", "Mist"],
+};
+
 // ═══════════════════════════════════════════════════════════════
 // ✏️ EDIT THESE TO UPDATE EVERY PAGE AT ONCE
 // ═══════════════════════════════════════════════════════════════
@@ -164,18 +175,19 @@ function renderProductCard(product, btnText) {
   }
 
   var primeHTML = product.prime ? '<div class="prime-tag">✓ Prime FREE Delivery</div>' : "";
-   var priceNote = '<div style="font-size:0.65rem;color:var(--text-light);margin-bottom:4px;">*Price may vary on Amazon</div>';
-   var boughtHTML = product.bought ? '<div class="bought-tag">' + product.bought + '</div>' : "";
+  var priceNote = '<div style="font-size:0.65rem;color:var(--text-light);margin-bottom:4px;">*Price may vary on Amazon</div>';
+  var boughtHTML = product.bought ? '<div class="bought-tag">' + product.bought + '</div>' : "";
+  var tagAttr = product.tag ? ' data-tag="' + product.tag + '"' : '';
 
-  return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '">' +
+  return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '"' + tagAttr + '>' +
     badgeHTML +
     '<div class="product-img">' + imgHTML + '</div>' +
     '<div class="product-name">' + product.name + '</div>' +
     '<div class="product-rating"><span class="stars">' + stars + '</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
     '<div class="product-price">' + priceHTML + '</div>' +
-   priceNote +
+    priceNote +
     primeHTML +
-     boughtHTML +
+    boughtHTML +
     '<a href="' + (product.url || "#") + '" class="buy-btn" target="_blank" rel="nofollow noopener">' + btnLabel + '</a>' +
     '</div>';
 }

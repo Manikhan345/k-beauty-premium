@@ -133,11 +133,14 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
       <div class="form-row"><label>Review Count</label><input type="text" id="fReviews" placeholder="87,420"></div>
     </div>
     <div class="form-row"><label>Badge</label>
-      <select id="fBadge"><option value="">None</option><option value="Best Seller">🔥 Best Seller</option><option value="New">🆕 New</option><option value="Deal">💰 Deal</option></select>
+      <select id="fBadge"><option value="">None</option><option value="Best Seller">🔥 Best Seller</option><option value="New">🆕 New</option><option value="Deal">💰 Deal</option><option value="Trending">📈 Trending</option><option value="Limited Edition">⚡ Limited Edition</option><option value="Prime Pick">🟦 Prime Pick</option></select>
+    </div>
+    <div class="form-row"><label>Product Tag / Type</label>
+      <select id="fTag"><option value="">No Tag</option></select>
+      <small>Tags update based on category selection</small>
     </div>
     <div class="form-row"><label>Product Image URL</label><input type="text" id="fImage" placeholder="https://m.media-amazon.com/images/I/..."><small>Paste the Amazon product image URL</small></div>
     <div class="form-row"><label>Amazon Affiliate Link</label><input type="text" id="fUrl" placeholder="https://www.amazon.com/dp/ASIN?tag=YOUR-TAG"></div>
-    <div class="form-row"><label>Bought Tag (optional)</label><input type="text" id="fBought" placeholder="e.g. 20K+ bought in past month"></div>
     <div class="checkbox-row"><input type="checkbox" id="fPrime" checked><label for="fPrime">✓ Prime FREE Delivery</label></div>
     <button class="btn-add" id="btnAdd" onclick="addProduct()">Add Product</button>
     <button class="btn-secondary" onclick="clearForm()">Clear Form</button>
@@ -157,6 +160,16 @@ var GITHUB_OWNER = "Manikhan345";
 var GITHUB_REPO = "k-beauty-premium";
 var GITHUB_BRANCH = "main";
 var CATEGORIES = { skincare: "🧴 Skincare", serums: "💎 Serums", facemasks: "🎭 Face Masks", sunscreen: "☀️ Sunscreen", makeup: "💄 Makeup", lipcare: "👄 Lip Care", haircare: "💇 Hair Care" };
+
+var CATEGORY_TAGS = {
+  skincare:  ["Cleanser", "Moisturizer", "Toner", "Cream", "Exfoliator", "Eye Care", "Patches", "Sets"],
+  serums:    ["Brightening", "Hydrating", "Anti-Aging", "Acne Care", "Pore Care", "Vitamin C", "Niacinamide", "Snail Mucin"],
+  facemasks: ["Sheet Mask", "Sleeping Mask", "Clay Mask", "Peel-Off", "Pads", "Patches", "Wash-Off", "Hydrogel"],
+  sunscreen: ["Cream", "Gel", "Stick", "Tinted", "Fluid", "Water-Resistant", "Tone-Up", "Matte"],
+  makeup:    ["Foundation", "Lip Tint", "Eye Shadow", "Mascara", "Brow", "Blush", "Powder", "Eyeliner"],
+  lipcare:   ["Lip Mask", "Lip Tint", "Lip Balm", "Lip Gloss", "Lip Serum", "Matte", "Glossy", "Tinted"],
+  haircare:  ["Shampoo", "Treatment", "Hair Serum", "Conditioner", "Scalp Care", "Mask", "Oil", "Mist"],
+};
 
 var token = "", data = {}, fileSHAs = {}, activeCategory = "skincare", editingIndex = -1, hasUnsavedChanges = false, dirtyCategories = new Set();
 
@@ -282,8 +295,8 @@ function addProduct() {
     originalPrice: parseFloat(document.getElementById("fOrigPrice").value) || null,
     rating: Math.min(5, Math.max(1, parseFloat(document.getElementById("fRating").value) || 4.5)),
     reviews: document.getElementById("fReviews").value.trim() || "0",
-    badge: document.getElementById("fBadge").value, image: document.getElementById("fImage").value.trim(),
-    url: document.getElementById("fUrl").value.trim() || "#", bought: document.getElementById("fBought").value.trim(), prime: document.getElementById("fPrime").checked
+    badge: document.getElementById("fBadge").value, tag: document.getElementById("fTag").value, image: document.getElementById("fImage").value.trim(),
+    url: document.getElementById("fUrl").value.trim() || "#", prime: document.getElementById("fPrime").checked
   };
   if (!data[cat]) data[cat] = [];
   if (editingIndex >= 0) {
@@ -291,7 +304,7 @@ function addProduct() {
     document.getElementById("formTitle").textContent = "➕ Add New Product";
     document.getElementById("btnAdd").textContent = "Add Product";
     showToast("Updated! Click 'Push to Live Site' to publish.", "success");
-  } else { data[cat].unshift(product); showToast("Added! Click 'Push to Live Site' to publish.", "success"); }
+  } else { data[cat].push(product); showToast("Added! Click 'Push to Live Site' to publish.", "success"); }
   markDirty(cat);
   if (cat !== activeCategory) switchCategory(cat); else { renderList(); buildCatTabs(); }
   clearForm();
@@ -303,8 +316,8 @@ function editProduct(i) {
   document.getElementById("fName").value = p.name; document.getElementById("fPrice").value = p.price;
   document.getElementById("fOrigPrice").value = p.originalPrice || "";
   document.getElementById("fRating").value = p.rating; document.getElementById("fReviews").value = p.reviews;
-  document.getElementById("fBadge").value = p.badge || ""; document.getElementById("fImage").value = p.image || "";
-  document.getElementById("fUrl").value = p.url || ""; document.getElementById("fBought").value = p.bought || ""; document.getElementById("fPrime").checked = p.prime !== false;
+  document.getElementById("fBadge").value = p.badge || ""; updateTagDropdown(); document.getElementById("fTag").value = p.tag || ""; document.getElementById("fImage").value = p.image || "";
+  document.getElementById("fUrl").value = p.url || ""; document.getElementById("fPrime").checked = p.prime !== false;
   document.getElementById("formTitle").textContent = "✏️ Edit Product";
   document.getElementById("btnAdd").textContent = "Save Changes";
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -317,8 +330,8 @@ function deleteProduct(i) {
 }
 
 function clearForm() {
-  ["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id) { document.getElementById(id).value = ""; });
-  document.getElementById("fBadge").value = ""; document.getElementById("fPrime").checked = true; editingIndex = -1;
+  ["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl"].forEach(function(id) { document.getElementById(id).value = ""; });
+  document.getElementById("fBadge").value = ""; document.getElementById("fTag").value = ""; document.getElementById("fPrime").checked = true; editingIndex = -1;
   document.getElementById("formTitle").textContent = "➕ Add New Product";
   document.getElementById("btnAdd").textContent = "Add Product";
 }
@@ -329,6 +342,7 @@ function showToast(msg, type) {
   setTimeout(function() { t.className = "toast"; }, 3000);
 }
 
+function updateTagDropdown() { var cat = document.getElementById("fCategory").value; var tags = CATEGORY_TAGS[cat] || []; var sel = document.getElementById("fTag"); sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join(""); } document.getElementById("fCategory").addEventListener("change", updateTagDropdown); updateTagDropdown();
 checkSavedToken();
 </script>
 </body>

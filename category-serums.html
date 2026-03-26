@@ -44,10 +44,8 @@
 </style>
 </head>
 <body>
-
 <div id="siteHeader"></div>
 <div id="siteNav"></div>
-
 <div class="breadcrumb"><a href="index.html">Home</a> › <span>Serums & Essences</span></div>
 <div class="category-title"><h2 id="catTitle">💎 Serums & Essences</h2><span class="result-count">Loading...</span></div>
 <div class="sort-bar">
@@ -57,6 +55,7 @@
   <button class="sort-btn" onclick="sortProducts('rating', this)">Top Rated</button>
   <button class="sort-btn" onclick="sortProducts('new', this)">Newest</button>
 </div>
+<div class="tag-bar" id="tagBar"></div>
 <div class="page-layout">
   <div class="product-grid" id="productGrid"><div class="grid-loading" style="grid-column:1/-1;display:grid;"><div class="grid-loading-card"></div><div class="grid-loading-card"></div><div class="grid-loading-card"></div><div class="grid-loading-card"></div><div class="grid-loading-card"></div><div class="grid-loading-card"></div><div class="grid-loading-card"></div><div class="grid-loading-card"></div></div></div>
   <aside class="sidebar">
@@ -64,15 +63,12 @@
     <div class="sidebar-card"><h3>Filter By</h3>
       <div class="filter-group"><label>Price Range</label><div class="filter-option"><input type="checkbox" id="f1" onchange="applyFilters()"> Under $10</div><div class="filter-option"><input type="checkbox" id="f2" onchange="applyFilters()"> $10 — $20</div><div class="filter-option"><input type="checkbox" id="f3" onchange="applyFilters()"> $20 — $30</div><div class="filter-option"><input type="checkbox" id="f4" onchange="applyFilters()"> Over $30</div></div>
       <div class="filter-group"><label>Rating</label><div class="filter-option"><input type="checkbox" id="r1" onchange="applyFilters()"> ★★★★★ 4.5 & up</div><div class="filter-option"><input type="checkbox" id="r2" onchange="applyFilters()"> ★★★★☆ 4.0 & up</div></div>
-      <div class="filter-group"><label>Type</label><div class="filter-option"><input type="checkbox"> Serum</div><div class="filter-option"><input type="checkbox"> Essence</div><div class="filter-option"><input type="checkbox"> Toner</div><div class="filter-option"><input type="checkbox"> Ampoule</div></div>
     </div>
     <div class="sidebar-card"><h3>🏆 Top Rated</h3><div id="topRated"><p style="color:var(--text-light);font-size:0.82rem;">Loading...</p></div></div>
     <div class="sidebar-card"><div class="ad-slot">📢 Ad Space<br><small>AdSense will appear here</small></div></div>
   </aside>
 </div>
-
 <div id="siteFooter"></div>
-
 <script>var CATEGORY_KEY = "serums";</script>
 <script src="shared.js"></script>
 <script src="category.js"></script>
