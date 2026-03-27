@@ -7,11 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #F4F5F7; --card: #FFF; --text: #1A1A1A; --text-mid: #555;
-  --rose: #D4596A; --rose-light: #FFF0F2; --rose-dark: #B8344A;
-  --border: #E0E0E0; --green: #38A169; --shadow: 0 2px 12px rgba(0,0,0,0.08);
-}
+:root { --bg: #F4F5F7; --card: #FFF; --text: #1A1A1A; --text-mid: #555; --rose: #D4596A; --rose-light: #FFF0F2; --rose-dark: #B8344A; --border: #E0E0E0; --green: #38A169; --blue: #3182CE; --shadow: 0 2px 12px rgba(0,0,0,0.08); }
 body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
 .top-bar { background: var(--text); color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
 .top-bar h1 { font-size: 1.2rem; font-weight: 600; }
@@ -32,7 +28,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .auth-card .btn-connect:hover { background: var(--rose-dark); }
 .auth-card .note { font-size: 0.72rem; color: #999; margin-top: 16px; line-height: 1.5; }
 .auth-error { color: #E53E3E; font-size: 0.82rem; margin-bottom: 12px; display: none; }
-.layout { max-width: 1100px; margin: 24px auto; padding: 0 16px; display: none; grid-template-columns: 380px 1fr; gap: 24px; }
+.layout { max-width: 1200px; margin: 24px auto; padding: 0 16px; display: none; grid-template-columns: 380px 1fr; gap: 24px; }
 .form-panel { background: var(--card); border-radius: 12px; padding: 24px; border: 1px solid var(--border); box-shadow: var(--shadow); position: sticky; top: 80px; align-self: start; }
 .form-panel h2 { font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--rose-light); }
 .form-row { margin-bottom: 14px; }
@@ -86,7 +82,34 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .toast.error { background: #E53E3E; }
 .toast.success { background: #38A169; }
 .empty-state { text-align: center; padding: 40px; color: var(--text-mid); }
-@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .form-panel { position: static; } .plist-item { grid-template-columns: 40px 1fr 60px; } .plist-badge, .plist-actions { display: none; } }
+
+/* ── AI FETCH PANEL ── */
+.ai-panel { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.ai-panel h2 { font-size: 1.1rem; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #EBF8FF; }
+.ai-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; margin-bottom: 16px; }
+.ai-controls .form-row { margin-bottom: 0; flex: 1; min-width: 140px; }
+.btn-fetch { padding: 10px 20px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; white-space: nowrap; height: 42px; }
+.btn-fetch:hover { opacity: 0.9; }
+.btn-fetch:disabled { background: #aaa; cursor: not-allowed; }
+.btn-fetch.loading { background: #D69E2E; }
+.ai-status { font-size: 0.78rem; color: var(--text-mid); margin-bottom: 12px; }
+.ai-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.ai-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; transition: border-color 0.2s; }
+.ai-card:hover { border-color: var(--blue); }
+.ai-card-img { width: 100%; height: 120px; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; overflow: hidden; }
+.ai-card-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+.ai-card-name { font-size: 0.78rem; font-weight: 500; line-height: 1.3; height: 2.6em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 4px; }
+.ai-card-meta { font-size: 0.72rem; color: var(--text-mid); margin-bottom: 4px; }
+.ai-card-price { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+.ai-card-actions { display: flex; gap: 6px; margin-top: auto; }
+.btn-ai-add { flex: 1; padding: 7px; background: var(--green); color: #fff; border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+.btn-ai-add:hover { opacity: 0.9; }
+.btn-ai-add:disabled { background: #ccc; }
+.btn-ai-edit { flex: 0; padding: 7px 10px; background: #EBF8FF; color: var(--blue); border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+.ai-added { background: #C6F6D5; color: var(--green); font-size: 0.75rem; text-align: center; padding: 7px; border-radius: 6px; font-weight: 600; }
+
+@media (max-width: 1100px) { .ai-results { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .form-panel { position: static; } .plist-item { grid-template-columns: 40px 1fr 60px; } .plist-badge, .plist-actions { display: none; } .ai-results { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -149,6 +172,34 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 
   <div class="right-panel">
     <div class="save-bar"><span class="saved" id="saveStatus">✓ All changes saved</span><button class="btn-push" id="btnPush" onclick="pushToGitHub()">Push to Live Site</button></div>
+
+    <!-- AI PRODUCT FETCHER -->
+    <div class="ai-panel">
+      <h2>🤖 AI Product Finder</h2>
+      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Select a category and type, then click Fetch. AI will find top-rated Amazon products and you can add them with one click.</p>
+      <div class="ai-controls">
+        <div class="form-row"><label>Category</label>
+          <select id="aiCategory" onchange="updateAiTags()">
+            <option value="skincare">🧴 Skincare</option><option value="serums">💎 Serums</option>
+            <option value="facemasks">🎭 Face Masks</option><option value="sunscreen">☀️ Sunscreen</option>
+            <option value="makeup">💄 Makeup</option><option value="lipcare">👄 Lip Care</option>
+            <option value="haircare">💇 Hair Care</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Product Type</label>
+          <select id="aiTag"><option value="">All Types</option></select>
+        </div>
+        <div class="form-row"><label>How Many</label>
+          <select id="aiCount">
+            <option value="5">5 products</option><option value="10" selected>10 products</option><option value="15">15 products</option><option value="20">20 products</option>
+          </select>
+        </div>
+        <button class="btn-fetch" id="btnFetch" onclick="fetchAIProducts()">🔍 Fetch Products</button>
+      </div>
+      <div class="ai-status" id="aiStatus"></div>
+      <div class="ai-results" id="aiResults"></div>
+    </div>
+
     <div class="cat-selector" id="catTabs"></div>
     <div class="product-list"><h2>Products <span class="product-list-count" id="listCount"></span></h2><div id="productList"></div></div>
   </div>
@@ -161,189 +212,209 @@ var GITHUB_OWNER = "Manikhan345";
 var GITHUB_REPO = "k-beauty-premium";
 var GITHUB_BRANCH = "main";
 var CATEGORIES = { skincare: "🧴 Skincare", serums: "💎 Serums", facemasks: "🎭 Face Masks", sunscreen: "☀️ Sunscreen", makeup: "💄 Makeup", lipcare: "👄 Lip Care", haircare: "💇 Hair Care" };
-
 var CATEGORY_TAGS = {
-  skincare:  ["Cleanser", "Moisturizer", "Toner", "Cream", "Exfoliator", "Eye Care", "Patches", "Sets"],
-  serums:    ["Brightening", "Hydrating", "Anti-Aging", "Acne Care", "Pore Care", "Vitamin C", "Niacinamide", "Snail Mucin"],
-  facemasks: ["Sheet Mask", "Sleeping Mask", "Clay Mask", "Peel-Off", "Pads", "Patches", "Wash-Off", "Hydrogel"],
-  sunscreen: ["Cream", "Gel", "Stick", "Tinted", "Fluid", "Water-Resistant", "Tone-Up", "Matte"],
-  makeup:    ["Foundation", "Lip Tint", "Eye Shadow", "Mascara", "Brow", "Blush", "Powder", "Eyeliner"],
-  lipcare:   ["Lip Mask", "Lip Tint", "Lip Balm", "Lip Gloss", "Lip Serum", "Matte", "Glossy", "Tinted"],
-  haircare:  ["Shampoo", "Treatment", "Hair Serum", "Conditioner", "Scalp Care", "Mask", "Oil", "Mist"],
+  skincare: ["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"],
+  serums: ["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"],
+  facemasks: ["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"],
+  sunscreen: ["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"],
+  makeup: ["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"],
+  lipcare: ["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"],
+  haircare: ["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"],
 };
+var CATEGORY_LABELS = { skincare:"Korean Skincare", serums:"Korean Serums & Essences", facemasks:"Korean Face Masks", sunscreen:"Korean Sunscreen SPF", makeup:"Korean Makeup K-beauty", lipcare:"Korean Lip Care", haircare:"Korean Hair Care" };
 
-var token = "", data = {}, fileSHAs = {}, activeCategory = "skincare", editingIndex = -1, hasUnsavedChanges = false, dirtyCategories = new Set();
+var token="", data={}, fileSHAs={}, activeCategory="skincare", editingIndex=-1, hasUnsavedChanges=false, dirtyCategories=new Set();
+var aiFetchedProducts = [];
+var addedSinceLastPush = 0;
 
-function checkSavedToken() { var s = localStorage.getItem("kb_github_token"); if (s) { token = s; verifyAndConnect(); } }
+// ═══════════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════════
+function checkSavedToken(){var s=localStorage.getItem("kb_github_token");if(s){token=s;verifyAndConnect();}}
+async function connectGitHub(){var input=document.getElementById("tokenInput").value.trim();if(!input)return;token=input;document.getElementById("authError").style.display="none";try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Invalid");var user=await resp.json();localStorage.setItem("kb_github_token",token);showToast("Connected as "+user.login,"success");showMainUI();loadAllData();}catch(e){document.getElementById("authError").style.display="block";token="";}}
+async function verifyAndConnect(){try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Expired");showMainUI();loadAllData();}catch(e){localStorage.removeItem("kb_github_token");token="";}}
+function logout(){localStorage.removeItem("kb_github_token");token="";data={};fileSHAs={};document.getElementById("mainLayout").style.display="none";document.getElementById("authScreen").style.display="block";document.getElementById("statusDot").className="status-dot disconnected";document.getElementById("statusText").textContent="Not connected";document.getElementById("btnLogout").style.display="none";}
+function showMainUI(){document.getElementById("authScreen").style.display="none";document.getElementById("mainLayout").style.display="grid";document.getElementById("statusDot").className="status-dot connected";document.getElementById("statusText").textContent="Connected to GitHub";document.getElementById("btnLogout").style.display="inline-block";}
 
-async function connectGitHub() {
-  var input = document.getElementById("tokenInput").value.trim();
-  if (!input) return;
-  token = input;
-  document.getElementById("authError").style.display = "none";
+// ═══════════════════════════════════════════════════════════════
+// LOAD / PUSH GITHUB
+// ═══════════════════════════════════════════════════════════════
+async function loadAllData(){for(var key of Object.keys(CATEGORIES))await loadCategory(key);buildCatTabs();renderList();showToast("All products loaded from GitHub","success");}
+async function loadCategory(key){try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json?ref="+GITHUB_BRANCH,{headers:{"Authorization":"token "+token}});if(!resp.ok){data[key]=[];fileSHAs[key]=null;return;}var file=await resp.json();fileSHAs[key]=file.sha;data[key]=JSON.parse(atob(file.content.replace(/\n/g,"")));}catch(e){data[key]=[];fileSHAs[key]=null;}}
+async function pushToGitHub(){if(dirtyCategories.size===0){showToast("No changes to push");return;}var btn=document.getElementById("btnPush");btn.disabled=true;btn.textContent="Pushing...";btn.classList.add("pushing");var success=0,failed=0;for(var key of dirtyCategories){var content=btoa(unescape(encodeURIComponent(JSON.stringify(data[key],null,2))));var body={message:"Update "+key+" products via admin",content:content,branch:GITHUB_BRANCH};if(fileSHAs[key])body.sha=fileSHAs[key];try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!resp.ok){failed++;continue;}var result=await resp.json();fileSHAs[key]=result.content.sha;success++;}catch(e){failed++;}}btn.disabled=false;btn.textContent="Push to Live Site";btn.classList.remove("pushing");if(failed===0){dirtyCategories.clear();hasUnsavedChanges=false;addedSinceLastPush=0;updateSaveStatus();showToast(success+" category(s) pushed! Site updating in ~10 seconds.","success");}else{showToast(success+" pushed, "+failed+" failed.","error");}}
+function markDirty(cat){dirtyCategories.add(cat);hasUnsavedChanges=true;updateSaveStatus();}
+function updateSaveStatus(){var el=document.getElementById("saveStatus");if(hasUnsavedChanges){el.className="unsaved";el.textContent="⚠ Unsaved: "+[...dirtyCategories].join(", ")+" ("+addedSinceLastPush+" new)";}else{el.className="saved";el.textContent="✓ All changes saved & live";}}
+
+// ═══════════════════════════════════════════════════════════════
+// TABS & LIST
+// ═══════════════════════════════════════════════════════════════
+function buildCatTabs(){document.getElementById("catTabs").innerHTML=Object.entries(CATEGORIES).map(function(e){var dot=dirtyCategories.has(e[0])?" ●":"";return '<button class="cat-btn '+(e[0]===activeCategory?"active":"")+'" onclick="switchCategory(\''+e[0]+'\')">'+e[1]+dot+'</button>';}).join("");}
+function switchCategory(key){activeCategory=key;document.getElementById("fCategory").value=key;buildCatTabs();renderList();}
+function renderList(){var list=document.getElementById("productList"),products=data[activeCategory]||[];document.getElementById("listCount").textContent="("+products.length+")";if(!products.length){list.innerHTML='<div class="empty-state"><p>No products yet.</p></div>';return;}list.innerHTML=products.map(function(p,i){var hasImg=p.image&&p.image.trim();var img=hasImg?'<img src="'+p.image+'" alt="">':'<span class="mini-placeholder">📦</span>';var badge="";if(p.badge){var c=p.badge==="Best Seller"?"hot":p.badge==="New"?"new":"deal";badge='<span class="plist-badge '+c+'">'+p.badge+'</span>';}return '<div class="plist-item"><div class="plist-img">'+img+'</div><div class="plist-name">'+p.name+'</div><div class="plist-price">$'+p.price.toFixed(2)+'</div>'+(badge||'<div></div>')+'<div class="plist-actions"><button class="btn-edit" onclick="editProduct('+i+')">Edit</button><button class="btn-del" onclick="deleteProduct('+i+')">Del</button></div></div>';}).join("");}
+
+// ═══════════════════════════════════════════════════════════════
+// ADD / EDIT / DELETE
+// ═══════════════════════════════════════════════════════════════
+function addProduct(){var name=document.getElementById("fName").value.trim(),price=parseFloat(document.getElementById("fPrice").value),cat=document.getElementById("fCategory").value;if(!name)return showToast("Product name is required","error");if(isNaN(price)||price<=0)return showToast("Valid price is required","error");var product={id:name.toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,30),name:name,price:price,originalPrice:parseFloat(document.getElementById("fOrigPrice").value)||null,rating:Math.min(5,Math.max(1,parseFloat(document.getElementById("fRating").value)||4.5)),reviews:document.getElementById("fReviews").value.trim()||"0",badge:document.getElementById("fBadge").value,tag:document.getElementById("fTag").value,image:document.getElementById("fImage").value.trim(),url:document.getElementById("fUrl").value.trim()||"#",bought:document.getElementById("fBought").value.trim(),prime:document.getElementById("fPrime").checked};if(!data[cat])data[cat]=[];if(editingIndex>=0){product.id=data[cat][editingIndex].id;data[cat][editingIndex]=product;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";showToast("Updated! Click 'Push to Live Site' to publish.","success");}else{data[cat].unshift(product);addedSinceLastPush++;showToast("Added! ("+addedSinceLastPush+" new products)","success");if(addedSinceLastPush>=10){showToast("🔔 You have "+addedSinceLastPush+" new products — consider pushing to live!","success");}}markDirty(cat);if(cat!==activeCategory)switchCategory(cat);else{renderList();buildCatTabs();}clearForm();}
+function editProduct(i){var p=data[activeCategory][i];editingIndex=i;document.getElementById("fCategory").value=activeCategory;document.getElementById("fName").value=p.name;document.getElementById("fPrice").value=p.price;document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=p.rating;document.getElementById("fReviews").value=p.reviews;document.getElementById("fBadge").value=p.badge||"";updateTagDropdown();document.getElementById("fTag").value=p.tag||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=p.prime!==false;document.getElementById("formTitle").textContent="✏️ Edit Product";document.getElementById("btnAdd").textContent="Save Changes";window.scrollTo({top:0,behavior:"smooth"});}
+function deleteProduct(i){if(!confirm("Delete this product?"))return;data[activeCategory].splice(i,1);markDirty(activeCategory);renderList();buildCatTabs();showToast("Deleted. Push to make it live.");}
+function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
+
+// ═══════════════════════════════════════════════════════════════
+// AI PRODUCT FETCHER
+// ═══════════════════════════════════════════════════════════════
+function updateAiTags(){var cat=document.getElementById("aiCategory").value;var tags=CATEGORY_TAGS[cat]||[];var sel=document.getElementById("aiTag");sel.innerHTML='<option value="">All Types</option>'+tags.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join("");}
+
+async function fetchAIProducts(){
+  var cat = document.getElementById("aiCategory").value;
+  var tag = document.getElementById("aiTag").value;
+  var count = parseInt(document.getElementById("aiCount").value);
+  var btn = document.getElementById("btnFetch");
+  var statusEl = document.getElementById("aiStatus");
+  var resultsEl = document.getElementById("aiResults");
+
+  var catLabel = CATEGORY_LABELS[cat] || cat;
+  var searchQuery = "best selling " + catLabel + (tag ? " " + tag : "") + " products on Amazon with prices ratings and reviews 2025 2026";
+
+  btn.disabled = true;
+  btn.textContent = "🔍 Searching...";
+  btn.classList.add("loading");
+  statusEl.textContent = "Searching for top " + (tag || catLabel) + " products on Amazon...";
+  resultsEl.innerHTML = "";
+
   try {
-    var resp = await fetch("https://api.github.com/user", { headers: { "Authorization": "token " + token } });
-    if (!resp.ok) throw new Error("Invalid");
-    var user = await resp.json();
-    localStorage.setItem("kb_github_token", token);
-    showToast("Connected as " + user.login, "success");
-    showMainUI(); loadAllData();
-  } catch (e) { document.getElementById("authError").style.display = "block"; token = ""; }
-}
+    var response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{
+          role: "user",
+          content: "Search Amazon for the top " + count + " best-selling " + catLabel + (tag ? " " + tag : "") + " products. For each product, provide ONLY a JSON array (no markdown, no backticks, no explanation) with objects containing these exact fields: name (full product name), price (number, current price in USD), originalPrice (number or null), rating (number 1-5), reviews (string like '87,420'), image (Amazon product image URL starting with https://m.media-amazon.com/images/), url (Amazon product page URL), bought (string like '10K+ bought in past month' or empty string). Return ONLY the JSON array, nothing else."
+        }]
+      })
+    });
 
-async function verifyAndConnect() {
-  try {
-    var resp = await fetch("https://api.github.com/user", { headers: { "Authorization": "token " + token } });
-    if (!resp.ok) throw new Error("Expired");
-    showMainUI(); loadAllData();
-  } catch (e) { localStorage.removeItem("kb_github_token"); token = ""; }
-}
+    var result = await response.json();
 
-function logout() {
-  localStorage.removeItem("kb_github_token"); token = ""; data = {}; fileSHAs = {};
-  document.getElementById("mainLayout").style.display = "none";
-  document.getElementById("authScreen").style.display = "block";
-  document.getElementById("statusDot").className = "status-dot disconnected";
-  document.getElementById("statusText").textContent = "Not connected";
-  document.getElementById("btnLogout").style.display = "none";
-}
+    // Extract text from response
+    var text = "";
+    if (result.content) {
+      for (var i = 0; i < result.content.length; i++) {
+        if (result.content[i].type === "text") text += result.content[i].text;
+      }
+    }
 
-function showMainUI() {
-  document.getElementById("authScreen").style.display = "none";
-  document.getElementById("mainLayout").style.display = "grid";
-  document.getElementById("statusDot").className = "status-dot connected";
-  document.getElementById("statusText").textContent = "Connected to GitHub";
-  document.getElementById("btnLogout").style.display = "inline-block";
-}
+    // Clean and parse JSON
+    text = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+    var products = JSON.parse(text);
 
-async function loadAllData() {
-  for (var key of Object.keys(CATEGORIES)) await loadCategory(key);
-  buildCatTabs(); renderList();
-  showToast("All products loaded from GitHub", "success");
-}
+    if (!Array.isArray(products) || products.length === 0) {
+      throw new Error("No products found");
+    }
 
-async function loadCategory(key) {
-  try {
-    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data/" + key + ".json?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
-    if (!resp.ok) { data[key] = []; fileSHAs[key] = null; return; }
-    var file = await resp.json();
-    fileSHAs[key] = file.sha;
-    data[key] = JSON.parse(atob(file.content.replace(/\n/g, "")));
-  } catch (e) { data[key] = []; fileSHAs[key] = null; }
-}
+    aiFetchedProducts = products;
+    statusEl.textContent = "Found " + products.length + " products. Click ➕ to add or ✏️ to edit before adding.";
 
-async function pushToGitHub() {
-  if (dirtyCategories.size === 0) { showToast("No changes to push"); return; }
-  var btn = document.getElementById("btnPush");
-  btn.disabled = true; btn.textContent = "Pushing..."; btn.classList.add("pushing");
-  var success = 0, failed = 0;
+    resultsEl.innerHTML = products.map(function(p, idx) {
+      var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.style.display=\'none\'">' : '📦';
+      return '<div class="ai-card" id="aiCard' + idx + '">' +
+        '<div class="ai-card-img">' + imgHTML + '</div>' +
+        '<div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div>' +
+        '<div class="ai-card-meta">⭐ ' + (p.rating || '4.5') + ' (' + (p.reviews || '0') + ')</div>' +
+        '<div class="ai-card-price">$' + (parseFloat(p.price) || 0).toFixed(2) + '</div>' +
+        '<div class="ai-card-actions">' +
+        '<button class="btn-ai-add" onclick="quickAddAI(' + idx + ')">➕ Add</button>' +
+        '<button class="btn-ai-edit" onclick="editFromAI(' + idx + ')">✏️</button>' +
+        '</div></div>';
+    }).join("");
 
-  for (var key of dirtyCategories) {
-    var content = btoa(unescape(encodeURIComponent(JSON.stringify(data[key], null, 2))));
-    var body = { message: "Update " + key + " products via admin", content: content, branch: GITHUB_BRANCH };
-    if (fileSHAs[key]) body.sha = fileSHAs[key];
-    try {
-      var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data/" + key + ".json",
-        { method: "PUT", headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      if (!resp.ok) { failed++; continue; }
-      var result = await resp.json();
-      fileSHAs[key] = result.content.sha;
-      success++;
-    } catch (e) { failed++; }
+  } catch (e) {
+    console.error("AI Fetch error:", e);
+    statusEl.textContent = "Error: " + e.message + ". Try again.";
   }
 
-  btn.disabled = false; btn.textContent = "Push to Live Site"; btn.classList.remove("pushing");
-  if (failed === 0) {
-    dirtyCategories.clear(); hasUnsavedChanges = false; updateSaveStatus();
-    showToast(success + " category(s) pushed! Site updating in ~10 seconds.", "success");
-  } else { showToast(success + " pushed, " + failed + " failed.", "error"); }
+  btn.disabled = false;
+  btn.textContent = "🔍 Fetch Products";
+  btn.classList.remove("loading");
 }
 
-function markDirty(cat) { dirtyCategories.add(cat); hasUnsavedChanges = true; updateSaveStatus(); }
-function updateSaveStatus() {
-  var el = document.getElementById("saveStatus");
-  if (hasUnsavedChanges) { el.className = "unsaved"; el.textContent = "⚠ Unsaved: " + [...dirtyCategories].join(", "); }
-  else { el.className = "saved"; el.textContent = "✓ All changes saved & live"; }
-}
+function quickAddAI(idx) {
+  var p = aiFetchedProducts[idx];
+  if (!p) return;
+  var cat = document.getElementById("aiCategory").value;
+  var tag = document.getElementById("aiTag").value;
 
-function buildCatTabs() {
-  document.getElementById("catTabs").innerHTML = Object.entries(CATEGORIES).map(function(e) {
-    var dot = dirtyCategories.has(e[0]) ? " ●" : "";
-    return '<button class="cat-btn ' + (e[0] === activeCategory ? "active" : "") + '" onclick="switchCategory(\'' + e[0] + '\')">' + e[1] + dot + '</button>';
-  }).join("");
-}
-function switchCategory(key) { activeCategory = key; document.getElementById("fCategory").value = key; buildCatTabs(); renderList(); }
-
-function renderList() {
-  var list = document.getElementById("productList"), products = data[activeCategory] || [];
-  document.getElementById("listCount").textContent = "(" + products.length + ")";
-  if (!products.length) { list.innerHTML = '<div class="empty-state"><p>No products yet.</p></div>'; return; }
-  list.innerHTML = products.map(function(p, i) {
-    var hasImg = p.image && p.image.trim();
-    var img = hasImg ? '<img src="' + p.image + '" alt="">' : '<span class="mini-placeholder">📦</span>';
-    var badge = "";
-    if (p.badge) { var c = p.badge === "Best Seller" ? "hot" : p.badge === "New" ? "new" : "deal"; badge = '<span class="plist-badge ' + c + '">' + p.badge + '</span>'; }
-    return '<div class="plist-item"><div class="plist-img">' + img + '</div><div class="plist-name">' + p.name + '</div><div class="plist-price">$' + p.price.toFixed(2) + '</div>' + (badge || '<div></div>') + '<div class="plist-actions"><button class="btn-edit" onclick="editProduct(' + i + ')">Edit</button><button class="btn-del" onclick="deleteProduct(' + i + ')">Del</button></div></div>';
-  }).join("");
-}
-
-function addProduct() {
-  var name = document.getElementById("fName").value.trim(), price = parseFloat(document.getElementById("fPrice").value), cat = document.getElementById("fCategory").value;
-  if (!name) return showToast("Product name is required", "error");
-  if (isNaN(price) || price <= 0) return showToast("Valid price is required", "error");
   var product = {
-    id: name.toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30), name: name, price: price,
-    originalPrice: parseFloat(document.getElementById("fOrigPrice").value) || null,
-    rating: Math.min(5, Math.max(1, parseFloat(document.getElementById("fRating").value) || 4.5)),
-    reviews: document.getElementById("fReviews").value.trim() || "0",
-    badge: document.getElementById("fBadge").value, tag: document.getElementById("fTag").value, image: document.getElementById("fImage").value.trim(),
-    url: document.getElementById("fUrl").value.trim() || "#", bought: document.getElementById("fBought").value.trim(), prime: document.getElementById("fPrime").checked
+    id: (p.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30),
+    name: p.name || "Unknown Product",
+    price: parseFloat(p.price) || 0,
+    originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
+    rating: parseFloat(p.rating) || 4.5,
+    reviews: p.reviews || "0",
+    badge: "",
+    tag: tag,
+    image: p.image || "",
+    url: p.url || "#",
+    bought: p.bought || "",
+    prime: true
   };
+
   if (!data[cat]) data[cat] = [];
-  if (editingIndex >= 0) {
-    product.id = data[cat][editingIndex].id; data[cat][editingIndex] = product; editingIndex = -1;
-    document.getElementById("formTitle").textContent = "➕ Add New Product";
-    document.getElementById("btnAdd").textContent = "Add Product";
-    showToast("Updated! Click 'Push to Live Site' to publish.", "success");
-  } else { data[cat].unshift(product); showToast("Added! Click 'Push to Live Site' to publish.", "success"); }
+  data[cat].unshift(product);
+  addedSinceLastPush++;
   markDirty(cat);
-  if (cat !== activeCategory) switchCategory(cat); else { renderList(); buildCatTabs(); }
-  clearForm();
+  if (cat === activeCategory) { renderList(); buildCatTabs(); }
+
+  // Mark card as added
+  var card = document.getElementById("aiCard" + idx);
+  if (card) {
+    var actions = card.querySelector(".ai-card-actions");
+    actions.innerHTML = '<div class="ai-added">✓ Added</div>';
+  }
+
+  showToast("Added: " + product.name.slice(0, 40) + "... (" + addedSinceLastPush + " new)", "success");
+
+  if (addedSinceLastPush >= 10 && addedSinceLastPush % 5 === 0) {
+    showToast("🔔 " + addedSinceLastPush + " new products — consider pushing to live!", "success");
+  }
 }
 
-function editProduct(i) {
-  var p = data[activeCategory][i]; editingIndex = i;
-  document.getElementById("fCategory").value = activeCategory;
-  document.getElementById("fName").value = p.name; document.getElementById("fPrice").value = p.price;
-  document.getElementById("fOrigPrice").value = p.originalPrice || "";
-  document.getElementById("fRating").value = p.rating; document.getElementById("fReviews").value = p.reviews;
-  document.getElementById("fBadge").value = p.badge || ""; updateTagDropdown(); document.getElementById("fTag").value = p.tag || ""; document.getElementById("fImage").value = p.image || "";
-  document.getElementById("fUrl").value = p.url || ""; document.getElementById("fBought").value = p.bought || ""; document.getElementById("fPrime").checked = p.prime !== false;
-  document.getElementById("formTitle").textContent = "✏️ Edit Product";
-  document.getElementById("btnAdd").textContent = "Save Changes";
+function editFromAI(idx) {
+  var p = aiFetchedProducts[idx];
+  if (!p) return;
+  var cat = document.getElementById("aiCategory").value;
+  var tag = document.getElementById("aiTag").value;
+
+  document.getElementById("fCategory").value = cat;
+  document.getElementById("fName").value = p.name || "";
+  document.getElementById("fPrice").value = parseFloat(p.price) || "";
+  document.getElementById("fOrigPrice").value = p.originalPrice ? parseFloat(p.originalPrice) : "";
+  document.getElementById("fRating").value = parseFloat(p.rating) || "";
+  document.getElementById("fReviews").value = p.reviews || "";
+  document.getElementById("fBadge").value = "";
+  updateTagDropdown();
+  document.getElementById("fTag").value = tag;
+  document.getElementById("fImage").value = p.image || "";
+  document.getElementById("fUrl").value = p.url || "";
+  document.getElementById("fBought").value = p.bought || "";
+  document.getElementById("fPrime").checked = true;
+  editingIndex = -1;
+
   window.scrollTo({ top: 0, behavior: "smooth" });
+  showToast("Product loaded into form — edit and click Add Product", "success");
 }
 
-function deleteProduct(i) {
-  if (!confirm("Delete this product?")) return;
-  data[activeCategory].splice(i, 1); markDirty(activeCategory); renderList(); buildCatTabs();
-  showToast("Deleted. Push to make it live.");
-}
-
-function clearForm() {
-  ["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id) { document.getElementById(id).value = ""; });
-  document.getElementById("fBadge").value = ""; document.getElementById("fTag").value = ""; document.getElementById("fPrime").checked = true; editingIndex = -1;
-  document.getElementById("formTitle").textContent = "➕ Add New Product";
-  document.getElementById("btnAdd").textContent = "Add Product";
-}
-
-function showToast(msg, type) {
-  var t = document.getElementById("toast"); t.textContent = msg;
-  t.className = "toast show" + (type ? " " + type : "");
-  setTimeout(function() { t.className = "toast"; }, 3000);
-}
-
-function updateTagDropdown() { var cat = document.getElementById("fCategory").value; var tags = CATEGORY_TAGS[cat] || []; var sel = document.getElementById("fTag"); sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join(""); } document.getElementById("fCategory").addEventListener("change", updateTagDropdown); updateTagDropdown();
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function showToast(msg, type) { var t = document.getElementById("toast"); t.textContent = msg; t.className = "toast show" + (type ? " " + type : ""); setTimeout(function() { t.className = "toast"; }, 3000); }
+function updateTagDropdown() { var cat = document.getElementById("fCategory").value; var tags = CATEGORY_TAGS[cat] || []; var sel = document.getElementById("fTag"); sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join(""); }
+document.getElementById("fCategory").addEventListener("change", updateTagDropdown);
+updateTagDropdown();
+updateAiTags();
 checkSavedToken();
 </script>
 </body>
