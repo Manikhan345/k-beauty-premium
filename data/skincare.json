@@ -15,7 +15,7 @@
   },
   {
     "id": "la_roche_posay_toleriane_purif",
-    "name": "La Roche-Posay Toleriane Purifying Foaming Facial Cleanser, Oil Free Face Wash for Women & Men with Niacinamide + Ceramides, Pore Cleanser Safe For Sensitive Skin, WonÃÂ¢ÃÂÃÂt Dry Out Skin, Soap Free",
+    "name": "La Roche-Posay Toleriane Purifying Foaming Facial Cleanser, Oil Free Face Wash for Women & Men with Niacinamide + Ceramides, Pore Cleanser Safe For Sensitive Skin, WonÃÂÃÂ¢ÃÂÃÂÃÂÃÂt Dry Out Skin, Soap Free",
     "price": 19.99,
     "originalPrice": null,
     "rating": 4.7,
@@ -99,7 +99,7 @@
   },
   {
     "id": "embryolisse_lait_cr_me_concent",
-    "name": "Embryolisse Lait-Crème Concentré Face Moisturizer and Makeup Primer, French Face Cream With Shea Butter & Aloe Vera",
+    "name": "Embryolisse Lait-CrÃ¨me ConcentrÃ© Face Moisturizer and Makeup Primer, French Face Cream With Shea Butter & Aloe Vera",
     "price": 27.2,
     "originalPrice": null,
     "rating": 4.6,
@@ -281,7 +281,7 @@
   },
   {
     "id": "peter_thomas_roth_instant_firm",
-    "name": "Peter Thomas Roth | Instant FIRMx® Temporary Eye Tightener | Firm and Smooth the Look of Fine Lines, 1 oz",
+    "name": "Peter Thomas Roth | Instant FIRMxÂ® Temporary Eye Tightener | Firm and Smooth the Look of Fine Lines, 1 oz",
     "price": 19.5,
     "originalPrice": null,
     "rating": 3.7,
@@ -337,7 +337,7 @@
   },
   {
     "id": "peter_thomas_roth_instant_firm",
-    "name": "Peter Thomas Roth | Instant FIRMx® Collagen Tightening Eye Patches | Eye Patches For Firming Under-Eye Bags & Wrinkles | Eye Masks For Puffiness",
+    "name": "Peter Thomas Roth | Instant FIRMxÂ® Collagen Tightening Eye Patches | Eye Patches For Firming Under-Eye Bags & Wrinkles | Eye Masks For Puffiness",
     "price": 30.6,
     "originalPrice": null,
     "rating": 4.2,
@@ -393,7 +393,7 @@
   },
   {
     "id": "strivectin_tighten_and_lift_ad",
-    "name": "StriVectin Tighten and Lift Advanced Neck Cream PLUS with Alpha-3 Peptides for Neck and Décolleté, Smoothing Look of Wrinkles and Fine Lines, Improves Crepey Skin and Vertical Lines",
+    "name": "StriVectin Tighten and Lift Advanced Neck Cream PLUS with Alpha-3 Peptides for Neck and DÃ©colletÃ©, Smoothing Look of Wrinkles and Fine Lines, Improves Crepey Skin and Vertical Lines",
     "price": 49.49,
     "originalPrice": null,
     "rating": 4.3,
@@ -458,6 +458,20 @@
     "tag": "Patches",
     "image": "https://m.media-amazon.com/images/I/71hgtL3mc+L._SL1500_.jpg",
     "url": "https://amzn.to/4taSdQX",
+    "bought": "20K+ bought in past month",
+    "prime": true
+  },
+  {
+    "id": "abib_collagen_peptide_eye_patc",
+    "name": "Abib Collagen Peptide Eye Patches for Wrinkles & Fine Line with Jericho Rose Jelly, 60 Count, Korean Skin Care Visit the Abib Store",
+    "price": 18.4,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "2,283",
+    "badge": "Best Seller",
+    "tag": "Patches",
+    "image": "https://m.media-amazon.com/images/I/51QvZBzQ-eL._SL1500_.jpg",
+    "url": "https://amzn.to/4lUJCPK",
     "bought": "20K+ bought in past month",
     "prime": true
   }
