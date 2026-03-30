@@ -283,33 +283,21 @@ async function fetchAIProducts(){
   resultsEl.innerHTML = "";
 
   try {
-    var response = await fetch("https://api.anthropic.com/v1/messages", {
+    var response = await fetch("/api/fetch-products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
-        tools: [{ type: "web_search_20250305", name: "web_search" }],
-        messages: [{
-          role: "user",
-          content: "Search Amazon for the top " + count + " best-selling " + catLabel + (tag ? " " + tag : "") + " products. For each product, provide ONLY a JSON array (no markdown, no backticks, no explanation) with objects containing these exact fields: name (full product name), price (number, current price in USD), originalPrice (number or null), rating (number 1-5), reviews (string like '87,420'), image (Amazon product image URL starting with https://m.media-amazon.com/images/), url (Amazon product page URL), bought (string like '10K+ bought in past month' or empty string). Return ONLY the JSON array, nothing else."
-        }]
+        category: catLabel + (tag ? " " + tag : ""),
+        tag: tag,
+        count: count
       })
     });
 
     var result = await response.json();
 
-    // Extract text from response
-    var text = "";
-    if (result.content) {
-      for (var i = 0; i < result.content.length; i++) {
-        if (result.content[i].type === "text") text += result.content[i].text;
-      }
-    }
+    if (result.error) throw new Error(result.error);
 
-    // Clean and parse JSON
-    text = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
-    var products = JSON.parse(text);
+    var products = result.products;
 
     if (!Array.isArray(products) || products.length === 0) {
       throw new Error("No products found");
