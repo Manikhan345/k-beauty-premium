@@ -11,8 +11,10 @@ export default async function handler(req, res) {
 
   try {
     const { category, tag, count } = req.body;
+    const num = count || 10;
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    // Step 1: Search for products with web search
+    const searchResponse = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,66 +28,83 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "user",
-            content: `Find the top ${count || 10} best-selling ${category}${tag ? " " + tag : ""} products currently available on Amazon.com with high ratings.
-
-Return your response as a JSON array ONLY. No text before or after. No markdown. No backticks. Just a raw JSON array.
-
-Each object in the array must have exactly these fields:
-{
-  "name": "Full product name",
-  "price": 14.99,
-  "originalPrice": 19.99,
-  "rating": 4.8,
-  "reviews": "12,450",
-  "image": "https://m.media-amazon.com/images/I/example.jpg",
-  "url": "https://www.amazon.com/dp/ASIN",
-  "bought": "10K+ bought in past month"
-}
-
-Rules:
-- price must be a number, not a string
-- originalPrice should be null if there is no discount
-- rating must be a number between 1 and 5
-- reviews should be a formatted string like "12,450"
-- image must be a real Amazon image URL or empty string ""
-- url must be a real Amazon product URL or "#"
-- bought should be like "10K+ bought in past month" or empty string ""
-- Return ONLY the JSON array, starting with [ and ending with ]`
+            content: `Search for the top ${num} best-selling ${category}${tag ? " " + tag : ""} products on Amazon. List each product with its name, approximate price, rating, number of reviews, and Amazon ASIN if possible. Focus on highly rated products with many reviews.`
           }
         ]
       })
     });
 
-    const data = await response.json();
-
-    if (data.error) {
-      return res.status(400).json({ error: data.error.message || "Anthropic API error" });
+    const searchData = await searchResponse.json();
+    if (searchData.error) {
+      return res.status(400).json({ error: searchData.error.message || "Search failed" });
     }
 
-    // Collect ALL text blocks from the response
-    let allText = "";
-    if (data.content && Array.isArray(data.content)) {
-      for (const block of data.content) {
-        if (block.type === "text") {
-          allText += block.text;
-        }
+    // Extract search results text
+    let searchText = "";
+    if (searchData.content && Array.isArray(searchData.content)) {
+      for (const block of searchData.content) {
+        if (block.type === "text") searchText += block.text;
       }
     }
 
-    if (!allText) {
-      return res.status(200).json({ products: [], error: "No text in API response" });
+    if (!searchText) {
+      return res.status(200).json({ products: [], error: "No search results found" });
     }
 
-    // Clean up the text - remove markdown, extra whitespace
-    allText = allText.trim();
-    allText = allText.replace(/```json\s*/gi, "");
-    allText = allText.replace(/```\s*/gi, "");
-    allText = allText.trim();
+    // Step 2: Convert search results to structured JSON (no web search needed)
+    const formatResponse = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        messages: [
+          {
+            role: "user",
+            content: `Here are search results about Amazon products:
 
-    // Try to find JSON array in the text
-    let jsonStr = allText;
+${searchText}
 
-    // If the text doesn't start with [, try to find the array
+Convert this into a JSON array of ${num} products. Output ONLY a valid JSON array, nothing else. No markdown, no backticks, no explanation before or after.
+
+Each object must have exactly these fields:
+- "name": full product name (string)
+- "price": current price in USD (number like 14.99, estimate if not exact)
+- "originalPrice": original price if discounted (number or null)
+- "rating": star rating (number like 4.8, estimate based on stars mentioned)
+- "reviews": review count as formatted string (like "12,450", estimate if not exact)
+- "image": empty string ""
+- "url": Amazon URL if found, otherwise "https://www.amazon.com/s?k=" followed by URL-encoded product name
+- "bought": popularity info like "10K+ bought in past month" or ""
+
+Output ONLY the JSON array. Start with [ end with ]. Nothing else.`
+          }
+        ]
+      })
+    });
+
+    const formatData = await formatResponse.json();
+    if (formatData.error) {
+      return res.status(400).json({ error: formatData.error.message || "Format failed" });
+    }
+
+    let formatText = "";
+    if (formatData.content && Array.isArray(formatData.content)) {
+      for (const block of formatData.content) {
+        if (block.type === "text") formatText += block.text;
+      }
+    }
+
+    // Clean up
+    formatText = formatText.trim();
+    formatText = formatText.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
+
+    // Find JSON array
+    let jsonStr = formatText;
     if (!jsonStr.startsWith("[")) {
       const startIdx = jsonStr.indexOf("[");
       const endIdx = jsonStr.lastIndexOf("]");
@@ -97,7 +116,6 @@ Rules:
     try {
       const products = JSON.parse(jsonStr);
       if (Array.isArray(products) && products.length > 0) {
-        // Clean up each product to ensure correct types
         const cleaned = products.map(p => ({
           name: String(p.name || "Unknown Product"),
           price: parseFloat(p.price) || 0,
@@ -109,15 +127,13 @@ Rules:
           bought: String(p.bought || "")
         }));
         return res.status(200).json({ products: cleaned });
-      } else {
-        return res.status(200).json({ products: [], error: "Empty or invalid product array" });
       }
+      return res.status(200).json({ products: [], error: "No products parsed" });
     } catch (parseErr) {
-      // Return the raw text for debugging
-      return res.status(200).json({ 
-        products: [], 
-        error: "Failed to parse JSON", 
-        debug: allText.substring(0, 500) 
+      return res.status(200).json({
+        products: [],
+        error: "Failed to parse JSON",
+        debug: formatText.substring(0, 500)
       });
     }
 
