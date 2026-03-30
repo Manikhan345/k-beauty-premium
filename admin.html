@@ -45,7 +45,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .btn-add:hover { background: var(--rose-dark); }
 .btn-secondary { width: 100%; padding: 10px; background: transparent; color: var(--rose); border: 1px solid var(--rose); border-radius: 8px; font-size: 0.85rem; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
 .btn-secondary:hover { background: var(--rose-light); }
-.right-panel { display: flex; flex-direction: column; gap: 20px; }
+.right-panel { display: flex; flex-direction: column; gap: 20px; min-width: 0; overflow: hidden; }
 .save-bar { background: var(--card); border-radius: 12px; padding: 16px 20px; border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; }
 .save-bar .unsaved { font-size: 0.82rem; color: #D69E2E; font-weight: 500; }
 .save-bar .saved { font-size: 0.82rem; color: var(--green); font-weight: 500; }
