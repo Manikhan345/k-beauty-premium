@@ -173,31 +173,17 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   <div class="right-panel">
     <div class="save-bar"><span class="saved" id="saveStatus">✓ All changes saved</span><button class="btn-push" id="btnPush" onclick="pushToGitHub()">Push to Live Site</button></div>
 
-    <!-- AI PRODUCT FETCHER -->
+    <!-- AMAZON URL FETCHER -->
     <div class="ai-panel">
-      <h2>🤖 AI Product Finder</h2>
-      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Select a category and type, then click Fetch. AI will find top-rated Amazon products and you can add them with one click.</p>
-      <div class="ai-controls">
-        <div class="form-row"><label>Category</label>
-          <select id="aiCategory" onchange="updateAiTags()">
-            <option value="skincare">🧴 Skincare</option><option value="serums">💎 Serums</option>
-            <option value="facemasks">🎭 Face Masks</option><option value="sunscreen">☀️ Sunscreen</option>
-            <option value="makeup">💄 Makeup</option><option value="lipcare">👄 Lip Care</option>
-            <option value="haircare">💇 Hair Care</option>
-          </select>
+      <h2>🔗 Quick Add from Amazon</h2>
+      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Paste an Amazon product URL and click Fetch. All product data will be auto-filled into the form.</p>
+      <div style="display:flex;gap:8px;">
+        <div class="form-row" style="flex:1;margin-bottom:0;">
+          <input type="text" id="amazonUrl" placeholder="https://www.amazon.com/dp/B0XXXXXXXX" style="width:100%;">
         </div>
-        <div class="form-row"><label>Product Type</label>
-          <select id="aiTag"><option value="">All Types</option></select>
-        </div>
-        <div class="form-row"><label>How Many</label>
-          <select id="aiCount">
-            <option value="5">5 products</option><option value="10" selected>10 products</option><option value="15">15 products</option><option value="20">20 products</option>
-          </select>
-        </div>
-        <button class="btn-fetch" id="btnFetch" onclick="fetchAIProducts()">🔍 Fetch Products</button>
+        <button class="btn-fetch" id="btnFetch" onclick="fetchFromAmazon()" style="height:42px;">🔍 Fetch</button>
       </div>
-      <div class="ai-status" id="aiStatus"></div>
-      <div class="ai-results" id="aiResults"></div>
+      <div class="ai-status" id="aiStatus" style="margin-top:8px;"></div>
     </div>
 
     <div class="cat-selector" id="catTabs"></div>
@@ -221,10 +207,8 @@ var CATEGORY_TAGS = {
   lipcare: ["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"],
   haircare: ["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"],
 };
-var CATEGORY_LABELS = { skincare:"Korean Skincare", serums:"Korean Serums & Essences", facemasks:"Korean Face Masks", sunscreen:"Korean Sunscreen SPF", makeup:"Korean Makeup K-beauty", lipcare:"Korean Lip Care", haircare:"Korean Hair Care" };
 
 var token="", data={}, fileSHAs={}, activeCategory="skincare", editingIndex=-1, hasUnsavedChanges=false, dirtyCategories=new Set();
-var aiFetchedProducts = [];
 var addedSinceLastPush = 0;
 
 // ═══════════════════════════════════════════════════════════════
@@ -261,138 +245,59 @@ function deleteProduct(i){if(!confirm("Delete this product?"))return;data[active
 function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
 
 // ═══════════════════════════════════════════════════════════════
-// AI PRODUCT FETCHER
+// FETCH FROM AMAZON URL
 // ═══════════════════════════════════════════════════════════════
-function updateAiTags(){var cat=document.getElementById("aiCategory").value;var tags=CATEGORY_TAGS[cat]||[];var sel=document.getElementById("aiTag");sel.innerHTML='<option value="">All Types</option>'+tags.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join("");}
-
-async function fetchAIProducts(){
-  var cat = document.getElementById("aiCategory").value;
-  var tag = document.getElementById("aiTag").value;
-  var count = parseInt(document.getElementById("aiCount").value);
+async function fetchFromAmazon() {
+  var url = document.getElementById("amazonUrl").value.trim();
   var btn = document.getElementById("btnFetch");
   var statusEl = document.getElementById("aiStatus");
-  var resultsEl = document.getElementById("aiResults");
 
-  var catLabel = CATEGORY_LABELS[cat] || cat;
-  var searchQuery = "best selling " + catLabel + (tag ? " " + tag : "") + " products on Amazon with prices ratings and reviews 2025 2026";
+  if (!url || !url.includes("amazon.com")) {
+    return showToast("Paste a valid Amazon product URL", "error");
+  }
 
   btn.disabled = true;
-  btn.textContent = "🔍 Searching...";
-  btn.classList.add("loading");
-  statusEl.textContent = "Searching for top " + (tag || catLabel) + " products on Amazon...";
-  resultsEl.innerHTML = "";
+  btn.textContent = "Fetching...";
+  statusEl.textContent = "Fetching product data from Amazon...";
 
   try {
     var response = await fetch("/api/fetch-products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        category: catLabel + (tag ? " " + tag : ""),
-        tag: tag,
-        count: count
-      })
+      body: JSON.stringify({ url: url })
     });
 
     var result = await response.json();
 
-    if (result.error && (!result.products || result.products.length === 0)) throw new Error(result.error + (result.debug ? "\n\nDebug: " + result.debug : ""));
+    if (result.error) throw new Error(result.error);
 
-    var products = result.products;
+    var p = result.product;
+    if (!p || !p.name) throw new Error("Could not parse product data");
 
-    if (!Array.isArray(products) || products.length === 0) {
-      throw new Error("No products found");
-    }
+    // Auto-fill the form
+    document.getElementById("fName").value = p.name;
+    document.getElementById("fPrice").value = p.price || "";
+    document.getElementById("fOrigPrice").value = p.originalPrice || "";
+    document.getElementById("fRating").value = p.rating || "";
+    document.getElementById("fReviews").value = p.reviews || "";
+    document.getElementById("fImage").value = p.image || "";
+    document.getElementById("fUrl").value = p.url || "";
+    document.getElementById("fBought").value = p.bought || "";
+    document.getElementById("fPrime").checked = p.prime !== false;
 
-    aiFetchedProducts = products;
-    statusEl.textContent = "Found " + products.length + " products. Click ➕ to add or ✏️ to edit before adding.";
+    statusEl.innerHTML = '✅ <strong>' + p.name.slice(0, 60) + '...</strong> loaded! Select category, tag & badge, then click Add Product.';
+    document.getElementById("amazonUrl").value = "";
 
-    resultsEl.innerHTML = products.map(function(p, idx) {
-      var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.style.display=\'none\'">' : '📦';
-      return '<div class="ai-card" id="aiCard' + idx + '">' +
-        '<div class="ai-card-img">' + imgHTML + '</div>' +
-        '<div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div>' +
-        '<div class="ai-card-meta">⭐ ' + (p.rating || '4.5') + ' (' + (p.reviews || '0') + ')</div>' +
-        '<div class="ai-card-price">$' + (parseFloat(p.price) || 0).toFixed(2) + '</div>' +
-        '<div class="ai-card-actions">' +
-        '<button class="btn-ai-add" onclick="quickAddAI(' + idx + ')">➕ Add</button>' +
-        '<button class="btn-ai-edit" onclick="editFromAI(' + idx + ')">✏️</button>' +
-        '</div></div>';
-    }).join("");
+    showToast("Product data loaded! Select category & tag, then Add.", "success");
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
   } catch (e) {
-    console.error("AI Fetch error:", e);
-    statusEl.textContent = "Error: " + e.message + ". Try again.";
+    statusEl.textContent = "Error: " + e.message;
+    showToast("Failed: " + e.message, "error");
   }
 
   btn.disabled = false;
-  btn.textContent = "🔍 Fetch Products";
-  btn.classList.remove("loading");
-}
-
-function quickAddAI(idx) {
-  var p = aiFetchedProducts[idx];
-  if (!p) return;
-  var cat = document.getElementById("aiCategory").value;
-  var tag = document.getElementById("aiTag").value;
-
-  var product = {
-    id: (p.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30),
-    name: p.name || "Unknown Product",
-    price: parseFloat(p.price) || 0,
-    originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
-    rating: parseFloat(p.rating) || 4.5,
-    reviews: p.reviews || "0",
-    badge: "",
-    tag: tag,
-    image: p.image || "",
-    url: p.url || "#",
-    bought: p.bought || "",
-    prime: true
-  };
-
-  if (!data[cat]) data[cat] = [];
-  data[cat].unshift(product);
-  addedSinceLastPush++;
-  markDirty(cat);
-  if (cat === activeCategory) { renderList(); buildCatTabs(); }
-
-  // Mark card as added
-  var card = document.getElementById("aiCard" + idx);
-  if (card) {
-    var actions = card.querySelector(".ai-card-actions");
-    actions.innerHTML = '<div class="ai-added">✓ Added</div>';
-  }
-
-  showToast("Added: " + product.name.slice(0, 40) + "... (" + addedSinceLastPush + " new)", "success");
-
-  if (addedSinceLastPush >= 10 && addedSinceLastPush % 5 === 0) {
-    showToast("🔔 " + addedSinceLastPush + " new products — consider pushing to live!", "success");
-  }
-}
-
-function editFromAI(idx) {
-  var p = aiFetchedProducts[idx];
-  if (!p) return;
-  var cat = document.getElementById("aiCategory").value;
-  var tag = document.getElementById("aiTag").value;
-
-  document.getElementById("fCategory").value = cat;
-  document.getElementById("fName").value = p.name || "";
-  document.getElementById("fPrice").value = parseFloat(p.price) || "";
-  document.getElementById("fOrigPrice").value = p.originalPrice ? parseFloat(p.originalPrice) : "";
-  document.getElementById("fRating").value = parseFloat(p.rating) || "";
-  document.getElementById("fReviews").value = p.reviews || "";
-  document.getElementById("fBadge").value = "";
-  updateTagDropdown();
-  document.getElementById("fTag").value = tag;
-  document.getElementById("fImage").value = p.image || "";
-  document.getElementById("fUrl").value = p.url || "";
-  document.getElementById("fBought").value = p.bought || "";
-  document.getElementById("fPrime").checked = true;
-  editingIndex = -1;
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  showToast("Product loaded into form — edit and click Add Product", "success");
+  btn.textContent = "🔍 Fetch";
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -402,7 +307,6 @@ function showToast(msg, type) { var t = document.getElementById("toast"); t.text
 function updateTagDropdown() { var cat = document.getElementById("fCategory").value; var tags = CATEGORY_TAGS[cat] || []; var sel = document.getElementById("fTag"); sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join(""); }
 document.getElementById("fCategory").addEventListener("change", updateTagDropdown);
 updateTagDropdown();
-updateAiTags();
 checkSavedToken();
 </script>
 </body>
