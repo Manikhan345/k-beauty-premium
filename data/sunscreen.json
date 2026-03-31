@@ -1,8 +1,22 @@
 [
   {
+    "id": "eltamd_uv_clear_face_sunscreen",
+    "name": "EltaMD UV Clear Face Sunscreen SPF 46, Oil-Free Sunscreen with Zinc Oxide, Dermatologist Recommended",
+    "price": 47,
+    "originalPrice": 79,
+    "rating": 4.5,
+    "reviews": "20,745",
+    "badge": "Best Seller",
+    "tag": "",
+    "image": "https://m.media-amazon.com/images/I/716i2HqV9FL._SL1500_.jpg",
+    "url": "https://www.amazon.com/dp/B00ZPWR0N8?tag=kbeauty000-20",
+    "bought": "",
+    "prime": true
+  },
+  {
     "id": "boj_rice_sun",
     "name": "EltaMD UV Clear Face Sunscreen SPF 46, Oil-Free Sunscreen with Zinc Oxide, Dermatologist Recommended",
-    "price": 45.00,
+    "price": 45,
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "67,277",
@@ -38,7 +52,7 @@
   {
     "id": "skin1004_centella",
     "name": "Colorescience Total Protection Face Shield Flex SPF 50, 1.8 fl. oz.",
-    "price": 58.00,
+    "price": 58,
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "7,575",
@@ -62,7 +76,7 @@
   {
     "id": "roundlab_birch_sun",
     "name": "Round Lab Birch Juice Moisturizing Sun Cream SPF50+",
-    "price": 14.20,
+    "price": 14.2,
     "originalPrice": null,
     "rating": 4.6,
     "reviews": "9,800",
@@ -74,8 +88,8 @@
   {
     "id": "purito_daily_sun",
     "name": "Purito Daily Go-To Sunscreen SPF50+ PA++++",
-    "price": 12.90,
-    "originalPrice": 17.00,
+    "price": 12.9,
+    "originalPrice": 17,
     "rating": 4.5,
     "reviews": "7,600",
     "badge": "Deal",
@@ -86,7 +100,7 @@
   {
     "id": "thankyou_farmer_sun",
     "name": "Thank You Farmer Sun Project Water Sun Cream SPF50+",
-    "price": 16.80,
+    "price": 16.8,
     "originalPrice": null,
     "rating": 4.4,
     "reviews": "5,300",
@@ -98,8 +112,8 @@
   {
     "id": "klairs_airy_sun",
     "name": "Klairs All-day Airy Sunscreen SPF50+ PA++++",
-    "price": 15.50,
-    "originalPrice": 20.00,
+    "price": 15.5,
+    "originalPrice": 20,
     "rating": 4.6,
     "reviews": "8,100",
     "badge": "Deal",
@@ -110,7 +124,7 @@
   {
     "id": "innisfree_daily_sun",
     "name": "Innisfree Daily UV Defense Sunscreen SPF36",
-    "price": 11.40,
+    "price": 11.4,
     "originalPrice": null,
     "rating": 4.3,
     "reviews": "12,400",
@@ -122,7 +136,7 @@
   {
     "id": "boj_matte_sun",
     "name": "Beauty of Joseon Matte Sun Stick Mugwort + Camelia SPF50+",
-    "price": 13.50,
+    "price": 13.5,
     "originalPrice": null,
     "rating": 4.7,
     "reviews": "15,200",
@@ -134,7 +148,7 @@
   {
     "id": "anua_peach_sun",
     "name": "Anua Peach 70 Niacin Sunscreen SPF50+ PA++++",
-    "price": 14.80,
+    "price": 14.8,
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "4,600",
@@ -146,8 +160,8 @@
   {
     "id": "torriden_dive_sun",
     "name": "Torriden DIVE-IN Mild Sunscreen SPF50+ PA++++",
-    "price": 13.20,
-    "originalPrice": 17.00,
+    "price": 13.2,
+    "originalPrice": 17,
     "rating": 4.6,
     "reviews": "6,900",
     "badge": "",
@@ -158,7 +172,7 @@
   {
     "id": "etude_sunprise",
     "name": "ETUDE Sunprise Mild Airy Finish SPF50+ PA+++",
-    "price": 8.90,
+    "price": 8.9,
     "originalPrice": null,
     "rating": 4.2,
     "reviews": "10,500",
@@ -170,8 +184,8 @@
   {
     "id": "dr_g_green_sun",
     "name": "Dr.G Green Mild Up Sun+ SPF50+ PA++++",
-    "price": 16.40,
-    "originalPrice": 22.00,
+    "price": 16.4,
+    "originalPrice": 22,
     "rating": 4.5,
     "reviews": "3,800",
     "badge": "",
@@ -182,7 +196,7 @@
   {
     "id": "numbuzin_no1_sun",
     "name": "Numbuzin No.1 Pure Glass Clean Tone Up SPF50+",
-    "price": 15.90,
+    "price": 15.9,
     "originalPrice": null,
     "rating": 4.4,
     "reviews": "5,100",
