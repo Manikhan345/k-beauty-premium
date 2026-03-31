@@ -1,7 +1,21 @@
 [
   {
+    "id": "aussie_total_miracle_hair_care",
+    "name": "Aussie Total Miracle Hair Care Bundle: Shampoo, Conditioner, and 3 Minute Deep Treatment with Apricot & Macadamia Oil, Paraben-Free for Damaged Hair, 26.2 & 8 Fl Oz",
+    "price": 18.39,
+    "originalPrice": null,
+    "rating": 4.7,
+    "reviews": "0",
+    "badge": "",
+    "tag": "Shampoo",
+    "image": "https://m.media-amazon.com/images/I/71ehMGWlb5L._AC_SL500_.jpg",
+    "url": "https://www.amazon.com/dp/B0857LKWKY?tag=kbeauty000-20",
+    "bought": "7K+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "olaplex_n_4_bond_maintenance_h",
-    "name": "Olaplex Nº.4 Bond Maintenance™ Hair Strengthening Shampoo: Repairs Damage &amp; Defend Against Future Breakage | Replenishes Hydration | For Coily, Curly, Straight, and Wavy",
+    "name": "Olaplex NÂº.4 Bond Maintenanceâ¢ Hair Strengthening Shampoo: Repairs Damage &amp; Defend Against Future Breakage | Replenishes Hydration | For Coily, Curly, Straight, and Wavy",
     "price": 34,
     "originalPrice": null,
     "rating": 4.6,
