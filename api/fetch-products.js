@@ -6,20 +6,13 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
+  const AFFILIATE_TAG = "kbeauty000-20";
+
   try {
     const { url } = req.body;
     if (!url || !url.includes("amazon.com")) {
       return res.status(400).json({ error: "Please provide a valid Amazon URL" });
     }
-
-    const AFFILIATE_TAG = "kbeauty000-20";
-
-    // Extract ASIN from URL
-    let asin = "";
-    const dpMatch = url.match(/\/dp\/([A-Z0-9]{10})/);
-    const gpMatch = url.match(/\/gp\/product\/([A-Z0-9]{10})/);
-    if (dpMatch) asin = dpMatch[1];
-    else if (gpMatch) asin = gpMatch[1];
 
     // Fetch the Amazon page
     const response = await fetch(url, {
@@ -37,111 +30,227 @@ export default async function handler(req, res) {
 
     const html = await response.text();
 
-    // Parse product name
-    let name = "";
-    const titleMatch = html.match(/<span id="productTitle"[^>]*>([\s\S]*?)<\/span>/);
-    if (titleMatch) name = titleMatch[1].trim();
-    if (!name) {
-      const titleMatch2 = html.match(/<title>([\s\S]*?)<\/title>/);
-      if (titleMatch2) name = titleMatch2[1].replace(/Amazon\.com\s*[:|-]\s*/, "").replace(/\s*[-|:]\s*.*$/, "").trim();
+    // Check if this is a search/category page or a single product page
+    const isSearchPage = url.includes("/s?") || url.includes("/s/") || url.includes("&s=") || html.includes('data-component-type="s-search-result"');
+    const isSingleProduct = url.includes("/dp/") || url.includes("/gp/product/");
+
+    if (isSingleProduct) {
+      // Single product page parsing
+      const product = parseSingleProduct(html, url, AFFILIATE_TAG);
+      return res.status(200).json({ products: [product], type: "single" });
     }
 
-    // Parse price
+    // Search/Category page parsing
+    const products = parseSearchPage(html, AFFILIATE_TAG);
+
+    if (products.length === 0) {
+      return res.status(200).json({ products: [], error: "No products found on this page. Amazon may have blocked the request. Try a different URL or try again later." });
+    }
+
+    return res.status(200).json({ products, type: "search" });
+
+  } catch (err) {
+    return res.status(500).json({ error: "Server error: " + err.message });
+  }
+}
+
+function parseSearchPage(html, affiliateTag) {
+  const products = [];
+
+  // Method 1: Parse search result blocks
+  // Amazon wraps each product in data-asin attributes
+  const asinPattern = /data-asin="([A-Z0-9]{10})"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g;
+  
+  // Better approach: split by search result divs
+  const resultBlocks = html.split('data-component-type="s-search-result"');
+  
+  for (let i = 1; i < resultBlocks.length; i++) {
+    const block = resultBlocks[i];
+    
+    // Extract ASIN
+    let asin = "";
+    const asinMatch = block.match(/data-asin="([A-Z0-9]{10})"/);
+    if (asinMatch) asin = asinMatch[1];
+    if (!asin) continue;
+
+    // Extract product name
+    let name = "";
+    // Try multiple patterns for product title
+    const namePatterns = [
+      /class="a-size-medium a-color-base a-text-normal"[^>]*>([\s\S]*?)<\//,
+      /class="a-size-base-plus a-color-base a-text-normal"[^>]*>([\s\S]*?)<\//,
+      /class="a-size-mini a-spacing-none a-color-base s-line-clamp-[24]"[\s\S]*?<span[^>]*>([\s\S]*?)<\/span>/,
+      /class="a-link-normal s-underline-text[\s\S]*?"[\s\S]*?<span[^>]*>([\s\S]*?)<\/span>/,
+      /aria-label="([^"]{10,})"/,
+    ];
+    for (const pattern of namePatterns) {
+      const match = block.match(pattern);
+      if (match) {
+        name = (match[1] || match[2] || "").replace(/<[^>]+>/g, "").trim();
+        if (name.length > 10) break;
+      }
+    }
+    if (!name || name.length < 5) continue;
+
+    // Extract price
     let price = 0;
     let originalPrice = null;
-    // Try different price selectors
     const pricePatterns = [
+      /class="a-price"[^>]*>.*?class="a-offscreen"[^>]*>\$?([\d.]+)<\/span>/s,
       /class="a-price-whole">(\d+)<.*?class="a-price-fraction">(\d+)/s,
-      /priceAmount['"]:?\s*(\d+\.?\d*)/,
-      /"price":\s*"?(\d+\.?\d*)"?/,
-      /\$(\d+\.\d{2})/
+      /\$(\d+\.\d{2})/,
     ];
     for (const pattern of pricePatterns) {
-      const match = html.match(pattern);
+      const match = block.match(pattern);
       if (match) {
-        if (match[2]) {
-          price = parseFloat(match[1] + "." + match[2]);
-        } else {
-          price = parseFloat(match[1]);
-        }
+        price = match[2] ? parseFloat(match[1] + "." + match[2]) : parseFloat(match[1]);
         if (price > 0) break;
       }
     }
 
-    // Try to find original/list price
-    const origPriceMatch = html.match(/class="a-price a-text-price"[^>]*>.*?<span[^>]*>\$?([\d.]+)<\/span>/s);
-    if (origPriceMatch) {
-      const op = parseFloat(origPriceMatch[1]);
+    // Original price (strikethrough)
+    const origMatch = block.match(/class="a-price a-text-price"[^>]*>.*?class="a-offscreen"[^>]*>\$?([\d.]+)<\/span>/s);
+    if (origMatch) {
+      const op = parseFloat(origMatch[1]);
       if (op > price) originalPrice = op;
     }
 
-    // Parse rating
+    // Extract rating
     let rating = 0;
-    const ratingMatch = html.match(/(\d+\.?\d*)\s*out of\s*5/);
+    const ratingMatch = block.match(/class="a-icon-alt"[^>]*>(\d+\.?\d*)\s*out of/);
     if (ratingMatch) rating = parseFloat(ratingMatch[1]);
     if (!rating) {
-      const ratingMatch2 = html.match(/"ratingValue":\s*"?(\d+\.?\d*)"?/);
+      const ratingMatch2 = block.match(/(\d+\.?\d*)\s*out of\s*5/);
       if (ratingMatch2) rating = parseFloat(ratingMatch2[1]);
     }
 
-    // Parse review count
+    // Extract review count
     let reviews = "0";
-    const reviewMatch = html.match(/(\d[\d,]+)\s*(?:global\s+)?ratings/i);
-    if (reviewMatch) reviews = reviewMatch[1];
-    if (reviews === "0") {
-      const reviewMatch2 = html.match(/"reviewCount":\s*"?(\d[\d,]*)"?/);
-      if (reviewMatch2) reviews = reviewMatch2[1];
+    const reviewPatterns = [
+      /aria-label="[\d,.]+\s*out of 5 stars"[\s\S]*?<span[^>]*class="a-size-base[^"]*"[^>]*>([\d,]+)<\/span>/,
+      /class="a-size-base s-underline-text">([\d,]+)<\/span>/,
+      />([\d,]{3,})<\/span>\s*<\/a>/,
+    ];
+    for (const pattern of reviewPatterns) {
+      const match = block.match(pattern);
+      if (match) {
+        reviews = match[1].trim();
+        if (reviews.length >= 2) break;
+      }
     }
 
-    // Parse image
+    // Extract image
     let image = "";
     const imgPatterns = [
-      /"hiRes":"(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
-      /"large":"(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
-      /data-old-hires="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
-      /id="landingImage"[^>]*src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
-      /id="imgBlkFront"[^>]*src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
-      /"(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+\._(?:AC_SL1500|AC_SL1200|AC_SL1000|AC_SX679|AC_SY741|AC_SX569|AC_SX355|AC_UL1500|SL1500|SL1200|SL1000)[^"]*\.jpg)"/
+      /class="s-image"[^>]*src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
+      /src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+\.jpg)"/,
+      /data-image-latency="s-product-image"[^>]*src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
     ];
     for (const pattern of imgPatterns) {
-      const match = html.match(pattern);
+      const match = block.match(pattern);
       if (match) {
         image = match[1];
         break;
       }
     }
-    // Fallback: any Amazon image
-    if (!image) {
-      const anyImg = html.match(/"(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+\.jpg)"/);
-      if (anyImg) image = anyImg[1];
-    }
 
-    // Parse bought in past month
+    // Extract bought in past month
     let bought = "";
-    const boughtMatch = html.match(/(\d+K?\+?\s*bought\s+in\s+past\s+month)/i);
+    const boughtMatch = block.match(/(\d+K?\+?\s*bought\s+in\s+past\s+month)/i);
     if (boughtMatch) bought = boughtMatch[1];
 
     // Build affiliate URL
-    const affiliateUrl = asin
-      ? `https://www.amazon.com/dp/${asin}?tag=${AFFILIATE_TAG}`
-      : url.includes("tag=") ? url : url + (url.includes("?") ? "&" : "?") + `tag=${AFFILIATE_TAG}`;
+    const affiliateUrl = `https://www.amazon.com/dp/${asin}?tag=${affiliateTag}`;
 
-    return res.status(200).json({
-      product: {
-        name: name || "Product name not found",
-        price: price,
-        originalPrice: originalPrice,
-        rating: rating || 4.5,
-        reviews: reviews,
-        image: image,
-        url: affiliateUrl,
-        asin: asin,
-        bought: bought,
-        prime: true
-      }
+    // Skip sponsored/ad results with no real data
+    if (price === 0 && rating === 0) continue;
+
+    products.push({
+      name,
+      price,
+      originalPrice,
+      rating: rating || 4.5,
+      reviews,
+      image,
+      url: affiliateUrl,
+      asin,
+      bought,
+      prime: true
     });
-
-  } catch (err) {
-    return res.status(500).json({ error: "Failed to fetch: " + err.message });
   }
+
+  return products;
+}
+
+function parseSingleProduct(html, originalUrl, affiliateTag) {
+  // Extract ASIN
+  let asin = "";
+  const dpMatch = originalUrl.match(/\/dp\/([A-Z0-9]{10})/);
+  const gpMatch = originalUrl.match(/\/gp\/product\/([A-Z0-9]{10})/);
+  if (dpMatch) asin = dpMatch[1];
+  else if (gpMatch) asin = gpMatch[1];
+
+  // Name
+  let name = "";
+  const titleMatch = html.match(/<span id="productTitle"[^>]*>([\s\S]*?)<\/span>/);
+  if (titleMatch) name = titleMatch[1].trim();
+
+  // Price
+  let price = 0;
+  let originalPrice = null;
+  const pricePatterns = [
+    /class="a-price-whole">(\d+)<.*?class="a-price-fraction">(\d+)/s,
+    /\$(\d+\.\d{2})/
+  ];
+  for (const pattern of pricePatterns) {
+    const match = html.match(pattern);
+    if (match) {
+      price = match[2] ? parseFloat(match[1] + "." + match[2]) : parseFloat(match[1]);
+      if (price > 0) break;
+    }
+  }
+
+  // Rating
+  let rating = 0;
+  const ratingMatch = html.match(/(\d+\.?\d*)\s*out of\s*5/);
+  if (ratingMatch) rating = parseFloat(ratingMatch[1]);
+
+  // Reviews
+  let reviews = "0";
+  const reviewMatch = html.match(/(\d[\d,]+)\s*(?:global\s+)?ratings/i);
+  if (reviewMatch) reviews = reviewMatch[1];
+
+  // Image
+  let image = "";
+  const imgPatterns = [
+    /"hiRes":"(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
+    /"large":"(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
+    /id="landingImage"[^>]*src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/,
+  ];
+  for (const pattern of imgPatterns) {
+    const match = html.match(pattern);
+    if (match) { image = match[1]; break; }
+  }
+
+  // Bought
+  let bought = "";
+  const boughtMatch = html.match(/(\d+K?\+?\s*bought\s+in\s+past\s+month)/i);
+  if (boughtMatch) bought = boughtMatch[1];
+
+  const affiliateUrl = asin
+    ? `https://www.amazon.com/dp/${asin}?tag=${affiliateTag}`
+    : originalUrl;
+
+  return {
+    name: name || "Product name not found",
+    price,
+    originalPrice,
+    rating: rating || 4.5,
+    reviews,
+    image,
+    url: affiliateUrl,
+    asin,
+    bought,
+    prime: true
+  };
 }
