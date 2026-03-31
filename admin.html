@@ -175,14 +175,13 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 
     <!-- AMAZON PAGE FETCHER -->
     <div class="ai-panel">
-      <h2>🔗 Import from Amazon</h2>
-      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Use the Chrome extension to extract products from Amazon, then paste the JSON here to import them.</p>
-      <div class="form-row" style="margin-bottom:8px;">
-        <textarea id="importJson" rows="3" placeholder='Click "Copy JSON" in the Chrome extension, then paste here...' style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.82rem;font-family:'Outfit',sans-serif;resize:vertical;outline:none;"></textarea>
-      </div>
+      <h2>🔗 Fetch from Amazon</h2>
+      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Paste an Amazon search or category page URL. All products on that page will be fetched and ready to add.</p>
       <div style="display:flex;gap:8px;">
-        <button class="btn-fetch" onclick="importFromJson()" style="flex:1;">📥 Import Products</button>
-        <button class="btn-fetch" onclick="document.getElementById('importJson').value=''" style="background:#E0E0E0;color:#555;">Clear</button>
+        <div class="form-row" style="flex:1;margin-bottom:0;">
+          <input type="text" id="amazonUrl" placeholder="https://www.amazon.com/s?k=korean+skincare+cleanser" style="width:100%;">
+        </div>
+        <button class="btn-fetch" id="btnFetch" onclick="fetchFromAmazon()">🔍 Fetch</button>
       </div>
       <div class="ai-status" id="aiStatus" style="margin-top:8px;"></div>
       <div class="ai-results" id="aiResults" style="margin-top:12px;"></div>
@@ -246,34 +245,68 @@ function editProduct(i){var p=data[activeCategory][i];editingIndex=i;document.ge
 function deleteProduct(i){if(!confirm("Delete this product?"))return;data[activeCategory].splice(i,1);markDirty(activeCategory);renderList();buildCatTabs();showToast("Deleted. Push to make it live.");}
 function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
 
-
 // ═══════════════════════════════════════════════════════════════
-// IMPORT FROM CHROME EXTENSION
+// FETCH FROM AMAZON PAGE
 // ═══════════════════════════════════════════════════════════════
 var fetchedProducts = [];
 
-function importFromJson() {
-  var jsonText = document.getElementById("importJson").value.trim();
+async function fetchFromAmazon() {
+  var url = document.getElementById("amazonUrl").value.trim();
+  var btn = document.getElementById("btnFetch");
   var statusEl = document.getElementById("aiStatus");
   var resultsEl = document.getElementById("aiResults");
-  if (!jsonText) return showToast("Paste the JSON from the Chrome extension", "error");
+
+  if (!url || !url.includes("amazon.com")) {
+    return showToast("Paste a valid Amazon URL", "error");
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Fetching...";
+  statusEl.textContent = "Fetching products from Amazon...";
+  resultsEl.innerHTML = "";
+
   try {
-    var products = JSON.parse(jsonText);
-    if (!Array.isArray(products) || products.length === 0) throw new Error("No products in JSON");
+    var response = await fetch("/api/fetch-products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: url })
+    });
+
+    var result = await response.json();
+
+    if (result.error) throw new Error(result.error);
+
+    var products = result.products;
+    if (!products || products.length === 0) throw new Error("No products found on this page");
+
     fetchedProducts = products;
-    statusEl.textContent = "Found " + products.length + " products. Select category & tag on the left, then click + to add.";
+    statusEl.textContent = "Found " + products.length + " products. Click ➕ to add or ✏️ to edit before adding.";
+
     resultsEl.innerHTML = products.map(function(p, idx) {
-      var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.parentElement.innerHTML=\'📦\'" style="max-width:90%;max-height:90%;object-fit:contain;">' : '📦';
+      var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.parentElement.innerHTML=\'📦\'">' : '📦';
       var priceHTML = '$' + (parseFloat(p.price) || 0).toFixed(2);
       if (p.originalPrice) priceHTML += ' <span style="text-decoration:line-through;color:#999;font-size:0.7rem;">$' + parseFloat(p.originalPrice).toFixed(2) + '</span>';
       var boughtHTML = p.bought ? '<div style="font-size:0.68rem;color:#C45500;font-weight:600;">' + p.bought + '</div>' : '';
-      return '<div class="ai-card" id="aiCard' + idx + '"><div class="ai-card-img">' + imgHTML + '</div><div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div><div class="ai-card-meta">⭐ ' + (p.rating || '4.5') + ' (' + (p.reviews || '0') + ')</div><div class="ai-card-price">' + priceHTML + '</div>' + boughtHTML + '<div class="ai-card-actions"><button class="btn-ai-add" onclick="quickAdd(' + idx + ')">➕ Add</button><button class="btn-ai-edit" onclick="editFromFetch(' + idx + ')">✏️</button></div></div>';
+
+      return '<div class="ai-card" id="aiCard' + idx + '">' +
+        '<div class="ai-card-img">' + imgHTML + '</div>' +
+        '<div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div>' +
+        '<div class="ai-card-meta">⭐ ' + (p.rating || '4.5') + ' (' + (p.reviews || '0') + ')</div>' +
+        '<div class="ai-card-price">' + priceHTML + '</div>' +
+        boughtHTML +
+        '<div class="ai-card-actions">' +
+        '<button class="btn-ai-add" onclick="quickAdd(' + idx + ')">➕ Add</button>' +
+        '<button class="btn-ai-edit" onclick="editFromFetch(' + idx + ')">✏️</button>' +
+        '</div></div>';
     }).join("");
-    showToast(products.length + " products loaded!", "success");
-  } catch(e) {
-    statusEl.textContent = "Error: Invalid JSON.";
-    showToast("Invalid JSON: " + e.message, "error");
+
+  } catch (e) {
+    statusEl.textContent = "Error: " + e.message;
+    showToast("Failed: " + e.message, "error");
   }
+
+  btn.disabled = false;
+  btn.textContent = "🔍 Fetch";
 }
 
 function quickAdd(idx) {
@@ -281,21 +314,45 @@ function quickAdd(idx) {
   if (!p) return;
   var cat = document.getElementById("fCategory").value;
   var tag = document.getElementById("fTag").value;
-  var product = { id: (p.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30), name: p.name || "", price: parseFloat(p.price) || 0, originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null, rating: parseFloat(p.rating) || 4.5, reviews: p.reviews || "0", badge: p.badge || "", tag: tag, image: p.image || "", url: p.url || "#", bought: p.bought || "", prime: p.prime !== false };
+
+  var product = {
+    id: (p.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30),
+    name: p.name || "",
+    price: parseFloat(p.price) || 0,
+    originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null,
+    rating: parseFloat(p.rating) || 4.5,
+    reviews: p.reviews || "0",
+    badge: "",
+    tag: tag,
+    image: p.image || "",
+    url: p.url || "#",
+    bought: p.bought || "",
+    prime: true
+  };
+
   if (!data[cat]) data[cat] = [];
   data[cat].unshift(product);
   addedSinceLastPush++;
   markDirty(cat);
   if (cat === activeCategory) { renderList(); buildCatTabs(); }
+
   var card = document.getElementById("aiCard" + idx);
-  if (card) { var actions = card.querySelector(".ai-card-actions"); actions.innerHTML = '<div class="ai-added">✓ Added to ' + cat + '</div>'; }
+  if (card) {
+    var actions = card.querySelector(".ai-card-actions");
+    actions.innerHTML = '<div class="ai-added">✓ Added to ' + cat + '</div>';
+  }
+
   showToast("Added: " + product.name.slice(0, 40) + "... (" + addedSinceLastPush + " new)", "success");
-  if (addedSinceLastPush >= 10 && addedSinceLastPush % 10 === 0) { showToast("🔔 " + addedSinceLastPush + " new products!", "success"); }
+
+  if (addedSinceLastPush >= 10 && addedSinceLastPush % 10 === 0) {
+    showToast("🔔 " + addedSinceLastPush + " new products — consider pushing to live!", "success");
+  }
 }
 
 function editFromFetch(idx) {
   var p = fetchedProducts[idx];
   if (!p) return;
+
   document.getElementById("fName").value = p.name || "";
   document.getElementById("fPrice").value = parseFloat(p.price) || "";
   document.getElementById("fOrigPrice").value = p.originalPrice ? parseFloat(p.originalPrice) : "";
@@ -306,10 +363,12 @@ function editFromFetch(idx) {
   document.getElementById("fBought").value = p.bought || "";
   document.getElementById("fPrime").checked = true;
   editingIndex = -1;
+
   window.scrollTo({ top: 0, behavior: "smooth" });
-  showToast("Product loaded — select category, tag, badge, then Add", "success");
+  showToast("Product loaded into form — select category, tag, badge, then Add", "success");
 }
 
+// ═══════════════════════════════════════════════════════════════
 // UTILITIES
 // ═══════════════════════════════════════════════════════════════
 function showToast(msg, type) { var t = document.getElementById("toast"); t.textContent = msg; t.className = "toast show" + (type ? " " + type : ""); setTimeout(function() { t.className = "toast"; }, 3000); }
