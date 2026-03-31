@@ -1,33 +1,5 @@
 [
   {
-    "id": "purito_deep_sea_pure_water_cre",
-    "name": "Purito Deep Sea Pure Water Cream Cleansing Foam",
-    "price": 12.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "6,234",
-    "badge": "",
-    "tag": "Cleanser",
-    "image": "https://m.media-amazon.com/images/I/41v8f6K-YRL.jpg",
-    "url": "https://www.amazon.com/dp/B083MWVXRG?tag=kbeauty000-20",
-    "bought": "25K+ bought in past month",
-    "prime": true
-  },
-  {
-    "id": "cosrx_advanced_snail_96_mucin_",
-    "name": "COSRX Advanced Snail 96 Mucin Power Essence",
-    "price": 8.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "8,432",
-    "badge": "",
-    "tag": "Cleanser",
-    "image": "https://m.media-amazon.com/images/I/51gAJQm8-ZL.jpg",
-    "url": "https://www.amazon.com/dp/B00BSNBON4?tag=kbeauty000-20",
-    "bought": "50K+ bought in past month",
-    "prime": true
-  },
-  {
     "id": "peter_thomas_roth_full_size_vi",
     "name": "Peter Thomas Roth | Full-Size Vitamin C & Hyaluronic Eye Patches 2-Piece Kit",
     "price": 55,
@@ -57,7 +29,7 @@
   },
   {
     "id": "la_roche_posay_toleriane_purif",
-    "name": "La Roche-Posay Toleriane Purifying Foaming Facial Cleanser, Oil Free Face Wash for Women & Men with Niacinamide + Ceramides, Pore Cleanser Safe For Sensitive Skin, WonÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂt Dry Out Skin, Soap Free",
+    "name": "La Roche-Posay Toleriane Purifying Foaming Facial Cleanser, Oil Free Face Wash for Women & Men with Niacinamide + Ceramides, Pore Cleanser Safe For Sensitive Skin, WonÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂt Dry Out Skin, Soap Free",
     "price": 19.99,
     "originalPrice": null,
     "rating": 4.7,
@@ -141,7 +113,7 @@
   },
   {
     "id": "embryolisse_lait_cr_me_concent",
-    "name": "Embryolisse Lait-CrÃÂÃÂÃÂÃÂ¨me ConcentrÃÂÃÂÃÂÃÂ© Face Moisturizer and Makeup Primer, French Face Cream With Shea Butter & Aloe Vera",
+    "name": "Embryolisse Lait-CrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¨me ConcentrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ© Face Moisturizer and Makeup Primer, French Face Cream With Shea Butter & Aloe Vera",
     "price": 27.2,
     "originalPrice": null,
     "rating": 4.6,
@@ -323,7 +295,7 @@
   },
   {
     "id": "peter_thomas_roth_instant_firm",
-    "name": "Peter Thomas Roth | Instant FIRMxÃÂÃÂÃÂÃÂ® Temporary Eye Tightener | Firm and Smooth the Look of Fine Lines, 1 oz",
+    "name": "Peter Thomas Roth | Instant FIRMxÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ® Temporary Eye Tightener | Firm and Smooth the Look of Fine Lines, 1 oz",
     "price": 19.5,
     "originalPrice": null,
     "rating": 3.7,
@@ -379,7 +351,7 @@
   },
   {
     "id": "peter_thomas_roth_instant_firm",
-    "name": "Peter Thomas Roth | Instant FIRMxÃÂÃÂÃÂÃÂ® Collagen Tightening Eye Patches | Eye Patches For Firming Under-Eye Bags & Wrinkles | Eye Masks For Puffiness",
+    "name": "Peter Thomas Roth | Instant FIRMxÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ® Collagen Tightening Eye Patches | Eye Patches For Firming Under-Eye Bags & Wrinkles | Eye Masks For Puffiness",
     "price": 30.6,
     "originalPrice": null,
     "rating": 4.2,
@@ -435,7 +407,7 @@
   },
   {
     "id": "strivectin_tighten_and_lift_ad",
-    "name": "StriVectin Tighten and Lift Advanced Neck Cream PLUS with Alpha-3 Peptides for Neck and DÃÂÃÂÃÂÃÂ©colletÃÂÃÂÃÂÃÂ©, Smoothing Look of Wrinkles and Fine Lines, Improves Crepey Skin and Vertical Lines",
+    "name": "StriVectin Tighten and Lift Advanced Neck Cream PLUS with Alpha-3 Peptides for Neck and DÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©colletÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©, Smoothing Look of Wrinkles and Fine Lines, Improves Crepey Skin and Vertical Lines",
     "price": 49.49,
     "originalPrice": null,
     "rating": 4.3,
