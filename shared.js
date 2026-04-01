@@ -171,7 +171,7 @@ var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 
 var full = Math.floor(rounded);
 var half = (rounded % 1 !== 0) ? 1 : 0;
 var empty = 5 - full - half;
-var stars = "★".repeat(full) + (half ? "⯨" : "") + "☆".repeat(empty);
+var stars = '<span style="color:#F5A623">' + "★".repeat(full) + '</span>' + (half ? '<span class="star-half">★</span>' : '') + '<span style="color:#ddd">' + "★".repeat(empty) + '</span>';
 var ratingNum = r ? " " + r : "";
 
   var priceHTML = "$" + product.price.toFixed(2);
