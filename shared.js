@@ -166,7 +166,13 @@ function renderProductCard(product, btnText) {
     ? '<img src="' + product.image + '" alt="' + product.name + '" loading="lazy">'
     : '<div class="placeholder-icon">📦</div>';
 
-  var stars = product.rating >= 4.5 ? "★★★★★" : product.rating >= 4.0 ? "★★★★☆" : "★★★☆☆";
+ var r = parseFloat(product.rating) || 0;
+var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
+var full = Math.floor(rounded);
+var half = (rounded % 1 !== 0) ? 1 : 0;
+var empty = 5 - full - half;
+var stars = "★".repeat(full) + (half ? "⯨" : "") + "☆".repeat(empty);
+var ratingNum = r ? " " + r : "";
 
   var priceHTML = "$" + product.price.toFixed(2);
   if (product.originalPrice) {
@@ -183,7 +189,7 @@ function renderProductCard(product, btnText) {
     badgeHTML +
     '<div class="product-img">' + imgHTML + '</div>' +
     '<div class="product-name">' + product.name + '</div>' +
-    '<div class="product-rating"><span class="stars">' + stars + '</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
+    '<div class="product-rating"><span class="stars">' + stars + ratingNum +'</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
     '<div class="product-price">' + priceHTML + '</div>' +
     priceNote +
     primeHTML +
