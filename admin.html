@@ -252,6 +252,75 @@ function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage
 // ═══════════════════════════════════════════════════════════════
 var fetchedProducts = [];
 
+// Auto-detect tag from product name
+var TAG_KEYWORDS = {
+  // Skincare
+  "Cleanser": ["cleanser","cleansing","face wash","facial wash","gel wash","foam wash"],
+  "Moisturizer": ["moisturizer","moisturizing","moisturiser","hydrating cream","face cream","facial cream"],
+  "Toner": ["toner","toning","astringent"],
+  "Cream": ["cream","balm","butter","lotion"],
+  "Exfoliator": ["exfoliat","scrub","peel","glycolic","salicylic","bha","aha"],
+  "Eye Care": ["eye cream","eye patch","eye serum","under eye","undereye"],
+  "Patches": ["patch","pimple patch","acne patch","hydrocolloid"],
+  "Sets": ["set","kit","bundle","collection","pack of","variety"],
+  // Serums
+  "Brightening": ["brightening","vitamin c","dark spot","glow","radiance","niacinamide"],
+  "Hydrating": ["hydrating","hyaluronic","moisture","hydration"],
+  "Anti-Aging": ["anti-aging","anti aging","retinol","retinal","wrinkle","firming","peptide","collagen"],
+  "Acne Care": ["acne","blemish","breakout","salicylic","benzoyl"],
+  "Pore Care": ["pore","blackhead","sebum","oil control"],
+  "Vitamin C": ["vitamin c","ascorbic"],
+  "Niacinamide": ["niacinamide"],
+  "Snail Mucin": ["snail","mucin"],
+  // Face Masks
+  "Sheet Mask": ["sheet mask","face mask sheet"],
+  "Sleeping Mask": ["sleeping mask","overnight mask","night mask"],
+  "Clay Mask": ["clay mask","mud mask","kaolin"],
+  "Peel-Off": ["peel off","peel-off"],
+  "Pads": ["pad","toning pad","exfoliating pad"],
+  "Wash-Off": ["wash off","wash-off","rinse off"],
+  "Hydrogel": ["hydrogel","jelly mask","gel mask"],
+  // Sunscreen
+  "Stick": ["sun stick","sunscreen stick","spf stick"],
+  "Tinted": ["tinted","tone up","tone-up"],
+  "Gel": ["sun gel","gel sunscreen","gel spf"],
+  "Fluid": ["fluid","lightweight sun","watery sun"],
+  "Matte": ["matte sun","matte spf","oil free sun"],
+  // Makeup
+  "Foundation": ["foundation","cushion","bb cream","cc cream","base makeup"],
+  "Lip Tint": ["lip tint","tint"],
+  "Eye Shadow": ["eyeshadow","eye shadow","palette"],
+  "Mascara": ["mascara","lash"],
+  "Brow": ["brow","eyebrow"],
+  "Blush": ["blush","cheek"],
+  "Powder": ["powder","setting powder","compact"],
+  "Eyeliner": ["eyeliner","eye liner","liner"],
+  // Lip Care
+  "Lip Mask": ["lip mask","lip sleeping"],
+  "Lip Balm": ["lip balm","lip butter"],
+  "Lip Gloss": ["lip gloss","gloss"],
+  "Lip Serum": ["lip serum","lip oil","lip essence"],
+  // Hair Care
+  "Shampoo": ["shampoo"],
+  "Conditioner": ["conditioner","conditioning"],
+  "Treatment": ["treatment","hair mask","hair repair","deep condition"],
+  "Hair Serum": ["hair serum","hair oil","hair essence","leave-in","leave in"],
+  "Scalp Care": ["scalp","dandruff","anti-dandruff"],
+  "Oil": ["oil","argan","coconut oil","hair oil"],
+  "Mist": ["mist","hair spray","spray"]
+};
+
+function detectTag(productName) {
+  var nameLower = (productName || '').toLowerCase();
+  for (var tag in TAG_KEYWORDS) {
+    var keywords = TAG_KEYWORDS[tag];
+    for (var i = 0; i < keywords.length; i++) {
+      if (nameLower.includes(keywords[i])) return tag;
+    }
+  }
+  return '';
+}
+
 function importFromJson() {
   var jsonText = document.getElementById("importJson").value.trim();
   var statusEl = document.getElementById("aiStatus");
@@ -261,14 +330,8 @@ function importFromJson() {
     var products = JSON.parse(jsonText);
     if (!Array.isArray(products) || products.length === 0) throw new Error("No products in JSON");
     fetchedProducts = products;
-    statusEl.textContent = "Found " + products.length + " products. Select category & tag on the left, then click + to add.";
-    resultsEl.innerHTML = products.map(function(p, idx) {
-      var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.parentElement.innerHTML=\'📦\'" style="max-width:90%;max-height:90%;object-fit:contain;">' : '📦';
-      var priceHTML = '$' + (parseFloat(p.price) || 0).toFixed(2);
-      if (p.originalPrice) priceHTML += ' <span style="text-decoration:line-through;color:#999;font-size:0.7rem;">$' + parseFloat(p.originalPrice).toFixed(2) + '</span>';
-      var boughtHTML = p.bought ? '<div style="font-size:0.68rem;color:#C45500;font-weight:600;">' + p.bought + '</div>' : '';
-      return '<div class="ai-card" id="aiCard' + idx + '"><div class="ai-card-img">' + imgHTML + '</div><div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div><div class="ai-card-meta">⭐ ' + (p.rating || '4.5') + ' (' + (p.reviews || '0') + ')</div><div class="ai-card-price">' + priceHTML + '</div>' + boughtHTML + '<div class="ai-card-actions"><button class="btn-ai-add" onclick="quickAdd(' + idx + ')">➕ Add</button><button class="btn-ai-edit" onclick="editFromFetch(' + idx + ')">✏️</button></div></div>';
-    }).join("");
+    statusEl.textContent = "Found " + products.length + " products. Select category on the left, then click ➕ to add.";
+    renderFetchedCards();
     showToast(products.length + " products loaded!", "success");
   } catch(e) {
     statusEl.textContent = "Error: Invalid JSON.";
@@ -276,11 +339,47 @@ function importFromJson() {
   }
 }
 
+function renderFetchedCards() {
+  var resultsEl = document.getElementById("aiResults");
+  var visibleCount = 0;
+  resultsEl.innerHTML = fetchedProducts.map(function(p, idx) {
+    if (p._dismissed) return '';
+    visibleCount++;
+    var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.parentElement.innerHTML=\'📦\'" style="max-width:90%;max-height:90%;object-fit:contain;">' : '📦';
+    var priceHTML = '$' + (parseFloat(p.price) || 0).toFixed(2);
+    if (p.originalPrice) priceHTML += ' <span style="text-decoration:line-through;color:#999;font-size:0.7rem;">$' + parseFloat(p.originalPrice).toFixed(2) + '</span>';
+    var boughtHTML = p.bought ? '<div style="font-size:0.68rem;color:#C45500;font-weight:600;">' + p.bought + '</div>' : '';
+    var autoTag = detectTag(p.name);
+    var tagHTML = autoTag ? '<div style="font-size:0.62rem;background:#EBF8FF;color:#3182CE;padding:2px 6px;border-radius:3px;display:inline-block;margin-top:2px;">' + autoTag + '</div>' : '';
+    return '<div class="ai-card" id="aiCard' + idx + '" style="position:relative;">' +
+      '<button onclick="dismissProduct(' + idx + ')" style="position:absolute;top:6px;right:6px;background:#FED7D7;color:#E53E3E;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;font-weight:700;line-height:22px;text-align:center;">✕</button>' +
+      '<div class="ai-card-img">' + imgHTML + '</div>' +
+      '<div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div>' +
+      '<div class="ai-card-meta">⭐ ' + (p.rating || '0') + ' (' + (p.reviews || '0') + ')</div>' +
+      '<div class="ai-card-price">' + priceHTML + '</div>' +
+      boughtHTML + tagHTML +
+      '<div class="ai-card-actions">' +
+      '<button class="btn-ai-add" onclick="quickAdd(' + idx + ')">➕ Add</button>' +
+      '<button class="btn-ai-edit" onclick="editFromFetch(' + idx + ')">✏️</button>' +
+      '</div></div>';
+  }).join("");
+  document.getElementById("aiStatus").textContent = visibleCount + " products ready. Select category on the left, then click ➕ to add.";
+}
+
+function dismissProduct(idx) {
+  fetchedProducts[idx]._dismissed = true;
+  var card = document.getElementById("aiCard" + idx);
+  if (card) card.style.display = 'none';
+  var visible = fetchedProducts.filter(function(p) { return !p._dismissed; }).length;
+  document.getElementById("aiStatus").textContent = visible + " products remaining.";
+}
+
 function quickAdd(idx) {
   var p = fetchedProducts[idx];
   if (!p) return;
   var cat = document.getElementById("fCategory").value;
-  var tag = document.getElementById("fTag").value;
+  var autoTag = detectTag(p.name);
+  var tag = document.getElementById("fTag").value || autoTag;
   var product = { id: (p.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30), name: p.name || "", price: parseFloat(p.price) || 0, originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null, rating: parseFloat(p.rating) || 4.5, reviews: p.reviews || "0", badge: p.badge || "", tag: tag, image: p.image || "", url: p.url || "#", bought: p.bought || "", prime: p.prime !== false };
   if (!data[cat]) data[cat] = [];
   data[cat].unshift(product);
@@ -288,8 +387,8 @@ function quickAdd(idx) {
   markDirty(cat);
   if (cat === activeCategory) { renderList(); buildCatTabs(); }
   var card = document.getElementById("aiCard" + idx);
-  if (card) { var actions = card.querySelector(".ai-card-actions"); actions.innerHTML = '<div class="ai-added">✓ Added to ' + cat + '</div>'; }
-  showToast("Added: " + product.name.slice(0, 40) + "... (" + addedSinceLastPush + " new)", "success");
+  if (card) { var actions = card.querySelector(".ai-card-actions"); actions.innerHTML = '<div class="ai-added">✓ Added to ' + cat + ' [' + tag + ']</div>'; }
+  showToast("Added: " + product.name.slice(0, 40) + "... → " + cat + " [" + tag + "]", "success");
   if (addedSinceLastPush >= 10 && addedSinceLastPush % 10 === 0) { showToast("🔔 " + addedSinceLastPush + " new products!", "success"); }
 }
 
