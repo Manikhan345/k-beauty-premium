@@ -1,5 +1,19 @@
 [
   {
+    "id": "unite_hair_7seconds_shampoo_hy",
+    "name": "UNITE Hair – 7SECONDS Shampoo – Hydrating Cleanser to Boost Shine & Help Protect Color – Defends Against UV & Heat Damage – Lightweight Formula for All Hair Types – 10 Fl Oz",
+    "price": 37.5,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "1,800",
+    "badge": "",
+    "tag": "Shampoo",
+    "image": "https://m.media-amazon.com/images/I/41E8pZWEoGL._AC_SL500_.jpg",
+    "url": "https://www.amazon.com/dp/B017DT43RG?tag=kbeauty000-20",
+    "bought": "1K+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "aussie_total_miracle_hair_care",
     "name": "Aussie Total Miracle Hair Care Bundle: Shampoo, Conditioner, and 3 Minute Deep Treatment with Apricot & Macadamia Oil, Paraben-Free for Damaged Hair, 26.2 & 8 Fl Oz",
     "price": 18.39,
@@ -15,7 +29,7 @@
   },
   {
     "id": "olaplex_n_4_bond_maintenance_h",
-    "name": "Olaplex NÂº.4 Bond Maintenanceâ¢ Hair Strengthening Shampoo: Repairs Damage &amp; Defend Against Future Breakage | Replenishes Hydration | For Coily, Curly, Straight, and Wavy",
+    "name": "Olaplex NÃÂº.4 Bond MaintenanceÃ¢ÂÂ¢ Hair Strengthening Shampoo: Repairs Damage &amp; Defend Against Future Breakage | Replenishes Hydration | For Coily, Curly, Straight, and Wavy",
     "price": 34,
     "originalPrice": null,
     "rating": 4.6,
