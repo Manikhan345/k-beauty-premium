@@ -116,3 +116,5 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .bought-tag { font-size: 0.7rem; color: #C45500; font-weight: 600; margin-bottom: 6px; }
 .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; align-items: start; }
 .product-card { max-width: 280px; }
+.star-half { position: relative; display: inline-block; color: #ddd; }
+.star-half::before { content: "★"; position: absolute; overflow: hidden; width: 50%; color: #F5A623; }
