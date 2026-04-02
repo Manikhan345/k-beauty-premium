@@ -113,7 +113,7 @@ function filterBySubtag(subtag, btn) {
 function renderGrid(products) {
   var grid = document.getElementById("productGrid");
   if (products.length === 0) { grid.innerHTML = '<p style="color:var(--text-light);padding:40px;text-align:center;grid-column:1/-1;">No products found for this filter.</p>'; return; }
-  grid.innerHTML = products.map(function(p) { return renderProductCard(p); }).join("");
+  grid.innerHTML = products.map(function(p) { return renderProductCard(p, null, CATEGORY_KEY); }).join("");
 }
 
 function updateCount(n) { var el = document.querySelector(".result-count"); if (el) el.textContent = "Showing " + n + " products"; }

@@ -162,7 +162,7 @@ function renderFooter() {
 // ═══════════════════════════════════════════════════════════════
 // PRODUCT CARD RENDERER
 // ═══════════════════════════════════════════════════════════════
-function renderProductCard(product, btnText) {
+function renderProductCard(product, btnText, categoryKey) {
   var btnLabel = btnText || "View on Amazon";
   var badgeClass = BADGE_MAP[product.badge] || "";
   var badgeHTML = product.badge ? '<span class="product-badge ' + badgeClass + '">' + product.badge + '</span>' : "";
@@ -190,8 +190,9 @@ function renderProductCard(product, btnText) {
   var priceNote = '<div style="font-size:0.65rem;color:var(--text-light);margin-bottom:4px;">*Price may vary on Amazon</div>';
   var boughtHTML = product.bought ? '<div class="bought-tag">' + product.bought + '</div>' : "";
   var tagAttr = product.tag ? ' data-tag="' + product.tag + '"' : '';
+  var productLink = (product.id && categoryKey) ? 'product.html?cat=' + categoryKey + '&id=' + product.id : '';
 
-  return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '"' + tagAttr + '>' +
+  return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '"' + tagAttr + (productLink ? ' data-href="' + productLink + '" onclick="if(!event.target.classList.contains(\'buy-btn\'))window.location.href=this.dataset.href"' : '') + '>' +
     badgeHTML +
     '<div class="product-img">' + imgHTML + '</div>' +
     '<div class="product-name">' + product.name + '</div>' +
