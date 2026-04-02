@@ -48,6 +48,9 @@ renderFooter();
 
 var HOMEPAGE_LIMIT = 5;
 async function buildHomepage() {
+  await loadConfig();
+  renderNav("home", "filterHomepage");
+  renderFooter();
   var main = document.getElementById("mainContent");
   var categories = Object.keys(CATEGORY_META);
   for (var i = 0; i < categories.length; i++) {

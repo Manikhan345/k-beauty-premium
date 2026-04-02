@@ -139,12 +139,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   <div class="form-panel">
     <h2 id="formTitle">➕ Add New Product</h2>
     <div class="form-row"><label>Category</label>
-      <select id="fCategory">
-        <option value="skincare">🧴 Skincare</option><option value="serums">💎 Serums & Essences</option>
-        <option value="facemasks">🎭 Face Masks</option><option value="sunscreen">☀️ Sunscreen / SPF</option>
-        <option value="makeup">💄 Makeup</option><option value="lipcare">👄 Lip Care</option>
-        <option value="haircare">💇 Hair Care</option>
-      </select>
+      <select id="fCategory"></select>
     </div>
     <div class="form-row"><label>Product Name</label><input type="text" id="fName" placeholder="e.g. COSRX Snail Mucin 96%"></div>
     <div class="form-row-half">
@@ -199,16 +194,32 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 var GITHUB_OWNER = "Manikhan345";
 var GITHUB_REPO = "k-beauty-premium";
 var GITHUB_BRANCH = "main";
-var CATEGORIES = { skincare: "🧴 Skincare", serums: "💎 Serums", facemasks: "🎭 Face Masks", sunscreen: "☀️ Sunscreen", makeup: "💄 Makeup", lipcare: "👄 Lip Care", haircare: "💇 Hair Care" };
-var CATEGORY_TAGS = {
-  skincare: ["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"],
-  serums: ["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"],
-  facemasks: ["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"],
-  sunscreen: ["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"],
-  makeup: ["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"],
-  lipcare: ["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"],
-  haircare: ["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"],
-};
+var CATEGORIES = {};
+var CATEGORY_TAGS = {};
+
+async function loadConfigForAdmin() {
+  try {
+    var resp = await fetch("config.json");
+    if (!resp.ok) throw new Error("Failed");
+    var config = await resp.json();
+    var cats = config.categories || {};
+    Object.keys(cats).forEach(function(key) {
+      CATEGORIES[key] = cats[key].title;
+      CATEGORY_TAGS[key] = cats[key].tags || [];
+    });
+    // Populate category dropdown
+    var sel = document.getElementById("fCategory");
+    sel.innerHTML = Object.keys(CATEGORIES).map(function(k) {
+      return '<option value="' + k + '">' + CATEGORIES[k] + '</option>';
+    }).join("");
+  } catch(e) {
+    console.error("Config error:", e);
+    CATEGORIES = { skincare:"🧴 Skincare", serums:"💎 Serums", facemasks:"🎭 Face Masks", sunscreen:"☀️ Sunscreen", makeup:"💄 Makeup", lipcare:"👄 Lip Care", haircare:"💇 Hair Care" };
+    CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
+    var sel = document.getElementById("fCategory");
+    sel.innerHTML = Object.keys(CATEGORIES).map(function(k) { return '<option value="' + k + '">' + CATEGORIES[k] + '</option>'; }).join("");
+  }
+}
 
 var token="", data={}, fileSHAs={}, activeCategory="skincare", editingIndex=-1, hasUnsavedChanges=false, dirtyCategories=new Set();
 var addedSinceLastPush = 0;
@@ -414,8 +425,13 @@ function editFromFetch(idx) {
 function showToast(msg, type) { var t = document.getElementById("toast"); t.textContent = msg; t.className = "toast show" + (type ? " " + type : ""); setTimeout(function() { t.className = "toast"; }, 3000); }
 function updateTagDropdown() { var cat = document.getElementById("fCategory").value; var tags = CATEGORY_TAGS[cat] || []; var sel = document.getElementById("fTag"); sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join(""); }
 document.getElementById("fCategory").addEventListener("change", updateTagDropdown);
-updateTagDropdown();
-checkSavedToken();
+
+async function initAdmin() {
+  await loadConfigForAdmin();
+  updateTagDropdown();
+  checkSavedToken();
+}
+initAdmin();
 </script>
 </body>
 </html>

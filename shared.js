@@ -1,37 +1,21 @@
 /* ═══════════════════════════════════════════════════════════════
    K Beauty Premium — Shared JavaScript
-   Header, Nav, Footer all rendered from here.
-   Change once → updates every page.
+   Reads categories from config.json — change once, updates everywhere.
    ═══════════════════════════════════════════════════════════════ */
 
-// ── SITE CONFIG ──
-var SITE_PAGES = {
-  home: "index.html",
-  skincare: "category-skincare.html",
-  serums: "category-serums.html",
-  facemasks: "category-facemasks.html",
-  sunscreen: "category-sunscreen.html",
-  makeup: "category-makeup.html",
-  lipcare: "category-lipcare.html",
-  haircare: "category-haircare.html",
-};
+// ── These are populated from config.json ──
+var SITE_PAGES = {};
+var CATEGORY_META = {};
+var CATEGORY_TAGS = {};
+var CONFIG_LOADED = false;
 
+// ── STATIC CONFIG ──
 var FOOTER_PAGES = {
   about: "about.html",
   contact: "contact.html",
   privacy: "privacy-policy.html",
   terms: "terms-of-service.html",
   disclosure: "affiliate-disclosure.html",
-};
-
-var CATEGORY_META = {
-  skincare:  { title: "🧴 Skincare",          file: "data/skincare.json" },
-  serums:    { title: "💎 Serums & Essences",  file: "data/serums.json" },
-  facemasks: { title: "🎭 Face Masks",         file: "data/facemasks.json" },
-  sunscreen: { title: "☀️ Sunscreen / SPF",    file: "data/sunscreen.json" },
-  makeup:    { title: "💄 Makeup",             file: "data/makeup.json" },
-  lipcare:   { title: "👄 Lip Care",           file: "data/lipcare.json" },
-  haircare:  { title: "💇 Hair Care",          file: "data/haircare.json" },
 };
 
 var BADGE_MAP = {
@@ -43,27 +27,48 @@ var BADGE_MAP = {
   "Prime Pick": "badge-prime",
 };
 
-// ── PRODUCT TAGS PER CATEGORY (based on Amazon subcategories) ──
-var CATEGORY_TAGS = {
-  skincare:  ["Cleanser", "Moisturizer", "Toner", "Cream", "Exfoliator", "Eye Care", "Patches", "Sets"],
-  serums:    ["Brightening", "Hydrating", "Anti-Aging", "Acne Care", "Pore Care", "Vitamin C", "Niacinamide", "Snail Mucin"],
-  facemasks: ["Sheet Mask", "Sleeping Mask", "Clay Mask", "Peel-Off", "Pads", "Patches", "Wash-Off", "Hydrogel"],
-  sunscreen: ["Cream", "Gel", "Stick", "Tinted", "Fluid", "Water-Resistant", "Tone-Up", "Matte"],
-  makeup:    ["Foundation", "Lip Tint", "Eye Shadow", "Mascara", "Brow", "Blush", "Powder", "Eyeliner"],
-  lipcare:   ["Lip Mask", "Lip Tint", "Lip Balm", "Lip Gloss", "Lip Serum", "Matte", "Glossy", "Tinted"],
-  haircare:  ["Shampoo", "Treatment", "Hair Serum", "Conditioner", "Scalp Care", "Mask", "Oil", "Mist"],
-};
-
 // ═══════════════════════════════════════════════════════════════
 // ✏️ EDIT THESE TO UPDATE EVERY PAGE AT ONCE
 // ═══════════════════════════════════════════════════════════════
-
 var SITE_NAME_HTML = 'K <span>Beauty</span> Premium';
 var SITE_SUBTITLE = 'Korean Skincare & Beauty Products';
 var CONTACT_EMAIL = 'hello@kbeauty.fun';
 var CONTACT_PHONE = '+1 (555) 123-4567';
-var CONTACT_PHONE_TEL = '+15551234567'; // for tel: link (no spaces)
+var CONTACT_PHONE_TEL = '+15551234567';
 var COPYRIGHT_YEAR = '2026';
+
+// ═══════════════════════════════════════════════════════════════
+// LOAD CONFIG
+// ═══════════════════════════════════════════════════════════════
+async function loadConfig() {
+  if (CONFIG_LOADED) return;
+  try {
+    var resp = await fetch("config.json");
+    if (!resp.ok) throw new Error("Failed to load config.json");
+    var config = await resp.json();
+    var cats = config.categories || {};
+    
+    SITE_PAGES = { home: "index.html" };
+    CATEGORY_META = {};
+    CATEGORY_TAGS = {};
+    
+    Object.keys(cats).forEach(function(key) {
+      var c = cats[key];
+      SITE_PAGES[key] = "category-" + key + ".html";
+      CATEGORY_META[key] = { title: c.title, file: "data/" + key + ".json" };
+      CATEGORY_TAGS[key] = c.tags || [];
+    });
+    
+    CONFIG_LOADED = true;
+  } catch (e) {
+    console.error("Config load error:", e);
+    // Fallback to hardcoded defaults if config.json fails
+    SITE_PAGES = { home:"index.html", skincare:"category-skincare.html", serums:"category-serums.html", facemasks:"category-facemasks.html", sunscreen:"category-sunscreen.html", makeup:"category-makeup.html", lipcare:"category-lipcare.html", haircare:"category-haircare.html" };
+    CATEGORY_META = { skincare:{title:"🧴 Skincare",file:"data/skincare.json"}, serums:{title:"💎 Serums & Essences",file:"data/serums.json"}, facemasks:{title:"🎭 Face Masks",file:"data/facemasks.json"}, sunscreen:{title:"☀️ Sunscreen / SPF",file:"data/sunscreen.json"}, makeup:{title:"💄 Makeup",file:"data/makeup.json"}, lipcare:{title:"👄 Lip Care",file:"data/lipcare.json"}, haircare:{title:"💇 Hair Care",file:"data/haircare.json"} };
+    CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
+    CONFIG_LOADED = true;
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // HEADER
@@ -82,28 +87,22 @@ function renderHeader() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// NAV
+// NAV (builds dynamically from config)
 // ═══════════════════════════════════════════════════════════════
 function renderNav(activePage, searchFunction) {
   var el = document.getElementById("siteNav");
   if (!el) return;
 
   var searchFn = searchFunction || "";
-  var categories = [
-    { key: "home", label: "All", href: "index.html" },
-    { key: "skincare", label: "Skincare", href: "category-skincare.html" },
-    { key: "serums", label: "Serums & Essences", href: "category-serums.html" },
-    { key: "facemasks", label: "Face Masks", href: "category-facemasks.html" },
-    { key: "sunscreen", label: "Sunscreen", href: "category-sunscreen.html" },
-    { key: "makeup", label: "Makeup", href: "category-makeup.html" },
-    { key: "lipcare", label: "Lip Care", href: "category-lipcare.html" },
-    { key: "haircare", label: "Hair Care", href: "category-haircare.html" },
-  ];
 
-  var links = categories.map(function(c) {
-    var cls = c.key === activePage ? ' class="active"' : '';
-    return '<a href="' + c.href + '"' + cls + '>' + c.label + '</a>';
-  }).join("");
+  // Build nav links from config
+  var links = '<a href="index.html"' + (activePage === "home" ? ' class="active"' : '') + '>All</a>';
+  Object.keys(CATEGORY_META).forEach(function(key) {
+    var meta = CATEGORY_META[key];
+    var label = meta.title.replace(/^[^\w]*/, "").trim(); // Remove emoji
+    var cls = key === activePage ? ' class="active"' : '';
+    links += '<a href="category-' + key + '.html"' + cls + '>' + label + '</a>';
+  });
 
   var searchHTML = "";
   if (searchFn) {
@@ -114,11 +113,19 @@ function renderNav(activePage, searchFunction) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// FOOTER
+// FOOTER (builds dynamically from config)
 // ═══════════════════════════════════════════════════════════════
 function renderFooter() {
   var el = document.getElementById("siteFooter");
   if (!el) return;
+
+  // Build category links dynamically
+  var catLinks = '';
+  Object.keys(CATEGORY_META).forEach(function(key) {
+    var meta = CATEGORY_META[key];
+    var label = meta.title.replace(/^[^\w]*/, "").trim();
+    catLinks += '<a href="category-' + key + '.html">' + label + '</a>';
+  });
 
   el.innerHTML = '<footer class="footer"><div class="footer-grid">' +
     '<div>' +
@@ -128,15 +135,7 @@ function renderFooter() {
     '<p style="margin-top:18px;font-size:1rem;"><a href="mailto:' + CONTACT_EMAIL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📧 ' + CONTACT_EMAIL + '</a></p>' +
     '<p style="font-size:1rem;"><a href="tel:' + CONTACT_PHONE_TEL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📞 ' + CONTACT_PHONE + '</a></p>' +
     '</div>' +
-    '<div class="footer-links"><h3>Categories</h3>' +
-    '<a href="category-skincare.html">Skincare</a>' +
-    '<a href="category-serums.html">Serums & Essences</a>' +
-    '<a href="category-facemasks.html">Face Masks</a>' +
-    '<a href="category-sunscreen.html">Sunscreen / SPF</a>' +
-    '<a href="category-makeup.html">Makeup</a>' +
-    '<a href="category-lipcare.html">Lip Care</a>' +
-    '<a href="category-haircare.html">Hair Care</a>' +
-    '</div>' +
+    '<div class="footer-links"><h3>Categories</h3>' + catLinks + '</div>' +
     '<div class="footer-links"><h3>More Pages</h3>' +
     '<a href="about.html">About Us</a>' +
     '<a href="contact.html">Contact</a>' +
@@ -166,13 +165,13 @@ function renderProductCard(product, btnText) {
     ? '<img src="' + product.image + '" alt="' + product.name + '" loading="lazy">'
     : '<div class="placeholder-icon">📦</div>';
 
- var r = parseFloat(product.rating) || 0;
-var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
-var full = Math.floor(rounded);
-var half = (rounded % 1 !== 0) ? 1 : 0;
-var empty = 5 - full - half;
-var stars = '<span style="color:#F5A623">' + "★".repeat(full) + '</span>' + (half ? '<span class="star-half">★</span>' : '') + '<span style="color:#ddd">' + "★".repeat(empty) + '</span>';
-var ratingNum = r ? " " + r : "";
+  var r = parseFloat(product.rating) || 0;
+  var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
+  var full = Math.floor(rounded);
+  var half = (rounded % 1 !== 0) ? 1 : 0;
+  var empty = 5 - full - half;
+  var stars = '<span style="color:#F5A623">' + "★".repeat(full) + '</span>' + (half ? '<span class="star-half">★</span>' : '') + '<span style="color:#ddd">' + "★".repeat(empty) + '</span>';
+  var ratingNum = r ? " " + r : "";
 
   var priceHTML = "$" + product.price.toFixed(2);
   if (product.originalPrice) {
@@ -189,7 +188,7 @@ var ratingNum = r ? " " + r : "";
     badgeHTML +
     '<div class="product-img">' + imgHTML + '</div>' +
     '<div class="product-name">' + product.name + '</div>' +
-    '<div class="product-rating"><span class="stars">' + stars + ratingNum +'</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
+    '<div class="product-rating"><span class="stars">' + stars + ratingNum + '</span><span class="rating-count">(' + product.reviews + ')</span></div>' +
     '<div class="product-price">' + priceHTML + '</div>' +
     priceNote +
     primeHTML +

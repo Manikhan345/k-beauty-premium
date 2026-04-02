@@ -1,15 +1,18 @@
 /* ═══════════════════════════════════════════════════════════════
    K Beauty Premium — Category Page Logic
-   Now with tag filtering
+   Loads from config.json for tags
    ═══════════════════════════════════════════════════════════════ */
 var allProducts = [];
 var activeTag = "";
 
 async function initCategoryPage() {
+  await loadConfig();
   var meta = CATEGORY_META[CATEGORY_KEY];
   if (!meta) return;
   document.getElementById("catTitle").textContent = meta.title;
   document.title = meta.title.replace(/^[^\w]*/, "") + " — K Beauty Premium";
+  renderNav(CATEGORY_KEY, "filterCategoryProducts");
+  renderFooter();
   allProducts = await fetchProducts(meta.file);
   renderTagButtons();
   renderGrid(allProducts);
@@ -17,7 +20,6 @@ async function initCategoryPage() {
   updateTopRated(allProducts);
 }
 
-// ── TAG FILTER BUTTONS ──
 function renderTagButtons() {
   var container = document.getElementById("tagBar");
   if (!container) return;
@@ -35,7 +37,6 @@ function filterByTag(tag, btn) {
   activeTag = tag;
   document.querySelectorAll(".tag-btn").forEach(function(b) { b.classList.remove("active"); });
   btn.classList.add("active");
-
   var filtered = tag ? allProducts.filter(function(p) { return p.tag === tag; }) : allProducts;
   renderGrid(filtered);
   updateCount(filtered.length);

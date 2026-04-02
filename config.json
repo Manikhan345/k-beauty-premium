@@ -1,0 +1,39 @@
+{
+  "categories": {
+    "skincare": {
+      "title": "🧴 Skincare",
+      "label": "Skincare",
+      "tags": ["Cleanser", "Moisturizer", "Toner", "Cream", "Exfoliator", "Eye Care", "Patches", "Sets"]
+    },
+    "serums": {
+      "title": "💎 Serums & Essences",
+      "label": "Serums & Essences",
+      "tags": ["Brightening", "Hydrating", "Anti-Aging", "Acne Care", "Pore Care", "Vitamin C", "Niacinamide", "Snail Mucin"]
+    },
+    "facemasks": {
+      "title": "🎭 Face Masks",
+      "label": "Face Masks",
+      "tags": ["Sheet Mask", "Sleeping Mask", "Clay Mask", "Peel-Off", "Pads", "Patches", "Wash-Off", "Hydrogel"]
+    },
+    "sunscreen": {
+      "title": "☀️ Sunscreen / SPF",
+      "label": "Sunscreen",
+      "tags": ["Cream", "Gel", "Stick", "Tinted", "Fluid", "Water-Resistant", "Tone-Up", "Matte"]
+    },
+    "makeup": {
+      "title": "💄 Makeup",
+      "label": "Makeup",
+      "tags": ["Foundation", "Lip Tint", "Eye Shadow", "Mascara", "Brow", "Blush", "Powder", "Eyeliner"]
+    },
+    "lipcare": {
+      "title": "👄 Lip Care",
+      "label": "Lip Care",
+      "tags": ["Lip Mask", "Lip Tint", "Lip Balm", "Lip Gloss", "Lip Serum", "Matte", "Glossy", "Tinted"]
+    },
+    "haircare": {
+      "title": "💇 Hair Care",
+      "label": "Hair Care",
+      "tags": ["Shampoo", "Treatment", "Hair Serum", "Conditioner", "Scalp Care", "Mask", "Oil", "Mist"]
+    }
+  }
+}
