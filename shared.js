@@ -56,7 +56,14 @@ async function loadConfig() {
       var c = cats[key];
       SITE_PAGES[key] = "category-" + key + ".html";
       CATEGORY_META[key] = { title: c.title, file: "data/" + key + ".json" };
-      CATEGORY_TAGS[key] = c.tags || [];
+      // Tags can be nested object or flat array
+      if (c.tags && typeof c.tags === "object" && !Array.isArray(c.tags)) {
+        // Nested: { "Face": ["Cleansers", "Moisturizers"], "Eyes": [...] }
+        CATEGORY_TAGS[key] = c.tags;
+      } else {
+        // Flat: ["Cleanser", "Moisturizer"]
+        CATEGORY_TAGS[key] = c.tags || [];
+      }
     });
     
     CONFIG_LOADED = true;

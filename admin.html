@@ -157,6 +157,10 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
       <select id="fTag"><option value="">No Tag</option></select>
       <small>Tags update based on category selection</small>
     </div>
+    <div class="form-row"><label>Sub-Tag</label>
+      <select id="fSubtag"><option value="">No Sub-Tag</option></select>
+      <small>Sub-tags update based on tag selection</small>
+    </div>
     <div class="form-row"><label>Product Image URL</label><input type="text" id="fImage" placeholder="https://m.media-amazon.com/images/I/..."><small>Paste the Amazon product image URL</small></div>
     <div class="form-row"><label>Amazon Affiliate Link</label><input type="text" id="fUrl" placeholder="https://www.amazon.com/dp/ASIN?tag=YOUR-TAG"></div>
     <div class="form-row"><label>Bought Tag (optional)</label><input type="text" id="fBought" placeholder="e.g. 20K+ bought in past month"></div>
@@ -252,10 +256,10 @@ function renderList(){var list=document.getElementById("productList"),products=d
 // ═══════════════════════════════════════════════════════════════
 // ADD / EDIT / DELETE
 // ═══════════════════════════════════════════════════════════════
-function addProduct(){var name=document.getElementById("fName").value.trim(),price=parseFloat(document.getElementById("fPrice").value),cat=document.getElementById("fCategory").value;if(!name)return showToast("Product name is required","error");if(isNaN(price)||price<=0)return showToast("Valid price is required","error");var product={id:name.toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,30),name:name,price:price,originalPrice:parseFloat(document.getElementById("fOrigPrice").value)||null,rating:Math.min(5,Math.max(1,parseFloat(document.getElementById("fRating").value)||4.5)),reviews:document.getElementById("fReviews").value.trim()||"0",badge:document.getElementById("fBadge").value,tag:document.getElementById("fTag").value,image:document.getElementById("fImage").value.trim(),url:document.getElementById("fUrl").value.trim()||"#",bought:document.getElementById("fBought").value.trim(),prime:document.getElementById("fPrime").checked};if(!data[cat])data[cat]=[];if(editingIndex>=0){product.id=data[cat][editingIndex].id;data[cat][editingIndex]=product;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";showToast("Updated! Click 'Push to Live Site' to publish.","success");}else{data[cat].unshift(product);addedSinceLastPush++;showToast("Added! ("+addedSinceLastPush+" new products)","success");if(addedSinceLastPush>=10){showToast("🔔 You have "+addedSinceLastPush+" new products — consider pushing to live!","success");}}markDirty(cat);if(cat!==activeCategory)switchCategory(cat);else{renderList();buildCatTabs();}clearForm();}
-function editProduct(i){var p=data[activeCategory][i];editingIndex=i;document.getElementById("fCategory").value=activeCategory;document.getElementById("fName").value=p.name;document.getElementById("fPrice").value=p.price;document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=p.rating;document.getElementById("fReviews").value=p.reviews;document.getElementById("fBadge").value=p.badge||"";updateTagDropdown();document.getElementById("fTag").value=p.tag||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=p.prime!==false;document.getElementById("formTitle").textContent="✏️ Edit Product";document.getElementById("btnAdd").textContent="Save Changes";window.scrollTo({top:0,behavior:"smooth"});}
+function addProduct(){var name=document.getElementById("fName").value.trim(),price=parseFloat(document.getElementById("fPrice").value),cat=document.getElementById("fCategory").value;if(!name)return showToast("Product name is required","error");if(isNaN(price)||price<=0)return showToast("Valid price is required","error");var product={id:name.toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,30),name:name,price:price,originalPrice:parseFloat(document.getElementById("fOrigPrice").value)||null,rating:Math.min(5,Math.max(1,parseFloat(document.getElementById("fRating").value)||4.5)),reviews:document.getElementById("fReviews").value.trim()||"0",badge:document.getElementById("fBadge").value,tag:document.getElementById("fTag").value,subtag:document.getElementById("fSubtag").value,image:document.getElementById("fImage").value.trim(),url:document.getElementById("fUrl").value.trim()||"#",bought:document.getElementById("fBought").value.trim(),prime:document.getElementById("fPrime").checked};if(!data[cat])data[cat]=[];if(editingIndex>=0){product.id=data[cat][editingIndex].id;data[cat][editingIndex]=product;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";showToast("Updated! Click 'Push to Live Site' to publish.","success");}else{data[cat].unshift(product);addedSinceLastPush++;showToast("Added! ("+addedSinceLastPush+" new products)","success");if(addedSinceLastPush>=10){showToast("🔔 You have "+addedSinceLastPush+" new products — consider pushing to live!","success");}}markDirty(cat);if(cat!==activeCategory)switchCategory(cat);else{renderList();buildCatTabs();}clearForm();}
+function editProduct(i){var p=data[activeCategory][i];editingIndex=i;document.getElementById("fCategory").value=activeCategory;document.getElementById("fName").value=p.name;document.getElementById("fPrice").value=p.price;document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=p.rating;document.getElementById("fReviews").value=p.reviews;document.getElementById("fBadge").value=p.badge||"";updateTagDropdown();document.getElementById("fTag").value=p.tag||"";updateSubtagDropdown();document.getElementById("fSubtag").value=p.subtag||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=p.prime!==false;document.getElementById("formTitle").textContent="✏️ Edit Product";document.getElementById("btnAdd").textContent="Save Changes";window.scrollTo({top:0,behavior:"smooth"});}
 function deleteProduct(i){if(!confirm("Delete this product?"))return;data[activeCategory].splice(i,1);markDirty(activeCategory);renderList();buildCatTabs();showToast("Deleted. Push to make it live.");}
-function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
+function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fSubtag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
 
 
 // ═══════════════════════════════════════════════════════════════
@@ -423,8 +427,36 @@ function editFromFetch(idx) {
 // UTILITIES
 // ═══════════════════════════════════════════════════════════════
 function showToast(msg, type) { var t = document.getElementById("toast"); t.textContent = msg; t.className = "toast show" + (type ? " " + type : ""); setTimeout(function() { t.className = "toast"; }, 3000); }
-function updateTagDropdown() { var cat = document.getElementById("fCategory").value; var tags = CATEGORY_TAGS[cat] || []; var sel = document.getElementById("fTag"); sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join(""); }
+function updateTagDropdown() {
+  var cat = document.getElementById("fCategory").value;
+  var tags = CATEGORY_TAGS[cat];
+  var sel = document.getElementById("fTag");
+  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
+  if (isNested) {
+    sel.innerHTML = '<option value="">No Tag</option>' + Object.keys(tags).map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join("");
+  } else if (Array.isArray(tags)) {
+    sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join("");
+  } else {
+    sel.innerHTML = '<option value="">No Tag</option>';
+  }
+  updateSubtagDropdown();
+}
+function updateSubtagDropdown() {
+  var cat = document.getElementById("fCategory").value;
+  var tag = document.getElementById("fTag").value;
+  var sel = document.getElementById("fSubtag");
+  var tags = CATEGORY_TAGS[cat];
+  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
+  if (isNested && tag && tags[tag]) {
+    sel.innerHTML = '<option value="">No Sub-Tag</option>' + tags[tag].map(function(st) { return '<option value="' + st + '">' + st + '</option>'; }).join("");
+    sel.parentElement.style.display = "";
+  } else {
+    sel.innerHTML = '<option value="">No Sub-Tag</option>';
+    sel.parentElement.style.display = isNested ? "none" : "none";
+  }
+}
 document.getElementById("fCategory").addEventListener("change", updateTagDropdown);
+document.getElementById("fTag").addEventListener("change", updateSubtagDropdown);
 
 async function initAdmin() {
   await loadConfigForAdmin();
