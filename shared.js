@@ -138,7 +138,8 @@ function renderFooter() {
     '<div>' +
     '<h3>Subscribe for Updates</h3>' +
     '<p>Get the latest K-beauty product launches, deals, and skincare tips.</p>' +
-    '<div class="email-form"><input type="email" placeholder="Enter your email"><button>Subscribe</button></div>' +
+    '<div class="email-form"><input type="email" id="footerSubEmail" placeholder="Enter your email"><button id="footerSubBtn">Subscribe</button></div>' +
+    '<div id="footerSubStatus" style="font-size:0.75rem;margin-top:6px;color:rgba(255,255,255,0.6);"></div>' +
     '<p style="margin-top:18px;font-size:1rem;"><a href="mailto:' + CONTACT_EMAIL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📧 ' + CONTACT_EMAIL + '</a></p>' +
     '<p style="font-size:1rem;"><a href="tel:' + CONTACT_PHONE_TEL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📞 ' + CONTACT_PHONE + '</a></p>' +
     '</div>' +
@@ -157,6 +158,7 @@ function renderFooter() {
     '<button class="back-top" id="backToTop">↑</button>';
 
   initBackToTop();
+  initSubscribeForm();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -224,4 +226,47 @@ function initBackToTop() {
   if (!btn) return;
   window.addEventListener("scroll", function() { btn.classList.toggle("show", window.scrollY > 400); });
   btn.addEventListener("click", function() { window.scrollTo({ top: 0, behavior: "smooth" }); });
+}
+
+function initSubscribeForm() {
+  var btn = document.getElementById("footerSubBtn");
+  if (!btn) return;
+  btn.addEventListener("click", async function() {
+    var input = document.getElementById("footerSubEmail");
+    var status = document.getElementById("footerSubStatus");
+    var email = input.value.trim();
+
+    if (!email || !email.includes("@")) {
+      status.textContent = "Please enter a valid email.";
+      status.style.color = "#FC8181";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "...";
+    status.textContent = "";
+
+    try {
+      var resp = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "subscribe", email: email })
+      });
+      var result = await resp.json();
+      if (result.success) {
+        status.textContent = "🌸 Subscribed! Check your inbox for a welcome email.";
+        status.style.color = "#68D391";
+        input.value = "";
+      } else {
+        status.textContent = result.error || "Failed. Try again.";
+        status.style.color = "#FC8181";
+      }
+    } catch (e) {
+      status.textContent = "Something went wrong. Try again.";
+      status.style.color = "#FC8181";
+    }
+
+    btn.disabled = false;
+    btn.textContent = "Subscribe";
+  });
 }
