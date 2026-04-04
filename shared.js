@@ -11,11 +11,11 @@ var CONFIG_LOADED = false;
 
 // ── STATIC CONFIG ──
 var FOOTER_PAGES = {
-  about: "about.html",
-  contact: "contact.html",
-  privacy: "privacy-policy.html",
-  terms: "terms-of-service.html",
-  disclosure: "affiliate-disclosure.html",
+  about: "/about",
+  contact: "/contact",
+  privacy: "/privacy",
+  terms: "/terms",
+  disclosure: "/disclosure",
 };
 
 var BADGE_MAP = {
@@ -48,13 +48,13 @@ async function loadConfig() {
     var config = await resp.json();
     var cats = config.categories || {};
     
-    SITE_PAGES = { home: "index.html" };
+    SITE_PAGES = { home: "/" };
     CATEGORY_META = {};
     CATEGORY_TAGS = {};
     
     Object.keys(cats).forEach(function(key) {
       var c = cats[key];
-      SITE_PAGES[key] = "category-" + key + ".html";
+      SITE_PAGES[key] = "/" + key;
       CATEGORY_META[key] = { title: c.title, file: "data/" + key + ".json" };
       // Tags can be nested object or flat array
       if (c.tags && typeof c.tags === "object" && !Array.isArray(c.tags)) {
@@ -70,7 +70,7 @@ async function loadConfig() {
   } catch (e) {
     console.error("Config load error:", e);
     // Fallback to hardcoded defaults if config.json fails
-    SITE_PAGES = { home:"index.html", skincare:"category-skincare.html", serums:"category-serums.html", facemasks:"category-facemasks.html", sunscreen:"category-sunscreen.html", makeup:"category-makeup.html", lipcare:"category-lipcare.html", haircare:"category-haircare.html" };
+    SITE_PAGES = { home:"/", skincare:"/skincare", serums:"/serums", facemasks:"/facemasks", sunscreen:"/sunscreen", makeup:"/makeup", lipcare:"/lipcare", haircare:"/haircare" };
     CATEGORY_META = { skincare:{title:"🧴 Skincare",file:"data/skincare.json"}, serums:{title:"💎 Serums & Essences",file:"data/serums.json"}, facemasks:{title:"🎭 Face Masks",file:"data/facemasks.json"}, sunscreen:{title:"☀️ Sunscreen / SPF",file:"data/sunscreen.json"}, makeup:{title:"💄 Makeup",file:"data/makeup.json"}, lipcare:{title:"👄 Lip Care",file:"data/lipcare.json"}, haircare:{title:"💇 Hair Care",file:"data/haircare.json"} };
     CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
     CONFIG_LOADED = true;
@@ -87,7 +87,7 @@ function renderHeader() {
     '<img src="header-banner.jpeg" alt="" class="header-bg">' +
     '<div class="header-overlay"></div>' +
     '<div class="header-inner">' +
-    '<h1><a href="index.html">' + SITE_NAME_HTML + '</a></h1>' +
+    '<h1><a href="/">' + SITE_NAME_HTML + '</a></h1>' +
     '<p class="header-sub">' + SITE_SUBTITLE + '</p>' +
     '</div>' +
     '</header>';
@@ -103,12 +103,12 @@ function renderNav(activePage, searchFunction) {
   var searchFn = searchFunction || "";
 
   // Build nav links from config
-  var links = '<a href="index.html"' + (activePage === "home" ? ' class="active"' : '') + '>All</a>';
+  var links = '<a href="/"' + (activePage === "home" ? ' class="active"' : '') + '>All</a>';
   Object.keys(CATEGORY_META).forEach(function(key) {
     var meta = CATEGORY_META[key];
     var label = meta.title.replace(/^[^\w]*/, "").trim(); // Remove emoji
     var cls = key === activePage ? ' class="active"' : '';
-    links += '<a href="category-' + key + '.html"' + cls + '>' + label + '</a>';
+    links += '<a href="/' + key + '"' + cls + '>' + label + '</a>';
   });
 
   var searchHTML = "";
@@ -131,7 +131,7 @@ function renderFooter() {
   Object.keys(CATEGORY_META).forEach(function(key) {
     var meta = CATEGORY_META[key];
     var label = meta.title.replace(/^[^\w]*/, "").trim();
-    catLinks += '<a href="category-' + key + '.html">' + label + '</a>';
+    catLinks += '<a href="/' + key + '">' + label + '</a>';
   });
 
   el.innerHTML = '<footer class="footer"><div class="footer-grid">' +
@@ -145,11 +145,11 @@ function renderFooter() {
     '</div>' +
     '<div class="footer-links"><h3>Categories</h3>' + catLinks + '</div>' +
     '<div class="footer-links"><h3>More Pages</h3>' +
-    '<a href="about.html">About Us</a>' +
-    '<a href="contact.html">Contact</a>' +
-    '<a href="privacy-policy.html">Privacy Policy</a>' +
-    '<a href="terms-of-service.html">Terms of Service</a>' +
-    '<a href="affiliate-disclosure.html">Affiliate Disclosure</a>' +
+    '<a href="/about">About Us</a>' +
+    '<a href="/contact">Contact</a>' +
+    '<a href="/privacy">Privacy Policy</a>' +
+    '<a href="/terms">Terms of Service</a>' +
+    '<a href="/disclosure">Affiliate Disclosure</a>' +
     '</div>' +
     '</div><div class="footer-bottom">' +
     '<p>&copy; ' + COPYRIGHT_YEAR + ' K Beauty Premium. All rights reserved.</p>' +
@@ -192,7 +192,7 @@ function renderProductCard(product, btnText, categoryKey) {
   var priceNote = '<div style="font-size:0.65rem;color:var(--text-light);margin-bottom:4px;">*Price may vary on Amazon</div>';
   var boughtHTML = product.bought ? '<div class="bought-tag">' + product.bought + '</div>' : "";
   var tagAttr = product.tag ? ' data-tag="' + product.tag + '"' : '';
-  var productLink = (product.id && categoryKey) ? 'product.html?cat=' + categoryKey + '&id=' + product.id : '';
+  var productLink = (product.id && categoryKey) ? '/p/' + categoryKey + '/' + product.id : '';
 
   return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '"' + tagAttr + (productLink ? ' data-href="' + productLink + '" onclick="if(!event.target.classList.contains(\'buy-btn\'))window.location.href=this.dataset.href"' : '') + '>' +
     badgeHTML +

@@ -189,6 +189,20 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 
     <div class="cat-selector" id="catTabs"></div>
     <div class="product-list"><h2>Products <span class="product-list-count" id="listCount"></span></h2><div id="productList"></div></div>
+
+    <!-- REDIRECT MANAGER -->
+    <div class="ai-panel" style="border-top:2px solid #E0E0E0;">
+      <h2>🔀 Redirect Manager</h2>
+      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Add redirects for renamed/deleted pages. Old URLs will automatically point to new ones (301 permanent redirect).</p>
+      <div style="display:grid;grid-template-columns:1fr 30px 1fr auto;gap:8px;align-items:end;margin-bottom:12px;">
+        <div class="form-row" style="margin-bottom:0;"><label style="display:block;font-size:0.72rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;">OLD PATH</label><input type="text" id="redirectFrom" placeholder="/old-page" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;font-family:'Outfit',sans-serif;"></div>
+        <span style="text-align:center;font-size:1.2rem;color:var(--text-mid);padding-bottom:6px;">→</span>
+        <div class="form-row" style="margin-bottom:0;"><label style="display:block;font-size:0.72rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;">NEW PATH</label><input type="text" id="redirectTo" placeholder="/new-page" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;font-family:'Outfit',sans-serif;"></div>
+        <button onclick="addRedirect()" style="padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:0.82rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;white-space:nowrap;height:36px;">+ Add</button>
+      </div>
+      <div id="redirectList" style="font-size:0.82rem;"></div>
+      <div id="redirectStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;"></div>
+    </div>
   </div>
 </div>
 
@@ -458,10 +472,111 @@ function updateSubtagDropdown() {
 document.getElementById("fCategory").addEventListener("change", updateTagDropdown);
 document.getElementById("fTag").addEventListener("change", updateSubtagDropdown);
 
+// ═══════════════════════════════════════════════════════════════
+// REDIRECT MANAGER
+// ═══════════════════════════════════════════════════════════════
+var vercelConfig = null;
+var vercelConfigSHA = null;
+
+async function loadRedirects() {
+  if (!token) return;
+  try {
+    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/vercel.json?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
+    if (!resp.ok) return;
+    var file = await resp.json();
+    vercelConfigSHA = file.sha;
+    vercelConfig = JSON.parse(atob(file.content.replace(/\n/g, "")));
+    renderRedirectList();
+  } catch(e) { console.error("Failed to load redirects:", e); }
+}
+
+function renderRedirectList() {
+  var list = document.getElementById("redirectList");
+  if (!vercelConfig || !vercelConfig.redirects || vercelConfig.redirects.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-mid);padding:8px 0;">No custom redirects yet.</p>';
+    return;
+  }
+  list.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
+    '<tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:6px;font-size:0.72rem;color:var(--text-mid);">FROM</th><th style="padding:6px;font-size:0.72rem;color:var(--text-mid);">→</th><th style="text-align:left;padding:6px;font-size:0.72rem;color:var(--text-mid);">TO</th><th style="padding:6px;font-size:0.72rem;color:var(--text-mid);">TYPE</th><th></th></tr>' +
+    vercelConfig.redirects.map(function(r, i) {
+      var isSystem = r.source.includes(":cat") || r.source.includes(".html");
+      return '<tr style="border-bottom:1px solid #f5f5f5;">' +
+        '<td style="padding:6px;font-family:monospace;font-size:0.78rem;color:' + (isSystem ? '#999' : 'var(--text)') + ';">' + r.source + '</td>' +
+        '<td style="padding:6px;text-align:center;color:var(--text-mid);">→</td>' +
+        '<td style="padding:6px;font-family:monospace;font-size:0.78rem;color:' + (isSystem ? '#999' : 'var(--green)') + ';">' + r.destination + '</td>' +
+        '<td style="padding:6px;font-size:0.68rem;color:var(--text-light);">' + (r.permanent ? '301' : '302') + '</td>' +
+        '<td style="padding:6px;">' + (isSystem ? '<span style="font-size:0.65rem;color:#999;">system</span>' : '<button onclick="deleteRedirect(' + i + ')" style="padding:3px 8px;background:#FED7D7;color:#E53E3E;border:none;border-radius:4px;font-size:0.7rem;cursor:pointer;">✕</button>') + '</td>' +
+        '</tr>';
+    }).join("") +
+    '</table>';
+}
+
+async function addRedirect() {
+  var from = document.getElementById("redirectFrom").value.trim();
+  var to = document.getElementById("redirectTo").value.trim();
+  var statusEl = document.getElementById("redirectStatus");
+
+  if (!from || !to) { statusEl.textContent = "Both paths are required."; return; }
+  if (!from.startsWith("/")) from = "/" + from;
+  if (!to.startsWith("/") && !to.startsWith("http")) to = "/" + to;
+
+  if (!vercelConfig) { statusEl.textContent = "Loading config..."; await loadRedirects(); }
+  if (!vercelConfig) { statusEl.textContent = "Failed to load vercel.json"; return; }
+
+  // Check duplicate
+  var exists = vercelConfig.redirects.some(function(r) { return r.source === from; });
+  if (exists) { statusEl.textContent = "Redirect for " + from + " already exists."; return; }
+
+  vercelConfig.redirects.push({ source: from, destination: to, permanent: true });
+
+  statusEl.textContent = "Saving to GitHub...";
+  var saved = await saveVercelConfig();
+  if (saved) {
+    document.getElementById("redirectFrom").value = "";
+    document.getElementById("redirectTo").value = "";
+    renderRedirectList();
+    statusEl.textContent = "✅ Redirect added! Site will update in ~30 seconds.";
+    showToast("Redirect added: " + from + " → " + to, "success");
+  } else {
+    statusEl.textContent = "Failed to save. Try again.";
+  }
+}
+
+async function deleteRedirect(index) {
+  if (!confirm("Delete this redirect?")) return;
+  var statusEl = document.getElementById("redirectStatus");
+  vercelConfig.redirects.splice(index, 1);
+  statusEl.textContent = "Saving...";
+  var saved = await saveVercelConfig();
+  if (saved) {
+    renderRedirectList();
+    statusEl.textContent = "✅ Redirect removed.";
+    showToast("Redirect deleted", "success");
+  } else {
+    statusEl.textContent = "Failed to save.";
+  }
+}
+
+async function saveVercelConfig() {
+  try {
+    var content = btoa(unescape(encodeURIComponent(JSON.stringify(vercelConfig, null, 2))));
+    var body = { message: "Update redirects via admin", content: content, branch: GITHUB_BRANCH };
+    if (vercelConfigSHA) body.sha = vercelConfigSHA;
+    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/vercel.json",
+      { method: "PUT", headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    if (!resp.ok) return false;
+    var result = await resp.json();
+    vercelConfigSHA = result.content.sha;
+    return true;
+  } catch(e) { return false; }
+}
+
 async function initAdmin() {
   await loadConfigForAdmin();
   updateTagDropdown();
   checkSavedToken();
+  // Load redirects after auth
+  setTimeout(loadRedirects, 2000);
 }
 initAdmin();
 </script>

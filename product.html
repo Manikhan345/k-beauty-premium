@@ -112,10 +112,22 @@ async function initProductPage() {
   renderNav("", "");
   renderFooter();
 
-  // Get URL params
-  var params = new URLSearchParams(window.location.search);
-  var cat = params.get("cat");
-  var productId = params.get("id");
+  // Get URL params - support both clean URL (/p/cat/id) and query params (?cat=x&id=y)
+  var cat = null, productId = null;
+  var path = window.location.pathname;
+  var pathMatch = path.match(/\/p\/([^\/]+)\/([^\/]+)/);
+  if (pathMatch) {
+    cat = pathMatch[1];
+    productId = pathMatch[2];
+  } else {
+    var params = new URLSearchParams(window.location.search);
+    cat = params.get("cat");
+    productId = params.get("id");
+    // Redirect old URL to clean URL
+    if (cat && productId) {
+      window.history.replaceState(null, "", "/p/" + cat + "/" + productId);
+    }
+  }
 
   if (!cat || !productId) {
     showNotFound();
@@ -145,8 +157,8 @@ async function initProductPage() {
   // Breadcrumb
   var catLabel = meta.title.replace(/^[^\w]*/, "").trim();
   document.getElementById("breadcrumb").innerHTML =
-    '<a href="index.html">Home</a> › ' +
-    '<a href="category-' + cat + '.html">' + catLabel + '</a>' +
+    '<a href="/">Home</a> › ' +
+    '<a href="/' + cat + '">' + catLabel + '</a>' +
     (product.tag ? ' › <span>' + product.tag + '</span>' : '') +
     ' › <span>' + product.name.substring(0, 50) + '...</span>';
 
@@ -176,7 +188,7 @@ async function initProductPage() {
         card.style.cursor = "pointer";
         card.addEventListener("click", function(e) {
           if (e.target.classList.contains("buy-btn")) return;
-          window.location.href = "product.html?cat=" + cat + "&id=" + relProd.id;
+          window.location.href = "/p/" + cat + "/" + relProd.id;
         });
       }
     });
@@ -244,7 +256,7 @@ function renderProductDetail(p, cat) {
         '<hr class="divider">' +
         tagHTML +
         '<a href="' + (p.url || '#') + '" class="btn-amazon" target="_blank" rel="nofollow noopener">🛒 View on Amazon</a>' +
-        '<a href="category-' + cat + '.html" class="btn-category">← Browse more ' + catLabel + '</a>' +
+        '<a href="/' + cat + '" class="btn-category">← Browse more ' + catLabel + '</a>' +
       '</div>' +
     '</div>';
 }
@@ -254,7 +266,7 @@ function showNotFound() {
     '<div class="not-found">' +
       '<h2>Product Not Found</h2>' +
       '<p>Sorry, we couldn\'t find this product. It may have been removed or the link is incorrect.</p>' +
-      '<a href="index.html" class="btn-category">← Back to Home</a>' +
+      '<a href="/" class="btn-category">← Back to Home</a>' +
     '</div>';
 }
 

@@ -7,13 +7,13 @@ var activeTag = "";
 var activeSubtag = "";
 
 async function initCategoryPage() {
-  await loadConfig();
+  if (!CONFIG_LOADED) await loadConfig();
   var meta = CATEGORY_META[CATEGORY_KEY];
   if (!meta) return;
   document.getElementById("catTitle").textContent = meta.title;
   document.title = meta.title.replace(/^[^\w]*/, "") + " — K Beauty Premium";
-  renderNav(CATEGORY_KEY, "filterCategoryProducts");
-  renderFooter();
+  var breadcrumb = document.getElementById("breadcrumb");
+  if (breadcrumb) breadcrumb.innerHTML = '<a href="/">Home</a> › <span>' + meta.title.replace(/^[^\w]*/, "").trim() + '</span>';
   allProducts = await fetchProducts(meta.file);
   renderTagButtons();
   renderGrid(allProducts);
