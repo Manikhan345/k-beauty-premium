@@ -222,14 +222,28 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 <!-- ═══════════ TAB 2: CATEGORY MANAGER ═══════════ -->
 <div class="tab-panel" id="tab-categories">
   <div class="panel">
-    <h2>➕ Add New Category</h2>
+    <h2 id="catFormTitle">➕ Add New Category</h2>
     <div class="form-row-half">
       <div class="form-row"><label>Category Key (URL slug)</label><input type="text" id="catKey" placeholder="e.g. bodycare"><small>Lowercase, no spaces. Used in URL: /bodycare</small></div>
       <div class="form-row"><label>Display Title</label><input type="text" id="catTitle" placeholder="e.g. 🧴 Body Care"></div>
     </div>
     <div class="form-row"><label>Label (for nav)</label><input type="text" id="catLabel" placeholder="e.g. Body Care"></div>
-    <div class="form-row"><label>Tags (comma separated)</label><input type="text" id="catTags" placeholder="e.g. Body Wash, Body Lotion, Body Scrub"><small>These become the filter buttons on the category page</small></div>
-    <button class="btn-primary" onclick="addCategory()">Add Category</button>
+    
+    <!-- Tag/Subtag Editor -->
+    <div class="form-row"><label>Tags & Sub-tags</label>
+      <div id="tagEditor" style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--bg);min-height:60px;">
+        <p style="color:#999;font-size:0.82rem;" id="tagEditorEmpty">No tags yet. Add one below.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px;">
+      <input type="text" id="newTagName" placeholder="New tag name (e.g. Face, Eyes, Body)" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;font-family:'Outfit',sans-serif;">
+      <button onclick="addTagToEditor()" style="padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:0.82rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;white-space:nowrap;">+ Add Tag</button>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="btn-primary" onclick="addCategory()" style="flex:1;">Save Category</button>
+      <button class="btn-secondary" onclick="clearCatForm()" style="flex:0;padding:10px 20px;">Clear</button>
+    </div>
     <div id="catManagerStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;"></div>
   </div>
   <div class="panel">
@@ -369,8 +383,83 @@ function quickAdd(i){var p=fetchedProducts[i];if(!p)return;var cat=document.getE
 function editFromFetch(i){var p=fetchedProducts[i];if(!p)return;document.getElementById("fName").value=p.name||"";document.getElementById("fPrice").value=parseFloat(p.price)||"";document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=parseFloat(p.rating)||"";document.getElementById("fReviews").value=p.reviews||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=true;editingIndex=-1;window.scrollTo({top:0,behavior:"smooth"});showToast("Loaded into form","success");}
 
 // ═══════════════════════════════════════════════════════════════
-// CATEGORY MANAGER
+// CATEGORY MANAGER WITH TAG/SUBTAG EDITOR
 // ═══════════════════════════════════════════════════════════════
+var editorTags = {}; // { "Face": ["Cleansers", "Moisturizers"], "Eyes": [] }
+var editingCatKey = null;
+
+function renderTagEditor() {
+  var el = document.getElementById("tagEditor");
+  var empty = document.getElementById("tagEditorEmpty");
+  var keys = Object.keys(editorTags);
+  if (keys.length === 0) { el.innerHTML = '<p style="color:#999;font-size:0.82rem;" id="tagEditorEmpty">No tags yet. Add one below.</p>'; return; }
+  
+  el.innerHTML = keys.map(function(tag) {
+    var subs = editorTags[tag] || [];
+    var subsHTML = subs.map(function(sub, si) {
+      return '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:#F0FFF4;color:#38A169;border-radius:12px;font-size:0.72rem;">' + sub + '<button onclick="removeSubtag(\'' + tag.replace(/'/g, "\\'") + '\',' + si + ')" style="background:none;border:none;color:#E53E3E;cursor:pointer;font-size:0.8rem;padding:0 2px;">×</button></span>';
+    }).join("");
+    
+    return '<div style="background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:10px;margin-bottom:8px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+        '<span style="font-weight:600;font-size:0.88rem;color:#3182CE;">' + tag + '</span>' +
+        '<button onclick="removeTag(\'' + tag.replace(/'/g, "\\'") + '\')" style="padding:2px 8px;background:#FED7D7;color:#E53E3E;border:none;border-radius:4px;font-size:0.7rem;cursor:pointer;">Remove Tag</button>' +
+      '</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">' + (subsHTML || '<span style="font-size:0.72rem;color:#999;">No sub-tags</span>') + '</div>' +
+      '<div style="display:flex;gap:4px;">' +
+        '<input type="text" id="subtag-' + tag.replace(/[^a-zA-Z0-9]/g, '_') + '" placeholder="Add sub-tag..." style="flex:1;padding:5px 8px;border:1px solid #ddd;border-radius:4px;font-size:0.78rem;font-family:\'Outfit\',sans-serif;">' +
+        '<button onclick="addSubtagFromInput(\'' + tag.replace(/'/g, "\\'") + '\')" style="padding:5px 10px;background:#38A169;color:#fff;border:none;border-radius:4px;font-size:0.72rem;cursor:pointer;">+</button>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+}
+
+function addTagToEditor() {
+  var input = document.getElementById("newTagName");
+  var name = input.value.trim();
+  if (!name) return;
+  if (editorTags[name]) { showToast("Tag '" + name + "' already exists", "error"); return; }
+  editorTags[name] = [];
+  input.value = "";
+  renderTagEditor();
+}
+
+function removeTag(tag) {
+  if (!confirm("Remove tag '" + tag + "' and all its sub-tags?")) return;
+  delete editorTags[tag];
+  renderTagEditor();
+}
+
+function addSubtagFromInput(tag) {
+  var inputId = "subtag-" + tag.replace(/[^a-zA-Z0-9]/g, '_');
+  var input = document.getElementById(inputId);
+  if (!input) return;
+  var val = input.value.trim();
+  if (!val) return;
+  if (!editorTags[tag]) editorTags[tag] = [];
+  if (editorTags[tag].includes(val)) { showToast("Sub-tag already exists", "error"); return; }
+  editorTags[tag].push(val);
+  input.value = "";
+  renderTagEditor();
+}
+
+function removeSubtag(tag, index) {
+  if (editorTags[tag]) {
+    editorTags[tag].splice(index, 1);
+    renderTagEditor();
+  }
+}
+
+function clearCatForm() {
+  document.getElementById("catKey").value = "";
+  document.getElementById("catTitle").value = "";
+  document.getElementById("catLabel").value = "";
+  editorTags = {};
+  editingCatKey = null;
+  document.getElementById("catFormTitle").textContent = "➕ Add New Category";
+  renderTagEditor();
+}
+
 function renderCategoryList(){
   var el=document.getElementById("categoryList");
   if(!configRaw||!configRaw.categories){el.innerHTML="<p>No config loaded.</p>";return;}
@@ -396,69 +485,105 @@ async function addCategory(){
   var key=document.getElementById("catKey").value.trim().toLowerCase().replace(/[^a-z0-9]/g,"");
   var title=document.getElementById("catTitle").value.trim();
   var label=document.getElementById("catLabel").value.trim();
-  var tagsStr=document.getElementById("catTags").value.trim();
   var status=document.getElementById("catManagerStatus");
 
   if(!key){status.textContent="Key is required.";return;}
   if(!title){status.textContent="Title is required.";return;}
-  if(configRaw.categories[key]){status.textContent="Category '"+key+"' already exists.";return;}
-
-  var tags=tagsStr?tagsStr.split(",").map(function(t){return t.trim();}).filter(Boolean):[];
+  
+  var isNew = !configRaw.categories[key] && editingCatKey !== key;
+  
+  // Build tags structure
+  var tags = {};
+  var hasSubtags = false;
+  Object.keys(editorTags).forEach(function(t) {
+    if (editorTags[t].length > 0) hasSubtags = true;
+    tags[t] = editorTags[t];
+  });
+  // If no subtags at all, use flat array
+  if (!hasSubtags && Object.keys(tags).length > 0) {
+    tags = Object.keys(editorTags);
+  }
 
   configRaw.categories[key]={title:title,label:label||title.replace(/^[^\w]*/,"").trim(),tags:tags};
+
+  // If renaming (editingCatKey differs from key), handle old key
+  if (editingCatKey && editingCatKey !== key) {
+    // Copy old data reference
+    delete configRaw.categories[editingCatKey];
+    // Rename data file
+    status.textContent = "Renaming data file...";
+    await renameDataFile(editingCatKey, key);
+  }
 
   status.textContent="Saving config...";
   var saved=await saveConfig();
   if(!saved){status.textContent="Failed to save config.";return;}
 
-  // Create empty data file
-  status.textContent="Creating data file...";
-  var emptyContent=btoa("[]");
-  try{
-    await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify({message:"Create "+key+" data file",content:emptyContent,branch:GITHUB_BRANCH})});
-  }catch(e){}
+  if (isNew) {
+    status.textContent="Creating data file...";
+    var emptyContent=btoa("[]");
+    try{
+      await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify({message:"Create "+key+" data file",content:emptyContent,branch:GITHUB_BRANCH})});
+    }catch(e){}
+  }
 
-  // Update vercel.json rewrite pattern
   await updateVercelRewrite();
-
-  // Reload
   await loadConfigForAdmin();
   renderCategoryList();
-  document.getElementById("catKey").value="";
-  document.getElementById("catTitle").value="";
-  document.getElementById("catLabel").value="";
-  document.getElementById("catTags").value="";
-  status.textContent="✅ Category '"+key+"' created! Site updating...";
-  showToast("Category added: "+title,"success");
-
-  // Reload products for new category
-  data[key]=[];fileSHAs[key]=null;
+  clearCatForm();
+  status.textContent="✅ Category '"+key+"' saved! Site updating...";
+  showToast("Category saved: "+title,"success");
+  data[key]=data[key]||[];fileSHAs[key]=fileSHAs[key]||null;
   buildCatTabs();
+}
+
+async function renameDataFile(oldKey, newKey) {
+  try {
+    // Get old file
+    var resp = await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+oldKey+".json?ref="+GITHUB_BRANCH, {headers:{"Authorization":"token "+token}});
+    if (!resp.ok) return;
+    var file = await resp.json();
+    // Create new file with same content
+    await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+newKey+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify({message:"Rename "+oldKey+" to "+newKey,content:file.content.replace(/\n/g,""),branch:GITHUB_BRANCH})});
+    // Delete old file
+    await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+oldKey+".json",{method:"DELETE",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify({message:"Delete old "+oldKey+" data",sha:file.sha,branch:GITHUB_BRANCH})});
+    // Add redirect
+    if (!vercelConfig) await loadRedirects();
+    if (vercelConfig) {
+      vercelConfig.redirects.push({source:"/"+oldKey,destination:"/"+newKey,permanent:true});
+      await saveVercelConfig();
+    }
+  } catch(e) { console.error("Rename error:", e); }
 }
 
 function editCategory(key){
   var c=configRaw.categories[key];
   if(!c)return;
-  var tags=c.tags;
-  var isNested=typeof tags==="object"&&!Array.isArray(tags);
-  var tagsStr="";
-  if(isNested){tagsStr=Object.keys(tags).join(", ");}
-  else if(Array.isArray(tags)){tagsStr=tags.join(", ");}
-
+  
   document.getElementById("catKey").value=key;
   document.getElementById("catTitle").value=c.title;
   document.getElementById("catLabel").value=c.label||"";
-  document.getElementById("catTags").value=tagsStr;
-  document.getElementById("catManagerStatus").textContent="Editing '"+key+"'. Change values and click Add to update (same key = update).";
-
-  // Allow overwrite
-  configRaw.categories[key]=undefined;
-  switchTab('categories',document.querySelectorAll('.tab-btn')[1]);
+  document.getElementById("catFormTitle").textContent="✏️ Edit Category: " + key;
+  editingCatKey = key;
+  
+  // Load tags into editor
+  editorTags = {};
+  var tags = c.tags;
+  if (typeof tags === "object" && !Array.isArray(tags)) {
+    Object.keys(tags).forEach(function(t) {
+      editorTags[t] = Array.isArray(tags[t]) ? tags[t].slice() : [];
+    });
+  } else if (Array.isArray(tags)) {
+    tags.forEach(function(t) { editorTags[t] = []; });
+  }
+  renderTagEditor();
+  
+  switchTab('categories', document.querySelectorAll('.tab-btn')[1]);
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
 async function deleteCategory(key){
-  if(!confirm("Delete category '"+key+"'? Products will remain in data/"+key+".json but won't show on the site."))return;
+  if(!confirm("Delete category '"+key+"'? Products in data/"+key+".json will remain but won't show on the site."))return;
   var status=document.getElementById("catManagerStatus");
   delete configRaw.categories[key];
 
@@ -470,7 +595,7 @@ async function deleteCategory(key){
   await loadConfigForAdmin();
   renderCategoryList();
   buildCatTabs();
-  status.textContent="✅ Category deleted.";
+  status.textContent="✅ Category deleted. Add a redirect for /"+key+" if needed.";
   showToast("Category '"+key+"' deleted","success");
 }
 
