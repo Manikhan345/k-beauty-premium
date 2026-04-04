@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Manager — K Beauty Premium Admin</title>
+<title>Admin Panel — K Beauty Premium</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root { --bg: #F4F5F7; --card: #FFF; --text: #1A1A1A; --text-mid: #555; --rose: #D4596A; --rose-light: #FFF0F2; --rose-dark: #B8344A; --border: #E0E0E0; --green: #38A169; --blue: #3182CE; --shadow: 0 2px 12px rgba(0,0,0,0.08); }
 body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+/* TOP BAR */
 .top-bar { background: var(--text); color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
 .top-bar h1 { font-size: 1.2rem; font-weight: 600; }
 .top-bar h1 span { color: var(--rose); }
@@ -18,6 +20,10 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .status-dot.connected { background: #38A169; }
 .status-dot.disconnected { background: #E53E3E; }
 .status-text { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+.btn-logout { padding: 6px 14px; background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.72rem; font-family: 'Outfit', sans-serif; cursor: pointer; }
+.btn-logout:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+/* AUTH */
 .auth-screen { max-width: 480px; margin: 80px auto; padding: 0 16px; }
 .auth-card { background: var(--card); border-radius: 16px; padding: 40px 32px; border: 1px solid var(--border); box-shadow: var(--shadow); text-align: center; }
 .auth-card h2 { font-size: 1.4rem; margin-bottom: 8px; }
@@ -28,31 +34,48 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .auth-card .btn-connect:hover { background: var(--rose-dark); }
 .auth-card .note { font-size: 0.72rem; color: #999; margin-top: 16px; line-height: 1.5; }
 .auth-error { color: #E53E3E; font-size: 0.82rem; margin-bottom: 12px; display: none; }
-.layout { max-width: 1200px; margin: 24px auto; padding: 0 16px; display: none; grid-template-columns: 380px 1fr; gap: 24px; }
-.form-panel { background: var(--card); border-radius: 12px; padding: 24px; border: 1px solid var(--border); box-shadow: var(--shadow); position: sticky; top: 80px; align-self: start; }
-.form-panel h2 { font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--rose-light); }
+
+/* MAIN TAB NAV */
+.tab-nav { max-width: 1200px; margin: 0 auto; padding: 16px 16px 0; display: none; }
+.tab-nav-inner { display: flex; gap: 4px; background: var(--card); border-radius: 12px 12px 0 0; padding: 4px; border: 1px solid var(--border); border-bottom: none; }
+.tab-btn { flex: 1; padding: 12px 20px; border: none; background: transparent; font-size: 0.88rem; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; border-radius: 8px; color: var(--text-mid); transition: all 0.2s; }
+.tab-btn:hover { background: var(--bg); }
+.tab-btn.active { background: var(--rose); color: #fff; font-weight: 600; }
+
+/* TAB CONTENT */
+.tab-content { max-width: 1200px; margin: 0 auto; padding: 0 16px 24px; display: none; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* SHARED FORM STYLES */
+.panel { background: var(--card); border-radius: 12px; padding: 24px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 20px; }
+.panel h2 { font-size: 1.1rem; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--rose-light); }
 .form-row { margin-bottom: 14px; }
 .form-row label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-mid); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-row input, .form-row select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: 'Outfit', sans-serif; outline: none; transition: border-color 0.2s; }
-.form-row input:focus, .form-row select:focus { border-color: var(--rose); }
+.form-row input, .form-row select, .form-row textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: 'Outfit', sans-serif; outline: none; transition: border-color 0.2s; }
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--rose); }
 .form-row input::placeholder { color: #bbb; }
 .form-row small { font-size: 0.7rem; color: #999; margin-top: 2px; display: block; }
 .form-row-half { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
 .checkbox-row input { width: 16px; height: 16px; accent-color: var(--rose); }
 .checkbox-row label { font-size: 0.85rem; margin: 0; text-transform: none; letter-spacing: 0; }
-.btn-add { width: 100%; padding: 12px; background: var(--rose); color: #fff; border: none; border-radius: 8px; font-size: 0.92rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; transition: background 0.2s; }
-.btn-add:hover { background: var(--rose-dark); }
-.btn-secondary { width: 100%; padding: 10px; background: transparent; color: var(--rose); border: 1px solid var(--rose); border-radius: 8px; font-size: 0.85rem; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+.btn-primary { width: 100%; padding: 12px; background: var(--rose); color: #fff; border: none; border-radius: 8px; font-size: 0.92rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+.btn-primary:hover { background: var(--rose-dark); }
+.btn-secondary { width: 100%; padding: 10px; background: transparent; color: var(--rose); border: 1px solid var(--rose); border-radius: 8px; font-size: 0.85rem; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; margin-top: 8px; }
 .btn-secondary:hover { background: var(--rose-light); }
-.right-panel { display: flex; flex-direction: column; gap: 20px; min-width: 0; overflow: hidden; }
+.btn-green { padding: 10px 24px; background: var(--green); color: #fff; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+.btn-green:hover { opacity: 0.9; }
+.btn-green:disabled { background: #ccc; cursor: not-allowed; }
+.btn-blue { padding: 8px 16px; background: var(--blue); color: #fff; border: none; border-radius: 6px; font-size: 0.82rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+
+/* PRODUCT MANAGER LAYOUT */
+.pm-layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+.pm-left { position: sticky; top: 80px; align-self: start; }
+.pm-right { display: flex; flex-direction: column; gap: 20px; min-width: 0; overflow: hidden; }
 .save-bar { background: var(--card); border-radius: 12px; padding: 16px 20px; border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; }
 .save-bar .unsaved { font-size: 0.82rem; color: #D69E2E; font-weight: 500; }
 .save-bar .saved { font-size: 0.82rem; color: var(--green); font-weight: 500; }
-.btn-push { padding: 10px 24px; background: var(--green); color: #fff; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; transition: opacity 0.2s; }
-.btn-push:hover { opacity: 0.9; }
-.btn-push:disabled { background: #ccc; cursor: not-allowed; }
-.btn-push.pushing { background: #D69E2E; }
 .cat-selector { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; gap: 8px; flex-wrap: wrap; }
 .cat-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--card); font-size: 0.82rem; font-family: 'Outfit', sans-serif; cursor: pointer; transition: all 0.2s; color: var(--text-mid); }
 .cat-btn:hover { border-color: var(--rose); color: var(--rose); }
@@ -75,47 +98,47 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .plist-actions button { padding: 4px 8px; border: none; border-radius: 4px; font-size: 0.72rem; font-family: 'Outfit', sans-serif; cursor: pointer; }
 .btn-edit { background: #EBF8FF; color: #3182CE; }
 .btn-del { background: #FED7D7; color: #E53E3E; }
-.btn-logout { padding: 6px 14px; background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.72rem; font-family: 'Outfit', sans-serif; cursor: pointer; }
-.btn-logout:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; z-index: 999; pointer-events: none; }
-.toast.show { opacity: 1; }
-.toast.error { background: #E53E3E; }
-.toast.success { background: #38A169; }
 .empty-state { text-align: center; padding: 40px; color: var(--text-mid); }
 
-/* ── AI FETCH PANEL ── */
+/* AI IMPORT */
 .ai-panel { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .ai-panel h2 { font-size: 1.1rem; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #EBF8FF; }
-.ai-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; margin-bottom: 16px; }
-.ai-controls .form-row { margin-bottom: 0; flex: 1; min-width: 140px; }
-.btn-fetch { padding: 10px 20px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; white-space: nowrap; height: 42px; }
-.btn-fetch:hover { opacity: 0.9; }
-.btn-fetch:disabled { background: #aaa; cursor: not-allowed; }
-.btn-fetch.loading { background: #D69E2E; }
-.ai-status { font-size: 0.78rem; color: var(--text-mid); margin-bottom: 12px; }
-.ai-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.ai-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; transition: border-color 0.2s; }
-.ai-card:hover { border-color: var(--blue); }
+.ai-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.ai-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; position: relative; }
 .ai-card-img { width: 100%; height: 120px; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; overflow: hidden; }
-.ai-card-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
 .ai-card-name { font-size: 0.78rem; font-weight: 500; line-height: 1.3; height: 2.6em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 4px; }
 .ai-card-meta { font-size: 0.72rem; color: var(--text-mid); margin-bottom: 4px; }
 .ai-card-price { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
 .ai-card-actions { display: flex; gap: 6px; margin-top: auto; }
 .btn-ai-add { flex: 1; padding: 7px; background: var(--green); color: #fff; border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
-.btn-ai-add:hover { opacity: 0.9; }
-.btn-ai-add:disabled { background: #ccc; }
 .btn-ai-edit { flex: 0; padding: 7px 10px; background: #EBF8FF; color: var(--blue); border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
 .ai-added { background: #C6F6D5; color: var(--green); font-size: 0.75rem; text-align: center; padding: 7px; border-radius: 6px; font-weight: 600; }
 
-@media (max-width: 1100px) { .ai-results { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .form-panel { position: static; } .plist-item { grid-template-columns: 40px 1fr 60px; } .plist-badge, .plist-actions { display: none; } .ai-results { grid-template-columns: 1fr; } }
+/* CATEGORY MANAGER */
+.cat-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.cat-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.cat-item .tag-group { margin: 8px 0; }
+.cat-item .tag-group-title { font-size: 0.78rem; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+.cat-item .tag-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.cat-item .tag-pill { padding: 3px 10px; background: #EBF8FF; color: var(--blue); border-radius: 12px; font-size: 0.72rem; }
+.cat-item .subtag-pill { padding: 2px 8px; background: #F0FFF4; color: var(--green); border-radius: 12px; font-size: 0.68rem; }
+.cat-actions { display: flex; gap: 6px; }
+.cat-actions button { padding: 4px 10px; border: none; border-radius: 4px; font-size: 0.72rem; font-family: 'Outfit', sans-serif; cursor: pointer; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; z-index: 999; pointer-events: none; }
+.toast.show { opacity: 1; }
+.toast.error { background: #E53E3E; }
+.toast.success { background: #38A169; }
+
+@media (max-width: 900px) { .pm-layout { grid-template-columns: 1fr; } .pm-left { position: static; } .plist-item { grid-template-columns: 40px 1fr 60px; } .plist-badge, .plist-actions { display: none; } .ai-results { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div class="top-bar">
-  <h1>K <span>Beauty</span> Premium — <span style="font-weight:300">Product Manager</span></h1>
+  <h1>K <span>Beauty</span> Premium — <span style="font-weight:300">Admin Panel</span></h1>
   <div class="right">
     <span class="status-dot disconnected" id="statusDot"></span>
     <span class="status-text" id="statusText">Not connected</span>
@@ -124,87 +147,117 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   </div>
 </div>
 
+<!-- AUTH -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
     <h2>🔐 Connect to GitHub</h2>
-    <p>Paste your GitHub Personal Access Token below.<br>This connects the admin panel directly to your repository.</p>
+    <p>Paste your GitHub Personal Access Token below.</p>
     <div class="auth-error" id="authError">Invalid token. Please check and try again.</div>
     <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
     <button class="btn-connect" onclick="connectGitHub()">Connect</button>
-    <p class="note">Your token is stored locally in your browser only.<br>It never leaves your device except to authenticate with GitHub.</p>
+    <p class="note">Your token is stored locally in your browser only.</p>
   </div>
 </div>
 
-<div class="layout" id="mainLayout">
-  <div class="form-panel">
-    <h2 id="formTitle">➕ Add New Product</h2>
-    <div class="form-row"><label>Category</label>
-      <select id="fCategory"></select>
-    </div>
-    <div class="form-row"><label>Product Name</label><input type="text" id="fName" placeholder="e.g. COSRX Snail Mucin 96%"></div>
-    <div class="form-row-half">
-      <div class="form-row"><label>Current Price ($)</label><input type="number" id="fPrice" step="0.01" placeholder="14.72"></div>
-      <div class="form-row"><label>Original Price ($)</label><input type="number" id="fOrigPrice" step="0.01" placeholder="25.00 (optional)"><small>Leave empty if no discount</small></div>
-    </div>
-    <div class="form-row-half">
-      <div class="form-row"><label>Rating (1-5)</label><input type="number" id="fRating" step="0.1" min="1" max="5" placeholder="4.8"></div>
-      <div class="form-row"><label>Review Count</label><input type="text" id="fReviews" placeholder="87,420"></div>
-    </div>
-    <div class="form-row"><label>Badge</label>
-      <select id="fBadge"><option value="">None</option><option value="Best Seller">🔥 Best Seller</option><option value="New">🆕 New</option><option value="Deal">💰 Deal</option><option value="Trending">📈 Trending</option><option value="Limited Edition">⚡ Limited Edition</option><option value="Prime Pick">🟦 Prime Pick</option></select>
-    </div>
-    <div class="form-row"><label>Product Tag / Type</label>
-      <select id="fTag"><option value="">No Tag</option></select>
-      <small>Tags update based on category selection</small>
-    </div>
-    <div class="form-row"><label>Sub-Tag</label>
-      <select id="fSubtag"><option value="">No Sub-Tag</option></select>
-      <small>Sub-tags update based on tag selection</small>
-    </div>
-    <div class="form-row"><label>Product Image URL</label><input type="text" id="fImage" placeholder="https://m.media-amazon.com/images/I/..."><small>Paste the Amazon product image URL</small></div>
-    <div class="form-row"><label>Amazon Affiliate Link</label><input type="text" id="fUrl" placeholder="https://www.amazon.com/dp/ASIN?tag=YOUR-TAG"></div>
-    <div class="form-row"><label>Bought Tag (optional)</label><input type="text" id="fBought" placeholder="e.g. 20K+ bought in past month"></div>
-    <div class="checkbox-row"><input type="checkbox" id="fPrime" checked><label for="fPrime">✓ Prime FREE Delivery</label></div>
-    <button class="btn-add" id="btnAdd" onclick="addProduct()">Add Product</button>
-    <button class="btn-secondary" onclick="clearForm()">Clear Form</button>
+<!-- TAB NAV -->
+<div class="tab-nav" id="tabNav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" onclick="switchTab('products', this)">📦 Product Manager</button>
+    <button class="tab-btn" onclick="switchTab('categories', this)">📂 Category Manager</button>
+    <button class="tab-btn" onclick="switchTab('redirects', this)">🔀 Redirects</button>
   </div>
+</div>
 
-  <div class="right-panel">
-    <div class="save-bar"><span class="saved" id="saveStatus">✓ All changes saved</span><button class="btn-push" id="btnPush" onclick="pushToGitHub()">Push to Live Site</button></div>
+<!-- TAB CONTENT -->
+<div class="tab-content" id="tabContent">
 
-    <!-- AMAZON PAGE FETCHER -->
-    <div class="ai-panel">
-      <h2>🔗 Import from Amazon</h2>
-      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Use the Chrome extension to extract products from Amazon, then paste the JSON here to import them.</p>
-      <div class="form-row" style="margin-bottom:8px;">
-        <textarea id="importJson" rows="3" placeholder='Click "Copy JSON" in the Chrome extension, then paste here...' style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.82rem;font-family:'Outfit',sans-serif;resize:vertical;outline:none;"></textarea>
+<!-- ═══════════ TAB 1: PRODUCT MANAGER ═══════════ -->
+<div class="tab-panel active" id="tab-products">
+  <div class="pm-layout">
+    <div class="pm-left">
+      <div class="panel">
+        <h2 id="formTitle">➕ Add New Product</h2>
+        <div class="form-row"><label>Category</label><select id="fCategory"></select></div>
+        <div class="form-row"><label>Product Name</label><input type="text" id="fName" placeholder="e.g. COSRX Snail Mucin 96%"></div>
+        <div class="form-row-half">
+          <div class="form-row"><label>Current Price ($)</label><input type="number" id="fPrice" step="0.01" placeholder="14.72"></div>
+          <div class="form-row"><label>Original Price ($)</label><input type="number" id="fOrigPrice" step="0.01" placeholder="25.00 (optional)"><small>Leave empty if no discount</small></div>
+        </div>
+        <div class="form-row-half">
+          <div class="form-row"><label>Rating (1-5)</label><input type="number" id="fRating" step="0.1" min="1" max="5" placeholder="4.8"></div>
+          <div class="form-row"><label>Review Count</label><input type="text" id="fReviews" placeholder="87,420"></div>
+        </div>
+        <div class="form-row"><label>Badge</label>
+          <select id="fBadge"><option value="">None</option><option value="Best Seller">🔥 Best Seller</option><option value="New">🆕 New</option><option value="Deal">💰 Deal</option><option value="Trending">📈 Trending</option><option value="Limited Edition">⚡ Limited Edition</option><option value="Prime Pick">🟦 Prime Pick</option></select>
+        </div>
+        <div class="form-row"><label>Product Tag / Type</label><select id="fTag"><option value="">No Tag</option></select><small>Tags update based on category</small></div>
+        <div class="form-row"><label>Sub-Tag</label><select id="fSubtag"><option value="">No Sub-Tag</option></select><small>Sub-tags update based on tag</small></div>
+        <div class="form-row"><label>Product Image URL</label><input type="text" id="fImage" placeholder="https://m.media-amazon.com/images/I/..."></div>
+        <div class="form-row"><label>Amazon Affiliate Link</label><input type="text" id="fUrl" placeholder="https://www.amazon.com/dp/ASIN?tag=YOUR-TAG"></div>
+        <div class="form-row"><label>Bought Tag (optional)</label><input type="text" id="fBought" placeholder="e.g. 20K+ bought in past month"></div>
+        <div class="checkbox-row"><input type="checkbox" id="fPrime" checked><label for="fPrime">✓ Prime FREE Delivery</label></div>
+        <button class="btn-primary" id="btnAdd" onclick="addProduct()">Add Product</button>
+        <button class="btn-secondary" onclick="clearForm()">Clear Form</button>
       </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn-fetch" onclick="importFromJson()" style="flex:1;">📥 Import Products</button>
-        <button class="btn-fetch" onclick="document.getElementById('importJson').value=''" style="background:#E0E0E0;color:#555;">Clear</button>
-      </div>
-      <div class="ai-status" id="aiStatus" style="margin-top:8px;"></div>
-      <div class="ai-results" id="aiResults" style="margin-top:12px;"></div>
     </div>
-
-    <div class="cat-selector" id="catTabs"></div>
-    <div class="product-list"><h2>Products <span class="product-list-count" id="listCount"></span></h2><div id="productList"></div></div>
-
-    <!-- REDIRECT MANAGER -->
-    <div class="ai-panel" style="border-top:2px solid #E0E0E0;">
-      <h2>🔀 Redirect Manager</h2>
-      <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Add redirects for renamed/deleted pages. Old URLs will automatically point to new ones (301 permanent redirect).</p>
-      <div style="display:grid;grid-template-columns:1fr 30px 1fr auto;gap:8px;align-items:end;margin-bottom:12px;">
-        <div class="form-row" style="margin-bottom:0;"><label style="display:block;font-size:0.72rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;">OLD PATH</label><input type="text" id="redirectFrom" placeholder="/old-page" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;font-family:'Outfit',sans-serif;"></div>
-        <span style="text-align:center;font-size:1.2rem;color:var(--text-mid);padding-bottom:6px;">→</span>
-        <div class="form-row" style="margin-bottom:0;"><label style="display:block;font-size:0.72rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;">NEW PATH</label><input type="text" id="redirectTo" placeholder="/new-page" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;font-family:'Outfit',sans-serif;"></div>
-        <button onclick="addRedirect()" style="padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:0.82rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;white-space:nowrap;height:36px;">+ Add</button>
+    <div class="pm-right">
+      <div class="save-bar"><span class="saved" id="saveStatus">✓ All changes saved</span><button class="btn-green" id="btnPush" onclick="pushToGitHub()">Push to Live Site</button></div>
+      <div class="ai-panel">
+        <h2>🔗 Import from Amazon</h2>
+        <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Paste JSON from Chrome extension.</p>
+        <div class="form-row" style="margin-bottom:8px;"><textarea id="importJson" rows="3" placeholder='Click "Copy JSON" in the Chrome extension, then paste here...' style="resize:vertical;"></textarea></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-blue" onclick="importFromJson()" style="flex:1;">📥 Import Products</button>
+          <button style="padding:8px 12px;background:#E0E0E0;color:#555;border:none;border-radius:6px;font-size:0.82rem;cursor:pointer;" onclick="document.getElementById('importJson').value=''">Clear</button>
+        </div>
+        <div id="aiStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;"></div>
+        <div class="ai-results" id="aiResults"></div>
       </div>
-      <div id="redirectList" style="font-size:0.82rem;"></div>
-      <div id="redirectStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;"></div>
+      <div class="cat-selector" id="catTabs"></div>
+      <div class="product-list"><h2>Products <span class="product-list-count" id="listCount"></span></h2><div id="productList"></div></div>
     </div>
   </div>
 </div>
+
+<!-- ═══════════ TAB 2: CATEGORY MANAGER ═══════════ -->
+<div class="tab-panel" id="tab-categories">
+  <div class="panel">
+    <h2>➕ Add New Category</h2>
+    <div class="form-row-half">
+      <div class="form-row"><label>Category Key (URL slug)</label><input type="text" id="catKey" placeholder="e.g. bodycare"><small>Lowercase, no spaces. Used in URL: /bodycare</small></div>
+      <div class="form-row"><label>Display Title</label><input type="text" id="catTitle" placeholder="e.g. 🧴 Body Care"></div>
+    </div>
+    <div class="form-row"><label>Label (for nav)</label><input type="text" id="catLabel" placeholder="e.g. Body Care"></div>
+    <div class="form-row"><label>Tags (comma separated)</label><input type="text" id="catTags" placeholder="e.g. Body Wash, Body Lotion, Body Scrub"><small>These become the filter buttons on the category page</small></div>
+    <button class="btn-primary" onclick="addCategory()">Add Category</button>
+    <div id="catManagerStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;"></div>
+  </div>
+  <div class="panel">
+    <h2>📂 Current Categories</h2>
+    <div id="categoryList"><p style="color:var(--text-mid);">Loading...</p></div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 3: REDIRECT MANAGER ═══════════ -->
+<div class="tab-panel" id="tab-redirects">
+  <div class="panel">
+    <h2>➕ Add Redirect</h2>
+    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Old URLs will automatically redirect to new ones (301 permanent).</p>
+    <div style="display:grid;grid-template-columns:1fr 30px 1fr auto;gap:8px;align-items:end;">
+      <div class="form-row" style="margin-bottom:0;"><label>Old Path</label><input type="text" id="redirectFrom" placeholder="/old-page"></div>
+      <span style="text-align:center;font-size:1.2rem;color:var(--text-mid);padding-bottom:10px;">→</span>
+      <div class="form-row" style="margin-bottom:0;"><label>New Path</label><input type="text" id="redirectTo" placeholder="/new-page"></div>
+      <button class="btn-green" onclick="addRedirect()" style="height:42px;">+ Add</button>
+    </div>
+    <div id="redirectStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;"></div>
+  </div>
+  <div class="panel">
+    <h2>🔀 Current Redirects</h2>
+    <div id="redirectList"><p style="color:var(--text-mid);">Loading...</p></div>
+  </div>
+</div>
+
+</div><!-- end tab-content -->
 
 <div class="toast" id="toast"></div>
 
@@ -214,371 +267,247 @@ var GITHUB_REPO = "k-beauty-premium";
 var GITHUB_BRANCH = "main";
 var CATEGORIES = {};
 var CATEGORY_TAGS = {};
+var configRaw = null;
+var configSHA = null;
 
+// ═══════════════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════════════
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+  if (tabId === 'categories') renderCategoryList();
+  if (tabId === 'redirects') loadRedirects();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONFIG LOADER
+// ═══════════════════════════════════════════════════════════════
 async function loadConfigForAdmin() {
   try {
-    var resp = await fetch("config.json");
-    if (!resp.ok) throw new Error("Failed");
-    var config = await resp.json();
-    var cats = config.categories || {};
+    // Load from GitHub API to get SHA for saving
+    if (token) {
+      var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/config.json?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
+      if (resp.ok) {
+        var file = await resp.json();
+        configSHA = file.sha;
+        configRaw = JSON.parse(atob(file.content.replace(/\n/g, "")));
+      }
+    }
+    if (!configRaw) {
+      var resp2 = await fetch("/config.json");
+      configRaw = await resp2.json();
+    }
+    var cats = configRaw.categories || {};
+    CATEGORIES = {};
+    CATEGORY_TAGS = {};
     Object.keys(cats).forEach(function(key) {
       CATEGORIES[key] = cats[key].title;
       CATEGORY_TAGS[key] = cats[key].tags || [];
     });
-    // Populate category dropdown
-    var sel = document.getElementById("fCategory");
-    sel.innerHTML = Object.keys(CATEGORIES).map(function(k) {
-      return '<option value="' + k + '">' + CATEGORIES[k] + '</option>';
-    }).join("");
-  } catch(e) {
-    console.error("Config error:", e);
-    CATEGORIES = { skincare:"🧴 Skincare", serums:"💎 Serums", facemasks:"🎭 Face Masks", sunscreen:"☀️ Sunscreen", makeup:"💄 Makeup", lipcare:"👄 Lip Care", haircare:"💇 Hair Care" };
-    CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
     var sel = document.getElementById("fCategory");
     sel.innerHTML = Object.keys(CATEGORIES).map(function(k) { return '<option value="' + k + '">' + CATEGORIES[k] + '</option>'; }).join("");
-  }
-}
-
-var token="", data={}, fileSHAs={}, activeCategory="skincare", editingIndex=-1, hasUnsavedChanges=false, dirtyCategories=new Set();
-var addedSinceLastPush = 0;
-
-// ═══════════════════════════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════════════════════════
-function checkSavedToken(){var s=localStorage.getItem("kb_github_token");if(s){token=s;verifyAndConnect();}}
-async function connectGitHub(){var input=document.getElementById("tokenInput").value.trim();if(!input)return;token=input;document.getElementById("authError").style.display="none";try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Invalid");var user=await resp.json();localStorage.setItem("kb_github_token",token);showToast("Connected as "+user.login,"success");showMainUI();loadAllData();}catch(e){document.getElementById("authError").style.display="block";token="";}}
-async function verifyAndConnect(){try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Expired");showMainUI();loadAllData();}catch(e){localStorage.removeItem("kb_github_token");token="";}}
-function logout(){localStorage.removeItem("kb_github_token");token="";data={};fileSHAs={};document.getElementById("mainLayout").style.display="none";document.getElementById("authScreen").style.display="block";document.getElementById("statusDot").className="status-dot disconnected";document.getElementById("statusText").textContent="Not connected";document.getElementById("btnLogout").style.display="none";}
-function showMainUI(){document.getElementById("authScreen").style.display="none";document.getElementById("mainLayout").style.display="grid";document.getElementById("statusDot").className="status-dot connected";document.getElementById("statusText").textContent="Connected to GitHub";document.getElementById("btnLogout").style.display="inline-block";}
-
-// ═══════════════════════════════════════════════════════════════
-// LOAD / PUSH GITHUB
-// ═══════════════════════════════════════════════════════════════
-async function loadAllData(){for(var key of Object.keys(CATEGORIES))await loadCategory(key);buildCatTabs();renderList();showToast("All products loaded from GitHub","success");}
-async function loadCategory(key){try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json?ref="+GITHUB_BRANCH,{headers:{"Authorization":"token "+token}});if(!resp.ok){data[key]=[];fileSHAs[key]=null;return;}var file=await resp.json();fileSHAs[key]=file.sha;data[key]=JSON.parse(atob(file.content.replace(/\n/g,"")));}catch(e){data[key]=[];fileSHAs[key]=null;}}
-async function pushToGitHub(){if(dirtyCategories.size===0){showToast("No changes to push");return;}var btn=document.getElementById("btnPush");btn.disabled=true;btn.textContent="Pushing...";btn.classList.add("pushing");var success=0,failed=0;for(var key of dirtyCategories){var content=btoa(unescape(encodeURIComponent(JSON.stringify(data[key],null,2))));var body={message:"Update "+key+" products via admin",content:content,branch:GITHUB_BRANCH};if(fileSHAs[key])body.sha=fileSHAs[key];try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!resp.ok){failed++;continue;}var result=await resp.json();fileSHAs[key]=result.content.sha;success++;}catch(e){failed++;}}btn.disabled=false;btn.textContent="Push to Live Site";btn.classList.remove("pushing");if(failed===0){dirtyCategories.clear();hasUnsavedChanges=false;addedSinceLastPush=0;updateSaveStatus();showToast(success+" category(s) pushed! Site updating in ~10 seconds.","success");}else{showToast(success+" pushed, "+failed+" failed.","error");}}
-function markDirty(cat){dirtyCategories.add(cat);hasUnsavedChanges=true;updateSaveStatus();}
-function updateSaveStatus(){var el=document.getElementById("saveStatus");if(hasUnsavedChanges){el.className="unsaved";el.textContent="⚠ Unsaved: "+[...dirtyCategories].join(", ")+" ("+addedSinceLastPush+" new)";}else{el.className="saved";el.textContent="✓ All changes saved & live";}}
-
-// ═══════════════════════════════════════════════════════════════
-// TABS & LIST
-// ═══════════════════════════════════════════════════════════════
-function buildCatTabs(){document.getElementById("catTabs").innerHTML=Object.entries(CATEGORIES).map(function(e){var dot=dirtyCategories.has(e[0])?" ●":"";return '<button class="cat-btn '+(e[0]===activeCategory?"active":"")+'" onclick="switchCategory(\''+e[0]+'\')">'+e[1]+dot+'</button>';}).join("");}
-function switchCategory(key){activeCategory=key;document.getElementById("fCategory").value=key;buildCatTabs();renderList();}
-function renderList(){var list=document.getElementById("productList"),products=data[activeCategory]||[];document.getElementById("listCount").textContent="("+products.length+")";if(!products.length){list.innerHTML='<div class="empty-state"><p>No products yet.</p></div>';return;}list.innerHTML=products.map(function(p,i){var hasImg=p.image&&p.image.trim();var img=hasImg?'<img src="'+p.image+'" alt="">':'<span class="mini-placeholder">📦</span>';var badge="";if(p.badge){var c=p.badge==="Best Seller"?"hot":p.badge==="New"?"new":"deal";badge='<span class="plist-badge '+c+'">'+p.badge+'</span>';}return '<div class="plist-item"><div class="plist-img">'+img+'</div><div class="plist-name">'+p.name+'</div><div class="plist-price">$'+p.price.toFixed(2)+'</div>'+(badge||'<div></div>')+'<div class="plist-actions"><button class="btn-edit" onclick="editProduct('+i+')">Edit</button><button class="btn-del" onclick="deleteProduct('+i+')">Del</button></div></div>';}).join("");}
-
-// ═══════════════════════════════════════════════════════════════
-// ADD / EDIT / DELETE
-// ═══════════════════════════════════════════════════════════════
-function addProduct(){var name=document.getElementById("fName").value.trim(),price=parseFloat(document.getElementById("fPrice").value),cat=document.getElementById("fCategory").value;if(!name)return showToast("Product name is required","error");if(isNaN(price)||price<=0)return showToast("Valid price is required","error");var product={id:name.toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,30),name:name,price:price,originalPrice:parseFloat(document.getElementById("fOrigPrice").value)||null,rating:Math.min(5,Math.max(1,parseFloat(document.getElementById("fRating").value)||4.5)),reviews:document.getElementById("fReviews").value.trim()||"0",badge:document.getElementById("fBadge").value,tag:document.getElementById("fTag").value,subtag:document.getElementById("fSubtag").value,image:document.getElementById("fImage").value.trim(),url:document.getElementById("fUrl").value.trim()||"#",bought:document.getElementById("fBought").value.trim(),prime:document.getElementById("fPrime").checked};if(!data[cat])data[cat]=[];if(editingIndex>=0){product.id=data[cat][editingIndex].id;data[cat][editingIndex]=product;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";showToast("Updated! Click 'Push to Live Site' to publish.","success");}else{data[cat].unshift(product);addedSinceLastPush++;showToast("Added! ("+addedSinceLastPush+" new products)","success");if(addedSinceLastPush>=10){showToast("🔔 You have "+addedSinceLastPush+" new products — consider pushing to live!","success");}}markDirty(cat);if(cat!==activeCategory)switchCategory(cat);else{renderList();buildCatTabs();}clearForm();}
-function editProduct(i){var p=data[activeCategory][i];editingIndex=i;document.getElementById("fCategory").value=activeCategory;document.getElementById("fName").value=p.name;document.getElementById("fPrice").value=p.price;document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=p.rating;document.getElementById("fReviews").value=p.reviews;document.getElementById("fBadge").value=p.badge||"";updateTagDropdown();document.getElementById("fTag").value=p.tag||"";updateSubtagDropdown();document.getElementById("fSubtag").value=p.subtag||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=p.prime!==false;document.getElementById("formTitle").textContent="✏️ Edit Product";document.getElementById("btnAdd").textContent="Save Changes";window.scrollTo({top:0,behavior:"smooth"});}
-function deleteProduct(i){if(!confirm("Delete this product?"))return;data[activeCategory].splice(i,1);markDirty(activeCategory);renderList();buildCatTabs();showToast("Deleted. Push to make it live.");}
-function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fSubtag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
-
-
-// ═══════════════════════════════════════════════════════════════
-// IMPORT FROM CHROME EXTENSION
-// ═══════════════════════════════════════════════════════════════
-var fetchedProducts = [];
-
-// Auto-detect tag from product name
-var TAG_KEYWORDS = {
-  // Skincare
-  "Cleanser": ["cleanser","cleansing","face wash","facial wash","gel wash","foam wash"],
-  "Moisturizer": ["moisturizer","moisturizing","moisturiser","hydrating cream","face cream","facial cream"],
-  "Toner": ["toner","toning","astringent"],
-  "Cream": ["cream","balm","butter","lotion"],
-  "Exfoliator": ["exfoliat","scrub","peel","glycolic","salicylic","bha","aha"],
-  "Eye Care": ["eye cream","eye patch","eye serum","under eye","undereye"],
-  "Patches": ["patch","pimple patch","acne patch","hydrocolloid"],
-  "Sets": ["set","kit","bundle","collection","pack of","variety"],
-  // Serums
-  "Brightening": ["brightening","vitamin c","dark spot","glow","radiance","niacinamide"],
-  "Hydrating": ["hydrating","hyaluronic","moisture","hydration"],
-  "Anti-Aging": ["anti-aging","anti aging","retinol","retinal","wrinkle","firming","peptide","collagen"],
-  "Acne Care": ["acne","blemish","breakout","salicylic","benzoyl"],
-  "Pore Care": ["pore","blackhead","sebum","oil control"],
-  "Vitamin C": ["vitamin c","ascorbic"],
-  "Niacinamide": ["niacinamide"],
-  "Snail Mucin": ["snail","mucin"],
-  // Face Masks
-  "Sheet Mask": ["sheet mask","face mask sheet"],
-  "Sleeping Mask": ["sleeping mask","overnight mask","night mask"],
-  "Clay Mask": ["clay mask","mud mask","kaolin"],
-  "Peel-Off": ["peel off","peel-off"],
-  "Pads": ["pad","toning pad","exfoliating pad"],
-  "Wash-Off": ["wash off","wash-off","rinse off"],
-  "Hydrogel": ["hydrogel","jelly mask","gel mask"],
-  // Sunscreen
-  "Stick": ["sun stick","sunscreen stick","spf stick"],
-  "Tinted": ["tinted","tone up","tone-up"],
-  "Gel": ["sun gel","gel sunscreen","gel spf"],
-  "Fluid": ["fluid","lightweight sun","watery sun"],
-  "Matte": ["matte sun","matte spf","oil free sun"],
-  // Makeup
-  "Foundation": ["foundation","cushion","bb cream","cc cream","base makeup"],
-  "Lip Tint": ["lip tint","tint"],
-  "Eye Shadow": ["eyeshadow","eye shadow","palette"],
-  "Mascara": ["mascara","lash"],
-  "Brow": ["brow","eyebrow"],
-  "Blush": ["blush","cheek"],
-  "Powder": ["powder","setting powder","compact"],
-  "Eyeliner": ["eyeliner","eye liner","liner"],
-  // Lip Care
-  "Lip Mask": ["lip mask","lip sleeping"],
-  "Lip Balm": ["lip balm","lip butter"],
-  "Lip Gloss": ["lip gloss","gloss"],
-  "Lip Serum": ["lip serum","lip oil","lip essence"],
-  // Hair Care
-  "Shampoo": ["shampoo"],
-  "Conditioner": ["conditioner","conditioning"],
-  "Treatment": ["treatment","hair mask","hair repair","deep condition"],
-  "Hair Serum": ["hair serum","hair oil","hair essence","leave-in","leave in"],
-  "Scalp Care": ["scalp","dandruff","anti-dandruff"],
-  "Oil": ["oil","argan","coconut oil","hair oil"],
-  "Mist": ["mist","hair spray","spray"]
-};
-
-function detectTag(productName) {
-  var nameLower = (productName || '').toLowerCase();
-  for (var tag in TAG_KEYWORDS) {
-    var keywords = TAG_KEYWORDS[tag];
-    for (var i = 0; i < keywords.length; i++) {
-      if (nameLower.includes(keywords[i])) return tag;
-    }
-  }
-  return '';
-}
-
-function importFromJson() {
-  var jsonText = document.getElementById("importJson").value.trim();
-  var statusEl = document.getElementById("aiStatus");
-  var resultsEl = document.getElementById("aiResults");
-  if (!jsonText) return showToast("Paste the JSON from the Chrome extension", "error");
-  try {
-    var products = JSON.parse(jsonText);
-    if (!Array.isArray(products) || products.length === 0) throw new Error("No products in JSON");
-    fetchedProducts = products;
-    statusEl.textContent = "Found " + products.length + " products. Select category on the left, then click ➕ to add.";
-    renderFetchedCards();
-    showToast(products.length + " products loaded!", "success");
   } catch(e) {
-    statusEl.textContent = "Error: Invalid JSON.";
-    showToast("Invalid JSON: " + e.message, "error");
+    console.error("Config error:", e);
   }
 }
 
-function renderFetchedCards() {
-  var resultsEl = document.getElementById("aiResults");
-  var visibleCount = 0;
-  resultsEl.innerHTML = fetchedProducts.map(function(p, idx) {
-    if (p._dismissed) return '';
-    visibleCount++;
-    var imgHTML = p.image ? '<img src="' + p.image + '" alt="" onerror="this.parentElement.innerHTML=\'📦\'" style="max-width:90%;max-height:90%;object-fit:contain;">' : '📦';
-    var priceHTML = '$' + (parseFloat(p.price) || 0).toFixed(2);
-    if (p.originalPrice) priceHTML += ' <span style="text-decoration:line-through;color:#999;font-size:0.7rem;">$' + parseFloat(p.originalPrice).toFixed(2) + '</span>';
-    var boughtHTML = p.bought ? '<div style="font-size:0.68rem;color:#C45500;font-weight:600;">' + p.bought + '</div>' : '';
-    var autoTag = detectTag(p.name);
-    var tagHTML = autoTag ? '<div style="font-size:0.62rem;background:#EBF8FF;color:#3182CE;padding:2px 6px;border-radius:3px;display:inline-block;margin-top:2px;">' + autoTag + '</div>' : '';
-    return '<div class="ai-card" id="aiCard' + idx + '" style="position:relative;">' +
-      '<button onclick="dismissProduct(' + idx + ')" style="position:absolute;top:6px;right:6px;background:#FED7D7;color:#E53E3E;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;font-weight:700;line-height:22px;text-align:center;">✕</button>' +
-      '<div class="ai-card-img">' + imgHTML + '</div>' +
-      '<div class="ai-card-name" title="' + (p.name || '').replace(/"/g, '&quot;') + '">' + (p.name || 'Unknown') + '</div>' +
-      '<div class="ai-card-meta">⭐ ' + (p.rating || '0') + ' (' + (p.reviews || '0') + ')</div>' +
-      '<div class="ai-card-price">' + priceHTML + '</div>' +
-      boughtHTML + tagHTML +
-      '<div class="ai-card-actions">' +
-      '<button class="btn-ai-add" onclick="quickAdd(' + idx + ')">➕ Add</button>' +
-      '<button class="btn-ai-edit" onclick="editFromFetch(' + idx + ')">✏️</button>' +
-      '</div></div>';
-  }).join("");
-  document.getElementById("aiStatus").textContent = visibleCount + " products ready. Select category on the left, then click ➕ to add.";
-}
-
-function dismissProduct(idx) {
-  fetchedProducts[idx]._dismissed = true;
-  var card = document.getElementById("aiCard" + idx);
-  if (card) card.style.display = 'none';
-  var visible = fetchedProducts.filter(function(p) { return !p._dismissed; }).length;
-  document.getElementById("aiStatus").textContent = visible + " products remaining.";
-}
-
-function quickAdd(idx) {
-  var p = fetchedProducts[idx];
-  if (!p) return;
-  var cat = document.getElementById("fCategory").value;
-  var autoTag = detectTag(p.name);
-  var tag = document.getElementById("fTag").value || autoTag;
-  var product = { id: (p.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 30), name: p.name || "", price: parseFloat(p.price) || 0, originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : null, rating: parseFloat(p.rating) || 4.5, reviews: p.reviews || "0", badge: p.badge || "", tag: tag, image: p.image || "", url: p.url || "#", bought: p.bought || "", prime: p.prime !== false };
-  if (!data[cat]) data[cat] = [];
-  data[cat].unshift(product);
-  addedSinceLastPush++;
-  markDirty(cat);
-  if (cat === activeCategory) { renderList(); buildCatTabs(); }
-  var card = document.getElementById("aiCard" + idx);
-  if (card) { var actions = card.querySelector(".ai-card-actions"); actions.innerHTML = '<div class="ai-added">✓ Added to ' + cat + ' [' + tag + ']</div>'; }
-  showToast("Added: " + product.name.slice(0, 40) + "... → " + cat + " [" + tag + "]", "success");
-  if (addedSinceLastPush >= 10 && addedSinceLastPush % 10 === 0) { showToast("🔔 " + addedSinceLastPush + " new products!", "success"); }
-}
-
-function editFromFetch(idx) {
-  var p = fetchedProducts[idx];
-  if (!p) return;
-  document.getElementById("fName").value = p.name || "";
-  document.getElementById("fPrice").value = parseFloat(p.price) || "";
-  document.getElementById("fOrigPrice").value = p.originalPrice ? parseFloat(p.originalPrice) : "";
-  document.getElementById("fRating").value = parseFloat(p.rating) || "";
-  document.getElementById("fReviews").value = p.reviews || "";
-  document.getElementById("fImage").value = p.image || "";
-  document.getElementById("fUrl").value = p.url || "";
-  document.getElementById("fBought").value = p.bought || "";
-  document.getElementById("fPrime").checked = true;
-  editingIndex = -1;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  showToast("Product loaded — select category, tag, badge, then Add", "success");
-}
-
-// UTILITIES
-// ═══════════════════════════════════════════════════════════════
-function showToast(msg, type) { var t = document.getElementById("toast"); t.textContent = msg; t.className = "toast show" + (type ? " " + type : ""); setTimeout(function() { t.className = "toast"; }, 3000); }
-function updateTagDropdown() {
-  var cat = document.getElementById("fCategory").value;
-  var tags = CATEGORY_TAGS[cat];
-  var sel = document.getElementById("fTag");
-  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
-  if (isNested) {
-    sel.innerHTML = '<option value="">No Tag</option>' + Object.keys(tags).map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join("");
-  } else if (Array.isArray(tags)) {
-    sel.innerHTML = '<option value="">No Tag</option>' + tags.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join("");
-  } else {
-    sel.innerHTML = '<option value="">No Tag</option>';
-  }
-  updateSubtagDropdown();
-}
-function updateSubtagDropdown() {
-  var cat = document.getElementById("fCategory").value;
-  var tag = document.getElementById("fTag").value;
-  var sel = document.getElementById("fSubtag");
-  var tags = CATEGORY_TAGS[cat];
-  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
-  if (isNested && tag && tags[tag]) {
-    sel.innerHTML = '<option value="">No Sub-Tag</option>' + tags[tag].map(function(st) { return '<option value="' + st + '">' + st + '</option>'; }).join("");
-    sel.parentElement.style.display = "";
-  } else {
-    sel.innerHTML = '<option value="">No Sub-Tag</option>';
-    sel.parentElement.style.display = isNested ? "none" : "none";
-  }
-}
-document.getElementById("fCategory").addEventListener("change", updateTagDropdown);
-document.getElementById("fTag").addEventListener("change", updateSubtagDropdown);
-
-// ═══════════════════════════════════════════════════════════════
-// REDIRECT MANAGER
-// ═══════════════════════════════════════════════════════════════
-var vercelConfig = null;
-var vercelConfigSHA = null;
-
-async function loadRedirects() {
-  if (!token) return;
+async function saveConfig() {
   try {
-    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/vercel.json?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
-    if (!resp.ok) return;
-    var file = await resp.json();
-    vercelConfigSHA = file.sha;
-    vercelConfig = JSON.parse(atob(file.content.replace(/\n/g, "")));
-    renderRedirectList();
-  } catch(e) { console.error("Failed to load redirects:", e); }
-}
-
-function renderRedirectList() {
-  var list = document.getElementById("redirectList");
-  if (!vercelConfig || !vercelConfig.redirects || vercelConfig.redirects.length === 0) {
-    list.innerHTML = '<p style="color:var(--text-mid);padding:8px 0;">No custom redirects yet.</p>';
-    return;
-  }
-  list.innerHTML = '<table style="width:100%;border-collapse:collapse;">' +
-    '<tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:6px;font-size:0.72rem;color:var(--text-mid);">FROM</th><th style="padding:6px;font-size:0.72rem;color:var(--text-mid);">→</th><th style="text-align:left;padding:6px;font-size:0.72rem;color:var(--text-mid);">TO</th><th style="padding:6px;font-size:0.72rem;color:var(--text-mid);">TYPE</th><th></th></tr>' +
-    vercelConfig.redirects.map(function(r, i) {
-      var isSystem = r.source.includes(":cat") || r.source.includes(".html");
-      return '<tr style="border-bottom:1px solid #f5f5f5;">' +
-        '<td style="padding:6px;font-family:monospace;font-size:0.78rem;color:' + (isSystem ? '#999' : 'var(--text)') + ';">' + r.source + '</td>' +
-        '<td style="padding:6px;text-align:center;color:var(--text-mid);">→</td>' +
-        '<td style="padding:6px;font-family:monospace;font-size:0.78rem;color:' + (isSystem ? '#999' : 'var(--green)') + ';">' + r.destination + '</td>' +
-        '<td style="padding:6px;font-size:0.68rem;color:var(--text-light);">' + (r.permanent ? '301' : '302') + '</td>' +
-        '<td style="padding:6px;">' + (isSystem ? '<span style="font-size:0.65rem;color:#999;">system</span>' : '<button onclick="deleteRedirect(' + i + ')" style="padding:3px 8px;background:#FED7D7;color:#E53E3E;border:none;border-radius:4px;font-size:0.7rem;cursor:pointer;">✕</button>') + '</td>' +
-        '</tr>';
-    }).join("") +
-    '</table>';
-}
-
-async function addRedirect() {
-  var from = document.getElementById("redirectFrom").value.trim();
-  var to = document.getElementById("redirectTo").value.trim();
-  var statusEl = document.getElementById("redirectStatus");
-
-  if (!from || !to) { statusEl.textContent = "Both paths are required."; return; }
-  if (!from.startsWith("/")) from = "/" + from;
-  if (!to.startsWith("/") && !to.startsWith("http")) to = "/" + to;
-
-  if (!vercelConfig) { statusEl.textContent = "Loading config..."; await loadRedirects(); }
-  if (!vercelConfig) { statusEl.textContent = "Failed to load vercel.json"; return; }
-
-  // Check duplicate
-  var exists = vercelConfig.redirects.some(function(r) { return r.source === from; });
-  if (exists) { statusEl.textContent = "Redirect for " + from + " already exists."; return; }
-
-  vercelConfig.redirects.push({ source: from, destination: to, permanent: true });
-
-  statusEl.textContent = "Saving to GitHub...";
-  var saved = await saveVercelConfig();
-  if (saved) {
-    document.getElementById("redirectFrom").value = "";
-    document.getElementById("redirectTo").value = "";
-    renderRedirectList();
-    statusEl.textContent = "✅ Redirect added! Site will update in ~30 seconds.";
-    showToast("Redirect added: " + from + " → " + to, "success");
-  } else {
-    statusEl.textContent = "Failed to save. Try again.";
-  }
-}
-
-async function deleteRedirect(index) {
-  if (!confirm("Delete this redirect?")) return;
-  var statusEl = document.getElementById("redirectStatus");
-  vercelConfig.redirects.splice(index, 1);
-  statusEl.textContent = "Saving...";
-  var saved = await saveVercelConfig();
-  if (saved) {
-    renderRedirectList();
-    statusEl.textContent = "✅ Redirect removed.";
-    showToast("Redirect deleted", "success");
-  } else {
-    statusEl.textContent = "Failed to save.";
-  }
-}
-
-async function saveVercelConfig() {
-  try {
-    var content = btoa(unescape(encodeURIComponent(JSON.stringify(vercelConfig, null, 2))));
-    var body = { message: "Update redirects via admin", content: content, branch: GITHUB_BRANCH };
-    if (vercelConfigSHA) body.sha = vercelConfigSHA;
-    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/vercel.json",
+    var content = btoa(unescape(encodeURIComponent(JSON.stringify(configRaw, null, 2))));
+    var body = { message: "Update config via admin", content: content, branch: GITHUB_BRANCH };
+    if (configSHA) body.sha = configSHA;
+    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/config.json",
       { method: "PUT", headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, body: JSON.stringify(body) });
     if (!resp.ok) return false;
     var result = await resp.json();
-    vercelConfigSHA = result.content.sha;
+    configSHA = result.content.sha;
     return true;
   } catch(e) { return false; }
 }
 
-async function initAdmin() {
-  await loadConfigForAdmin();
-  updateTagDropdown();
-  checkSavedToken();
-  // Load redirects after auth
-  setTimeout(loadRedirects, 2000);
+// ═══════════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════════
+var token="", data={}, fileSHAs={}, activeCategory="skincare", editingIndex=-1, hasUnsavedChanges=false, dirtyCategories=new Set();
+var addedSinceLastPush = 0;
+
+function checkSavedToken(){var s=localStorage.getItem("kb_github_token");if(s){token=s;verifyAndConnect();}}
+async function connectGitHub(){var input=document.getElementById("tokenInput").value.trim();if(!input)return;token=input;document.getElementById("authError").style.display="none";try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Invalid");var user=await resp.json();localStorage.setItem("kb_github_token",token);showToast("Connected as "+user.login,"success");await loadConfigForAdmin();showMainUI();loadAllData();}catch(e){document.getElementById("authError").style.display="block";token="";}}
+async function verifyAndConnect(){try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Expired");await loadConfigForAdmin();showMainUI();loadAllData();}catch(e){localStorage.removeItem("kb_github_token");token="";}}
+function logout(){localStorage.removeItem("kb_github_token");token="";data={};fileSHAs={};document.getElementById("tabNav").style.display="none";document.getElementById("tabContent").style.display="none";document.getElementById("authScreen").style.display="block";document.getElementById("statusDot").className="status-dot disconnected";document.getElementById("statusText").textContent="Not connected";document.getElementById("btnLogout").style.display="none";}
+function showMainUI(){document.getElementById("authScreen").style.display="none";document.getElementById("tabNav").style.display="block";document.getElementById("tabContent").style.display="block";document.getElementById("statusDot").className="status-dot connected";document.getElementById("statusText").textContent="Connected to GitHub";document.getElementById("btnLogout").style.display="inline-block";updateTagDropdown();}
+
+// ═══════════════════════════════════════════════════════════════
+// PRODUCT MANAGER
+// ═══════════════════════════════════════════════════════════════
+async function loadAllData(){for(var key of Object.keys(CATEGORIES))await loadCategory(key);buildCatTabs();renderList();showToast("All products loaded","success");setTimeout(loadRedirects,1000);}
+async function loadCategory(key){try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json?ref="+GITHUB_BRANCH,{headers:{"Authorization":"token "+token}});if(!resp.ok){data[key]=[];fileSHAs[key]=null;return;}var file=await resp.json();fileSHAs[key]=file.sha;data[key]=JSON.parse(atob(file.content.replace(/\n/g,"")));}catch(e){data[key]=[];fileSHAs[key]=null;}}
+async function pushToGitHub(){if(dirtyCategories.size===0){showToast("No changes to push");return;}var btn=document.getElementById("btnPush");btn.disabled=true;btn.textContent="Pushing...";var success=0,failed=0;for(var key of dirtyCategories){var content=btoa(unescape(encodeURIComponent(JSON.stringify(data[key],null,2))));var body={message:"Update "+key+" via admin",content:content,branch:GITHUB_BRANCH};if(fileSHAs[key])body.sha=fileSHAs[key];try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!resp.ok){failed++;continue;}var result=await resp.json();fileSHAs[key]=result.content.sha;success++;}catch(e){failed++;}}btn.disabled=false;btn.textContent="Push to Live Site";if(failed===0){dirtyCategories.clear();hasUnsavedChanges=false;addedSinceLastPush=0;updateSaveStatus();showToast(success+" pushed!","success");}else{showToast(failed+" failed","error");}}
+function markDirty(cat){dirtyCategories.add(cat);hasUnsavedChanges=true;updateSaveStatus();}
+function updateSaveStatus(){var el=document.getElementById("saveStatus");if(hasUnsavedChanges){el.className="unsaved";el.textContent="⚠ Unsaved: "+[...dirtyCategories].join(", ");}else{el.className="saved";el.textContent="✓ All saved & live";}}
+function buildCatTabs(){document.getElementById("catTabs").innerHTML=Object.entries(CATEGORIES).map(function(e){var dot=dirtyCategories.has(e[0])?" ●":"";return '<button class="cat-btn '+(e[0]===activeCategory?"active":"")+'" onclick="switchCategory(\''+e[0]+'\')">'+e[1]+dot+'</button>';}).join("");}
+function switchCategory(key){activeCategory=key;document.getElementById("fCategory").value=key;buildCatTabs();renderList();}
+function renderList(){var list=document.getElementById("productList"),products=data[activeCategory]||[];document.getElementById("listCount").textContent="("+products.length+")";if(!products.length){list.innerHTML='<div class="empty-state"><p>No products yet.</p></div>';return;}list.innerHTML=products.map(function(p,i){var hasImg=p.image&&p.image.trim();var img=hasImg?'<img src="'+p.image+'" alt="">':'<span class="mini-placeholder">📦</span>';var badge="";if(p.badge){var c=p.badge==="Best Seller"?"hot":p.badge==="New"?"new":"deal";badge='<span class="plist-badge '+c+'">'+p.badge+'</span>';}return '<div class="plist-item"><div class="plist-img">'+img+'</div><div class="plist-name">'+p.name+'</div><div class="plist-price">$'+p.price.toFixed(2)+'</div>'+(badge||'<div></div>')+'<div class="plist-actions"><button class="btn-edit" onclick="editProduct('+i+')">Edit</button><button class="btn-del" onclick="deleteProduct('+i+')">Del</button></div></div>';}).join("");}
+function addProduct(){var name=document.getElementById("fName").value.trim(),price=parseFloat(document.getElementById("fPrice").value),cat=document.getElementById("fCategory").value;if(!name)return showToast("Name required","error");if(isNaN(price)||price<=0)return showToast("Price required","error");var product={id:name.toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,30),name:name,price:price,originalPrice:parseFloat(document.getElementById("fOrigPrice").value)||null,rating:Math.min(5,Math.max(1,parseFloat(document.getElementById("fRating").value)||4.5)),reviews:document.getElementById("fReviews").value.trim()||"0",badge:document.getElementById("fBadge").value,tag:document.getElementById("fTag").value,subtag:document.getElementById("fSubtag").value,image:document.getElementById("fImage").value.trim(),url:document.getElementById("fUrl").value.trim()||"#",bought:document.getElementById("fBought").value.trim(),prime:document.getElementById("fPrime").checked};if(!data[cat])data[cat]=[];if(editingIndex>=0){product.id=data[cat][editingIndex].id;data[cat][editingIndex]=product;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";showToast("Updated!","success");}else{data[cat].unshift(product);addedSinceLastPush++;showToast("Added! ("+addedSinceLastPush+" new)","success");}markDirty(cat);if(cat!==activeCategory)switchCategory(cat);else{renderList();buildCatTabs();}clearForm();}
+function editProduct(i){var p=data[activeCategory][i];editingIndex=i;document.getElementById("fCategory").value=activeCategory;document.getElementById("fName").value=p.name;document.getElementById("fPrice").value=p.price;document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=p.rating;document.getElementById("fReviews").value=p.reviews;document.getElementById("fBadge").value=p.badge||"";updateTagDropdown();document.getElementById("fTag").value=p.tag||"";updateSubtagDropdown();document.getElementById("fSubtag").value=p.subtag||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=p.prime!==false;document.getElementById("formTitle").textContent="✏️ Edit Product";document.getElementById("btnAdd").textContent="Save Changes";window.scrollTo({top:0,behavior:"smooth"});}
+function deleteProduct(i){if(!confirm("Delete?"))return;data[activeCategory].splice(i,1);markDirty(activeCategory);renderList();buildCatTabs();showToast("Deleted");}
+function clearForm(){["fName","fPrice","fOrigPrice","fRating","fReviews","fImage","fUrl","fBought"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fBadge").value="";document.getElementById("fTag").value="";document.getElementById("fSubtag").value="";document.getElementById("fPrime").checked=true;editingIndex=-1;document.getElementById("formTitle").textContent="➕ Add New Product";document.getElementById("btnAdd").textContent="Add Product";}
+
+// ═══════════════════════════════════════════════════════════════
+// CHROME EXTENSION IMPORT
+// ═══════════════════════════════════════════════════════════════
+var fetchedProducts = [];
+var TAG_KEYWORDS={"Cleanser":["cleanser","cleansing","face wash","facial wash","gel wash","foam wash"],"Moisturizer":["moisturizer","moisturizing","moisturiser","hydrating cream","face cream"],"Toner":["toner","toning","astringent"],"Cream":["cream","balm","butter","lotion"],"Exfoliator":["exfoliat","scrub","peel","glycolic","salicylic","bha","aha"],"Eye Care":["eye cream","eye patch","eye serum","under eye"],"Patches":["patch","pimple patch","acne patch","hydrocolloid"],"Sets":["set","kit","bundle","collection"],"Brightening":["brightening","vitamin c","dark spot","glow","niacinamide"],"Hydrating":["hydrating","hyaluronic","moisture","hydration"],"Anti-Aging":["anti-aging","anti aging","retinol","wrinkle","peptide","collagen"],"Acne Care":["acne","blemish","breakout","benzoyl"],"Pore Care":["pore","blackhead","sebum","oil control"],"Vitamin C":["vitamin c","ascorbic"],"Niacinamide":["niacinamide"],"Snail Mucin":["snail","mucin"],"Sheet Mask":["sheet mask"],"Sleeping Mask":["sleeping mask","overnight mask"],"Clay Mask":["clay mask","mud mask"],"Peel-Off":["peel off","peel-off"],"Pads":["pad","toning pad"],"Wash-Off":["wash off","wash-off"],"Hydrogel":["hydrogel","jelly mask","gel mask"],"Stick":["sun stick","spf stick"],"Tinted":["tinted","tone up"],"Gel":["sun gel","gel sunscreen"],"Fluid":["fluid","watery sun"],"Matte":["matte sun","oil free sun"],"Foundation":["foundation","cushion","bb cream","cc cream"],"Lip Tint":["lip tint","tint"],"Eye Shadow":["eyeshadow","eye shadow","palette"],"Mascara":["mascara","lash"],"Brow":["brow","eyebrow"],"Blush":["blush","cheek"],"Powder":["powder","setting powder"],"Eyeliner":["eyeliner","eye liner"],"Lip Mask":["lip mask","lip sleeping"],"Lip Balm":["lip balm","lip butter"],"Lip Gloss":["lip gloss","gloss"],"Lip Serum":["lip serum","lip oil"],"Shampoo":["shampoo"],"Conditioner":["conditioner","conditioning"],"Treatment":["treatment","hair mask","hair repair"],"Hair Serum":["hair serum","hair oil","leave-in"],"Scalp Care":["scalp","dandruff"],"Oil":["oil","argan"],"Mist":["mist","hair spray","spray"]};
+function detectTag(n){var l=(n||'').toLowerCase();for(var t in TAG_KEYWORDS){for(var i=0;i<TAG_KEYWORDS[t].length;i++){if(l.includes(TAG_KEYWORDS[t][i]))return t;}};return '';}
+function importFromJson(){var j=document.getElementById("importJson").value.trim();if(!j)return showToast("Paste JSON","error");try{var p=JSON.parse(j);if(!Array.isArray(p)||!p.length)throw new Error("No products");fetchedProducts=p;document.getElementById("aiStatus").textContent=p.length+" products loaded.";renderFetchedCards();showToast(p.length+" loaded!","success");}catch(e){showToast("Invalid JSON: "+e.message,"error");}}
+function renderFetchedCards(){var r=document.getElementById("aiResults");var c=0;r.innerHTML=fetchedProducts.map(function(p,i){if(p._dismissed)return '';c++;var img=p.image?'<img src="'+p.image+'" alt="" onerror="this.parentElement.innerHTML=\'📦\'" style="max-width:90%;max-height:90%;object-fit:contain;">':'📦';var pr='$'+(parseFloat(p.price)||0).toFixed(2);var at=detectTag(p.name);var tag=at?'<div style="font-size:0.62rem;background:#EBF8FF;color:#3182CE;padding:2px 6px;border-radius:3px;display:inline-block;margin-top:2px;">'+at+'</div>':'';return '<div class="ai-card" id="aiCard'+i+'" style="position:relative;"><button onclick="dismissProduct('+i+')" style="position:absolute;top:6px;right:6px;background:#FED7D7;color:#E53E3E;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;font-weight:700;">✕</button><div class="ai-card-img">'+img+'</div><div class="ai-card-name">'+p.name+'</div><div class="ai-card-meta">⭐ '+(p.rating||'0')+' ('+(p.reviews||'0')+')</div><div class="ai-card-price">'+pr+'</div>'+tag+'<div class="ai-card-actions"><button class="btn-ai-add" onclick="quickAdd('+i+')">➕ Add</button><button class="btn-ai-edit" onclick="editFromFetch('+i+')">✏️</button></div></div>';}).join("");document.getElementById("aiStatus").textContent=c+" products ready.";}
+function dismissProduct(i){fetchedProducts[i]._dismissed=true;var c=document.getElementById("aiCard"+i);if(c)c.style.display='none';document.getElementById("aiStatus").textContent=fetchedProducts.filter(function(p){return!p._dismissed;}).length+" remaining.";}
+function quickAdd(i){var p=fetchedProducts[i];if(!p)return;var cat=document.getElementById("fCategory").value;var at=detectTag(p.name);var tag=document.getElementById("fTag").value||at;var prod={id:(p.name||"p").toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,30),name:p.name||"",price:parseFloat(p.price)||0,originalPrice:p.originalPrice?parseFloat(p.originalPrice):null,rating:parseFloat(p.rating)||4.5,reviews:p.reviews||"0",badge:"",tag:tag,image:p.image||"",url:p.url||"#",bought:p.bought||"",prime:p.prime!==false};if(!data[cat])data[cat]=[];data[cat].unshift(prod);addedSinceLastPush++;markDirty(cat);if(cat===activeCategory){renderList();buildCatTabs();}var c=document.getElementById("aiCard"+i);if(c){c.querySelector(".ai-card-actions").innerHTML='<div class="ai-added">✓ Added</div>';}showToast("Added: "+prod.name.slice(0,30)+"...","success");}
+function editFromFetch(i){var p=fetchedProducts[i];if(!p)return;document.getElementById("fName").value=p.name||"";document.getElementById("fPrice").value=parseFloat(p.price)||"";document.getElementById("fOrigPrice").value=p.originalPrice||"";document.getElementById("fRating").value=parseFloat(p.rating)||"";document.getElementById("fReviews").value=p.reviews||"";document.getElementById("fImage").value=p.image||"";document.getElementById("fUrl").value=p.url||"";document.getElementById("fBought").value=p.bought||"";document.getElementById("fPrime").checked=true;editingIndex=-1;window.scrollTo({top:0,behavior:"smooth"});showToast("Loaded into form","success");}
+
+// ═══════════════════════════════════════════════════════════════
+// CATEGORY MANAGER
+// ═══════════════════════════════════════════════════════════════
+function renderCategoryList(){
+  var el=document.getElementById("categoryList");
+  if(!configRaw||!configRaw.categories){el.innerHTML="<p>No config loaded.</p>";return;}
+  var cats=configRaw.categories;
+  el.innerHTML=Object.keys(cats).map(function(key){
+    var c=cats[key];
+    var tags=c.tags||{};
+    var isNested=typeof tags==="object"&&!Array.isArray(tags);
+    var tagHTML='';
+    if(isNested){
+      tagHTML=Object.keys(tags).map(function(t){
+        var subs=tags[t];
+        return '<div class="tag-group"><span class="tag-group-title">'+t+'</span><div class="tag-pills">'+subs.map(function(s){return '<span class="subtag-pill">'+s+'</span>';}).join("")+'</div></div>';
+      }).join("");
+    }else if(Array.isArray(tags)){
+      tagHTML='<div class="tag-pills">'+tags.map(function(t){return '<span class="tag-pill">'+t+'</span>';}).join("")+'</div>';
+    }
+    return '<div class="cat-item"><h3><span>'+c.title+' <small style="color:#999;font-weight:400;">(/'+key+')</small></span><div class="cat-actions"><button class="btn-edit" onclick="editCategory(\''+key+'\')">Edit</button><button class="btn-del" onclick="deleteCategory(\''+key+'\')">Delete</button></div></h3>'+tagHTML+'</div>';
+  }).join("");
 }
-initAdmin();
+
+async function addCategory(){
+  var key=document.getElementById("catKey").value.trim().toLowerCase().replace(/[^a-z0-9]/g,"");
+  var title=document.getElementById("catTitle").value.trim();
+  var label=document.getElementById("catLabel").value.trim();
+  var tagsStr=document.getElementById("catTags").value.trim();
+  var status=document.getElementById("catManagerStatus");
+
+  if(!key){status.textContent="Key is required.";return;}
+  if(!title){status.textContent="Title is required.";return;}
+  if(configRaw.categories[key]){status.textContent="Category '"+key+"' already exists.";return;}
+
+  var tags=tagsStr?tagsStr.split(",").map(function(t){return t.trim();}).filter(Boolean):[];
+
+  configRaw.categories[key]={title:title,label:label||title.replace(/^[^\w]*/,"").trim(),tags:tags};
+
+  status.textContent="Saving config...";
+  var saved=await saveConfig();
+  if(!saved){status.textContent="Failed to save config.";return;}
+
+  // Create empty data file
+  status.textContent="Creating data file...";
+  var emptyContent=btoa("[]");
+  try{
+    await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify({message:"Create "+key+" data file",content:emptyContent,branch:GITHUB_BRANCH})});
+  }catch(e){}
+
+  // Update vercel.json rewrite pattern
+  await updateVercelRewrite();
+
+  // Reload
+  await loadConfigForAdmin();
+  renderCategoryList();
+  document.getElementById("catKey").value="";
+  document.getElementById("catTitle").value="";
+  document.getElementById("catLabel").value="";
+  document.getElementById("catTags").value="";
+  status.textContent="✅ Category '"+key+"' created! Site updating...";
+  showToast("Category added: "+title,"success");
+
+  // Reload products for new category
+  data[key]=[];fileSHAs[key]=null;
+  buildCatTabs();
+}
+
+function editCategory(key){
+  var c=configRaw.categories[key];
+  if(!c)return;
+  var tags=c.tags;
+  var isNested=typeof tags==="object"&&!Array.isArray(tags);
+  var tagsStr="";
+  if(isNested){tagsStr=Object.keys(tags).join(", ");}
+  else if(Array.isArray(tags)){tagsStr=tags.join(", ");}
+
+  document.getElementById("catKey").value=key;
+  document.getElementById("catTitle").value=c.title;
+  document.getElementById("catLabel").value=c.label||"";
+  document.getElementById("catTags").value=tagsStr;
+  document.getElementById("catManagerStatus").textContent="Editing '"+key+"'. Change values and click Add to update (same key = update).";
+
+  // Allow overwrite
+  configRaw.categories[key]=undefined;
+  switchTab('categories',document.querySelectorAll('.tab-btn')[1]);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function deleteCategory(key){
+  if(!confirm("Delete category '"+key+"'? Products will remain in data/"+key+".json but won't show on the site."))return;
+  var status=document.getElementById("catManagerStatus");
+  delete configRaw.categories[key];
+
+  status.textContent="Saving...";
+  var saved=await saveConfig();
+  if(!saved){status.textContent="Failed.";return;}
+
+  await updateVercelRewrite();
+  await loadConfigForAdmin();
+  renderCategoryList();
+  buildCatTabs();
+  status.textContent="✅ Category deleted.";
+  showToast("Category '"+key+"' deleted","success");
+}
+
+async function updateVercelRewrite(){
+  if(!vercelConfig)await loadRedirects();
+  if(!vercelConfig)return;
+  var catKeys=Object.keys(configRaw.categories);
+  var pattern="/:cat("+catKeys.join("|")+")";
+  // Find and update the category rewrite
+  var found=false;
+  vercelConfig.rewrites=vercelConfig.rewrites.map(function(r){
+    if(r.source.startsWith("/:cat")){found=true;return{source:pattern,destination:"/category.html"};}
+    return r;
+  });
+  if(!found){vercelConfig.rewrites.push({source:pattern,destination:"/category.html"});}
+  await saveVercelConfig();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// REDIRECT MANAGER
+// ═══════════════════════════════════════════════════════════════
+var vercelConfig=null;var vercelConfigSHA=null;
+async function loadRedirects(){if(!token)return;try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/vercel.json?ref="+GITHUB_BRANCH,{headers:{"Authorization":"token "+token}});if(!resp.ok)return;var file=await resp.json();vercelConfigSHA=file.sha;vercelConfig=JSON.parse(atob(file.content.replace(/\n/g,"")));renderRedirectList();}catch(e){}}
+function renderRedirectList(){var list=document.getElementById("redirectList");if(!vercelConfig||!vercelConfig.redirects||!vercelConfig.redirects.length){list.innerHTML='<p style="color:var(--text-mid);">No redirects.</p>';return;}list.innerHTML='<table style="width:100%;border-collapse:collapse;"><tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:6px;font-size:0.72rem;">FROM</th><th style="padding:6px;">→</th><th style="text-align:left;padding:6px;font-size:0.72rem;">TO</th><th style="padding:6px;font-size:0.72rem;">TYPE</th><th></th></tr>'+vercelConfig.redirects.map(function(r,i){var sys=r.source.includes(":cat")||r.source.includes(".html");return '<tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:6px;font-family:monospace;font-size:0.78rem;color:'+(sys?'#999':'var(--text)')+';">'+r.source+'</td><td style="padding:6px;text-align:center;">→</td><td style="padding:6px;font-family:monospace;font-size:0.78rem;color:'+(sys?'#999':'var(--green)')+';">'+r.destination+'</td><td style="padding:6px;font-size:0.68rem;">'+(r.permanent?'301':'302')+'</td><td style="padding:6px;">'+(sys?'<span style="font-size:0.65rem;color:#999;">system</span>':'<button onclick="deleteRedirect('+i+')" style="padding:3px 8px;background:#FED7D7;color:#E53E3E;border:none;border-radius:4px;font-size:0.7rem;cursor:pointer;">✕</button>')+'</td></tr>';}).join("")+'</table>';}
+async function addRedirect(){var from=document.getElementById("redirectFrom").value.trim();var to=document.getElementById("redirectTo").value.trim();var s=document.getElementById("redirectStatus");if(!from||!to){s.textContent="Both required.";return;}if(!from.startsWith("/"))from="/"+from;if(!to.startsWith("/")&&!to.startsWith("http"))to="/"+to;if(!vercelConfig)await loadRedirects();if(!vercelConfig){s.textContent="Failed to load.";return;}if(vercelConfig.redirects.some(function(r){return r.source===from;})){s.textContent="Already exists.";return;}vercelConfig.redirects.push({source:from,destination:to,permanent:true});s.textContent="Saving...";if(await saveVercelConfig()){document.getElementById("redirectFrom").value="";document.getElementById("redirectTo").value="";renderRedirectList();s.textContent="✅ Added!";showToast("Redirect: "+from+" → "+to,"success");}else{s.textContent="Failed.";}}
+async function deleteRedirect(i){if(!confirm("Delete?"))return;vercelConfig.redirects.splice(i,1);if(await saveVercelConfig()){renderRedirectList();showToast("Deleted","success");}}
+async function saveVercelConfig(){try{var c=btoa(unescape(encodeURIComponent(JSON.stringify(vercelConfig,null,2))));var b={message:"Update vercel.json via admin",content:c,branch:GITHUB_BRANCH};if(vercelConfigSHA)b.sha=vercelConfigSHA;var r=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/vercel.json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify(b)});if(!r.ok)return false;var res=await r.json();vercelConfigSHA=res.content.sha;return true;}catch(e){return false;}}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function showToast(msg,type){var t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type?" "+type:"");setTimeout(function(){t.className="toast";},3000);}
+function updateTagDropdown(){var cat=document.getElementById("fCategory").value;var tags=CATEGORY_TAGS[cat];var sel=document.getElementById("fTag");var nested=tags&&typeof tags==="object"&&!Array.isArray(tags);if(nested){sel.innerHTML='<option value="">No Tag</option>'+Object.keys(tags).map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join("");}else if(Array.isArray(tags)){sel.innerHTML='<option value="">No Tag</option>'+tags.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join("");}else{sel.innerHTML='<option value="">No Tag</option>';}updateSubtagDropdown();}
+function updateSubtagDropdown(){var cat=document.getElementById("fCategory").value;var tag=document.getElementById("fTag").value;var sel=document.getElementById("fSubtag");var tags=CATEGORY_TAGS[cat];var nested=tags&&typeof tags==="object"&&!Array.isArray(tags);if(nested&&tag&&tags[tag]){sel.innerHTML='<option value="">No Sub-Tag</option>'+tags[tag].map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join("");sel.parentElement.style.display="";}else{sel.innerHTML='<option value="">No Sub-Tag</option>';sel.parentElement.style.display="none";}}
+document.getElementById("fCategory").addEventListener("change",updateTagDropdown);
+document.getElementById("fTag").addEventListener("change",updateSubtagDropdown);
+checkSavedToken();
 </script>
 </body>
 </html>
