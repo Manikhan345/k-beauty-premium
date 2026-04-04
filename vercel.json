@@ -1,0 +1,19 @@
+{
+  "rewrites": [
+    { "source": "/skincare", "destination": "/category-skincare.html" },
+    { "source": "/serums", "destination": "/category-serums.html" },
+    { "source": "/facemasks", "destination": "/category-facemasks.html" },
+    { "source": "/sunscreen", "destination": "/category-sunscreen.html" },
+    { "source": "/makeup", "destination": "/category-makeup.html" },
+    { "source": "/lipcare", "destination": "/category-lipcare.html" },
+    { "source": "/haircare", "destination": "/category-haircare.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/privacy", "destination": "/privacy-policy.html" },
+    { "source": "/terms", "destination": "/terms-of-service.html" },
+    { "source": "/disclosure", "destination": "/affiliate-disclosure.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/p/:cat/:id", "destination": "/product.html?cat=:cat&id=:id" }
+  ],
+  "trailingSlash": false
+}
