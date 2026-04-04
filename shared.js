@@ -43,7 +43,7 @@ var COPYRIGHT_YEAR = '2026';
 async function loadConfig() {
   if (CONFIG_LOADED) return;
   try {
-    var resp = await fetch("config.json");
+    var resp = await fetch("/config.json");
     if (!resp.ok) throw new Error("Failed to load config.json");
     var config = await resp.json();
     var cats = config.categories || {};
@@ -55,7 +55,7 @@ async function loadConfig() {
     Object.keys(cats).forEach(function(key) {
       var c = cats[key];
       SITE_PAGES[key] = "/" + key;
-      CATEGORY_META[key] = { title: c.title, file: "data/" + key + ".json" };
+      CATEGORY_META[key] = { title: c.title, file: "/data/" + key + ".json" };
       // Tags can be nested object or flat array
       if (c.tags && typeof c.tags === "object" && !Array.isArray(c.tags)) {
         // Nested: { "Face": ["Cleansers", "Moisturizers"], "Eyes": [...] }
