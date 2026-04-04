@@ -1,18 +1,20 @@
 {
   "categories": {
     "skincare": {
-      "title": "ð§´ Skincare",
+      "title": "Ã°ÂÂ§Â´ Skincare",
       "label": "Skincare",
-      "tags": [
-        "Face",
-        "Eyes",
-        "Body",
-        "Lip Balms",
-        "Sunscreens & Tanning"
-      ]
+      "tags": {
+        "Face": [
+          "Cleansers, Creams & Moisturizers, Exfoliators, Face Treatments, Toners & Astringents"
+        ],
+        "Eyes": [],
+        "Body": [],
+        "Lip Balms": [],
+        "Sunscreens & Tanning": []
+      }
     },
     "serums": {
-      "title": "ð Serums & Essences",
+      "title": "Ã°ÂÂÂ Serums & Essences",
       "label": "Serums & Essences",
       "tags": {
         "Brightening": [
@@ -47,7 +49,7 @@
       }
     },
     "facemasks": {
-      "title": "ð­ Face Masks",
+      "title": "Ã°ÂÂÂ­ Face Masks",
       "label": "Face Masks",
       "tags": {
         "Sheet Masks": [
@@ -77,7 +79,7 @@
       }
     },
     "sunscreen": {
-      "title": "âï¸ Sunscreen / SPF",
+      "title": "Ã¢ÂÂÃ¯Â¸Â Sunscreen / SPF",
       "label": "Sunscreen",
       "tags": {
         "Face Sunscreen": [
@@ -104,7 +106,7 @@
       }
     },
     "makeup": {
-      "title": "ð Makeup",
+      "title": "Ã°ÂÂÂ Makeup",
       "label": "Makeup",
       "tags": {
         "Face": [
@@ -136,7 +138,7 @@
       }
     },
     "lipcare": {
-      "title": "ð Lip Care",
+      "title": "Ã°ÂÂÂ Lip Care",
       "label": "Lip Care",
       "tags": {
         "Lip Masks": [
@@ -165,7 +167,7 @@
       }
     },
     "haircare": {
-      "title": "ð Hair Care",
+      "title": "Ã°ÂÂÂ Hair Care",
       "label": "Hair Care",
       "tags": {
         "Shampoo": [
