@@ -1,80 +1,200 @@
 {
   "categories": {
     "skincare": {
-      "title": "🧴 Skincare",
+      "title": "ð§´ Skincare",
       "label": "Skincare",
-      "tags": {
-        "Face": ["Cleansers", "Creams & Moisturizers", "Exfoliators", "Face Treatments", "Toners & Astringents"],
-        "Eyes": ["Eye Creams", "Eye Serums", "Eye Patches"],
-        "Body": ["Body Wash", "Body Lotion", "Body Scrubs"],
-        "Lip Balms": ["Balms & Moisturizers", "Lip Scrubs"],
-        "Sunscreens & Tanning": ["Sunscreens", "After Sun"],
-        "Sets": ["Skincare Sets", "Gift Sets"]
-      }
+      "tags": [
+        "Face",
+        "Eyes",
+        "Body",
+        "Lip Balms",
+        "Sunscreens & Tanning"
+      ]
     },
     "serums": {
-      "title": "💎 Serums & Essences",
+      "title": "ð Serums & Essences",
       "label": "Serums & Essences",
       "tags": {
-        "Brightening": ["Vitamin C", "Niacinamide", "Alpha Arbutin"],
-        "Hydrating": ["Hyaluronic Acid", "Snail Mucin", "Ceramide"],
-        "Anti-Aging": ["Retinol", "Peptide", "Collagen"],
-        "Acne Care": ["Salicylic Acid", "Tea Tree", "BHA"],
-        "Pore Care": ["AHA", "PHA", "Pore Minimizing"],
-        "Essences": ["First Essences", "Treatment Essences"]
+        "Brightening": [
+          "Vitamin C",
+          "Niacinamide",
+          "Alpha Arbutin"
+        ],
+        "Hydrating": [
+          "Hyaluronic Acid",
+          "Snail Mucin",
+          "Ceramide"
+        ],
+        "Anti-Aging": [
+          "Retinol",
+          "Peptide",
+          "Collagen"
+        ],
+        "Acne Care": [
+          "Salicylic Acid",
+          "Tea Tree",
+          "BHA"
+        ],
+        "Pore Care": [
+          "AHA",
+          "PHA",
+          "Pore Minimizing"
+        ],
+        "Essences": [
+          "First Essences",
+          "Treatment Essences"
+        ]
       }
     },
     "facemasks": {
-      "title": "🎭 Face Masks",
+      "title": "ð­ Face Masks",
       "label": "Face Masks",
       "tags": {
-        "Sheet Masks": ["Hydrating", "Brightening", "Collagen", "Soothing"],
-        "Wash-Off Masks": ["Clay Masks", "Cream Masks", "Gel Masks"],
-        "Sleeping Masks": ["Overnight Hydrating", "Overnight Repair"],
-        "Peel-Off Masks": ["Pore Cleansing", "Brightening"],
-        "Pads & Patches": ["Toning Pads", "Eye Patches", "Pimple Patches"]
+        "Sheet Masks": [
+          "Hydrating",
+          "Brightening",
+          "Collagen",
+          "Soothing"
+        ],
+        "Wash-Off Masks": [
+          "Clay Masks",
+          "Cream Masks",
+          "Gel Masks"
+        ],
+        "Sleeping Masks": [
+          "Overnight Hydrating",
+          "Overnight Repair"
+        ],
+        "Peel-Off Masks": [
+          "Pore Cleansing",
+          "Brightening"
+        ],
+        "Pads & Patches": [
+          "Toning Pads",
+          "Eye Patches",
+          "Pimple Patches"
+        ]
       }
     },
     "sunscreen": {
-      "title": "☀️ Sunscreen / SPF",
+      "title": "âï¸ Sunscreen / SPF",
       "label": "Sunscreen",
       "tags": {
-        "Face Sunscreen": ["Cream", "Gel", "Fluid", "Tinted", "Tone-Up"],
-        "Body Sunscreen": ["Spray", "Lotion", "Stick"],
-        "Sun Sticks": ["Matte", "Glow", "Waterproof"],
-        "After Sun": ["Aloe Gel", "Soothing Cream"]
+        "Face Sunscreen": [
+          "Cream",
+          "Gel",
+          "Fluid",
+          "Tinted",
+          "Tone-Up"
+        ],
+        "Body Sunscreen": [
+          "Spray",
+          "Lotion",
+          "Stick"
+        ],
+        "Sun Sticks": [
+          "Matte",
+          "Glow",
+          "Waterproof"
+        ],
+        "After Sun": [
+          "Aloe Gel",
+          "Soothing Cream"
+        ]
       }
     },
     "makeup": {
-      "title": "💄 Makeup",
+      "title": "ð Makeup",
       "label": "Makeup",
       "tags": {
-        "Face": ["Foundation", "Cushion", "BB Cream", "CC Cream", "Powder", "Blush", "Contour"],
-        "Eyes": ["Eye Shadow", "Eyeliner", "Mascara", "Brow"],
-        "Lips": ["Lip Tint", "Lipstick", "Lip Gloss", "Lip Liner"],
-        "Setting": ["Setting Spray", "Setting Powder", "Primer"]
+        "Face": [
+          "Foundation",
+          "Cushion",
+          "BB Cream",
+          "CC Cream",
+          "Powder",
+          "Blush",
+          "Contour"
+        ],
+        "Eyes": [
+          "Eye Shadow",
+          "Eyeliner",
+          "Mascara",
+          "Brow"
+        ],
+        "Lips": [
+          "Lip Tint",
+          "Lipstick",
+          "Lip Gloss",
+          "Lip Liner"
+        ],
+        "Setting": [
+          "Setting Spray",
+          "Setting Powder",
+          "Primer"
+        ]
       }
     },
     "lipcare": {
-      "title": "👄 Lip Care",
+      "title": "ð Lip Care",
       "label": "Lip Care",
       "tags": {
-        "Lip Masks": ["Overnight Masks", "Treatment Masks"],
-        "Lip Balms": ["Moisturizing", "Tinted", "SPF"],
-        "Lip Tints": ["Water Tint", "Velvet Tint", "Glossy Tint"],
-        "Lip Gloss": ["Clear", "Shimmer", "Plumping"],
-        "Lip Serums": ["Hydrating", "Plumping"]
+        "Lip Masks": [
+          "Overnight Masks",
+          "Treatment Masks"
+        ],
+        "Lip Balms": [
+          "Moisturizing",
+          "Tinted",
+          "SPF"
+        ],
+        "Lip Tints": [
+          "Water Tint",
+          "Velvet Tint",
+          "Glossy Tint"
+        ],
+        "Lip Gloss": [
+          "Clear",
+          "Shimmer",
+          "Plumping"
+        ],
+        "Lip Serums": [
+          "Hydrating",
+          "Plumping"
+        ]
       }
     },
     "haircare": {
-      "title": "💇 Hair Care",
+      "title": "ð Hair Care",
       "label": "Hair Care",
       "tags": {
-        "Shampoo": ["Moisturizing", "Volumizing", "Anti-Dandruff", "Color Care"],
-        "Conditioner": ["Deep Conditioner", "Leave-In", "Rinse-Out"],
-        "Treatment": ["Hair Masks", "Hair Ampoules", "Protein Treatment"],
-        "Styling": ["Hair Serum", "Hair Oil", "Hair Mist", "Hair Spray"],
-        "Scalp Care": ["Scalp Scrub", "Scalp Serum", "Scalp Tonic"]
+        "Shampoo": [
+          "Moisturizing",
+          "Volumizing",
+          "Anti-Dandruff",
+          "Color Care"
+        ],
+        "Conditioner": [
+          "Deep Conditioner",
+          "Leave-In",
+          "Rinse-Out"
+        ],
+        "Treatment": [
+          "Hair Masks",
+          "Hair Ampoules",
+          "Protein Treatment"
+        ],
+        "Styling": [
+          "Hair Serum",
+          "Hair Oil",
+          "Hair Mist",
+          "Hair Spray"
+        ],
+        "Scalp Care": [
+          "Scalp Scrub",
+          "Scalp Serum",
+          "Scalp Tonic"
+        ]
       }
     }
   }
