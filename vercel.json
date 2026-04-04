@@ -16,7 +16,7 @@
     { "source": "/disclosure", "destination": "/affiliate-disclosure.html" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/p/:cat/:id", "destination": "/product.html" },
-    { "source": "/:cat", "destination": "/category.html" }
+    { "source": "/:cat(skincare|serums|facemasks|sunscreen|makeup|lipcare|haircare)", "destination": "/category.html" }
   ],
   "trailingSlash": false
 }
