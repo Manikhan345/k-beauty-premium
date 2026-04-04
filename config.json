@@ -11,10 +11,20 @@
           "Face Treatments",
           "Toners & Astringents"
         ],
-        "Eyes": [],
-        "Body": [],
+        "Eyes": [
+          "Creams",
+          "Masks"
+        ],
+        "Body": [
+          "Foot Care",
+          "Moisturizers"
+        ],
         "Lip Balms": [],
-        "Sunscreens & Tanning": []
+        "Sunscreens & Tanning": [
+          "After Sun",
+          "Self-Tanners & Bronzers",
+          "Sunscreens"
+        ]
       }
     },
     "serums": {
