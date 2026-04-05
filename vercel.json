@@ -71,7 +71,7 @@
       "destination": "/product.html"
     },
     {
-      "source": "/:cat(skincare|facemasks|sunscreen|makeup|lipcare|haircare|fragrance)",
+      "source": "/:cat(skincare|facemasks|sunscreen|makeup|haircare|fragrance)",
       "destination": "/category.html"
     }
   ],
