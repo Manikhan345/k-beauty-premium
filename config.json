@@ -156,32 +156,64 @@
       "title": "Hair Care",
       "label": "Hair Care",
       "tags": {
-        "Shampoo": [
-          "Moisturizing",
-          "Volumizing",
-          "Anti-Dandruff",
-          "Color Care"
+        "Shampoo & Conditioner": [
+          "2-in-1 Shampoo & Conditioner",
+          "3-in-1 Shampoo, Conditioner & Body Wash",
+          "Conditioners",
+          "Deep Conditioners",
+          "Dry Shampoos",
+          "Shampoo & Conditioner Sets",
+          "Shampoos"
         ],
-        "Conditioner": [
-          "Deep Conditioner",
-          "Leave-In",
-          "Rinse-Out"
+        "Styling Products": [
+          "Detanglers",
+          "Gels",
+          "Hair Fragrances",
+          "Hair Sprays",
+          "Mousses & Foams",
+          "Oils & Serums",
+          "Pomades & Waxes",
+          "Root Lifting Powders",
+          "Salt Water Sprays"
         ],
-        "Treatment": [
-          "Hair Masks",
-          "Hair Ampoules",
-          "Protein Treatment"
+        "Styling Tools & Appliances": [
+          "Curling Irons & Wands",
+          "Hair Brushes",
+          "Hair Combs",
+          "Hair Dryers & Accessories",
+          "Hair Rollers",
+          "Hot-Air Brushes",
+          "Straighteners"
         ],
-        "Styling": [
-          "Hair Serum",
-          "Hair Oil",
-          "Hair Mist",
-          "Hair Spray"
+        "Hair Color": [
+          "Color Additives & Fillers",
+          "Color Correctors",
+          "Color Glazes",
+          "Color Removers",
+          "Hair Color",
+          "Hair Mascaras & Root",
+          "Touch Ups"
         ],
-        "Scalp Care": [
-          "Scalp Scrub",
-          "Scalp Serum",
-          "Scalp Tonic"
+        "Hair Masks": [],
+        "Hair Treatment Oils": [],
+        "Hair & Scalp Treatments": [],
+        "Hair Cutting Tools": [
+          "Hair Cutting Kits",
+          "Shear & Razor Cases",
+          "Shears"
+        ],
+        "Hair Loss Products": [],
+        "Hair Perms, Relaxers & Texturizers": [
+          "Hair Relaxers"
+        ],
+        "Hair Accessories": [
+          "Bun & Crown Shapers",
+          "Clips",
+          "Elastics & Ties",
+          "Hair Drying Towels",
+          "Hair Pins",
+          "Headbands",
+          "Side Combs"
         ]
       }
     },
