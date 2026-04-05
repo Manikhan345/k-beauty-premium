@@ -90,31 +90,37 @@
       "label": "Makeup",
       "tags": {
         "Face": [
-          "Foundation",
-          "Cushion",
-          "BB Cream",
-          "CC Cream",
-          "Powder",
           "Blush",
-          "Contour"
+          "Bronzers & Highlighters",
+          "Concealers & Neutralizers",
+          "Foundation",
+          "Foundation Primers",
+          "Powder"
         ],
         "Eyes": [
-          "Eye Shadow",
+          "Eyebrow color",
           "Eyeliner",
-          "Mascara",
-          "Brow"
+          "Eye Shadow",
+          "Eyeshadow Bases & Primers",
+          "Liner and Shadow Combinaations",
+          "Mascara"
         ],
         "Lips": [
-          "Lip Tint",
-          "Lipstick",
-          "Lip Gloss",
-          "Lip Liner"
+          "Lip Glosses",
+          "Lip Liners",
+          "Lip Stains",
+          "Lipstick"
         ],
-        "Setting": [
-          "Setting Spray",
-          "Setting Powder",
-          "Primer"
-        ]
+        "Body": [
+          "Body Glitter",
+          "Bronzing Powder",
+          "Concealer"
+        ],
+        "Makeup Remover": [
+          "Eyes",
+          "Face"
+        ],
+        "Makeup Sets": []
       }
     },
     "lipcare": {
