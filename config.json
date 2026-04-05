@@ -28,36 +28,6 @@
         "Sets": []
       }
     },
-    "facemasks": {
-      "title": "Face Masks",
-      "label": "Face Masks",
-      "tags": {
-        "Sheet Masks": [
-          "Hydrating",
-          "Brightening",
-          "Collagen",
-          "Soothing"
-        ],
-        "Wash-Off Masks": [
-          "Clay Masks",
-          "Cream Masks",
-          "Gel Masks"
-        ],
-        "Sleeping Masks": [
-          "Overnight Hydrating",
-          "Overnight Repair"
-        ],
-        "Peel-Off Masks": [
-          "Pore Cleansing",
-          "Brightening"
-        ],
-        "Pads & Patches": [
-          "Toning Pads",
-          "Eye Patches",
-          "Pimple Patches"
-        ]
-      }
-    },
     "makeup": {
       "title": "Makeup",
       "label": "Makeup",
