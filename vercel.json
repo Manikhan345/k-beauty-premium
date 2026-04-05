@@ -34,6 +34,11 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/serums",
+      "destination": "/fragrance",
+      "permanent": true
     }
   ],
   "rewrites": [
