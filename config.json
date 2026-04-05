@@ -28,41 +28,6 @@
         "Sets": []
       }
     },
-    "serums": {
-      "title": "Serums & Essences",
-      "label": "Serums & Essences",
-      "tags": {
-        "Brightening": [
-          "Vitamin C",
-          "Niacinamide",
-          "Alpha Arbutin"
-        ],
-        "Hydrating": [
-          "Hyaluronic Acid",
-          "Snail Mucin",
-          "Ceramide"
-        ],
-        "Anti-Aging": [
-          "Retinol",
-          "Peptide",
-          "Collagen"
-        ],
-        "Acne Care": [
-          "Salicylic Acid",
-          "Tea Tree",
-          "BHA"
-        ],
-        "Pore Care": [
-          "AHA",
-          "PHA",
-          "Pore Minimizing"
-        ],
-        "Essences": [
-          "First Essences",
-          "Treatment Essences"
-        ]
-      }
-    },
     "facemasks": {
       "title": "Face Masks",
       "label": "Face Masks",
@@ -211,6 +176,25 @@
           "Scalp Scrub",
           "Scalp Serum",
           "Scalp Tonic"
+        ]
+      }
+    },
+    "fragrance": {
+      "title": "Fragrance",
+      "label": "Fragrance",
+      "tags": {
+        "Gift Sets": [],
+        "Women's": [
+          "Sets",
+          "Eau de Toilette",
+          "Essential Oils",
+          "Eau de Parfum",
+          "Cologne",
+          "Body Sprays"
+        ],
+        "Candles & Home Scents": [
+          "Candles",
+          "Home Scents"
         ]
       }
     }
