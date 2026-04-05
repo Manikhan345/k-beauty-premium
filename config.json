@@ -58,33 +58,6 @@
         ]
       }
     },
-    "sunscreen": {
-      "title": "Sunscreen / SPF",
-      "label": "Sunscreen",
-      "tags": {
-        "Face Sunscreen": [
-          "Cream",
-          "Gel",
-          "Fluid",
-          "Tinted",
-          "Tone-Up"
-        ],
-        "Body Sunscreen": [
-          "Spray",
-          "Lotion",
-          "Stick"
-        ],
-        "Sun Sticks": [
-          "Matte",
-          "Glow",
-          "Waterproof"
-        ],
-        "After Sun": [
-          "Aloe Gel",
-          "Soothing Cream"
-        ]
-      }
-    },
     "makeup": {
       "title": "Makeup",
       "label": "Makeup",
