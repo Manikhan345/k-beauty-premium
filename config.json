@@ -123,35 +123,6 @@
         "Makeup Sets": []
       }
     },
-    "lipcare": {
-      "title": "Lip Care",
-      "label": "Lip Care",
-      "tags": {
-        "Lip Masks": [
-          "Overnight Masks",
-          "Treatment Masks"
-        ],
-        "Lip Balms": [
-          "Moisturizing",
-          "Tinted",
-          "SPF"
-        ],
-        "Lip Tints": [
-          "Water Tint",
-          "Velvet Tint",
-          "Glossy Tint"
-        ],
-        "Lip Gloss": [
-          "Clear",
-          "Shimmer",
-          "Plumping"
-        ],
-        "Lip Serums": [
-          "Hydrating",
-          "Plumping"
-        ]
-      }
-    },
     "haircare": {
       "title": "Hair Care",
       "label": "Hair Care",
