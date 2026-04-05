@@ -149,6 +149,32 @@
           "Home Scents"
         ]
       }
+    },
+    "foothandnailcare": {
+      "title": "Foot, Hand & Nail Care",
+      "label": "Foot, Hand & Nail Care",
+      "tags": {
+        "Hand & Nail Care": [
+          "Cuticle Care",
+          "Hand Creams & Lotions",
+          "Hand Soaps",
+          "Nail Treatments"
+        ],
+        "Nail Tools": [
+          "Clippers & Trimmers",
+          "Foot Rasps",
+          "Nail Brushes",
+          "Nail Dryers",
+          "Nail Files & Buffers",
+          "Sets & Kits"
+        ],
+        "Nail Art & Polish": [
+          "Nail Art",
+          "Nail Polish",
+          "Nail Polish Remover",
+          "Top & Base Coats"
+        ]
+      }
     }
   }
 }
