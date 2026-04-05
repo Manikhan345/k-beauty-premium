@@ -175,6 +175,30 @@
           "Top & Base Coats"
         ]
       }
+    },
+    "bathbody": {
+      "title": "Bath & Body",
+      "label": "Bath & Body",
+      "tags": {
+        "Bath": [
+          "Bubble Bath",
+          "Minerals & Salts",
+          "Oils"
+        ],
+        "Bathing Accessories": [
+          "Bath Brushes",
+          "Body Sponges"
+        ],
+        "Cleansers": [
+          "Body Washes",
+          "Soaps"
+        ],
+        "Deodorants & Antiperspirants": [],
+        "Scrubs & Body Treatments": [
+          "Body Scrubs",
+          "Body Souffles & Mousse"
+        ]
+      }
     }
   }
 }
