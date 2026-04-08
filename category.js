@@ -14,8 +14,8 @@ async function initCategoryPage() {
   document.title = meta.title.replace(/^[^\w]*/, "") + " — K Beauty Premium";
   var breadcrumb = document.getElementById("breadcrumb");
   if (breadcrumb) breadcrumb.innerHTML = '<a href="/">Home</a> › <span>' + meta.title.replace(/^[^\w]*/, "").trim() + '</span>';
-  allProducts = await fetchProducts(meta.file);
   renderSidebarFilters();
+  allProducts = await fetchProducts(meta.file);
   renderGrid(allProducts);
   updateCount(allProducts.length);
   updateTopRated(allProducts);
