@@ -186,7 +186,7 @@
     "originalPrice": null,
     "rating": 4.5,
     "reviews": "13,900",
-    "badge": "",
+    "badge": "Best Seller",
     "tag": "Sunscreens & Tanning",
     "subtag": "After Sun",
     "image": "https://m.media-amazon.com/images/I/71yJZO9VqoL._AC_UL960_FMwebp_QL65_.jpg",
@@ -331,7 +331,7 @@
   },
   {
     "id": "aloe_up_aloe_vera_gel_for_sunb",
-    "name": "ALOE UP Aloe Vera Gel for Sunburn Relief – Cooling After Sun Jelly for Face & Body – 96.6% Pure Gel – Reef Friendly, Water Resistant for up to 80 Minutes, Alcohol & Fragrance Free – 4 Oz",
+    "name": "ALOE UP Aloe Vera Gel for Sunburn Relief â Cooling After Sun Jelly for Face & Body â 96.6% Pure Gel â Reef Friendly, Water Resistant for up to 80 Minutes, Alcohol & Fragrance Free â 4 Oz",
     "price": 9.99,
     "originalPrice": null,
     "rating": 4.7,
@@ -646,7 +646,7 @@
   },
   {
     "id": "ouai_body_cream_st_barts_hydra",
-    "name": "OUAI Body Cream, St. Barts - Hydrating Whipped Body Cream with Cupuaçu Butter, Coconut Oil and Squalane - Softens Skin and Delivers Healthy-Looking Glow - Sulfate-Free Skin Care (7.5 Oz)",
+    "name": "OUAI Body Cream, St. Barts - Hydrating Whipped Body Cream with CupuaÃ§u Butter, Coconut Oil and Squalane - Softens Skin and Delivers Healthy-Looking Glow - Sulfate-Free Skin Care (7.5 Oz)",
     "price": 40,
     "originalPrice": null,
     "rating": 4.6,
@@ -796,7 +796,7 @@
   },
   {
     "id": "osea_undaria_algae_body_lotion",
-    "name": "OSEA Undaria Algae™ Body Lotion 5 oz - Ultra-Hydrating & Lightweight Body Lotion - Firms Skin in 4 Hours - Packed with Undaria Seaweed & Hyaluronic Acid - for Dry, Normal, & Combination Skin",
+    "name": "OSEA Undaria Algaeâ¢ Body Lotion 5 oz - Ultra-Hydrating & Lightweight Body Lotion - Firms Skin in 4 Hours - Packed with Undaria Seaweed & Hyaluronic Acid - for Dry, Normal, & Combination Skin",
     "price": 48,
     "originalPrice": null,
     "rating": 4.4,
@@ -826,7 +826,7 @@
   },
   {
     "id": "moisturizing_tallow_lip_balm_g",
-    "name": "Moisturizing Tallow Lip Balm â Grass-Fed Beef Tallow with Organic Coconut Oil, Beeswax, and Vitamin E â Lip Balm Set â Variety Pack â Travel Essential â 3-Pack",
+    "name": "Moisturizing Tallow Lip Balm Ã¢ÂÂ Grass-Fed Beef Tallow with Organic Coconut Oil, Beeswax, and Vitamin E Ã¢ÂÂ Lip Balm Set Ã¢ÂÂ Variety Pack Ã¢ÂÂ Travel Essential Ã¢ÂÂ 3-Pack",
     "price": 13.99,
     "originalPrice": null,
     "rating": 4.7,
@@ -871,7 +871,7 @@
   },
   {
     "id": "burt_s_bees_lavender_vanilla_l",
-    "name": "Burtâs Bees Lavender Vanilla Lip Sleeping Mask, With Hyaluronic Acid and Squalane Moisturizer To Instantly Hydrate Lips, Overnight Mask and Treatment, 0.45 oz.",
+    "name": "BurtÃ¢ÂÂs Bees Lavender Vanilla Lip Sleeping Mask, With Hyaluronic Acid and Squalane Moisturizer To Instantly Hydrate Lips, Overnight Mask and Treatment, 0.45 oz.",
     "price": 17.99,
     "originalPrice": null,
     "rating": 4.5,
@@ -886,7 +886,7 @@
   },
   {
     "id": "high_meadow_peppermint_lanolin",
-    "name": "High Meadow Peppermint Lanolin Lip Balm Stick for Dry, Cracked Lips â Lanolin Balm for Lips with Beeswax & Shea Butter, Long-Lasting Moisture, Travel Size, Unisex",
+    "name": "High Meadow Peppermint Lanolin Lip Balm Stick for Dry, Cracked Lips Ã¢ÂÂ Lanolin Balm for Lips with Beeswax & Shea Butter, Long-Lasting Moisture, Travel Size, Unisex",
     "price": 15.99,
     "originalPrice": null,
     "rating": 4.3,
@@ -1021,7 +1021,7 @@
   },
   {
     "id": "eos_100_natural_lip_balms_coco",
-    "name": "eos 100% Natural Lip Balms- Coconut Milk, Pineapple Passionfruit, Watermelon FrosÃ© & Raspberry Kiwi Splash, All-Day Moisture Lip Care, 0.14 oz, 4-Pack",
+    "name": "eos 100% Natural Lip Balms- Coconut Milk, Pineapple Passionfruit, Watermelon FrosÃÂ© & Raspberry Kiwi Splash, All-Day Moisture Lip Care, 0.14 oz, 4-Pack",
     "price": 9.78,
     "originalPrice": null,
     "rating": 4.8,
@@ -1081,7 +1081,7 @@
   },
   {
     "id": "dr_reju_all_advanced_pdrn_reju",
-    "name": "Dr. Reju-All Advanced PDRN Rejuvenating Lip Serum â Hydrating Lip Balm with Lipozip PDRN for Glowy, Dewy Lips â Gentle Exfoliating & Smoothing Lip Moisturizer â Hibiscus & Lactic Acid â 0.3 Fl Oz",
+    "name": "Dr. Reju-All Advanced PDRN Rejuvenating Lip Serum Ã¢ÂÂ Hydrating Lip Balm with Lipozip PDRN for Glowy, Dewy Lips Ã¢ÂÂ Gentle Exfoliating & Smoothing Lip Moisturizer Ã¢ÂÂ Hibiscus & Lactic Acid Ã¢ÂÂ 0.3 Fl Oz",
     "price": 15.9,
     "originalPrice": null,
     "rating": 4.6,
@@ -1141,7 +1141,7 @@
   },
   {
     "id": "dr_bronner_s_organic_lip_balm_",
-    "name": "Dr. Bronnerâs Organic Lip Balm 6-Pack (.15oz) Natural, Moisturizing, Petroleum-Free Lip Moisturizer with Beeswax & Avocado Oil for Dry Lips, Men & Women - Unscented",
+    "name": "Dr. BronnerÃ¢ÂÂs Organic Lip Balm 6-Pack (.15oz) Natural, Moisturizing, Petroleum-Free Lip Moisturizer with Beeswax & Avocado Oil for Dry Lips, Men & Women - Unscented",
     "price": 22.99,
     "originalPrice": null,
     "rating": 4.7,
@@ -1216,7 +1216,7 @@
   },
   {
     "id": "jack_black_intense_therapy_lip",
-    "name": "Jack Black Intense Therapy Lip Balm, 0.25-Oz. â SPF 25 Sun Protection, Lip Moisturizer, Hydrating Lip Balm with SPF, Lip Sunscreen",
+    "name": "Jack Black Intense Therapy Lip Balm, 0.25-Oz. Ã¢ÂÂ SPF 25 Sun Protection, Lip Moisturizer, Hydrating Lip Balm with SPF, Lip Sunscreen",
     "price": 24,
     "originalPrice": null,
     "rating": 4.6,
@@ -1291,7 +1291,7 @@
   },
   {
     "id": "jack_black_intense_therapy_lip",
-    "name": "Jack Black Intense Therapy Lip Balm, 0.25-Oz. â SPF 25 Sun Protection, Lip Moisturizer, Hydrating Lip Balm with SPF, Lip Sunscreen",
+    "name": "Jack Black Intense Therapy Lip Balm, 0.25-Oz. Ã¢ÂÂ SPF 25 Sun Protection, Lip Moisturizer, Hydrating Lip Balm with SPF, Lip Sunscreen",
     "price": 24,
     "originalPrice": null,
     "rating": 4.6,
@@ -1441,7 +1441,7 @@
   },
   {
     "id": "revision_skincare_youthfull_li",
-    "name": "Revision Skincare YouthFull Lip ReplenisherÂ®, Moisturizing Lip Plumper with Hyaluronic Acid, Volumizing, Plumping and Anti Aging",
+    "name": "Revision Skincare YouthFull Lip ReplenisherÃÂ®, Moisturizing Lip Plumper with Hyaluronic Acid, Volumizing, Plumping and Anti Aging",
     "price": 44.5,
     "originalPrice": null,
     "rating": 4.3,
@@ -1456,7 +1456,7 @@
   },
   {
     "id": "lanc_me_lip_id_le_squalane_12_",
-    "name": "LancÃ´me Lip IdÃ´le Squalane-12 Butterglowâ¢ Hydrating Lip Balm â Instant Shine, 24H Hydration, and Buildable Color for Smooth & Moisturized Lips",
+    "name": "LancÃÂ´me Lip IdÃÂ´le Squalane-12 ButterglowÃ¢ÂÂ¢ Hydrating Lip Balm Ã¢ÂÂ Instant Shine, 24H Hydration, and Buildable Color for Smooth & Moisturized Lips",
     "price": 27.2,
     "originalPrice": null,
     "rating": 4.5,
@@ -1591,7 +1591,7 @@
   },
   {
     "id": "n_cessaire_the_lip_balm_hydrat",
-    "name": "NÃ©cessaire The Lip Balm | Hydrating Hyaluronic Acid Lip Balm for Women and Men, Mint Oil with Niacinamide + Essential Ceramides. Non-Comedogenic Lip Balm for Dry Lips â 15 ml / 0.5 fl oz",
+    "name": "NÃÂ©cessaire The Lip Balm | Hydrating Hyaluronic Acid Lip Balm for Women and Men, Mint Oil with Niacinamide + Essential Ceramides. Non-Comedogenic Lip Balm for Dry Lips Ã¢ÂÂ 15 ml / 0.5 fl oz",
     "price": 28,
     "originalPrice": null,
     "rating": 4.6,
@@ -1771,7 +1771,7 @@
   },
   {
     "id": "lanc_me_lip_id_le_squalane_12_",
-    "name": "LancÃ´me Lip IdÃ´le Squalane-12 Butterglowâ¢ Hydrating Lip Balm â Instant Shine, 24H Hydration, and Buildable Color for Smooth & Moisturized Lips",
+    "name": "LancÃÂ´me Lip IdÃÂ´le Squalane-12 ButterglowÃ¢ÂÂ¢ Hydrating Lip Balm Ã¢ÂÂ Instant Shine, 24H Hydration, and Buildable Color for Smooth & Moisturized Lips",
     "price": 27.2,
     "originalPrice": null,
     "rating": 4.5,
@@ -2041,7 +2041,7 @@
   },
   {
     "id": "saltair_body_oil_luxurious_san",
-    "name": "Saltair Body Oil - Luxurious Santal Bloom After Shower and Bath Oil for Women and Men. Botanical, Non-Greasy, Well-Absorbing Moisturizer for Hydrating Dry Skin â 4oz Pump Bottle",
+    "name": "Saltair Body Oil - Luxurious Santal Bloom After Shower and Bath Oil for Women and Men. Botanical, Non-Greasy, Well-Absorbing Moisturizer for Hydrating Dry Skin Ã¢ÂÂ 4oz Pump Bottle",
     "price": 22.99,
     "originalPrice": null,
     "rating": 4.5,
@@ -2146,7 +2146,7 @@
   },
   {
     "id": "cyklar_nutrient_rich_body_crea",
-    "name": "CYKLAR Nutrient Rich Body Cream â Vanilla Verve â Non-Greasy Lotion for 48-Hr Moisture â Squalane, Niacinamide & Banana Flower for Hydration & Skin Barrier Support â Dry Skin Moisturizer 8oz",
+    "name": "CYKLAR Nutrient Rich Body Cream Ã¢ÂÂ Vanilla Verve Ã¢ÂÂ Non-Greasy Lotion for 48-Hr Moisture Ã¢ÂÂ Squalane, Niacinamide & Banana Flower for Hydration & Skin Barrier Support Ã¢ÂÂ Dry Skin Moisturizer 8oz",
     "price": 29,
     "originalPrice": null,
     "rating": 4.5,
@@ -2206,7 +2206,7 @@
   },
   {
     "id": "n_cessaire_the_body_lotion_fra",
-    "name": "NÃ©cessaire The Body Lotion - Fragrance-Free - Multi-Peptide Moisturizer - Firming Body Lotion for Women + Men. 2.5% Niacinamide. Non-Comedogenic + Hypoallergenic for Sensitive Skin â 450ml/15.2 fl oz",
+    "name": "NÃÂ©cessaire The Body Lotion - Fragrance-Free - Multi-Peptide Moisturizer - Firming Body Lotion for Women + Men. 2.5% Niacinamide. Non-Comedogenic + Hypoallergenic for Sensitive Skin Ã¢ÂÂ 450ml/15.2 fl oz",
     "price": 52,
     "originalPrice": null,
     "rating": 4.4,
@@ -2236,7 +2236,7 @@
   },
   {
     "id": "embryolisse_lait_cr_me_fluid_f",
-    "name": "Embryolisse Lait-CrÃ¨me Fluid+ Face & Body Cream, Multi-Use Lightweight Moisturizer with Shea Butter & Aloe Vera. Fast Absorbing, For All Skin Types",
+    "name": "Embryolisse Lait-CrÃÂ¨me Fluid+ Face & Body Cream, Multi-Use Lightweight Moisturizer with Shea Butter & Aloe Vera. Fast Absorbing, For All Skin Types",
     "price": 39,
     "originalPrice": null,
     "rating": 4.4,
@@ -2266,7 +2266,7 @@
   },
   {
     "id": "hempz_triple_moisture_body_moi",
-    "name": "HEMPZ Triple Moisture Body Moisturizer, 17 Oz â Hydrating Lotion Rich with Minerals, Vitamin C, & Hempseed Oil to Nourish & Repair Extremely Dry or Sensitive Skin for Body",
+    "name": "HEMPZ Triple Moisture Body Moisturizer, 17 Oz Ã¢ÂÂ Hydrating Lotion Rich with Minerals, Vitamin C, & Hempseed Oil to Nourish & Repair Extremely Dry or Sensitive Skin for Body",
     "price": 19.28,
     "originalPrice": null,
     "rating": 4.8,
@@ -2281,7 +2281,7 @@
   },
   {
     "id": "saltair_multi_lipid_body_butte",
-    "name": "Saltair Multi-Lipid Body Butter â Hydrating 24-Hour Moisture â Body Cream for Soft Skin & Barrier Support â Ceramides, Coconut Oil & Shea Butter for Dry Skin Care â Golden Hour, 10oz",
+    "name": "Saltair Multi-Lipid Body Butter Ã¢ÂÂ Hydrating 24-Hour Moisture Ã¢ÂÂ Body Cream for Soft Skin & Barrier Support Ã¢ÂÂ Ceramides, Coconut Oil & Shea Butter for Dry Skin Care Ã¢ÂÂ Golden Hour, 10oz",
     "price": 20.99,
     "originalPrice": null,
     "rating": 4.6,
@@ -2296,7 +2296,7 @@
   },
   {
     "id": "ouai_body_cream_st_barts_hydra",
-    "name": "OUAI Body Cream, St. Barts - Hydrating Whipped Body Cream with CupuaÃ§u Butter, Coconut Oil and Squalane - Softens Skin and Delivers Healthy-Looking Glow - Sulfate-Free Skin Care (7.5 Oz)",
+    "name": "OUAI Body Cream, St. Barts - Hydrating Whipped Body Cream with CupuaÃÂ§u Butter, Coconut Oil and Squalane - Softens Skin and Delivers Healthy-Looking Glow - Sulfate-Free Skin Care (7.5 Oz)",
     "price": 40,
     "originalPrice": null,
     "rating": 4.6,
@@ -2551,7 +2551,7 @@
   },
   {
     "id": "epionce_intensive_nourishing_c",
-    "name": "Epionce Intensive Nourishing Cream â Rich Anti-Aging Moisturizer for Face, Neck & DÃ©colletage | Ceramides, Glycerin & Squalene | Targets Fine Lines, Dark Spots & Dryness | Dermatologist Skincare",
+    "name": "Epionce Intensive Nourishing Cream Ã¢ÂÂ Rich Anti-Aging Moisturizer for Face, Neck & DÃÂ©colletage | Ceramides, Glycerin & Squalene | Targets Fine Lines, Dark Spots & Dryness | Dermatologist Skincare",
     "price": 105.6,
     "originalPrice": null,
     "rating": 4.8,
@@ -2746,7 +2746,7 @@
   },
   {
     "id": "osea_undaria_algae_body_butter",
-    "name": "OSEA Undaria Algaeâ¢ Body Butter 6.7 oz - For Dry Skin - Ultra Hydrating Whipped Shea Butter + Ceramides - Vegan Skincare & Clean Bodycare - Thick Body Cream - For Extremely Dry Crepey Skin",
+    "name": "OSEA Undaria AlgaeÃ¢ÂÂ¢ Body Butter 6.7 oz - For Dry Skin - Ultra Hydrating Whipped Shea Butter + Ceramides - Vegan Skincare & Clean Bodycare - Thick Body Cream - For Extremely Dry Crepey Skin",
     "price": 54,
     "originalPrice": null,
     "rating": 4.5,
@@ -2956,7 +2956,7 @@
   },
   {
     "id": "amop_pedi_perfect_electric_cal",
-    "name": "AmopÃ© Pedi Perfect Electric Callus Remover Foot File w/ Diamond Crystals, Pedicure Tool for Feet, Removes Hard & Dead Skin, Feet Scrubber & Buffer, Splashproof, w/ Extra Coarse Roller Head, 1 Count",
+    "name": "AmopÃÂ© Pedi Perfect Electric Callus Remover Foot File w/ Diamond Crystals, Pedicure Tool for Feet, Removes Hard & Dead Skin, Feet Scrubber & Buffer, Splashproof, w/ Extra Coarse Roller Head, 1 Count",
     "price": 34.69,
     "originalPrice": null,
     "rating": 4.4,
@@ -3151,7 +3151,7 @@
   },
   {
     "id": "magnum_solace_nighttime_magnes",
-    "name": "Magnum Solace Nighttime Magnesium Lotion with Arnica â Highly Concentrated Magnesium for Muscles & Joints â Apply to Legs or Feet Before Bed â Skin-Friendly",
+    "name": "Magnum Solace Nighttime Magnesium Lotion with Arnica Ã¢ÂÂ Highly Concentrated Magnesium for Muscles & Joints Ã¢ÂÂ Apply to Legs or Feet Before Bed Ã¢ÂÂ Skin-Friendly",
     "price": 9.99,
     "originalPrice": null,
     "rating": 4.4,
@@ -3376,7 +3376,7 @@
   },
   {
     "id": "antifungal_cream_for_itchy_fee",
-    "name": "Antifungal Cream - For Itchy Feet and Skin Fungus Relief - Extra Strength Treatment for Athleteâs Foot, Ringworm, and Jock Itch. Moisturizer for Dry Cracked Feet infused with Tea Tree Oil Made in USA",
+    "name": "Antifungal Cream - For Itchy Feet and Skin Fungus Relief - Extra Strength Treatment for AthleteÃ¢ÂÂs Foot, Ringworm, and Jock Itch. Moisturizer for Dry Cracked Feet infused with Tea Tree Oil Made in USA",
     "price": 20.97,
     "originalPrice": null,
     "rating": 4.4,
@@ -3436,7 +3436,7 @@
   },
   {
     "id": "callus_remover_for_feet_extra_",
-    "name": "Callus Remover for Feet (Extra Strength) Foot Callus Remover Gel - Pedicure Tools for Feet Scrubber â Foot Care Spa Essentials, 6oz",
+    "name": "Callus Remover for Feet (Extra Strength) Foot Callus Remover Gel - Pedicure Tools for Feet Scrubber Ã¢ÂÂ Foot Care Spa Essentials, 6oz",
     "price": 7.79,
     "originalPrice": null,
     "rating": 4.4,
@@ -3451,7 +3451,7 @@
   },
   {
     "id": "moisturizing_socks_up_to_size_",
-    "name": "Moisturizing Socks (Up to Size 8.5) â Self Care Gifts for Mom - Infused with Vitamin E & JoJoba Oil - Gel Silicone Aloe Foot Care Socks - Mothers Day Spa Gifts for Women",
+    "name": "Moisturizing Socks (Up to Size 8.5) Ã¢ÂÂ Self Care Gifts for Mom - Infused with Vitamin E & JoJoba Oil - Gel Silicone Aloe Foot Care Socks - Mothers Day Spa Gifts for Women",
     "price": 9.98,
     "originalPrice": null,
     "rating": 4.4,
@@ -3481,7 +3481,7 @@
   },
   {
     "id": "swissklip_klearnail_toenail_st",
-    "name": "Swissklip KlearNail Toenail Stick | Medi-Care Treatment | Natural Solution for Healthy Nails I Suitable For Foot, Toe, and Fingernail I For Brittle Toenails â 10ml / 0.3 Fl. Oz. Pack 1 - Made in USA",
+    "name": "Swissklip KlearNail Toenail Stick | Medi-Care Treatment | Natural Solution for Healthy Nails I Suitable For Foot, Toe, and Fingernail I For Brittle Toenails Ã¢ÂÂ 10ml / 0.3 Fl. Oz. Pack 1 - Made in USA",
     "price": 28.99,
     "originalPrice": null,
     "rating": 3.8,
@@ -3571,7 +3571,7 @@
   },
   {
     "id": "lune_nerve_balm_neuropathy_cre",
-    "name": "Lune Nerve Balm â Neuropathy Cream for Burning, Tingling & Numbness in Feet & Hands | Natural Nerve Pain Relief Cream with Arnica, Vitamin B6 & Magnesium | 3.4 oz",
+    "name": "Lune Nerve Balm Ã¢ÂÂ Neuropathy Cream for Burning, Tingling & Numbness in Feet & Hands | Natural Nerve Pain Relief Cream with Arnica, Vitamin B6 & Magnesium | 3.4 oz",
     "price": 59.99,
     "originalPrice": null,
     "rating": 4,
@@ -3706,7 +3706,7 @@
   },
   {
     "id": "cloud_massage_shiatsu_foot_mas",
-    "name": "Cloud Massage Shiatsu Foot Massager with Heat â Deep Kneading for Pain Relief â Perfect for Fatherâs Day, Circulation & Relaxation â Ideal for Plantar Fasciitis, Neuropathy & Arthritis",
+    "name": "Cloud Massage Shiatsu Foot Massager with Heat Ã¢ÂÂ Deep Kneading for Pain Relief Ã¢ÂÂ Perfect for FatherÃ¢ÂÂs Day, Circulation & Relaxation Ã¢ÂÂ Ideal for Plantar Fasciitis, Neuropathy & Arthritis",
     "price": 249.99,
     "originalPrice": null,
     "rating": 4,
@@ -3736,7 +3736,7 @@
   },
   {
     "id": "sundaysilks_exclusive_mulberry",
-    "name": "SUNDAYSILKSâ¢ Exclusive Mulberry Silk Sleep Mask | Soft Eye Covers, Blackout Sleeping Mask for Women & Men | Silk Eye Mask for Sleep, Travel, and Relaxation | Antifaz para Dormir [Midnight Black]",
+    "name": "SUNDAYSILKSÃ¢ÂÂ¢ Exclusive Mulberry Silk Sleep Mask | Soft Eye Covers, Blackout Sleeping Mask for Women & Men | Silk Eye Mask for Sleep, Travel, and Relaxation | Antifaz para Dormir [Midnight Black]",
     "price": 35.99,
     "originalPrice": null,
     "rating": 4.5,
@@ -4036,7 +4036,7 @@
   },
   {
     "id": "patchology_iced_cooling_under_",
-    "name": "Patchology Iced Cooling Under Eye Mask Patches with Peptides, Cloudberry Oil & Bakuchiol â Firming & Soothing Eye Gels to Reduce Fine Lines and Under Eye Bags â Hydrating Under Eye Pads (5 Pairs)",
+    "name": "Patchology Iced Cooling Under Eye Mask Patches with Peptides, Cloudberry Oil & Bakuchiol Ã¢ÂÂ Firming & Soothing Eye Gels to Reduce Fine Lines and Under Eye Bags Ã¢ÂÂ Hydrating Under Eye Pads (5 Pairs)",
     "price": 9.85,
     "originalPrice": null,
     "rating": 4.5,
@@ -4051,7 +4051,7 @@
   },
   {
     "id": "myhalos_sleep_mask_3d_blackout",
-    "name": "MyHalosÂ® Sleep Mask â 3D Blackout Eye Mask for Women & Men, Side Sleepers, Zero Pressure Memory Foam Eyelash Friendly, Breathable,Award-Winning Sleep Aid for Travel (Black, 1 Count (Pack of 1))",
+    "name": "MyHalosÃÂ® Sleep Mask Ã¢ÂÂ 3D Blackout Eye Mask for Women & Men, Side Sleepers, Zero Pressure Memory Foam Eyelash Friendly, Breathable,Award-Winning Sleep Aid for Travel (Black, 1 Count (Pack of 1))",
     "price": 9.99,
     "originalPrice": null,
     "rating": 4.7,
@@ -4156,7 +4156,7 @@
   },
   {
     "id": "patchology_serve_chilled_ros_h",
-    "name": "Patchology Serve Chilled RosÃ© Hydrating Under Eye Patches â Hyaluronic Acid & Antioxidant-Infused Eye Masks to Reduce Dark Circles, Puffiness & Fine Lines - Ideal Skincare Essentials (5 Pairs)",
+    "name": "Patchology Serve Chilled RosÃÂ© Hydrating Under Eye Patches Ã¢ÂÂ Hyaluronic Acid & Antioxidant-Infused Eye Masks to Reduce Dark Circles, Puffiness & Fine Lines - Ideal Skincare Essentials (5 Pairs)",
     "price": 9.05,
     "originalPrice": null,
     "rating": 4.6,
@@ -4186,7 +4186,7 @@
   },
   {
     "id": "mizon_under_eye_patches_for_pu",
-    "name": "MIZON Under Eye Patches for Puffy Eyes & Dark Circles, 24K Gold & Snail Mucin, 60 Pcs â Anti-Wrinkle Collagen & Peptide Formula â Moisturizing Korean Eye Mask for Elasticity",
+    "name": "MIZON Under Eye Patches for Puffy Eyes & Dark Circles, 24K Gold & Snail Mucin, 60 Pcs Ã¢ÂÂ Anti-Wrinkle Collagen & Peptide Formula Ã¢ÂÂ Moisturizing Korean Eye Mask for Elasticity",
     "price": 21.7,
     "originalPrice": null,
     "rating": 4.3,
@@ -4201,7 +4201,7 @@
   },
   {
     "id": "gonim_under_eye_patches_360_fi",
-    "name": "GONIM Under Eye Patches 360Â° Fit, Eye Mask with Collagen Peptide, Salmon DNA PDRN, Caffeine,Retinol & Niacinamide, PDRN Eye Patches for Puffy Eyes and Dark Circles, Gifts for Women, Hydrating 4 pairs",
+    "name": "GONIM Under Eye Patches 360ÃÂ° Fit, Eye Mask with Collagen Peptide, Salmon DNA PDRN, Caffeine,Retinol & Niacinamide, PDRN Eye Patches for Puffy Eyes and Dark Circles, Gifts for Women, Hydrating 4 pairs",
     "price": 23.9,
     "originalPrice": null,
     "rating": 4.2,
@@ -4261,7 +4261,7 @@
   },
   {
     "id": "drmtlgy_brightening_eye_masks_",
-    "name": "DRMTLGY Brightening Eye Masks â Under Eye Patches for Dark Circles & Puffiness â Caffeine Hydrogel Eye Masks with Hyaluronic Acid & Peptides â 60 Count",
+    "name": "DRMTLGY Brightening Eye Masks Ã¢ÂÂ Under Eye Patches for Dark Circles & Puffiness Ã¢ÂÂ Caffeine Hydrogel Eye Masks with Hyaluronic Acid & Peptides Ã¢ÂÂ 60 Count",
     "price": 44,
     "originalPrice": null,
     "rating": 4.3,
@@ -4501,7 +4501,7 @@
   },
   {
     "id": "annemarie_b_rlind_hyaluronic_a",
-    "name": "ANNEMARIE BÃRLIND Hyaluronic Acid Under Eye Mask â Vegan Eye Patches for Puffy Eyes with Tremella and Konjac Rootâ Remove Under Eye Bags Instantly â Cruelty-free Gel Eye Patch â 6 Pairs",
+    "name": "ANNEMARIE BÃÂRLIND Hyaluronic Acid Under Eye Mask Ã¢ÂÂ Vegan Eye Patches for Puffy Eyes with Tremella and Konjac RootÃ¢ÂÂ Remove Under Eye Bags Instantly Ã¢ÂÂ Cruelty-free Gel Eye Patch Ã¢ÂÂ 6 Pairs",
     "price": 38,
     "originalPrice": null,
     "rating": 4.4,
@@ -4666,7 +4666,7 @@
   },
   {
     "id": "est_e_lauder_advanced_night_re",
-    "name": "EstÃ©e Lauder Advanced Night Repair Eye Supercharged Gel-Cream Synchronized Multi-Recovery | Under Eye Cream for Dark Circles",
+    "name": "EstÃÂ©e Lauder Advanced Night Repair Eye Supercharged Gel-Cream Synchronized Multi-Recovery | Under Eye Cream for Dark Circles",
     "price": 26,
     "originalPrice": null,
     "rating": 4.4,
@@ -4771,7 +4771,7 @@
   },
   {
     "id": "peter_thomas_roth_instant_firm",
-    "name": "Peter Thomas Roth | Instant FIRMxÂ® Eye Temporary Eye Tightener",
+    "name": "Peter Thomas Roth | Instant FIRMxÃÂ® Eye Temporary Eye Tightener",
     "price": 39,
     "originalPrice": null,
     "rating": 3.7,
@@ -4801,7 +4801,7 @@
   },
   {
     "id": "belif_peptide_eye_bomb_anti_ag",
-    "name": "belif Peptide Eye Bomb, Anti-Aging Eye Cream for Wrinkles, Fine Lines, Crowâs Feet & Eye Bags, 48hr Hydration with Ceramide, Squalane, Caffeine, Dermatologist-Tested Korean Skincare, 0.84 fl.oz",
+    "name": "belif Peptide Eye Bomb, Anti-Aging Eye Cream for Wrinkles, Fine Lines, CrowÃ¢ÂÂs Feet & Eye Bags, 48hr Hydration with Ceramide, Squalane, Caffeine, Dermatologist-Tested Korean Skincare, 0.84 fl.oz",
     "price": 43.47,
     "originalPrice": null,
     "rating": 4.4,
@@ -5206,7 +5206,7 @@
   },
   {
     "id": "revision_skincare_d_e_j_eye_cr",
-    "name": "Revision Skincare DÂ·EÂ·J Eye CreamÂ®, Firming and Moisturizing Treatment for Fine Lines, Wrinkles and Crowâs Feet",
+    "name": "Revision Skincare DÃÂ·EÃÂ·J Eye CreamÃÂ®, Firming and Moisturizing Treatment for Fine Lines, Wrinkles and CrowÃ¢ÂÂs Feet",
     "price": 75,
     "originalPrice": null,
     "rating": 4.1,
@@ -5281,7 +5281,7 @@
   },
   {
     "id": "caldera_lab_the_eye_serum_men_",
-    "name": "Caldera + Lab The Eye Serum | Menâs Eye Serum formulated for fine lines, dark circles and puffiness.",
+    "name": "Caldera + Lab The Eye Serum | MenÃ¢ÂÂs Eye Serum formulated for fine lines, dark circles and puffiness.",
     "price": 88,
     "originalPrice": null,
     "rating": 4.3,
@@ -5401,7 +5401,7 @@
   },
   {
     "id": "lanc_me_g_nifique_eye_cream_fo",
-    "name": "LancÃ´me GÃ©nifique Eye Cream - For Dark Circles & Fine Lines - With Bifidus Prebiotic, Hyaluronic Acid & Vitamin Cg - 0.67 Fl Oz",
+    "name": "LancÃÂ´me GÃÂ©nifique Eye Cream - For Dark Circles & Fine Lines - With Bifidus Prebiotic, Hyaluronic Acid & Vitamin Cg - 0.67 Fl Oz",
     "price": 73.95,
     "originalPrice": null,
     "rating": 4.6,
@@ -5431,7 +5431,7 @@
   },
   {
     "id": "clinique_even_better_eyes_dark",
-    "name": "Clinique Even Better Eyes Dark Circle Corrector | Hydrating, Brightening + Dark Circle Reducing, 0.34 Fl OzClinique Even Better Eyes Dark Circle Corrector |â¦",
+    "name": "Clinique Even Better Eyes Dark Circle Corrector | Hydrating, Brightening + Dark Circle Reducing, 0.34 Fl OzClinique Even Better Eyes Dark Circle Corrector |Ã¢ÂÂ¦",
     "price": 40.8,
     "originalPrice": null,
     "rating": 4.5,
@@ -5536,7 +5536,7 @@
   },
   {
     "id": "murad_clarifying_toner_oil_con",
-    "name": "Murad Clarifying Toner â Oil-Control Cooling Face Toner with Witch Hazel, Cucumber, Algae & Grape Seed Extracts to Minimize Pores, Shine Reduction, Balance Oil & Refresh Skin â 6 Fl Oz",
+    "name": "Murad Clarifying Toner Ã¢ÂÂ Oil-Control Cooling Face Toner with Witch Hazel, Cucumber, Algae & Grape Seed Extracts to Minimize Pores, Shine Reduction, Balance Oil & Refresh Skin Ã¢ÂÂ 6 Fl Oz",
     "price": 32,
     "originalPrice": null,
     "rating": 4.7,
@@ -5671,7 +5671,7 @@
   },
   {
     "id": "mario_badescu_glycolic_acid_to",
-    "name": "Mario Badescu Glycolic Acid Toner for Face â Exfoliating Facial Toner with Glycolic Acid & Aloe Vera, Helps Smooth Texture & Improve Uneven Tone",
+    "name": "Mario Badescu Glycolic Acid Toner for Face Ã¢ÂÂ Exfoliating Facial Toner with Glycolic Acid & Aloe Vera, Helps Smooth Texture & Improve Uneven Tone",
     "price": 18,
     "originalPrice": null,
     "rating": 4.6,
@@ -5791,7 +5791,7 @@
   },
   {
     "id": "thayers_2_aha_exfoliating_and_",
-    "name": "Thayers 2% AHA Exfoliating and Brightening Toner with Glycolic Acid, Lactic Acid and Witch Hazel, Smoothing and Pore Refining Skin Care for All Skin Types, 12 Fl Ozâ",
+    "name": "Thayers 2% AHA Exfoliating and Brightening Toner with Glycolic Acid, Lactic Acid and Witch Hazel, Smoothing and Pore Refining Skin Care for All Skin Types, 12 Fl OzÃ¢ÂÂ",
     "price": 14.97,
     "originalPrice": null,
     "rating": 4.7,
@@ -5866,7 +5866,7 @@
   },
   {
     "id": "some_by_mi_aha_bha_pha_30_days",
-    "name": "SOME BY MI AHA BHA PHA 30 Days Miracle Toner â 5.07oz, 150ml â Korean Salicylic Acid Exfoliating Face Toner for All Skin Types â Daily Pore Care & Oil Control with 2% Niacinamide â Korean Skin Care",
+    "name": "SOME BY MI AHA BHA PHA 30 Days Miracle Toner Ã¢ÂÂ 5.07oz, 150ml Ã¢ÂÂ Korean Salicylic Acid Exfoliating Face Toner for All Skin Types Ã¢ÂÂ Daily Pore Care & Oil Control with 2% Niacinamide Ã¢ÂÂ Korean Skin Care",
     "price": 16.8,
     "originalPrice": null,
     "rating": 4.5,
@@ -6091,7 +6091,7 @@
   },
   {
     "id": "murad_hydrating_toner_moisture",
-    "name": "Murad Hydrating Toner â Moisture-Replenishing Alcohol-Free Face Toner with Lecithin, Grape Seed, Peach & Cucumber Extracts for Deep Hydration, Soothing Irritation, & Refreshed Skin - 6 Fl Oz",
+    "name": "Murad Hydrating Toner Ã¢ÂÂ Moisture-Replenishing Alcohol-Free Face Toner with Lecithin, Grape Seed, Peach & Cucumber Extracts for Deep Hydration, Soothing Irritation, & Refreshed Skin - 6 Fl Oz",
     "price": 44,
     "originalPrice": null,
     "rating": 4.7,
@@ -6226,7 +6226,7 @@
   },
   {
     "id": "clean_skin_club_clean_towels_x",
-    "name": "Clean Skin Club Clean Towels XLÂ®, 100% USDA Biobased Face Towel, Disposable Face Towelette, Eczema Association Accepted, Makeup Remover Dry Wipes, Ultra Soft, 1 Pack, 50 Ct",
+    "name": "Clean Skin Club Clean Towels XLÃÂ®, 100% USDA Biobased Face Towel, Disposable Face Towelette, Eczema Association Accepted, Makeup Remover Dry Wipes, Ultra Soft, 1 Pack, 50 Ct",
     "price": 17.95,
     "originalPrice": null,
     "rating": 4.8,
@@ -6331,7 +6331,7 @@
   },
   {
     "id": "obagi_clenziderm_m_d_pore_ther",
-    "name": "Obagi CLENZIderm M.D. Pore Therapy Exfoliating BHA Toner - Unclogs Pores with 2% Salicylic Acid Acne Treatment â 5 oz",
+    "name": "Obagi CLENZIderm M.D. Pore Therapy Exfoliating BHA Toner - Unclogs Pores with 2% Salicylic Acid Acne Treatment Ã¢ÂÂ 5 oz",
     "price": 50,
     "originalPrice": null,
     "rating": 4.6,
@@ -6361,7 +6361,7 @@
   },
   {
     "id": "lanc_me_g_nifique_ultimate_dua",
-    "name": "LancÃ´me GÃ©nifique Ultimate Dual Recovery Face Serum- Anti-Aging Serum Visibly Improves Fine Lines, Rough Texture, Plumpness and Even Skintone - with Beta Glucan and, Hyaluronic Acid",
+    "name": "LancÃÂ´me GÃÂ©nifique Ultimate Dual Recovery Face Serum- Anti-Aging Serum Visibly Improves Fine Lines, Rough Texture, Plumpness and Even Skintone - with Beta Glucan and, Hyaluronic Acid",
     "price": 55.25,
     "originalPrice": null,
     "rating": 4.6,
@@ -6376,7 +6376,7 @@
   },
   {
     "id": "caldera_lab_the_eye_serum_men_",
-    "name": "Caldera + Lab The Eye Serum | Menâs Eye Serum formulated for fine lines, dark circles and puffiness.",
+    "name": "Caldera + Lab The Eye Serum | MenÃ¢ÂÂs Eye Serum formulated for fine lines, dark circles and puffiness.",
     "price": 88,
     "originalPrice": null,
     "rating": 4.3,
@@ -6421,7 +6421,7 @@
   },
   {
     "id": "foundation_skincare_azelaic_ac",
-    "name": "Foundation Skincare Azelaic Acid for Face 14% (1 Fl Oz) â Dermatologist Formula for Uneven and Blemish-Prone Skin, Supports Balanced Tone & Smooth Texture for Men & Women",
+    "name": "Foundation Skincare Azelaic Acid for Face 14% (1 Fl Oz) Ã¢ÂÂ Dermatologist Formula for Uneven and Blemish-Prone Skin, Supports Balanced Tone & Smooth Texture for Men & Women",
     "price": 45,
     "originalPrice": null,
     "rating": 4.2,
@@ -6721,7 +6721,7 @@
   },
   {
     "id": "maree_v_line_lifting_mask_with",
-    "name": "MAREE V Line Lifting Mask with 24K Gold â Deep Collagen Face Mask for Women â Jawline Shaper Mask with Retinol & Hyaluronic Acid â Neck Tightening & Firming - Double Chin Strap for Face Lift",
+    "name": "MAREE V Line Lifting Mask with 24K Gold Ã¢ÂÂ Deep Collagen Face Mask for Women Ã¢ÂÂ Jawline Shaper Mask with Retinol & Hyaluronic Acid Ã¢ÂÂ Neck Tightening & Firming - Double Chin Strap for Face Lift",
     "price": 23.95,
     "originalPrice": null,
     "rating": 4.2,
@@ -6796,7 +6796,7 @@
   },
   {
     "id": "murad_deep_relief_acne_spot_tr",
-    "name": "Murad Deep Relief Acne Spot Treatment with 2% Salicylic Acid â Patch-Like Liquid Treatment for Deep, Hormonal Acne & Breakouts â 1 Fl Oz",
+    "name": "Murad Deep Relief Acne Spot Treatment with 2% Salicylic Acid Ã¢ÂÂ Patch-Like Liquid Treatment for Deep, Hormonal Acne & Breakouts Ã¢ÂÂ 1 Fl Oz",
     "price": 45,
     "originalPrice": null,
     "rating": 4.4,
@@ -6886,7 +6886,7 @@
   },
   {
     "id": "good_molecules_daily_brighteni",
-    "name": "Good Molecules Daily Brightening Serum with Beta Arbutin 3% & Hyaluronic Acid â Brightening Serum for Dark Spots & Uneven Tone, Face Skincare, 1 fl oz (30 ml)",
+    "name": "Good Molecules Daily Brightening Serum with Beta Arbutin 3% & Hyaluronic Acid Ã¢ÂÂ Brightening Serum for Dark Spots & Uneven Tone, Face Skincare, 1 fl oz (30 ml)",
     "price": 7.97,
     "originalPrice": null,
     "rating": 4.6,
@@ -6931,7 +6931,7 @@
   },
   {
     "id": "hanacure_the_all_in_one_facial",
-    "name": "HanacureÂ® The All-In-One FacialÂ® Set - Face Lifting Mask, Neck Firming and Tightening",
+    "name": "HanacureÃÂ® The All-In-One FacialÃÂ® Set - Face Lifting Mask, Neck Firming and Tightening",
     "price": 87.99,
     "originalPrice": null,
     "rating": 4.5,
@@ -7021,7 +7021,7 @@
   },
   {
     "id": "jiyu_nad_hydrating_face_moistu",
-    "name": "JiYu NAD+ Hydrating Face Moisturizer â Korean Anti-Aging Cream for Radiant, Firm & Smooth Skin â Deeply Hydrating & Brightening Daily Moisturizer Cream for Face and Body, All Skin Types â 50 ml",
+    "name": "JiYu NAD+ Hydrating Face Moisturizer Ã¢ÂÂ Korean Anti-Aging Cream for Radiant, Firm & Smooth Skin Ã¢ÂÂ Deeply Hydrating & Brightening Daily Moisturizer Cream for Face and Body, All Skin Types Ã¢ÂÂ 50 ml",
     "price": 69.95,
     "originalPrice": null,
     "rating": 4.4,
@@ -7186,7 +7186,7 @@
   },
   {
     "id": "folliculitis_treatment_cream_7",
-    "name": "Folliculitis Treatment Cream, 7X Fast-Acting Ointment for Scalp, Face & Body, Relieves Itching, Redness & Bumps, Intensive Skin Therapy â 120g",
+    "name": "Folliculitis Treatment Cream, 7X Fast-Acting Ointment for Scalp, Face & Body, Relieves Itching, Redness & Bumps, Intensive Skin Therapy Ã¢ÂÂ 120g",
     "price": 23.74,
     "originalPrice": null,
     "rating": 4.4,
@@ -7216,7 +7216,7 @@
   },
   {
     "id": "versed_doctor_s_visit_instant_",
-    "name": "Versed Doctorâs Visit Instant Resurfacing Face Mask - AHA, BHA and Enzyme Exfoliating Mask Helps Reduce Hyperpigmentation - Smooth and Moisturize Skin with Vitamin C - Vegan (1.7 fl oz)",
+    "name": "Versed DoctorÃ¢ÂÂs Visit Instant Resurfacing Face Mask - AHA, BHA and Enzyme Exfoliating Mask Helps Reduce Hyperpigmentation - Smooth and Moisturize Skin with Vitamin C - Vegan (1.7 fl oz)",
     "price": 14.92,
     "originalPrice": null,
     "rating": 4.3,
@@ -7456,7 +7456,7 @@
   },
   {
     "id": "vegan_face_exfoliator_scrub_ge",
-    "name": "Vegan Face Exfoliator Scrub â Gentle Daily Facial Scrub with Blueberry, Coffee Bean, and Vitamin C â Face Exfoliant for Smooth, Radiant Skin â Flawless Exfoliator (8 oz)",
+    "name": "Vegan Face Exfoliator Scrub Ã¢ÂÂ Gentle Daily Facial Scrub with Blueberry, Coffee Bean, and Vitamin C Ã¢ÂÂ Face Exfoliant for Smooth, Radiant Skin Ã¢ÂÂ Flawless Exfoliator (8 oz)",
     "price": 35,
     "originalPrice": null,
     "rating": 4.5,
@@ -7711,7 +7711,7 @@
   },
   {
     "id": "kate_somerville_eradikate_3_su",
-    "name": "Kate Somerville EradiKate 3% Sulfur Daily Foaming Cleanser Acne Treatment â Clinically Formulated Medicated Face Wash Balances Skin & Cleans Pores, 4 Fl Oz",
+    "name": "Kate Somerville EradiKate 3% Sulfur Daily Foaming Cleanser Acne Treatment Ã¢ÂÂ Clinically Formulated Medicated Face Wash Balances Skin & Cleans Pores, 4 Fl Oz",
     "price": 46,
     "originalPrice": null,
     "rating": 4.5,
@@ -7801,7 +7801,7 @@
   },
   {
     "id": "maree_face_exfoliator_microder",
-    "name": "MAREE Face Exfoliator â Microdermabrasion Facial Scrub & Exfoliating Face Wash for Women â Collagen & Glycolic Acid â Gentle Scrub and Exfoliant â Men Exfoliating Scrubber â Exfoliante Facial Cleanser",
+    "name": "MAREE Face Exfoliator Ã¢ÂÂ Microdermabrasion Facial Scrub & Exfoliating Face Wash for Women Ã¢ÂÂ Collagen & Glycolic Acid Ã¢ÂÂ Gentle Scrub and Exfoliant Ã¢ÂÂ Men Exfoliating Scrubber Ã¢ÂÂ Exfoliante Facial Cleanser",
     "price": 9.98,
     "originalPrice": null,
     "rating": 4.5,
@@ -8056,7 +8056,7 @@
   },
   {
     "id": "manuka_honey_exfoliating_face_",
-    "name": "Manuka Honey Exfoliating Face Scrub â Gentle Microdermabrasion Face Exfoliator to Help Smooth, Soften & Balance with Moisturizing Organic Superfoods 2oz",
+    "name": "Manuka Honey Exfoliating Face Scrub Ã¢ÂÂ Gentle Microdermabrasion Face Exfoliator to Help Smooth, Soften & Balance with Moisturizing Organic Superfoods 2oz",
     "price": 16.99,
     "originalPrice": null,
     "rating": 4.4,
@@ -8281,7 +8281,7 @@
   },
   {
     "id": "timeline_mitopure_resurfacing_",
-    "name": "Timeline Mitopureâ¢ Resurfacing Face Exfoliator- with Plant-Based Acids to Purify, Tone, Hydrate, Refine Texture & Unclog Pores - 3.38 Fl Oz",
+    "name": "Timeline MitopureÃ¢ÂÂ¢ Resurfacing Face Exfoliator- with Plant-Based Acids to Purify, Tone, Hydrate, Refine Texture & Unclog Pores - 3.38 Fl Oz",
     "price": 70,
     "originalPrice": null,
     "rating": 4.8,
@@ -8311,7 +8311,7 @@
   },
   {
     "id": "osea_atmosphere_protection_cre",
-    "name": "OSEA Atmosphere ProtectionÂ® Cream 2oz - Lightweight Face Moisturizer for Fast-Absorbing Hydration - Smooths with Niacinamide, Shea Butter, and Undaria Seaweed - Ideal Under Sunscreen or Makeup",
+    "name": "OSEA Atmosphere ProtectionÃÂ® Cream 2oz - Lightweight Face Moisturizer for Fast-Absorbing Hydration - Smooths with Niacinamide, Shea Butter, and Undaria Seaweed - Ideal Under Sunscreen or Makeup",
     "price": 54,
     "originalPrice": null,
     "rating": 4.7,
@@ -8356,7 +8356,7 @@
   },
   {
     "id": "truskin_vitamin_c_face_cream_b",
-    "name": "TruSkin Vitamin C Face Cream â Brightening & Hydrating Daily Moisturizer with Vitamin E, B5, Jojoba Oil & Green Tea â Smooth, Radiant-Looking Skin, 4 Fl Oz",
+    "name": "TruSkin Vitamin C Face Cream Ã¢ÂÂ Brightening & Hydrating Daily Moisturizer with Vitamin E, B5, Jojoba Oil & Green Tea Ã¢ÂÂ Smooth, Radiant-Looking Skin, 4 Fl Oz",
     "price": 26.95,
     "originalPrice": null,
     "rating": 4.4,
@@ -8551,7 +8551,7 @@
   },
   {
     "id": "good_molecules_lightweight_dai",
-    "name": "Good Molecules Lightweight Daily Moisturizer Face Cream â 100 ml / 3.38 fl oz - Non-Greasy Facial Moisturizer Face Lotion with Shea Butter & Hyaluronic Acid",
+    "name": "Good Molecules Lightweight Daily Moisturizer Face Cream Ã¢ÂÂ 100 ml / 3.38 fl oz - Non-Greasy Facial Moisturizer Face Lotion with Shea Butter & Hyaluronic Acid",
     "price": 11.97,
     "originalPrice": null,
     "rating": 4.6,
@@ -8566,7 +8566,7 @@
   },
   {
     "id": "av_ne_tolerance_control_soothi",
-    "name": "AvÃ¨ne Tolerance Control Soothing Skin Recovery Cream",
+    "name": "AvÃÂ¨ne Tolerance Control Soothing Skin Recovery Cream",
     "price": 40,
     "originalPrice": null,
     "rating": 4.6,
@@ -8611,7 +8611,7 @@
   },
   {
     "id": "embryolisse_lait_cr_me_concent",
-    "name": "Embryolisse Lait-CrÃ¨me ConcentrÃ© Face Moisturizer and Makeup Primer, French Face Cream With Shea Butter & Aloe Vera",
+    "name": "Embryolisse Lait-CrÃÂ¨me ConcentrÃÂ© Face Moisturizer and Makeup Primer, French Face Cream With Shea Butter & Aloe Vera",
     "price": 0,
     "originalPrice": null,
     "rating": 4.6,
@@ -8626,7 +8626,7 @@
   },
   {
     "id": "prequel_skin_am_pm_modern_mois",
-    "name": "Prequel Skin AM/PM Modern Moisturizer â Hydrating Face Cream with Peptides, Ceramides & Glycerin for Dry, Sensitive, or Combination Skin â Non-Greasy Moisturizer for Barrier Support",
+    "name": "Prequel Skin AM/PM Modern Moisturizer Ã¢ÂÂ Hydrating Face Cream with Peptides, Ceramides & Glycerin for Dry, Sensitive, or Combination Skin Ã¢ÂÂ Non-Greasy Moisturizer for Barrier Support",
     "price": 17.99,
     "originalPrice": null,
     "rating": 4.6,
@@ -8911,7 +8911,7 @@
   },
   {
     "id": "obagi_hydrate_light_oil_free_m",
-    "name": "Obagi Hydrate Light Oil-Free Moisturizer â Fast-Absorbing, Lightweight Gel for Acne-Prone Skin â Non-Comedogenic, Hypoallergenic with Soothing Niacinamide, Glycerin & Ceramides for 24-Hour Hydration",
+    "name": "Obagi Hydrate Light Oil-Free Moisturizer Ã¢ÂÂ Fast-Absorbing, Lightweight Gel for Acne-Prone Skin Ã¢ÂÂ Non-Comedogenic, Hypoallergenic with Soothing Niacinamide, Glycerin & Ceramides for 24-Hour Hydration",
     "price": 70,
     "originalPrice": null,
     "rating": 4.6,
@@ -8926,7 +8926,7 @@
   },
   {
     "id": "obagi_hydrate_facial_moisturiz",
-    "name": "Obagi Hydrate Facial Moisturizer â Non-Comedogenic Intensely Hydrating All Day Moisturizer that Combats Dryness with Tara Seed Extract, Shea Butter & Avocado Oil",
+    "name": "Obagi Hydrate Facial Moisturizer Ã¢ÂÂ Non-Comedogenic Intensely Hydrating All Day Moisturizer that Combats Dryness with Tara Seed Extract, Shea Butter & Avocado Oil",
     "price": 70,
     "originalPrice": null,
     "rating": 4.4,
@@ -9061,7 +9061,7 @@
   },
   {
     "id": "l_oreal_paris_collagen_daily_f",
-    "name": "LâOreal Paris Collagen Daily Face Moisturizer, Anti Aging Face Cream to Reduce Wrinkles and Provide Intense Hydration, 1.7 oz",
+    "name": "LÃ¢ÂÂOreal Paris Collagen Daily Face Moisturizer, Anti Aging Face Cream to Reduce Wrinkles and Provide Intense Hydration, 1.7 oz",
     "price": 9.99,
     "originalPrice": null,
     "rating": 4.6,
@@ -9106,7 +9106,7 @@
   },
   {
     "id": "lanc_me_r_nergie_h_p_n_300_pep",
-    "name": "LancÃ´me RÃ©nergie H.P.N. 300-Peptide Cream SPF 25 Face Cream - Anti-Aging Moisturizer, Targets Fine Lines, Wrinkles & Dark Spots - SPF 25 Sunscreen Protection",
+    "name": "LancÃÂ´me RÃÂ©nergie H.P.N. 300-Peptide Cream SPF 25 Face Cream - Anti-Aging Moisturizer, Targets Fine Lines, Wrinkles & Dark Spots - SPF 25 Sunscreen Protection",
     "price": 127.5,
     "originalPrice": null,
     "rating": 4.7,
@@ -9286,7 +9286,7 @@
   },
   {
     "id": "naturium_niacinamide_cleansing",
-    "name": "Naturium Niacinamide Cleansing GelÃÂ©e 3% Plus Hyaluronic Acid & Vitamin C, Gentle & Smoothing Face Wash, 7.1 oz",
+    "name": "Naturium Niacinamide Cleansing GelÃÂÃÂ©e 3% Plus Hyaluronic Acid & Vitamin C, Gentle & Smoothing Face Wash, 7.1 oz",
     "price": 17.88,
     "originalPrice": null,
     "rating": 4.6,
@@ -9346,7 +9346,7 @@
   },
   {
     "id": "est_e_lauder_perfectly_clean_m",
-    "name": "EstÃÂ©e Lauder Perfectly Clean Multi-Action Foaming Face Wash Cleanser/Purifying Face Mask, 5.0 fl oz.",
+    "name": "EstÃÂÃÂ©e Lauder Perfectly Clean Multi-Action Foaming Face Wash Cleanser/Purifying Face Mask, 5.0 fl oz.",
     "price": 32,
     "originalPrice": null,
     "rating": 4.8,
@@ -9676,7 +9676,7 @@
   },
   {
     "id": "rael_miracle_clear_facial_clea",
-    "name": "Rael Miracle Clear Facial Cleanser Ã¢ÂÂ Makeup Remover, Daily Face Wash, Gentle Deep Pore Cleansing Korean Skin Care for Oily & Combination Skin (Exfoliating Cleanser, 5.1 fl. oz)",
+    "name": "Rael Miracle Clear Facial Cleanser ÃÂ¢ÃÂÃÂ Makeup Remover, Daily Face Wash, Gentle Deep Pore Cleansing Korean Skin Care for Oily & Combination Skin (Exfoliating Cleanser, 5.1 fl. oz)",
     "price": 12.99,
     "originalPrice": null,
     "rating": 4.6,
@@ -9811,7 +9811,7 @@
   },
   {
     "id": "tiege_hanley_skin_care_set_for",
-    "name": "Tiege Hanley Skin Care Set for Men, Essential Routine, System Level 1, Daily Face Wash, Facial Scrub, Moisturizer With SPF, and Night Cream for Healthy, Hydrated Skin, MenÃ¢ÂÂs Skin Care, 4 Piece Kit",
+    "name": "Tiege Hanley Skin Care Set for Men, Essential Routine, System Level 1, Daily Face Wash, Facial Scrub, Moisturizer With SPF, and Night Cream for Healthy, Hydrated Skin, MenÃÂ¢ÃÂÃÂs Skin Care, 4 Piece Kit",
     "price": 45,
     "originalPrice": null,
     "rating": 4.2,
@@ -10021,7 +10021,7 @@
   },
   {
     "id": "la_roche_posay_toleriane_purif",
-    "name": "La Roche-Posay Toleriane Purifying Foaming Facial Cleanser, Oil Free Face Wash for Women & Men with Niacinamide + Ceramides, Pore Cleanser Safe For Sensitive Skin, WonÃ¢ÂÂt Dry Out Skin, Soap Free",
+    "name": "La Roche-Posay Toleriane Purifying Foaming Facial Cleanser, Oil Free Face Wash for Women & Men with Niacinamide + Ceramides, Pore Cleanser Safe For Sensitive Skin, WonÃÂ¢ÃÂÃÂt Dry Out Skin, Soap Free",
     "price": 19.99,
     "originalPrice": null,
     "rating": 4.7,
