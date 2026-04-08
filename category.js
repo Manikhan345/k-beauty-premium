@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    K Beauty Premium — Category Page Logic
-   Supports nested tags: tag (Face) → subtag (Cleansers)
+   Amazon-style left sidebar filters with tag → subtag hierarchy
    ═══════════════════════════════════════════════════════════════ */
 var allProducts = [];
 var activeTag = "";
@@ -15,96 +15,110 @@ async function initCategoryPage() {
   var breadcrumb = document.getElementById("breadcrumb");
   if (breadcrumb) breadcrumb.innerHTML = '<a href="/">Home</a> › <span>' + meta.title.replace(/^[^\w]*/, "").trim() + '</span>';
   allProducts = await fetchProducts(meta.file);
-  renderTagButtons();
+  renderSidebarFilters();
   renderGrid(allProducts);
   updateCount(allProducts.length);
   updateTopRated(allProducts);
 }
 
-// ── TAG FILTER BUTTONS (two rows) ──
-function renderTagButtons() {
-  var container = document.getElementById("tagBar");
+// ── SIDEBAR FILTER RENDERING ──
+function renderSidebarFilters() {
+  var container = document.getElementById("filterTags");
   if (!container) return;
   var tags = CATEGORY_TAGS[CATEGORY_KEY];
   if (!tags) { container.style.display = "none"; return; }
 
-  // Check if nested (object) or flat (array)
   var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
 
   if (isNested) {
     var tagKeys = Object.keys(tags);
     if (tagKeys.length === 0) { container.style.display = "none"; return; }
 
-    var row1 = '<div class="tag-row" id="tagRow1">';
-    row1 += '<button class="tag-btn active" onclick="filterByTag(\'\', this)">All</button>';
+    var html = '<div class="filter-section-title">Department</div>';
+    html += '<a class="filter-link active" onclick="filterByTag(\'\')">All Products</a>';
     tagKeys.forEach(function(t) {
-      row1 += '<button class="tag-btn" onclick="filterByTag(\'' + t.replace(/'/g, "\\'") + '\', this)">' + t + '</button>';
+      html += '<a class="filter-link" data-tag="' + t + '" onclick="filterByTag(\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</a>';
+      // Subtags (hidden initially)
+      var subs = tags[t];
+      if (subs && subs.length > 0) {
+        html += '<div class="filter-sub-links" data-parent="' + t + '" style="display:none;">';
+        subs.forEach(function(st) {
+          html += '<a class="filter-sub-link" data-subtag="' + st + '" onclick="filterBySubtag(\'' + st.replace(/'/g, "\\'") + '\')">' + st + '</a>';
+        });
+        html += '</div>';
+      }
     });
-    row1 += '</div>';
-
-    var row2 = '<div class="tag-row" id="tagRow2" style="display:none;"></div>';
-
-    container.innerHTML = row1 + row2;
-  } else {
-    // Flat tags (backward compatible)
-    var html = '<div class="tag-row">';
-    html += '<button class="tag-btn active" onclick="filterByTag(\'\', this)">All</button>';
-    tags.forEach(function(tag) {
-      html += '<button class="tag-btn" onclick="filterByTag(\'' + tag.replace(/'/g, "\\'") + '\', this)">' + tag + '</button>';
-    });
-    html += '</div>';
     container.innerHTML = html;
+  } else if (Array.isArray(tags)) {
+    var html = '<div class="filter-section-title">Department</div>';
+    html += '<a class="filter-link active" onclick="filterByTag(\'\')">All Products</a>';
+    tags.forEach(function(tag) {
+      html += '<a class="filter-link" data-tag="' + tag + '" onclick="filterByTag(\'' + tag.replace(/'/g, "\\'") + '\')">' + tag + '</a>';
+    });
+    container.innerHTML = html;
+  } else {
+    container.style.display = "none";
   }
 }
 
-function filterByTag(tag, btn) {
+function filterByTag(tag) {
   activeTag = tag;
   activeSubtag = "";
 
-  // Update row 1 active state
-  document.querySelectorAll("#tagRow1 .tag-btn, .tag-row:first-child .tag-btn").forEach(function(b) { b.classList.remove("active"); });
-  btn.classList.add("active");
-
-  // Show/hide subtag row
-  var tags = CATEGORY_TAGS[CATEGORY_KEY];
-  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
-  var row2 = document.getElementById("tagRow2");
-
-  if (isNested && row2 && tag && tags[tag]) {
-    var subtags = tags[tag];
-    if (subtags.length > 0) {
-      var html = '<button class="tag-btn active" onclick="filterBySubtag(\'\', this)">All ' + tag + '</button>';
-      subtags.forEach(function(st) {
-        html += '<button class="tag-btn" onclick="filterBySubtag(\'' + st.replace(/'/g, "\\'") + '\', this)">' + st + '</button>';
-      });
-      row2.innerHTML = html;
-      row2.style.display = "flex";
-    } else {
-      row2.style.display = "none";
+  // Update active state on tag links
+  document.querySelectorAll("#filterTags .filter-link").forEach(function(l) {
+    l.classList.remove("active");
+    if ((!tag && !l.getAttribute("data-tag")) || l.getAttribute("data-tag") === tag) {
+      l.classList.add("active");
     }
-  } else if (row2) {
-    row2.style.display = "none";
+  });
+
+  // Show/hide subtags
+  document.querySelectorAll("#filterTags .filter-sub-links").forEach(function(el) {
+    el.style.display = (el.getAttribute("data-parent") === tag) ? "block" : "none";
+  });
+  // Reset subtag active
+  document.querySelectorAll("#filterTags .filter-sub-link").forEach(function(l) { l.classList.remove("active"); });
+
+  // Update breadcrumb
+  var meta = CATEGORY_META[CATEGORY_KEY];
+  var catLabel = meta ? meta.title.replace(/^[^\w]*/, "").trim() : CATEGORY_KEY;
+  var breadcrumb = document.getElementById("breadcrumb");
+  if (breadcrumb) {
+    var bc = '<a href="/">Home</a> › <a href="/' + CATEGORY_KEY + '">' + catLabel + '</a>';
+    if (tag) bc += ' › <span>' + tag + '</span>';
+    breadcrumb.innerHTML = bc;
   }
 
-  // Filter products
   var filtered = tag ? allProducts.filter(function(p) { return p.tag === tag; }) : allProducts;
   renderGrid(filtered);
   updateCount(filtered.length);
 }
 
-function filterBySubtag(subtag, btn) {
+function filterBySubtag(subtag) {
   activeSubtag = subtag;
 
-  // Update row 2 active state
-  document.querySelectorAll("#tagRow2 .tag-btn").forEach(function(b) { b.classList.remove("active"); });
-  btn.classList.add("active");
+  // Update active state on subtag links
+  document.querySelectorAll("#filterTags .filter-sub-link").forEach(function(l) {
+    l.classList.remove("active");
+    if (l.getAttribute("data-subtag") === subtag) l.classList.add("active");
+  });
 
-  // Filter by both tag and subtag
+  // Update breadcrumb
+  var meta = CATEGORY_META[CATEGORY_KEY];
+  var catLabel = meta ? meta.title.replace(/^[^\w]*/, "").trim() : CATEGORY_KEY;
+  var breadcrumb = document.getElementById("breadcrumb");
+  if (breadcrumb) {
+    var bc = '<a href="/">Home</a> › <a href="/' + CATEGORY_KEY + '">' + catLabel + '</a>';
+    if (activeTag) bc += ' › <a onclick="filterByTag(\'' + activeTag.replace(/'/g, "\\'") + '\')" style="cursor:pointer;color:var(--accent);">' + activeTag + '</a>';
+    if (subtag) bc += ' › <span>' + subtag + '</span>';
+    breadcrumb.innerHTML = bc;
+  }
+
   var filtered = allProducts.filter(function(p) {
-    if (!activeTag) return true;
-    if (p.tag !== activeTag) return false;
-    if (!subtag) return true;
-    return p.subtag === subtag;
+    if (activeTag && p.tag !== activeTag) return false;
+    if (subtag && p.subtag !== subtag) return false;
+    return true;
   });
   renderGrid(filtered);
   updateCount(filtered.length);
@@ -116,7 +130,10 @@ function renderGrid(products) {
   grid.innerHTML = products.map(function(p) { return renderProductCard(p, null, CATEGORY_KEY); }).join("");
 }
 
-function updateCount(n) { var el = document.querySelector(".result-count"); if (el) el.textContent = "Showing " + n + " products"; }
+function updateCount(n) { 
+  var el = document.querySelector(".result-count"); 
+  if (el) el.textContent = "Showing " + n + " products"; 
+}
 
 function updateTopRated(products) {
   var container = document.getElementById("topRated");
