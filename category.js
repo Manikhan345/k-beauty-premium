@@ -144,9 +144,9 @@ function updateTopRated(products) {
   }).join("");
 }
 
-function sortProducts(type, btn) {
-  document.querySelectorAll(".sort-btn").forEach(function(b) { b.classList.remove("active"); });
-  btn.classList.add("active");
+function sortProducts(type, el) {
+  document.querySelectorAll(".sort-link").forEach(function(l) { l.classList.remove("active"); });
+  if (el) el.classList.add("active");
   var base = getFilteredBase();
   var sorted = base.slice();
   switch(type) {
