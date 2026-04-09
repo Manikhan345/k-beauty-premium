@@ -43,7 +43,7 @@ var COPYRIGHT_YEAR = '2026';
 async function loadConfig() {
   if (CONFIG_LOADED) return;
   try {
-    var resp = await fetch("/config.json");
+    var resp = await fetch("config.json");
     if (!resp.ok) throw new Error("Failed to load config.json");
     var config = await resp.json();
     var cats = config.categories || {};
@@ -55,7 +55,7 @@ async function loadConfig() {
     Object.keys(cats).forEach(function(key) {
       var c = cats[key];
       SITE_PAGES[key] = "/" + key;
-      CATEGORY_META[key] = { title: c.title, file: "/data/" + key + ".json" };
+      CATEGORY_META[key] = { title: c.title, file: "data/" + key + ".json" };
       // Tags can be nested object or flat array
       if (c.tags && typeof c.tags === "object" && !Array.isArray(c.tags)) {
         // Nested: { "Face": ["Cleansers", "Moisturizers"], "Eyes": [...] }
@@ -102,11 +102,11 @@ function renderNav(activePage, searchFunction) {
 
   var searchFn = searchFunction || "";
 
-  // Build nav links from config
+  // Desktop nav links
   var links = '<a href="/"' + (activePage === "home" ? ' class="active"' : '') + '>All</a>';
   Object.keys(CATEGORY_META).forEach(function(key) {
     var meta = CATEGORY_META[key];
-    var label = meta.title.replace(/^[^\w]*/, "").trim(); // Remove emoji
+    var label = meta.title.replace(/^[^\w]*/, "").trim();
     var cls = key === activePage ? ' class="active"' : '';
     links += '<a href="/' + key + '"' + cls + '>' + label + '</a>';
   });
@@ -116,7 +116,65 @@ function renderNav(activePage, searchFunction) {
     searchHTML = '<div class="search-wrap"><input type="text" placeholder="Search products..." id="searchInput" onkeyup="' + searchFn + '()"><span class="search-icon">🔍</span></div>';
   }
 
-  el.innerHTML = '<nav class="nav"><div class="nav-inner">' + links + searchHTML + '</div></nav>';
+  // Desktop nav
+  var desktopNav = '<nav class="nav"><div class="nav-inner">' + links + searchHTML + '</div></nav>';
+
+  // Mobile nav bar
+  var mobileSearchHTML = '<div class="mobile-search"><input type="text" placeholder="Search e.g. Eye Liner"' + (searchFn ? ' id="mobileSearchInput" onkeyup="' + searchFn + '()"' : '') + '><span class="search-icon">🔍</span></div>';
+  var mobileNav = '<div class="mobile-nav-bar"><button class="mobile-menu-btn" onclick="openDrawer()"><span class="hamburger">☰</span> Menu</button>' + mobileSearchHTML + '</div>';
+
+  // Drawer
+  var drawerLinks = '<a class="drawer-link" href="/">All Products</a>';
+  Object.keys(CATEGORY_META).forEach(function(key) {
+    var meta = CATEGORY_META[key];
+    var label = meta.title.replace(/^[^\w]*/, "").trim();
+    var tags = CATEGORY_TAGS[key];
+    var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
+    var cls = key === activePage ? ' active' : '';
+
+    if (isNested && Object.keys(tags).length > 0) {
+      drawerLinks += '<a class="drawer-link' + cls + '" onclick="toggleDrawerSub(\'' + key + '\')" style="cursor:pointer;">' + label + '<span class="drawer-arrow" id="arrow-' + key + '">►</span></a>';
+      drawerLinks += '<div class="drawer-sub-section" id="sub-' + key + '">';
+      drawerLinks += '<a class="drawer-sub-link" href="/' + key + '">All ' + label + '</a>';
+      Object.keys(tags).forEach(function(tag) {
+        drawerLinks += '<a class="drawer-sub-link" href="/' + key + '#' + tag.replace(/\s+/g, '-') + '" onclick="navigateWithTag(\'' + key + '\',\'' + tag.replace(/'/g, "\\'") + '\')">' + tag + '</a>';
+      });
+      drawerLinks += '</div>';
+    } else {
+      drawerLinks += '<a class="drawer-link' + cls + '" href="/' + key + '">' + label + '</a>';
+    }
+  });
+
+  var drawer = '<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>' +
+    '<div class="drawer" id="drawer">' +
+      '<div class="drawer-header"><h3>K <span style="color:var(--champagne);">Beauty</span></h3><button class="drawer-close" onclick="closeDrawer()">✕</button></div>' +
+      '<div class="drawer-section"><div class="drawer-section-title">Categories</div>' + drawerLinks + '</div>' +
+    '</div>';
+
+  el.innerHTML = desktopNav + mobileNav + drawer;
+}
+
+function openDrawer() {
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("drawerOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeDrawer() {
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("drawerOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+function toggleDrawerSub(key) {
+  var sub = document.getElementById("sub-" + key);
+  var arrow = document.getElementById("arrow-" + key);
+  if (sub) {
+    sub.classList.toggle("open");
+    if (arrow) arrow.classList.toggle("open");
+  }
+}
+function navigateWithTag(cat, tag) {
+  closeDrawer();
+  window.location.href = "/" + cat + "?tag=" + encodeURIComponent(tag);
 }
 
 // ═══════════════════════════════════════════════════════════════

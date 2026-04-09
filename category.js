@@ -16,8 +16,16 @@ async function initCategoryPage() {
   if (breadcrumb) breadcrumb.innerHTML = '<a href="/">Home</a> › <span>' + meta.title.replace(/^[^\w]*/, "").trim() + '</span>';
   renderSidebarFilters();
   allProducts = await fetchProducts(meta.file);
-  renderGrid(allProducts);
-  updateCount(allProducts.length);
+  
+  // Check for ?tag= parameter (from mobile drawer navigation)
+  var urlParams = new URLSearchParams(window.location.search);
+  var preTag = urlParams.get("tag");
+  if (preTag) {
+    filterByTag(preTag);
+  } else {
+    renderGrid(allProducts);
+    updateCount(allProducts.length);
+  }
   updateTopRated(allProducts);
 }
 
