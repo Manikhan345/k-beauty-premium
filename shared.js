@@ -111,16 +111,14 @@ function renderNav(activePage, searchFunction) {
     links += '<a href="/' + key + '"' + cls + '>' + label + '</a>';
   });
 
-  var searchHTML = "";
-  if (searchFn) {
-    searchHTML = '<div class="search-wrap"><input type="text" placeholder="Search products..." id="searchInput" onkeyup="' + searchFn + '()"><span class="search-icon">🔍</span></div>';
-  }
-
+  // Desktop nav - always include global search
+  var globalSearchHTML = '<div class="search-wrap global-search"><input type="text" placeholder="Search all products..." id="globalSearchInput" onkeyup="globalSearch(this.value)" autocomplete="off"><span class="search-icon">🔍</span><div class="search-results" id="globalSearchResults"></div></div>';
+  
   // Desktop nav
-  var desktopNav = '<nav class="nav"><div class="nav-inner">' + links + searchHTML + '</div></nav>';
+  var desktopNav = '<nav class="nav"><div class="nav-inner">' + links + globalSearchHTML + '</div></nav>';
 
   // Mobile nav bar
-  var mobileSearchHTML = '<div class="mobile-search"><input type="text" placeholder="Search e.g. Eye Liner"' + (searchFn ? ' id="mobileSearchInput" onkeyup="' + searchFn + '()"' : '') + '><span class="search-icon">🔍</span></div>';
+  var mobileSearchHTML = '<div class="mobile-search global-search"><input type="text" placeholder="Search e.g. Eye Liner" id="mobileGlobalSearch" onkeyup="globalSearch(this.value)" autocomplete="off"><span class="search-icon">🔍</span><div class="search-results" id="mobileSearchResults"></div></div>';
   var mobileNav = '<div class="mobile-nav-bar"><button class="mobile-menu-btn" onclick="openDrawer()"><span class="hamburger">☰</span> Menu</button>' + mobileSearchHTML + '</div>';
 
   // Drawer
@@ -340,3 +338,82 @@ function initSubscribeForm() {
     btn.textContent = "Subscribe";
   });
 }
+
+// ═══════════════════════════════════════════════════════════════
+// GLOBAL SEARCH — searches all products across all categories
+// ═══════════════════════════════════════════════════════════════
+var globalSearchCache = null;
+var globalSearchTimer = null;
+
+async function loadAllProducts() {
+  if (globalSearchCache) return globalSearchCache;
+  globalSearchCache = [];
+  var keys = Object.keys(CATEGORY_META);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    try {
+      var products = await fetchProducts(CATEGORY_META[key].file);
+      products.forEach(function(p) { p._cat = key; });
+      globalSearchCache = globalSearchCache.concat(products);
+    } catch(e) {}
+  }
+  return globalSearchCache;
+}
+
+function globalSearch(query) {
+  clearTimeout(globalSearchTimer);
+  var q = (query || "").toLowerCase().trim();
+  
+  var desktopResults = document.getElementById("globalSearchResults");
+  var mobileResults = document.getElementById("mobileSearchResults");
+  var resultsEl = (window.innerWidth <= 768 && mobileResults) ? mobileResults : desktopResults;
+  
+  var desktopInput = document.getElementById("globalSearchInput");
+  var mobileInput = document.getElementById("mobileGlobalSearch");
+  if (desktopInput && desktopInput !== document.activeElement) desktopInput.value = query;
+  if (mobileInput && mobileInput !== document.activeElement) mobileInput.value = query;
+
+  if (!q || q.length < 2) {
+    if (desktopResults) { desktopResults.innerHTML = ""; desktopResults.style.display = "none"; }
+    if (mobileResults) { mobileResults.innerHTML = ""; mobileResults.style.display = "none"; }
+    return;
+  }
+
+  globalSearchTimer = setTimeout(async function() {
+    if (resultsEl) { resultsEl.innerHTML = '<div class="search-no-result">Searching...</div>'; resultsEl.style.display = "block"; }
+
+    var allProducts = await loadAllProducts();
+    var matches = allProducts.filter(function(p) {
+      return p.name.toLowerCase().includes(q) ||
+        (p.tag && p.tag.toLowerCase().includes(q)) ||
+        (p.subtag && p.subtag.toLowerCase().includes(q)) ||
+        (p._cat && p._cat.toLowerCase().includes(q));
+    }).slice(0, 8);
+
+    if (matches.length === 0) {
+      if (resultsEl) { resultsEl.innerHTML = '<div class="search-no-result">No products found for "' + query + '"</div>'; resultsEl.style.display = "block"; }
+      return;
+    }
+
+    var html = matches.map(function(p) {
+      var catMeta = CATEGORY_META[p._cat];
+      var catLabel = catMeta ? catMeta.title.replace(/^[^\w]*/, "").trim() : p._cat;
+      var img = (p.image && p.image.trim()) ? '<img src="' + p.image + '" alt="">' : '<span style="font-size:1.5rem;">📦</span>';
+      return '<a class="search-result-item" href="/p/' + p._cat + '/' + p.id + '">' +
+        '<div class="search-result-img">' + img + '</div>' +
+        '<div class="search-result-info">' +
+          '<div class="search-result-name">' + p.name + '</div>' +
+          '<div class="search-result-meta">$' + p.price.toFixed(2) + ' · ' + catLabel + (p.tag ? ' › ' + p.tag : '') + '</div>' +
+        '</div>' +
+      '</a>';
+    }).join("");
+
+    if (resultsEl) { resultsEl.innerHTML = html; resultsEl.style.display = "block"; }
+  }, 300);
+}
+
+document.addEventListener("click", function(e) {
+  if (!e.target.closest(".global-search")) {
+    document.querySelectorAll(".search-results").forEach(function(el) { el.style.display = "none"; });
+  }
+});
