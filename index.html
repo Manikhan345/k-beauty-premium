@@ -40,17 +40,24 @@
 
 <div id="siteFooter"></div>
 
-<script src="shared.js"></script>
+<script src="/shared.js"></script>
 <script>
 renderHeader();
-renderNav("home", "filterHomepage");
-renderFooter();
 
 var HOMEPAGE_LIMIT = 5;
 async function buildHomepage() {
   await loadConfig();
-  renderNav("home", "filterHomepage");
+  renderNav("home");
   renderFooter();
+
+  // Check for search query
+  var urlParams = new URLSearchParams(window.location.search);
+  var searchQuery = urlParams.get("search");
+  if (searchQuery && searchQuery.trim().length >= 2) {
+    showSearchResults(searchQuery.trim());
+    return;
+  }
+
   var main = document.getElementById("mainContent");
   var categories = Object.keys(CATEGORY_META);
   for (var i = 0; i < categories.length; i++) {
@@ -73,10 +80,38 @@ async function buildHomepage() {
     else { container.innerHTML = '<p style="color:var(--text-light);padding:20px;">No products found.</p>'; }
   }
 }
-function filterHomepage() {
-  var q = document.getElementById("searchInput").value.toLowerCase().trim();
-  document.querySelectorAll(".product-card").forEach(function(c) { c.style.display = (!q || c.querySelector(".product-name").textContent.toLowerCase().includes(q)) ? "" : "none"; });
-  document.querySelectorAll(".category-section").forEach(function(s) { var v = s.querySelectorAll('.product-card:not([style*="display: none"])'); s.style.display = (q && v.length === 0) ? "none" : ""; });
+
+async function showSearchResults(query) {
+  var main = document.getElementById("mainContent");
+  main.innerHTML = '<div style="max-width:1200px;margin:0 auto;padding:20px 16px;"><h2 style="font-family:Noto Serif Display,serif;font-size:1.6rem;margin-bottom:6px;">Search Results</h2><p style="color:var(--text-light);margin-bottom:20px;">Showing results for "<strong>' + query + '</strong>"</p><div id="searchResultsGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;"><p style="color:var(--text-light);grid-column:1/-1;">Searching...</p></div></div>';
+
+  // Fill search input
+  var di = document.getElementById("globalSearchInput");
+  var mi = document.getElementById("mobileGlobalSearch");
+  if (di) di.value = query;
+  if (mi) mi.value = query;
+
+  var q = query.toLowerCase();
+  var allResults = [];
+  var keys = Object.keys(CATEGORY_META);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var products = await fetchProducts(CATEGORY_META[key].file);
+    products.forEach(function(p) {
+      if (p.name.toLowerCase().includes(q) || (p.tag && p.tag.toLowerCase().includes(q)) || (p.subtag && p.subtag.toLowerCase().includes(q)) || key.includes(q)) {
+        allResults.push({product: p, cat: key});
+      }
+    });
+  }
+
+  var grid = document.getElementById("searchResultsGrid");
+  if (allResults.length === 0) {
+    grid.innerHTML = '<p style="color:var(--text-light);grid-column:1/-1;text-align:center;padding:40px;">No products found for "' + query + '". Try a different search term.</p>';
+  } else {
+    grid.innerHTML = allResults.map(function(r) { return renderProductCard(r.product, null, r.cat); }).join("");
+    var countEl = main.querySelector("p");
+    if (countEl) countEl.innerHTML = 'Found <strong>' + allResults.length + '</strong> products for "<strong>' + query + '</strong>"';
+  }
 }
 buildHomepage();
 </script>

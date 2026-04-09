@@ -43,7 +43,7 @@ var COPYRIGHT_YEAR = '2026';
 async function loadConfig() {
   if (CONFIG_LOADED) return;
   try {
-    var resp = await fetch("config.json");
+    var resp = await fetch("/config.json");
     if (!resp.ok) throw new Error("Failed to load config.json");
     var config = await resp.json();
     var cats = config.categories || {};
@@ -55,7 +55,7 @@ async function loadConfig() {
     Object.keys(cats).forEach(function(key) {
       var c = cats[key];
       SITE_PAGES[key] = "/" + key;
-      CATEGORY_META[key] = { title: c.title, file: "data/" + key + ".json" };
+      CATEGORY_META[key] = { title: c.title, file: "/data/" + key + ".json" };
       // Tags can be nested object or flat array
       if (c.tags && typeof c.tags === "object" && !Array.isArray(c.tags)) {
         // Nested: { "Face": ["Cleansers", "Moisturizers"], "Eyes": [...] }
@@ -71,7 +71,7 @@ async function loadConfig() {
     console.error("Config load error:", e);
     // Fallback to hardcoded defaults if config.json fails
     SITE_PAGES = { home:"/", skincare:"/skincare", serums:"/serums", facemasks:"/facemasks", sunscreen:"/sunscreen", makeup:"/makeup", lipcare:"/lipcare", haircare:"/haircare" };
-    CATEGORY_META = { skincare:{title:"🧴 Skincare",file:"data/skincare.json"}, serums:{title:"💎 Serums & Essences",file:"data/serums.json"}, facemasks:{title:"🎭 Face Masks",file:"data/facemasks.json"}, sunscreen:{title:"☀️ Sunscreen / SPF",file:"data/sunscreen.json"}, makeup:{title:"💄 Makeup",file:"data/makeup.json"}, lipcare:{title:"👄 Lip Care",file:"data/lipcare.json"}, haircare:{title:"💇 Hair Care",file:"data/haircare.json"} };
+    CATEGORY_META = { skincare:{title:"🧴 Skincare",file:"/data/skincare.json"}, serums:{title:"💎 Serums & Essences",file:"/data/serums.json"}, facemasks:{title:"🎭 Face Masks",file:"/data/facemasks.json"}, sunscreen:{title:"☀️ Sunscreen / SPF",file:"/data/sunscreen.json"}, makeup:{title:"💄 Makeup",file:"/data/makeup.json"}, lipcare:{title:"👄 Lip Care",file:"/data/lipcare.json"}, haircare:{title:"💇 Hair Care",file:"/data/haircare.json"} };
     CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
     CONFIG_LOADED = true;
   }
@@ -112,13 +112,13 @@ function renderNav(activePage, searchFunction) {
   });
 
   // Desktop nav - always include global search
-  var globalSearchHTML = '<div class="search-wrap global-search"><input type="text" placeholder="Search all products..." id="globalSearchInput" onkeyup="globalSearch(this.value)" autocomplete="off"><span class="search-icon">🔍</span><div class="search-results" id="globalSearchResults"></div></div>';
+  var globalSearchHTML = '<div class="search-wrap global-search"><input type="text" placeholder="Search all products..." id="globalSearchInput" onkeyup="handleSearchKey(event, this.value)" autocomplete="off"><span class="search-icon" onclick="submitSearch()" style="cursor:pointer;">🔍</span><div class="search-results" id="globalSearchResults"></div></div>';
   
   // Desktop nav
   var desktopNav = '<nav class="nav"><div class="nav-inner">' + links + globalSearchHTML + '</div></nav>';
 
   // Mobile nav bar
-  var mobileSearchHTML = '<div class="mobile-search global-search"><input type="text" placeholder="Search e.g. Eye Liner" id="mobileGlobalSearch" onkeyup="globalSearch(this.value)" autocomplete="off"><span class="search-icon">🔍</span><div class="search-results" id="mobileSearchResults"></div></div>';
+  var mobileSearchHTML = '<div class="mobile-search global-search"><input type="text" placeholder="Search e.g. Eye Liner" id="mobileGlobalSearch" onkeyup="handleSearchKey(event, this.value)" autocomplete="off"><span class="search-icon" onclick="submitSearch()" style="cursor:pointer;">🔍</span><div class="search-results" id="mobileSearchResults"></div></div>';
   var mobileNav = '<div class="mobile-nav-bar"><button class="mobile-menu-btn" onclick="openDrawer()"><span class="hamburger">☰</span> Menu</button>' + mobileSearchHTML + '</div>';
 
   // Drawer
@@ -417,3 +417,19 @@ document.addEventListener("click", function(e) {
     document.querySelectorAll(".search-results").forEach(function(el) { el.style.display = "none"; });
   }
 });
+
+function handleSearchKey(event, value) {
+  if (event.key === "Enter") {
+    submitSearch();
+  } else {
+    globalSearch(value);
+  }
+}
+
+function submitSearch() {
+  var q = (document.getElementById("globalSearchInput") || document.getElementById("mobileGlobalSearch") || {}).value || "";
+  q = q.trim();
+  if (q.length >= 2) {
+    window.location.href = "/?search=" + encodeURIComponent(q);
+  }
+}
