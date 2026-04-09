@@ -66,11 +66,10 @@
 
 @media (max-width: 768px) {
   .page-layout { grid-template-columns: 1fr; }
-  .left-sidebar { display: none; border: 1px solid var(--border); border-radius: 10px; padding: 16px; background: var(--card); margin-bottom: 12px; }
+  .left-sidebar { display: none; border: 1px solid var(--border); border-radius: 10px; padding: 16px; background: var(--card); margin-bottom: 12px; order: -1; }
   .left-sidebar.open { display: block; }
   .product-grid, .grid-loading { grid-template-columns: repeat(2, 1fr) !important; }
   .category-title h2 { font-size: 1.3rem; }
-  .right-content { order: -1; }
   .mobile-filter-toggle { display: flex !important; }
 }
 @media (max-width: 320px) { .product-grid, .grid-loading { grid-template-columns: 1fr !important; } }
@@ -83,7 +82,7 @@
 <div class="category-title"><h2 id="catTitle">Loading...</h2><span class="result-count" id="resultCount">Loading...</span></div>
 
 <div class="mobile-filter-toggle">
-  <button class="mobile-filter-btn" onclick="toggleMobileFilters()">☰ Filters & Sort</button>
+  <button class="mobile-filter-btn" onclick="toggleMobileFilters()">☰</button>
 </div>
 
 <div id="mainContent">
@@ -142,7 +141,7 @@ function toggleMobileFilters() {
   var sidebar = document.getElementById("leftSidebar");
   sidebar.classList.toggle("open");
   var btn = document.querySelector(".mobile-filter-btn");
-  btn.textContent = sidebar.classList.contains("open") ? "✕ Close Filters" : "☰ Filters & Sort";
+  btn.textContent = sidebar.classList.contains("open") ? "✕" : "☰";
 }
 var CATEGORY_KEY = "";
 var path = window.location.pathname.replace(/^\//, "").replace(/\/$/, "");
