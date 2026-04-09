@@ -17,11 +17,15 @@ async function initCategoryPage() {
   renderSidebarFilters();
   allProducts = await fetchProducts(meta.file);
   
-  // Check for ?tag= parameter (from mobile drawer navigation)
+  // Check for ?tag= and ?subtag= parameters (from mobile drawer navigation)
   var urlParams = new URLSearchParams(window.location.search);
   var preTag = urlParams.get("tag");
+  var preSubtag = urlParams.get("subtag");
   if (preTag) {
     filterByTag(preTag);
+    if (preSubtag) {
+      filterBySubtag(preSubtag);
+    }
   } else {
     renderGrid(allProducts);
     updateCount(allProducts.length);

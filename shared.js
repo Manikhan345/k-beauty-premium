@@ -137,7 +137,17 @@ function renderNav(activePage, searchFunction) {
       drawerLinks += '<div class="drawer-sub-section" id="sub-' + key + '">';
       drawerLinks += '<a class="drawer-sub-link" href="/' + key + '">All ' + label + '</a>';
       Object.keys(tags).forEach(function(tag) {
-        drawerLinks += '<a class="drawer-sub-link" href="/' + key + '#' + tag.replace(/\s+/g, '-') + '" onclick="navigateWithTag(\'' + key + '\',\'' + tag.replace(/'/g, "\\'") + '\')">' + tag + '</a>';
+        var subtags = tags[tag];
+        if (subtags && subtags.length > 0) {
+          drawerLinks += '<a class="drawer-sub-link" onclick="toggleDrawerSub(\'' + key + '-' + tag.replace(/[^a-zA-Z0-9]/g,'_') + '\')" style="cursor:pointer;font-weight:500;color:var(--text);">' + tag + '<span class="drawer-arrow" id="arrow-' + key + '-' + tag.replace(/[^a-zA-Z0-9]/g,'_') + '" style="font-size:0.6rem;">►</span></a>';
+          drawerLinks += '<div class="drawer-sub-section" id="sub-' + key + '-' + tag.replace(/[^a-zA-Z0-9]/g,'_') + '">';
+          subtags.forEach(function(st) {
+            drawerLinks += '<a class="drawer-sub-link" style="padding-left:32px;font-size:0.78rem;" onclick="navigateWithTag(\'' + key + '\',\'' + tag.replace(/'/g, "\\'") + '\',\'' + st.replace(/'/g, "\\'") + '\')">' + st + '</a>';
+          });
+          drawerLinks += '</div>';
+        } else {
+          drawerLinks += '<a class="drawer-sub-link" onclick="navigateWithTag(\'' + key + '\',\'' + tag.replace(/'/g, "\\'") + '\')">' + tag + '</a>';
+        }
       });
       drawerLinks += '</div>';
     } else {
@@ -172,9 +182,11 @@ function toggleDrawerSub(key) {
     if (arrow) arrow.classList.toggle("open");
   }
 }
-function navigateWithTag(cat, tag) {
+function navigateWithTag(cat, tag, subtag) {
   closeDrawer();
-  window.location.href = "/" + cat + "?tag=" + encodeURIComponent(tag);
+  var url = "/" + cat + "?tag=" + encodeURIComponent(tag);
+  if (subtag) url += "&subtag=" + encodeURIComponent(subtag);
+  window.location.href = url;
 }
 
 // ═══════════════════════════════════════════════════════════════

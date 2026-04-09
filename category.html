@@ -81,10 +81,6 @@
 <div class="breadcrumb" id="breadcrumb"><a href="/">Home</a> › <span>Loading...</span></div>
 <div class="category-title"><h2 id="catTitle">Loading...</h2><span class="result-count" id="resultCount">Loading...</span></div>
 
-<div class="mobile-filter-toggle">
-  <button class="mobile-filter-btn" onclick="toggleMobileFilters()">☰</button>
-</div>
-
 <div id="mainContent">
   <div class="page-layout">
     <div class="left-sidebar" id="leftSidebar">
@@ -137,12 +133,6 @@
 <script src="/shared.js"></script>
 <script src="/category.js"></script>
 <script>
-function toggleMobileFilters() {
-  var sidebar = document.getElementById("leftSidebar");
-  sidebar.classList.toggle("open");
-  var btn = document.querySelector(".mobile-filter-btn");
-  btn.textContent = sidebar.classList.contains("open") ? "✕" : "☰";
-}
 var CATEGORY_KEY = "";
 var path = window.location.pathname.replace(/^\//, "").replace(/\/$/, "");
 if (path) CATEGORY_KEY = path;
