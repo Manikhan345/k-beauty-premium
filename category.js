@@ -17,20 +17,57 @@ async function initCategoryPage() {
   renderSidebarFilters();
   allProducts = await fetchProducts(meta.file);
   
-  // Check for ?tag= and ?subtag= parameters (from mobile drawer navigation)
   var urlParams = new URLSearchParams(window.location.search);
   var preTag = urlParams.get("tag");
   var preSubtag = urlParams.get("subtag");
   if (preTag) {
     filterByTag(preTag);
-    if (preSubtag) {
-      filterBySubtag(preSubtag);
-    }
+    if (preSubtag) filterBySubtag(preSubtag);
   } else {
-    renderGrid(allProducts);
-    updateCount(allProducts.length);
+    renderSectionedView();
   }
   updateTopRated(allProducts);
+}
+
+function renderSectionedView() {
+  var grid = document.getElementById("productGrid");
+  var tags = CATEGORY_TAGS[CATEGORY_KEY];
+  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
+  
+  if (!isNested || !tags || Object.keys(tags).length === 0) {
+    // Fallback: just show all products in grid
+    renderGrid(allProducts);
+    updateCount(allProducts.length);
+    return;
+  }
+  
+  // Remove grid styles, build sections
+  grid.style.display = "block";
+  grid.style.gridTemplateColumns = "none";
+  
+  var html = "";
+  var totalShown = 0;
+  Object.keys(tags).forEach(function(tag) {
+    var tagProducts = allProducts.filter(function(p) { return p.tag === tag; });
+    if (tagProducts.length === 0) return;
+    
+    // Shuffle and take first 8 for variety
+    var shuffled = tagProducts.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 8);
+    totalShown += tagProducts.length;
+    
+    html += '<div class="category-section-block" style="margin-bottom:32px;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;border-bottom:2px solid var(--border);padding-bottom:8px;">';
+    html += '<h3 style="font-family:Noto Serif Display,serif;font-size:1.3rem;font-weight:700;color:var(--text);">' + tag + '</h3>';
+    html += '<a onclick="filterByTag(\'' + tag.replace(/'/g, "\\'") + '\')" style="color:var(--accent);font-size:0.82rem;font-weight:600;cursor:pointer;text-decoration:none;">View all ' + tagProducts.length + ' →</a>';
+    html += '</div>';
+    html += '<div class="section-product-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;">';
+    html += shuffled.map(function(p) { return renderProductCard(p, null, CATEGORY_KEY); }).join("");
+    html += '</div>';
+    html += '</div>';
+  });
+  
+  grid.innerHTML = html;
+  updateCount(totalShown);
 }
 
 // ── SIDEBAR FILTER RENDERING ──
@@ -102,7 +139,12 @@ function filterByTag(tag) {
     breadcrumb.innerHTML = bc;
   }
 
-  var filtered = tag ? allProducts.filter(function(p) { return p.tag === tag; }) : allProducts;
+  // If no tag selected, show sectioned view (all products grouped by tag)
+  if (!tag) {
+    renderSectionedView();
+    return;
+  }
+  var filtered = allProducts.filter(function(p) { return p.tag === tag; });
   renderGrid(filtered);
   updateCount(filtered.length);
 }
@@ -138,6 +180,9 @@ function filterBySubtag(subtag) {
 
 function renderGrid(products) {
   var grid = document.getElementById("productGrid");
+  // Reset grid display in case we were in sectioned view
+  grid.style.display = "";
+  grid.style.gridTemplateColumns = "";
   if (products.length === 0) { grid.innerHTML = '<p style="color:var(--text-light);padding:40px;text-align:center;grid-column:1/-1;">No products found for this filter.</p>'; return; }
   grid.innerHTML = products.map(function(p) { return renderProductCard(p, null, CATEGORY_KEY); }).join("");
 }
