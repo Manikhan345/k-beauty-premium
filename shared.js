@@ -33,8 +33,8 @@ var BADGE_MAP = {
 var SITE_NAME_HTML = 'K <span>Beauty</span> Premium';
 var SITE_SUBTITLE = 'Korean Skincare & Beauty Products';
 var CONTACT_EMAIL = 'hello@kbeauty.fun';
-var CONTACT_PHONE = '+1 (555) 123-4567';
-var CONTACT_PHONE_TEL = '+15551234567';
+var CONTACT_PHONE = '+92 (345) 970-4441';
+var CONTACT_PHONE_TEL = '+923459704441';
 var COPYRIGHT_YEAR = '2026';
 
 // ═══════════════════════════════════════════════════════════════
