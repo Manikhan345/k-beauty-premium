@@ -370,7 +370,25 @@ function showMainUI(){document.getElementById("authScreen").style.display="none"
 // PRODUCT MANAGER
 // ═══════════════════════════════════════════════════════════════
 async function loadAllData(){for(var key of Object.keys(CATEGORIES))await loadCategory(key);buildCatTabs();buildTagTabs();buildSubtagTabs();renderList();showToast("All products loaded","success");setTimeout(loadRedirects,1000);}
-async function loadCategory(key){try{var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json?ref="+GITHUB_BRANCH,{headers:{"Authorization":"token "+token}});if(!resp.ok){data[key]=[];fileSHAs[key]=null;return;}var file=await resp.json();fileSHAs[key]=file.sha;if(file.content){data[key]=JSON.parse(atob(file.content.replace(/\n/g,"")));}else if(file.git_url){var blobResp=await fetch(file.git_url,{headers:{"Authorization":"token "+token}});if(blobResp.ok){var blob=await blobResp.json();data[key]=JSON.parse(atob(blob.content.replace(/\n/g,"")));}else{data[key]=[];}}else{data[key]=[];}}catch(e){console.error("Load "+key+" error:",e);data[key]=[];fileSHAs[key]=null;}}
+async function loadCategory(key){data[key]=[];fileSHAs[key]=null;try{
+  // Step 1: Get the file SHA via Git Trees API (works for any file size)
+  var treeResp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data?ref="+GITHUB_BRANCH,{headers:{"Authorization":"token "+token}});
+  if(!treeResp.ok){console.error("Load "+key+" tree error:",treeResp.status);return;}
+  var files=await treeResp.json();
+  var fileEntry=files.find(function(f){return f.name===key+".json";});
+  if(!fileEntry){console.warn(key+".json not found");return;}
+  fileSHAs[key]=fileEntry.sha;
+  // Step 2: Fetch file via raw download URL (handles large files, public repos)
+  try{
+    var rawResp=await fetch(fileEntry.download_url,{cache:"no-cache"});
+    if(rawResp.ok){var jsonData=await rawResp.json();data[key]=jsonData;return;}
+  }catch(e){console.warn("Raw fetch failed, trying blob:",e);}
+  // Step 3: Fallback to Blob API
+  try{
+    var blobResp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/git/blobs/"+fileEntry.sha,{headers:{"Authorization":"token "+token,"Accept":"application/vnd.github.v3+json"}});
+    if(blobResp.ok){var blob=await blobResp.json();if(blob.content){data[key]=JSON.parse(atob(blob.content.replace(/\n/g,"")));}}
+  }catch(e){console.error("Blob fetch failed:",e);}
+}catch(e){console.error("Load "+key+" error:",e);}}
 async function pushToGitHub(){if(dirtyCategories.size===0){showToast("No changes to push");return;}var btn=document.getElementById("btnPush");btn.disabled=true;btn.textContent="Pushing...";var success=0,failed=0;for(var key of dirtyCategories){try{var jsonStr=JSON.stringify(data[key],null,2);var encoded=btoa(unescape(encodeURIComponent(jsonStr)));var body={message:"Update "+key+" via admin",content:encoded,branch:GITHUB_BRANCH};if(fileSHAs[key])body.sha=fileSHAs[key];var resp=await fetch("https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/contents/data/"+key+".json",{method:"PUT",headers:{"Authorization":"token "+token,"Content-Type":"application/json"},body:JSON.stringify(body)});if(!resp.ok){var errData=await resp.json();console.error("Push "+key+" failed:",errData);failed++;continue;}var result=await resp.json();fileSHAs[key]=result.content.sha;success++;}catch(e){console.error("Push "+key+" error:",e);failed++;}}btn.disabled=false;btn.textContent="Push to Live Site";if(failed===0){dirtyCategories.clear();hasUnsavedChanges=false;addedSinceLastPush=0;updateSaveStatus();showToast(success+" pushed!","success");}else{showToast(success+" pushed, "+failed+" failed","error");}}
 function markDirty(cat){dirtyCategories.add(cat);hasUnsavedChanges=true;updateSaveStatus();}
 function updateSaveStatus(){var el=document.getElementById("saveStatus");if(hasUnsavedChanges){el.className="unsaved";el.textContent="⚠ Unsaved: "+[...dirtyCategories].join(", ");}else{el.className="saved";el.textContent="✓ All saved & live";}}
