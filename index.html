@@ -14,10 +14,16 @@
 .category-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.4rem; font-weight: 600; }
 .category-header a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: color 0.2s; }
 .category-header a:hover { color: var(--accent-dark); }
-.product-scroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.product-scroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; scroll-behavior: smooth; }
 .product-scroll::-webkit-scrollbar { height: 4px; }
 .product-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 .product-scroll .product-card { min-width: 220px; max-width: 220px; scroll-snap-align: start; }
+.scroll-wrapper { position: relative; }
+.scroll-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.95); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; font-size: 1.5rem; color: var(--accent); z-index: 5; display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0; transition: all 0.2s; font-family: serif; font-weight: 700; }
+.scroll-arrow:hover { background: var(--accent); color: #fff; }
+.scroll-arrow-left { left: -10px; }
+.scroll-arrow-right { right: -10px; }
+@media (max-width: 768px) { .scroll-arrow { display: none; } }
 .promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
 .promo h2 { font-family: 'Noto Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
 .promo p { font-weight: 300; opacity: 0.9; margin-bottom: 16px; }
@@ -44,7 +50,55 @@
 <script>
 renderHeader();
 
-var HOMEPAGE_LIMIT = 5;
+var HOMEPAGE_LIMIT = 10;
+
+function scrollCarousel(id, direction) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var scrollAmount = el.clientWidth * 0.8;
+  el.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+}
+
+// Parse "40K+ bought" / "1K+ bought" / "300+ bought" into a number
+function parseBought(boughtStr) {
+  if (!boughtStr) return 0;
+  var m = boughtStr.match(/(\d+(?:\.\d+)?)\s*([KkMm])?/);
+  if (!m) return 0;
+  var num = parseFloat(m[1]);
+  var mult = m[2] && (m[2] === 'K' || m[2] === 'k') ? 1000 : (m[2] && (m[2] === 'M' || m[2] === 'm') ? 1000000 : 1);
+  return num * mult;
+}
+
+// Get top-selling products with variety across tags/subtags
+function getTopRandomProducts(products, limit) {
+  // Sort by bought count descending
+  var sorted = products.slice().sort(function(a, b) {
+    return parseBought(b.bought) - parseBought(a.bought);
+  });
+  // Take top 30 best-selling, then shuffle for variety
+  var topPool = sorted.slice(0, Math.min(30, sorted.length));
+  // Shuffle topPool
+  for (var i = topPool.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = topPool[i]; topPool[i] = topPool[j]; topPool[j] = tmp;
+  }
+  // Pick variety: prefer different tags/subtags
+  var picked = [];
+  var usedSubtags = {};
+  for (var k = 0; k < topPool.length && picked.length < limit; k++) {
+    var key = (topPool[k].tag || '') + '|' + (topPool[k].subtag || '');
+    if (!usedSubtags[key]) {
+      picked.push(topPool[k]);
+      usedSubtags[key] = true;
+    }
+  }
+  // If still need more, fill from remaining top products
+  for (var l = 0; l < topPool.length && picked.length < limit; l++) {
+    if (picked.indexOf(topPool[l]) === -1) picked.push(topPool[l]);
+  }
+  return picked;
+}
+
 async function buildHomepage() {
   await loadConfig();
   renderNav("home");
@@ -64,7 +118,7 @@ async function buildHomepage() {
     var key = categories[i], meta = CATEGORY_META[key], pageUrl = SITE_PAGES[key];
     var section = document.createElement("section");
     section.className = "category-section"; section.id = key;
-    section.innerHTML = '<div class="category-header"><h2>' + meta.title + '</h2><a href="' + pageUrl + '">View More →</a></div><div class="product-scroll" id="scroll-' + key + '"><div class="loading-placeholder"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div></div>';
+    section.innerHTML = '<div class="category-header"><h2>' + meta.title + ' <span style="font-size:0.7rem;color:var(--text-light);font-weight:400;">🔥 Best Sellers</span></h2><a href="' + pageUrl + '">View More →</a></div><div class="scroll-wrapper" style="position:relative;"><button class="scroll-arrow scroll-arrow-left" onclick="scrollCarousel(\'scroll-' + key + '\',-1)" aria-label="Previous">‹</button><div class="product-scroll" id="scroll-' + key + '"><div class="loading-placeholder"><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div><div class="loading-card"></div></div></div><button class="scroll-arrow scroll-arrow-right" onclick="scrollCarousel(\'scroll-' + key + '\',1)" aria-label="Next">›</button></div>';
     main.appendChild(section);
     if (i === 2) {
       var promo = document.createElement("div"); promo.className = "promo";
@@ -76,8 +130,10 @@ async function buildHomepage() {
     var k = categories[j], m = CATEGORY_META[k];
     var products = await fetchProducts(m.file);
     var container = document.getElementById("scroll-" + k);
-    if (products.length > 0) { container.innerHTML = products.slice(0, HOMEPAGE_LIMIT).map(function(p) { return renderProductCard(p, null, k); }).join(""); }
-    else { container.innerHTML = '<p style="color:var(--text-light);padding:20px;">No products found.</p>'; }
+    if (products.length > 0) {
+      var topPicks = getTopRandomProducts(products, HOMEPAGE_LIMIT);
+      container.innerHTML = topPicks.map(function(p) { return renderProductCard(p, null, k); }).join("");
+    } else { container.innerHTML = '<p style="color:var(--text-light);padding:20px;">No products found.</p>'; }
   }
 }
 
