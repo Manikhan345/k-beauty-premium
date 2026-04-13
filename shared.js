@@ -3,6 +3,19 @@
    Reads categories from config.json — change once, updates everywhere.
    ═══════════════════════════════════════════════════════════════ */
 
+// ── Google Analytics (gtag.js) ──
+(function() {
+  var GA_ID = "G-0CT2LFECDL";
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag("js", new Date());
+  gtag("config", GA_ID);
+})();
+
 // ── These are populated from config.json ──
 var SITE_PAGES = {};
 var CATEGORY_META = {};
@@ -33,8 +46,8 @@ var BADGE_MAP = {
 var SITE_NAME_HTML = 'K <span>Beauty</span> Premium';
 var SITE_SUBTITLE = 'Korean Skincare & Beauty Products';
 var CONTACT_EMAIL = 'hello@kbeauty.fun';
-var CONTACT_PHONE = '+92 (345) 970-4441';
-var CONTACT_PHONE_TEL = '+923459704441';
+var CONTACT_PHONE = '+1 (555) 123-4567';
+var CONTACT_PHONE_TEL = '+15551234567';
 var COPYRIGHT_YEAR = '2026';
 
 // ═══════════════════════════════════════════════════════════════
