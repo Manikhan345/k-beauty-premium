@@ -3,8 +3,52 @@
    Reads categories from config.json — change once, updates everywhere.
    ═══════════════════════════════════════════════════════════════ */
 
+// ── Internal Traffic Blocker ──
+// Visit https://kbeauty.fun/?internal=1 to enable on this device
+// Visit https://kbeauty.fun/?internal=0 to disable
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get("internal") === "1") {
+    try {
+      localStorage.setItem("kb_internal", "1");
+      document.cookie = "kb_internal=1; max-age=31536000; path=/; SameSite=Lax";
+    } catch(e) {}
+  }
+  if (params.get("internal") === "0") {
+    try {
+      localStorage.removeItem("kb_internal");
+      document.cookie = "kb_internal=; max-age=0; path=/";
+    } catch(e) {}
+  }
+  
+  var isInternal = false;
+  try {
+    if (localStorage.getItem("kb_internal") === "1") isInternal = true;
+    if (document.cookie.indexOf("kb_internal=1") !== -1) isInternal = true;
+  } catch(e) {}
+  
+  window.KB_INTERNAL = isInternal;
+  
+  // Show visual badge when internal
+  if (isInternal) {
+    document.addEventListener("DOMContentLoaded", function() {
+      var badge = document.createElement("div");
+      badge.style.cssText = "position:fixed;bottom:10px;left:10px;background:#10B981;color:#fff;padding:6px 12px;border-radius:20px;font-size:0.7rem;font-family:sans-serif;font-weight:600;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,0.2);cursor:pointer;";
+      badge.textContent = "🛡️ Internal — Tracking OFF";
+      badge.title = "Click to disable internal mode";
+      badge.onclick = function() {
+        if (confirm("Disable internal mode? You'll be tracked normally after this.")) {
+          window.location.href = window.location.pathname + "?internal=0";
+        }
+      };
+      document.body.appendChild(badge);
+    });
+  }
+})();
+
 // ── Google Analytics (gtag.js) ──
 (function() {
+  if (window.KB_INTERNAL) return; // Skip GA for internal traffic
   var GA_ID = "G-0CT2LFECDL";
   var s = document.createElement("script");
   s.async = true;
