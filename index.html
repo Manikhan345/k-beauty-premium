@@ -59,6 +59,30 @@ function scrollCarousel(id, direction) {
   el.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
 }
 
+function startAutoScroll(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var paused = false;
+  var interval;
+  
+  el.addEventListener('mouseenter', function() { paused = true; });
+  el.addEventListener('mouseleave', function() { paused = false; });
+  el.addEventListener('touchstart', function() { paused = true; });
+  el.addEventListener('touchend', function() { setTimeout(function() { paused = false; }, 3000); });
+  
+  interval = setInterval(function() {
+    if (paused || !el.children.length) return;
+    var maxScroll = el.scrollWidth - el.clientWidth;
+    // If at end, scroll back to start smoothly
+    if (el.scrollLeft >= maxScroll - 10) {
+      el.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      // Scroll by one card width
+      el.scrollBy({ left: 240, behavior: 'smooth' });
+    }
+  }, 3500); // every 3.5 seconds
+}
+
 // Parse "40K+ bought" / "1K+ bought" / "300+ bought" into a number
 function parseBought(boughtStr) {
   if (!boughtStr) return 0;
@@ -133,6 +157,7 @@ async function buildHomepage() {
     if (products.length > 0) {
       var topPicks = getTopRandomProducts(products, HOMEPAGE_LIMIT);
       container.innerHTML = topPicks.map(function(p) { return renderProductCard(p, null, k); }).join("");
+      startAutoScroll("scroll-" + k);
     } else { container.innerHTML = '<p style="color:var(--text-light);padding:20px;">No products found.</p>'; }
   }
 }
