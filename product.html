@@ -154,6 +154,9 @@ async function initProductPage() {
   var metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.content = product.name + " - Shop at K Beauty Premium. " + (product.rating ? product.rating + " stars" : "") + " from $" + product.price.toFixed(2);
 
+  // Define catLabel early - used in schema and breadcrumb
+  var catLabel = meta.title.replace(/^[^\w]*/, "").trim();
+
   // Inject Product schema for rich results in Google
   var oldProductSchema = document.getElementById("productDetailSchema");
   if (oldProductSchema) oldProductSchema.remove();
@@ -203,7 +206,6 @@ async function initProductPage() {
   document.head.appendChild(bcSchema);
 
   // Breadcrumb
-  var catLabel = meta.title.replace(/^[^\w]*/, "").trim();
   document.getElementById("breadcrumb").innerHTML =
     '<a href="/">Home</a> › ' +
     '<a href="/' + cat + '">' + catLabel + '</a>' +
