@@ -141,13 +141,99 @@ function renderHeader() {
   var el = document.getElementById("siteHeader");
   if (!el) return;
   el.innerHTML = '<header class="header">' +
-    '<img src="header-banner.jpeg" alt="" class="header-bg">' +
+    '<img src="header-banner.jpeg" alt="Korean skincare and K-beauty products" class="header-bg">' +
     '<div class="header-overlay"></div>' +
     '<div class="header-inner">' +
     '<h1><a href="/">' + SITE_NAME_HTML + '</a></h1>' +
     '<p class="header-sub">' + SITE_SUBTITLE + '</p>' +
     '</div>' +
     '</header>';
+  // Inject SEO meta tags (canonical, OG, Twitter, schema)
+  injectSEO();
+}
+
+function injectSEO() {
+  var path = window.location.pathname;
+  var canonicalURL = "https://kbeauty.fun" + (path === "/" ? "/" : path.replace(/\/$/, ""));
+  var pageTitle = document.title || "K Beauty Premium";
+  var pageDesc = "Discover the best Korean skincare, makeup & hair care on Amazon. Curated K-beauty picks from COSRX, Laneige, Innisfree, Beauty of Joseon and more — updated weekly.";
+  
+  // Get existing description
+  var descEl = document.querySelector('meta[name="description"]');
+  if (descEl && descEl.content) pageDesc = descEl.content;
+  
+  // Helper to add/update meta tag
+  function setMeta(selector, attr, attrVal, content) {
+    var tag = document.querySelector(selector);
+    if (!tag) {
+      tag = document.createElement("meta");
+      tag.setAttribute(attr, attrVal);
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute("content", content);
+  }
+  
+  // Canonical
+  var canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.setAttribute("rel", "canonical");
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute("href", canonicalURL);
+  
+  // Open Graph
+  var ogImage = "https://kbeauty.fun/header-banner.jpeg";
+  setMeta('meta[property="og:type"]', "property", "og:type", "website");
+  setMeta('meta[property="og:url"]', "property", "og:url", canonicalURL);
+  setMeta('meta[property="og:title"]', "property", "og:title", pageTitle);
+  setMeta('meta[property="og:description"]', "property", "og:description", pageDesc);
+  setMeta('meta[property="og:image"]', "property", "og:image", ogImage);
+  setMeta('meta[property="og:site_name"]', "property", "og:site_name", "K Beauty Premium");
+  
+  // Twitter Card
+  setMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
+  setMeta('meta[name="twitter:title"]', "name", "twitter:title", pageTitle);
+  setMeta('meta[name="twitter:description"]', "name", "twitter:description", pageDesc);
+  setMeta('meta[name="twitter:image"]', "name", "twitter:image", ogImage);
+  
+  // JSON-LD Structured Data
+  var oldSchema = document.getElementById("siteSchema");
+  if (oldSchema) oldSchema.remove();
+  var schemaScript = document.createElement("script");
+  schemaScript.type = "application/ld+json";
+  schemaScript.id = "siteSchema";
+  var schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "K Beauty Premium",
+    "url": "https://kbeauty.fun/",
+    "description": pageDesc,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://kbeauty.fun/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+  schemaScript.textContent = JSON.stringify(schema);
+  document.head.appendChild(schemaScript);
+  
+  // Organization schema
+  var orgSchema = document.createElement("script");
+  orgSchema.type = "application/ld+json";
+  orgSchema.id = "orgSchema";
+  var oldOrg = document.getElementById("orgSchema");
+  if (oldOrg) oldOrg.remove();
+  orgSchema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "K Beauty Premium",
+    "url": "https://kbeauty.fun/",
+    "logo": ogImage,
+    "description": "Curated Korean beauty and skincare products from top K-beauty brands.",
+    "email": "hello@kbeauty.fun"
+  });
+  document.head.appendChild(orgSchema);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -261,12 +347,16 @@ function renderFooter() {
 
   el.innerHTML = '<footer class="footer"><div class="footer-grid">' +
     '<div>' +
-    '<h3>Subscribe for Updates</h3>' +
-    '<p>Get the latest K-beauty product launches, deals, and skincare tips.</p>' +
+    '<h3>Get the K-Beauty Insider</h3>' +
+    '<p>Subscribe for exclusive product drops, routine guides, and the best K-beauty deals on Amazon. Delivered weekly.</p>' +
     '<div class="email-form"><input type="email" id="footerSubEmail" placeholder="Enter your email"><button id="footerSubBtn">Subscribe</button></div>' +
     '<div id="footerSubStatus" style="font-size:0.75rem;margin-top:6px;color:rgba(255,255,255,0.6);"></div>' +
     '<p style="margin-top:18px;font-size:1rem;"><a href="mailto:' + CONTACT_EMAIL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📧 ' + CONTACT_EMAIL + '</a></p>' +
-    '<p style="font-size:1rem;"><a href="tel:' + CONTACT_PHONE_TEL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📞 ' + CONTACT_PHONE + '</a></p>' +
+    '<div style="margin-top:14px;display:flex;gap:12px;">' +
+      '<a href="https://www.tiktok.com/@kbeautypremium" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:1.4rem;" aria-label="TikTok">🎵</a>' +
+      '<a href="https://www.instagram.com/kbeautypremium" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:1.4rem;" aria-label="Instagram">📷</a>' +
+      '<a href="https://www.pinterest.com/kbeautypremium" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:1.4rem;" aria-label="Pinterest">📌</a>' +
+    '</div>' +
     '</div>' +
     '<div class="footer-links"><h3>Categories</h3>' + catLinks + '</div>' +
     '<div class="footer-links"><h3>More Pages</h3>' +
@@ -319,7 +409,28 @@ function renderProductCard(product, btnText, categoryKey) {
   var tagAttr = product.tag ? ' data-tag="' + product.tag + '"' : '';
   var productLink = (product.id && categoryKey) ? '/p/' + categoryKey + '/' + product.id : '';
 
+  var schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.image || "",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": r || 4.5,
+      "reviewCount": parseInt((product.reviews || "0").replace(/,/g, "")) || 1
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": product.url || "#"
+    }
+  };
+  var schemaHTML = '<script type="application/ld+json">' + JSON.stringify(schemaData).replace(/</g, "\\u003c") + '</' + 'script>';
+
   return '<div class="product-card" data-price="' + product.price + '" data-rating="' + product.rating + '" data-name="' + product.name.toLowerCase() + '"' + tagAttr + (productLink ? ' data-href="' + productLink + '" onclick="if(!event.target.classList.contains(\'buy-btn\'))window.location.href=this.dataset.href"' : '') + '>' +
+    schemaHTML +
     badgeHTML +
     '<div class="product-img">' + imgHTML + '</div>' +
     '<div class="product-name">' + product.name + '</div>' +
