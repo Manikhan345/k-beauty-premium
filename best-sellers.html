@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best Sellers — K Beauty Premium</title>
+<meta name="description" content="The most popular Korean beauty products on Amazon this month. Top-selling K-beauty picks across skincare, makeup, hair care, and more.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css">
+<style>
+.bestseller-hero { max-width: 1200px; margin: 24px auto 12px; padding: 0 16px; text-align: center; }
+.bestseller-hero h1 { font-family: 'Noto Serif Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.bestseller-hero p { color: var(--text-mid); font-size: 0.95rem; max-width: 600px; margin: 0 auto; }
+.bestseller-content { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+.bs-category-block { margin-bottom: 40px; }
+.bs-category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-light); }
+.bs-category-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--text); }
+.bs-category-header a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+.bs-category-header a:hover { text-decoration: underline; }
+.bs-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.rank-badge { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; z-index: 2; box-shadow: 0 2px 6px rgba(196,149,106,0.3); }
+.rank-badge.top3 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #3D2B1F; }
+.bs-loading { color: var(--text-light); text-align: center; padding: 40px; grid-column: 1/-1; }
+@media (max-width: 1024px) { .bs-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 900px) { .bs-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+@media (max-width: 320px) { .bs-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div id="siteHeader"></div>
+<div id="siteNav"></div>
+
+<div class="bestseller-hero">
+  <h1>🏆 Best Sellers</h1>
+  <p>The most popular K-Beauty products on Amazon this month, ranked by real purchase data.</p>
+</div>
+
+<div class="bestseller-content" id="bestsellerContent">
+  <p class="bs-loading">Loading best sellers...</p>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="/shared.js"></script>
+<script>
+function parseBoughtCount(boughtStr) {
+  if (!boughtStr) return 0;
+  var m = boughtStr.match(/(\d+(?:\.\d+)?)\s*([KkMm])?/);
+  if (!m) return 0;
+  var num = parseFloat(m[1]);
+  var mult = m[2] && (m[2] === 'K' || m[2] === 'k') ? 1000 : (m[2] && (m[2] === 'M' || m[2] === 'm') ? 1000000 : 1);
+  return num * mult;
+}
+
+async function buildBestSellers() {
+  await loadConfig();
+  renderHeader();
+  renderNav("bestsellers");
+  renderFooter();
+  
+  var content = document.getElementById("bestsellerContent");
+  content.innerHTML = "";
+  
+  var categories = Object.keys(CATEGORY_META);
+  
+  for (var i = 0; i < categories.length; i++) {
+    var key = categories[i];
+    var meta = CATEGORY_META[key];
+    var label = meta.title.replace(/^[^\w]*/, "").trim();
+    
+    // Create category block
+    var block = document.createElement("div");
+    block.className = "bs-category-block";
+    block.innerHTML = '<div class="bs-category-header"><h2>' + meta.title + '</h2><a href="/' + key + '">View all →</a></div><div class="bs-grid" id="bs-grid-' + key + '"><p class="bs-loading">Loading...</p></div>';
+    content.appendChild(block);
+    
+    // Load products for this category
+    try {
+      var products = await fetchProducts(meta.file);
+      
+      // Sort by bought count descending
+      var sorted = products.slice().sort(function(a, b) {
+        return parseBoughtCount(b.bought) - parseBoughtCount(a.bought);
+      });
+      
+      // Take top 10 that actually have bought data
+      var topSellers = sorted.filter(function(p) { return parseBoughtCount(p.bought) > 0; }).slice(0, 10);
+      
+      // Fallback: if fewer than 10 have bought data, fill with highest rated
+      if (topSellers.length < 10) {
+        var remaining = sorted.filter(function(p) { return parseBoughtCount(p.bought) === 0; })
+          .sort(function(a, b) { return (b.rating || 0) - (a.rating || 0); })
+          .slice(0, 10 - topSellers.length);
+        topSellers = topSellers.concat(remaining);
+      }
+      
+      var grid = document.getElementById("bs-grid-" + key);
+      if (topSellers.length === 0) {
+        grid.innerHTML = '<p class="bs-loading">No products yet in this category.</p>';
+        continue;
+      }
+      
+      grid.innerHTML = topSellers.map(function(p, idx) {
+        var rank = idx + 1;
+        var rankClass = rank <= 3 ? 'rank-badge top3' : 'rank-badge';
+        var card = renderProductCard(p, null, key);
+        // Inject rank badge — wrap card with position relative and prepend badge
+        return '<div style="position:relative;"><div class="' + rankClass + '">#' + rank + '</div>' + card + '</div>';
+      }).join("");
+    } catch(e) {
+      console.error("Error loading " + key + ":", e);
+      document.getElementById("bs-grid-" + key).innerHTML = '<p class="bs-loading">Could not load products.</p>';
+    }
+  }
+}
+
+buildBestSellers();
+</script>
+</body>
+</html>
