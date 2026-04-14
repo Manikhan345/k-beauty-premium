@@ -389,7 +389,14 @@ async function loadCategory(key){data[key]=[];fileSHAs[key]=null;try{
     if(blobResp.ok){var blob=await blobResp.json();if(blob.content){data[key]=JSON.parse(atob(blob.content.replace(/\n/g,"")));}}
   }catch(e){console.error("Blob fetch failed:",e);}
 }catch(e){console.error("Load "+key+" error:",e);}}
-function cleanProductText(str){if(!str)return "";var s=str;for(var i=0;i<3;i++){try{if(/Ã|â€|Â/.test(s))s=decodeURIComponent(escape(s));else break;}catch(e){break;}}return s.replace(/[\u2018\u2019\u201A\u201B]/g,"'").replace(/[\u201C\u201D\u201E\u201F]/g,'"').replace(/[\u2013\u2014\u2015]/g,'-').replace(/\u2026/g,'...').replace(/[\u00A0\u2000-\u200F\u2028-\u202F]/g,' ').replace(/â€™/g,"'").replace(/â€œ/g,'"').replace(/â€\u009d/g,'"').replace(/â€"/g,'-').replace(/Ã¢â‚¬â„¢/g,"'").replace(/Ã¢â‚¬Å"/g,'"').replace(/Ã¢â‚¬Â/g,'"').replace(/Ã¢â‚¬â€œ/g,'-').replace(/ÃÂÃÂ®/g,'®').replace(/ÃÂÃÂ©/g,'©').replace(/ÃÂÃÂ™/g,'™').replace(/ÃÂ®/g,'®').replace(/ÃÂ©/g,'©').replace(/ÃÂ™/g,'™').replace(/Ã‚Â®/g,'®').replace(/Ã‚Â©/g,'©').replace(/Ã‚Â/g,'').replace(/Â®/g,'®').replace(/Â©/g,'©').replace(/Â/g,'').replace(/[\u0000-\u001F\u007F-\u009F]/g,'').replace(/\s+/g,' ').trim();}
+function cleanProductText(str){if(!str)return "";var s=str;for(var i=0;i<5;i++){try{if(/Ã|â€|Â/.test(s)){var decoded=decodeURIComponent(escape(s));if(decoded===s)break;s=decoded;}else break;}catch(e){break;}}
+  s=s.replace(/[\u2018\u2019\u201A\u201B]/g,"'").replace(/[\u201C\u201D\u201E\u201F]/g,'"').replace(/[\u2013\u2014\u2015]/g,'-').replace(/\u2026/g,'...').replace(/[\u00A0\u2000-\u200F\u2028-\u202F]/g,' ').replace(/â€™/g,"'").replace(/â€œ/g,'"').replace(/â€\u009d/g,'"').replace(/â€"/g,'-').replace(/Ã¢â‚¬â„¢/g,"'").replace(/Ã¢â‚¬Å"/g,'"').replace(/Ã¢â‚¬Â/g,'"').replace(/Ã¢â‚¬â€œ/g,'-').replace(/ÃÂÃÂ®/g,'®').replace(/ÃÂÃÂ©/g,'©').replace(/ÃÂÃÂ™/g,'™').replace(/ÃÂ®/g,'®').replace(/ÃÂ©/g,'©').replace(/ÃÂ™/g,'™').replace(/Ã‚Â®/g,'®').replace(/Ã‚Â©/g,'©').replace(/Ã‚Â/g,'').replace(/Â®/g,'®').replace(/Â©/g,'©').replace(/Â/g,'');
+  // AGGRESSIVE: strip any remaining sequence of 2+ stray accent/garbage chars (mojibake leftovers like "Ã¢ÃÃ")
+  s=s.replace(/[ÃÂâ€¢‚„'"]{2,}/g,'-');
+  // Also strip lone Ã, Â that aren't part of a real word character
+  s=s.replace(/(?<![a-zA-Z])[ÃÂ](?![a-zA-Z])/g,'');
+  s=s.replace(/[\u0000-\u001F\u007F-\u009F]/g,'').replace(/\s+/g,' ').replace(/\s*-\s*-+\s*/g,' - ').trim();
+  return s;}
 
 function cleanAllNames(){if(!confirm("Clean garbled characters in all product names across all categories?"))return;var total=0;var changed=0;Object.keys(data).forEach(function(cat){if(!data[cat])return;data[cat].forEach(function(p){if(!p.name)return;total++;var cleaned=cleanProductText(p.name);if(cleaned!==p.name){p.name=cleaned;changed++;markDirty(cat);}});});if(changed>0){renderList();buildCatTabs();showToast("Cleaned "+changed+" of "+total+" product names. Click Push to save.","success");}else{showToast("All "+total+" names are already clean","success");}}
 
