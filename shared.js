@@ -90,8 +90,8 @@ var BADGE_MAP = {
 var SITE_NAME_HTML = 'K <span>Beauty</span> Premium';
 var SITE_SUBTITLE = 'Korean Skincare & Beauty Products';
 var CONTACT_EMAIL = 'hello@kbeauty.fun';
-var CONTACT_PHONE = '+1 (555) 123-4567';
-var CONTACT_PHONE_TEL = '+15551234567';
+var CONTACT_PHONE = '+92 (345) 970-4441';
+var CONTACT_PHONE_TEL = '+923459704441';
 var COPYRIGHT_YEAR = '2026';
 
 // ═══════════════════════════════════════════════════════════════
@@ -352,6 +352,7 @@ function renderFooter() {
     '<div class="email-form"><input type="email" id="footerSubEmail" placeholder="Enter your email"><button id="footerSubBtn">Subscribe</button></div>' +
     '<div id="footerSubStatus" style="font-size:0.75rem;margin-top:6px;color:rgba(255,255,255,0.6);"></div>' +
     '<p style="margin-top:18px;font-size:1rem;"><a href="mailto:' + CONTACT_EMAIL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📧 ' + CONTACT_EMAIL + '</a></p>' +
+    '<p style="font-size:1rem;"><a href="tel:' + CONTACT_PHONE_TEL + '" style="color:rgba(255,255,255,0.6);text-decoration:none;">📞 ' + CONTACT_PHONE + '</a></p>' +
     '<div style="margin-top:14px;display:flex;gap:12px;">' +
       '<a href="https://www.tiktok.com/@kbeautypremium" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:1.4rem;" aria-label="TikTok">🎵</a>' +
       '<a href="https://www.instagram.com/kbeautypremium" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:1.4rem;" aria-label="Instagram">📷</a>' +
