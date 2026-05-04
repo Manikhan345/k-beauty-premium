@@ -69,6 +69,10 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .btn-green:disabled { background: #ccc; cursor: not-allowed; }
 .btn-blue { padding: 8px 16px; background: var(--blue); color: #fff; border: none; border-radius: 6px; font-size: 0.82rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
 
+/* BLOG TOOLBAR */
+.blog-toolbar-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: var(--text-mid); transition: all 0.15s; }
+.blog-toolbar-btn:hover { background: var(--rose-light); color: var(--rose); border-color: var(--rose); }
+
 /* PRODUCT MANAGER LAYOUT */
 .pm-layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
 .pm-left { position: sticky; top: 80px; align-self: start; }
@@ -268,49 +272,59 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 <!-- ═══════════ TAB 3: REDIRECT MANAGER ═══════════ -->
 <!-- BLOG MANAGER TAB -->
 <div class="tab-panel" id="tab-blog">
-  <div class="form-section">
+  <div class="panel">
     <h2 id="blogFormTitle">📝 New Blog Post</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div><label class="label">POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin" class="input-field"></div>
-      <div><label class="label">SLUG (URL)</label><input type="text" id="blogSlug" placeholder="auto-generated from title" class="input-field"></div>
+    <div class="form-row-half">
+      <div class="form-row"><label>POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin"></div>
+      <div class="form-row"><label>SLUG (URL)</label><input type="text" id="blogSlug" placeholder="auto-generated from title"><small>Will appear as /blog/your-slug</small></div>
     </div>
-    <div style="margin-bottom:12px;"><label class="label">EXCERPT (preview text)</label><input type="text" id="blogExcerpt" placeholder="Short description for listing page..." class="input-field"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div><label class="label">COVER IMAGE URL</label><input type="text" id="blogCover" placeholder="https://..." class="input-field"></div>
-      <div><label class="label">TAGS (comma separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide" class="input-field"></div>
+    <div class="form-row"><label>EXCERPT (preview text for listing)</label><input type="text" id="blogExcerpt" placeholder="Short 1-2 sentence summary that appears on the blog listing page..."></div>
+    <div class="form-row-half">
+      <div class="form-row"><label>COVER IMAGE URL</label><input type="text" id="blogCover" placeholder="https://images.unsplash.com/..."><small>Tip: Use Unsplash, Pexels, or Canva for free images</small></div>
+      <div class="form-row"><label>TAGS (comma separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide"></div>
     </div>
-    <div style="margin-bottom:8px;">
-      <label class="label">CONTENT (Markdown supported)</label>
-      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;">
-        <button onclick="blogInsert('**','**')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-weight:700;font-family:Outfit,sans-serif;font-size:0.78rem;">B</button>
-        <button onclick="blogInsert('*','*')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-style:italic;font-family:Outfit,sans-serif;font-size:0.78rem;">I</button>
-        <button onclick="blogInsert('## ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">H2</button>
-        <button onclick="blogInsert('### ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">H3</button>
-        <button onclick="blogInsert('![alt](',')')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">🖼️ Image</button>
-        <button onclick="blogInsert('[link text](',')')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">🔗 Link</button>
-        <button onclick="blogInsert('- ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">• List</button>
-        <button onclick="blogInsert('> ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">❝ Quote</button>
-        <button onclick="blogInsert('---','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">— Line</button>
+    <div class="form-row" style="margin-top:4px;">
+      <label>COVER PREVIEW</label>
+      <div id="blogCoverPreview" style="width:100%;height:160px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.82rem;overflow:hidden;margin-bottom:12px;">No cover image</div>
+    </div>
+    <div class="form-row">
+      <label>CONTENT (Markdown supported)</label>
+      <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;background:var(--bg);padding:8px 10px;border-radius:8px;border:1px solid var(--border);">
+        <button onclick="blogInsert('**','**')" class="blog-toolbar-btn" title="Bold"><strong>B</strong></button>
+        <button onclick="blogInsert('*','*')" class="blog-toolbar-btn" title="Italic"><em>I</em></button>
+        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
+        <button onclick="blogInsert('## ','')" class="blog-toolbar-btn" title="Heading 2">H2</button>
+        <button onclick="blogInsert('### ','')" class="blog-toolbar-btn" title="Heading 3">H3</button>
+        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
+        <button onclick="blogInsert('![alt](',')')" class="blog-toolbar-btn" title="Insert image">🖼️</button>
+        <button onclick="blogInsert('[link text](',')')" class="blog-toolbar-btn" title="Insert link">🔗</button>
+        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
+        <button onclick="blogInsert('- ','')" class="blog-toolbar-btn" title="Bullet list">•</button>
+        <button onclick="blogInsert('> ','')" class="blog-toolbar-btn" title="Blockquote">❝</button>
+        <button onclick="blogInsert('\n---\n','')" class="blog-toolbar-btn" title="Horizontal line">—</button>
       </div>
-      <textarea id="blogContent" rows="18" placeholder="Write your blog post here using Markdown..." style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:0.88rem;font-family:'Outfit',sans-serif;line-height:1.6;resize:vertical;"></textarea>
+      <textarea id="blogContent" rows="20" placeholder="Write your blog post here using Markdown...&#10;&#10;## Your First Heading&#10;&#10;Start writing your content here. Use **bold** for emphasis and *italic* for styling.&#10;&#10;### Add Images&#10;![description](https://image-url.jpg)&#10;&#10;### Add Links&#10;[Check out this product](https://amazon.com/dp/...)&#10;&#10;> Use blockquotes for tips or callouts"></textarea>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <button class="btn-green" onclick="saveBlogPost()" id="blogSaveBtn">Publish Post</button>
-      <button onclick="previewBlogPost()" style="padding:8px 16px;background:#EBF8FF;color:var(--blue);border:1px solid #BEE3F8;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">👁️ Preview</button>
-      <button onclick="clearBlogForm()" style="padding:8px 16px;background:#f5f5f5;color:#999;border:1px solid #ddd;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">Clear</button>
-      <span id="blogStatus" style="font-size:0.78rem;color:var(--text-mid);margin-left:8px;"></span>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
+      <button class="btn-green" onclick="saveBlogPost()" id="blogSaveBtn" style="padding:12px 28px;">🚀 Publish Post</button>
+      <button class="btn-blue" onclick="previewBlogPost()">👁️ Preview</button>
+      <button onclick="clearBlogForm()" style="padding:8px 16px;background:var(--bg);color:var(--text-mid);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">Clear</button>
+      <span id="blogStatus" style="font-size:0.82rem;color:var(--text-mid);margin-left:auto;"></span>
     </div>
   </div>
 
   <!-- Preview Panel -->
-  <div id="blogPreview" style="display:none;margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:780px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><strong style="color:var(--accent);">Preview</strong><button onclick="document.getElementById('blogPreview').style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#999;">✕</button></div>
+  <div id="blogPreview" class="panel" style="display:none;max-width:780px;margin:0 auto 20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--rose-light);">
+      <h2 style="margin:0;padding:0;border:0;">👁️ Live Preview</h2>
+      <button onclick="document.getElementById('blogPreview').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#999;">✕</button>
+    </div>
     <div id="blogPreviewContent" style="font-size:1rem;line-height:1.8;"></div>
   </div>
 
   <!-- Blog Post List -->
-  <div class="product-list" style="margin-top:16px;">
-    <h2>Published Posts <span class="product-list-count" id="blogListCount"></span></h2>
+  <div class="panel">
+    <h2>Published Posts <span style="font-size:0.82rem;font-weight:400;color:var(--text-mid);" id="blogListCount"></span></h2>
     <div id="blogPostList"></div>
   </div>
 </div>
@@ -814,6 +828,17 @@ document.getElementById("blogTitle").addEventListener("input", function() {
   }
 });
 
+// Cover image preview
+document.getElementById("blogCover").addEventListener("input", function() {
+  var preview = document.getElementById("blogCoverPreview");
+  var url = this.value.trim();
+  if (url) {
+    preview.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.parentElement.innerHTML=\'❌ Invalid image URL\'">';
+  } else {
+    preview.innerHTML = 'No cover image';
+  }
+});
+
 async function loadBlogPosts() {
   try {
     // Try raw URL first (handles large files)
@@ -907,6 +932,10 @@ function editBlogPost(i) {
   document.getElementById("blogContent").value = post.content || "";
   document.getElementById("blogFormTitle").textContent = "✏️ Edit Blog Post";
   document.getElementById("blogSaveBtn").textContent = "Save Changes";
+  // Show cover preview
+  var preview = document.getElementById("blogCoverPreview");
+  if (post.cover) { preview.innerHTML = '<img src="' + post.cover + '" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">'; }
+  else { preview.innerHTML = 'No cover image'; }
   document.getElementById("blogFormTitle").scrollIntoView({ behavior: "smooth" });
 }
 
