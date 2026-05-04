@@ -164,6 +164,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   <div class="tab-nav-inner">
     <button class="tab-btn active" onclick="switchTab('products', this)">📦 Product Manager</button>
     <button class="tab-btn" onclick="switchTab('categories', this)">📂 Category Manager</button>
+    <button class="tab-btn" onclick="switchTab('blog', this)">📝 Blog Manager</button>
     <button class="tab-btn" onclick="switchTab('redirects', this)">🔀 Redirects</button>
   </div>
 </div>
@@ -265,6 +266,55 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 </div>
 
 <!-- ═══════════ TAB 3: REDIRECT MANAGER ═══════════ -->
+<!-- BLOG MANAGER TAB -->
+<div class="tab-panel" id="tab-blog">
+  <div class="form-section">
+    <h2 id="blogFormTitle">📝 New Blog Post</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div><label class="label">POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin" class="input-field"></div>
+      <div><label class="label">SLUG (URL)</label><input type="text" id="blogSlug" placeholder="auto-generated from title" class="input-field"></div>
+    </div>
+    <div style="margin-bottom:12px;"><label class="label">EXCERPT (preview text)</label><input type="text" id="blogExcerpt" placeholder="Short description for listing page..." class="input-field"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div><label class="label">COVER IMAGE URL</label><input type="text" id="blogCover" placeholder="https://..." class="input-field"></div>
+      <div><label class="label">TAGS (comma separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide" class="input-field"></div>
+    </div>
+    <div style="margin-bottom:8px;">
+      <label class="label">CONTENT (Markdown supported)</label>
+      <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;">
+        <button onclick="blogInsert('**','**')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-weight:700;font-family:Outfit,sans-serif;font-size:0.78rem;">B</button>
+        <button onclick="blogInsert('*','*')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-style:italic;font-family:Outfit,sans-serif;font-size:0.78rem;">I</button>
+        <button onclick="blogInsert('## ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">H2</button>
+        <button onclick="blogInsert('### ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">H3</button>
+        <button onclick="blogInsert('![alt](',')')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">🖼️ Image</button>
+        <button onclick="blogInsert('[link text](',')')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">🔗 Link</button>
+        <button onclick="blogInsert('- ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">• List</button>
+        <button onclick="blogInsert('> ','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">❝ Quote</button>
+        <button onclick="blogInsert('---','')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-family:Outfit,sans-serif;font-size:0.78rem;">— Line</button>
+      </div>
+      <textarea id="blogContent" rows="18" placeholder="Write your blog post here using Markdown..." style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:0.88rem;font-family:'Outfit',sans-serif;line-height:1.6;resize:vertical;"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-green" onclick="saveBlogPost()" id="blogSaveBtn">Publish Post</button>
+      <button onclick="previewBlogPost()" style="padding:8px 16px;background:#EBF8FF;color:var(--blue);border:1px solid #BEE3F8;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">👁️ Preview</button>
+      <button onclick="clearBlogForm()" style="padding:8px 16px;background:#f5f5f5;color:#999;border:1px solid #ddd;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">Clear</button>
+      <span id="blogStatus" style="font-size:0.78rem;color:var(--text-mid);margin-left:8px;"></span>
+    </div>
+  </div>
+
+  <!-- Preview Panel -->
+  <div id="blogPreview" style="display:none;margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:780px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><strong style="color:var(--accent);">Preview</strong><button onclick="document.getElementById('blogPreview').style.display='none'" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#999;">✕</button></div>
+    <div id="blogPreviewContent" style="font-size:1rem;line-height:1.8;"></div>
+  </div>
+
+  <!-- Blog Post List -->
+  <div class="product-list" style="margin-top:16px;">
+    <h2>Published Posts <span class="product-list-count" id="blogListCount"></span></h2>
+    <div id="blogPostList"></div>
+  </div>
+</div>
+
 <div class="tab-panel" id="tab-redirects">
   <div class="panel">
     <h2>➕ Add Redirect</h2>
@@ -748,6 +798,211 @@ function updateSubtagDropdown(){var cat=document.getElementById("fCategory").val
 document.getElementById("fCategory").addEventListener("change",function(){updateTagDropdown();updateTagInfo();});
 document.getElementById("fTag").addEventListener("change",function(){updateSubtagDropdown();updateTagInfo();});
 document.getElementById("fSubtag").addEventListener("change",updateTagInfo);
+
+// ═══════════════════════════════════════════════════════════════
+// BLOG MANAGER
+// ═══════════════════════════════════════════════════════════════
+var blogPosts = [];
+var blogSHA = null;
+var editingBlogIndex = -1;
+
+// Auto-generate slug from title
+document.getElementById("blogTitle").addEventListener("input", function() {
+  if (editingBlogIndex === -1) {
+    var slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+    document.getElementById("blogSlug").value = slug;
+  }
+});
+
+async function loadBlogPosts() {
+  try {
+    // Try raw URL first (handles large files)
+    var listResp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
+    if (!listResp.ok) { blogPosts = []; return; }
+    var files = await listResp.json();
+    var blogFile = files.find(function(f) { return f.name === "blog.json"; });
+    if (!blogFile) { blogPosts = []; blogSHA = null; return; }
+    blogSHA = blogFile.sha;
+    var rawResp = await fetch(blogFile.download_url, { cache: "no-cache" });
+    if (rawResp.ok) { blogPosts = await rawResp.json(); }
+    else { blogPosts = []; }
+  } catch(e) { console.error("Load blog error:", e); blogPosts = []; }
+  renderBlogList();
+}
+
+function renderBlogList() {
+  var list = document.getElementById("blogPostList");
+  document.getElementById("blogListCount").textContent = "(" + blogPosts.length + ")";
+  if (!blogPosts.length) { list.innerHTML = '<div class="empty-state"><p>No blog posts yet. Write your first post above!</p></div>'; return; }
+  var sorted = blogPosts.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+  list.innerHTML = sorted.map(function(p, i) {
+    var realIndex = blogPosts.indexOf(p);
+    var dateStr = p.date ? new Date(p.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
+    var tags = (p.tags || []).map(function(t) { return '<span style="font-size:0.65rem;background:#EBF8FF;color:var(--blue);padding:1px 6px;border-radius:3px;margin-right:3px;">' + t + '</span>'; }).join("");
+    var coverThumb = p.cover ? '<img src="' + p.cover + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:1.5rem;">📝</span>';
+    return '<div class="plist-item">' +
+      '<div class="plist-img">' + coverThumb + '</div>' +
+      '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + tags + '<span style="font-size:0.65rem;color:var(--text-light);">' + dateStr + '</span></div></div>' +
+      '<div class="plist-price" style="font-size:0.75rem;color:var(--text-light);">/' + p.slug + '</div>' +
+      '<div class="plist-actions"><button class="btn-edit" onclick="editBlogPost(' + realIndex + ')">Edit</button><button class="btn-del" onclick="deleteBlogPost(' + realIndex + ')">Del</button></div>' +
+    '</div>';
+  }).join("");
+}
+
+function blogInsert(before, after) {
+  var ta = document.getElementById("blogContent");
+  var start = ta.selectionStart;
+  var end = ta.selectionEnd;
+  var selected = ta.value.substring(start, end);
+  ta.value = ta.value.substring(0, start) + before + selected + after + ta.value.substring(end);
+  ta.focus();
+  ta.selectionStart = start + before.length;
+  ta.selectionEnd = start + before.length + selected.length;
+}
+
+function previewBlogPost() {
+  var content = document.getElementById("blogContent").value;
+  var title = document.getElementById("blogTitle").value;
+  var preview = document.getElementById("blogPreview");
+  var previewContent = document.getElementById("blogPreviewContent");
+  // Simple markdown to HTML
+  var html = content;
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:12px 0;">');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:var(--accent);">$1</a>');
+  html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid var(--accent);padding:8px 16px;margin:12px 0;background:var(--accent-light);border-radius:0 6px 6px 0;font-style:italic;">$1</blockquote>');
+  html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/^---+$/gm, '<hr>');
+  html = html.split('\n\n').map(function(b) { b = b.trim(); if (!b || b.startsWith('<')) return b; return '<p>' + b + '</p>'; }).join('\n');
+  previewContent.innerHTML = '<h1 style="font-family:Noto Serif Display,serif;font-size:1.8rem;margin-bottom:16px;">' + (title || 'Untitled') + '</h1>' + html;
+  preview.style.display = "block";
+  preview.scrollIntoView({ behavior: "smooth" });
+}
+
+function clearBlogForm() {
+  document.getElementById("blogTitle").value = "";
+  document.getElementById("blogSlug").value = "";
+  document.getElementById("blogExcerpt").value = "";
+  document.getElementById("blogCover").value = "";
+  document.getElementById("blogTags").value = "";
+  document.getElementById("blogContent").value = "";
+  document.getElementById("blogPreview").style.display = "none";
+  editingBlogIndex = -1;
+  document.getElementById("blogFormTitle").textContent = "📝 New Blog Post";
+  document.getElementById("blogSaveBtn").textContent = "Publish Post";
+}
+
+function editBlogPost(i) {
+  var post = blogPosts[i];
+  if (!post) return;
+  editingBlogIndex = i;
+  document.getElementById("blogTitle").value = post.title || "";
+  document.getElementById("blogSlug").value = post.slug || "";
+  document.getElementById("blogExcerpt").value = post.excerpt || "";
+  document.getElementById("blogCover").value = post.cover || "";
+  document.getElementById("blogTags").value = (post.tags || []).join(", ");
+  document.getElementById("blogContent").value = post.content || "";
+  document.getElementById("blogFormTitle").textContent = "✏️ Edit Blog Post";
+  document.getElementById("blogSaveBtn").textContent = "Save Changes";
+  document.getElementById("blogFormTitle").scrollIntoView({ behavior: "smooth" });
+}
+
+function deleteBlogPost(i) {
+  if (!confirm("Delete this blog post?")) return;
+  blogPosts.splice(i, 1);
+  pushBlogToGitHub("Deleted blog post");
+}
+
+async function saveBlogPost() {
+  var title = document.getElementById("blogTitle").value.trim();
+  var slug = document.getElementById("blogSlug").value.trim();
+  var excerpt = document.getElementById("blogExcerpt").value.trim();
+  var cover = document.getElementById("blogCover").value.trim();
+  var tags = document.getElementById("blogTags").value.split(",").map(function(t) { return t.trim(); }).filter(Boolean);
+  var content = document.getElementById("blogContent").value;
+
+  if (!title || !slug || !content) {
+    document.getElementById("blogStatus").textContent = "Title, slug, and content are required.";
+    return;
+  }
+
+  // Check duplicate slug
+  var existing = blogPosts.findIndex(function(p) { return p.slug === slug; });
+  if (existing !== -1 && existing !== editingBlogIndex) {
+    document.getElementById("blogStatus").textContent = "A post with this slug already exists!";
+    return;
+  }
+
+  var post = {
+    title: title,
+    slug: slug,
+    excerpt: excerpt,
+    cover: cover,
+    tags: tags,
+    content: content,
+    date: editingBlogIndex >= 0 ? (blogPosts[editingBlogIndex].date || new Date().toISOString()) : new Date().toISOString()
+  };
+
+  if (editingBlogIndex >= 0) {
+    blogPosts[editingBlogIndex] = post;
+  } else {
+    blogPosts.unshift(post);
+  }
+
+  await pushBlogToGitHub(editingBlogIndex >= 0 ? "Updated blog: " + title : "New blog: " + title);
+  clearBlogForm();
+}
+
+async function pushBlogToGitHub(message) {
+  var btn = document.getElementById("blogSaveBtn");
+  var status = document.getElementById("blogStatus");
+  btn.disabled = true;
+  btn.textContent = "Pushing...";
+  status.textContent = "Saving to GitHub...";
+
+  try {
+    var jsonStr = JSON.stringify(blogPosts, null, 2);
+    var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+    var body = { message: message || "Update blog", content: encoded, branch: GITHUB_BRANCH };
+    if (blogSHA) body.sha = blogSHA;
+
+    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data/blog.json", {
+      method: "PUT",
+      headers: { "Authorization": "token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) {
+      var err = await resp.json();
+      status.textContent = "Error: " + (err.message || "Failed to save");
+      btn.disabled = false;
+      btn.textContent = "Publish Post";
+      return;
+    }
+
+    var result = await resp.json();
+    blogSHA = result.content.sha;
+    status.textContent = "✅ Published! Live in ~30 seconds.";
+    renderBlogList();
+    showToast("Blog post published!", "success");
+  } catch(e) {
+    status.textContent = "Error: " + e.message;
+  }
+
+  btn.disabled = false;
+  btn.textContent = editingBlogIndex >= 0 ? "Save Changes" : "Publish Post";
+}
+
+// Load blog posts when switching to blog tab
+var origSwitchTab = window.switchTab;
+window.switchTab = function(tab, btn) {
+  origSwitchTab(tab, btn);
+  if (tab === "blog" && token) loadBlogPosts();
+};
+
 checkSavedToken();
 </script>
 </body>

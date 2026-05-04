@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post — K Beauty Premium</title>
+<meta name="description" content="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css">
+<style>
+.post-container { max-width: 780px; margin: 30px auto; padding: 0 16px; }
+.post-breadcrumb { font-size: 0.8rem; color: var(--text-light); margin-bottom: 16px; }
+.post-breadcrumb a { color: var(--accent); text-decoration: none; }
+.post-date { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+.post-title { font-family: 'Noto Serif Display', serif; font-size: 2.2rem; font-weight: 700; margin: 8px 0 16px; line-height: 1.25; }
+.post-tags { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.post-tag { font-size: 0.7rem; background: var(--accent-light); color: var(--accent); padding: 3px 12px; border-radius: 20px; font-weight: 500; }
+.post-cover { width: 100%; border-radius: 12px; margin-bottom: 28px; max-height: 420px; object-fit: cover; }
+.post-content { font-size: 1.05rem; line-height: 1.8; color: var(--text); }
+.post-content h2 { font-family: 'Noto Serif Display', serif; font-size: 1.5rem; margin: 32px 0 12px; color: var(--text); }
+.post-content h3 { font-family: 'Noto Serif Display', serif; font-size: 1.2rem; margin: 24px 0 10px; color: var(--text); }
+.post-content p { margin: 0 0 16px; }
+.post-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+.post-content ul, .post-content ol { margin: 0 0 16px; padding-left: 24px; }
+.post-content li { margin-bottom: 6px; }
+.post-content a { color: var(--accent); text-decoration: underline; }
+.post-content blockquote { border-left: 3px solid var(--accent); padding: 12px 20px; margin: 16px 0; background: var(--accent-light); border-radius: 0 8px 8px 0; font-style: italic; color: var(--text-mid); }
+.post-content strong { font-weight: 600; }
+.post-nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+.post-nav a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.post-loading { text-align: center; padding: 80px 20px; color: var(--text-light); }
+.post-not-found { text-align: center; padding: 80px 20px; }
+.post-not-found h2 { font-family: 'Noto Serif Display', serif; margin-bottom: 12px; }
+@media (max-width: 768px) {
+  .post-title { font-size: 1.6rem; }
+  .post-content { font-size: 0.95rem; }
+}
+</style>
+</head>
+<body>
+<div id="siteHeader"></div>
+<div id="siteNav"></div>
+
+<div class="post-container" id="postContainer">
+  <div class="post-loading">Loading post...</div>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="/shared.js"></script>
+<script>
+// Simple Markdown-to-HTML converter
+function markdownToHTML(md) {
+  var html = md;
+  // Headers
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+  // Bold + italic
+  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Images
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy">');
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  // Blockquote
+  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+  // Unordered list
+  html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+  // Ordered list
+  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+  // Horizontal rule
+  html = html.replace(/^---+$/gm, '<hr>');
+  // Paragraphs (lines that aren't already wrapped in tags)
+  html = html.split('\n\n').map(function(block) {
+    block = block.trim();
+    if (!block) return '';
+    if (block.startsWith('<h') || block.startsWith('<ul') || block.startsWith('<ol') || block.startsWith('<blockquote') || block.startsWith('<hr') || block.startsWith('<img')) return block;
+    if (!block.startsWith('<')) return '<p>' + block.replace(/\n/g, '<br>') + '</p>';
+    return block;
+  }).join('\n');
+  return html;
+}
+
+async function loadBlogPost() {
+  renderHeader();
+  renderNav("blog");
+  renderFooter();
+
+  var container = document.getElementById("postContainer");
+  var slug = window.location.pathname.replace(/^\/blog\//, "").replace(/\/$/, "");
+
+  if (!slug) {
+    container.innerHTML = '<div class="post-not-found"><h2>Post Not Found</h2><p>This post doesn\'t exist.</p><a href="/blog" style="color:var(--accent);">← Back to Blog</a></div>';
+    return;
+  }
+
+  try {
+    var resp = await fetch("/data/blog.json");
+    if (!resp.ok) throw new Error("No blog data");
+    var posts = await resp.json();
+    posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+    
+    var post = posts.find(function(p) { return p.slug === slug; });
+    if (!post) {
+      container.innerHTML = '<div class="post-not-found"><h2>Post Not Found</h2><p>This post doesn\'t exist or has been removed.</p><a href="/blog" style="color:var(--accent);">← Back to Blog</a></div>';
+      return;
+    }
+
+    // Update page meta
+    document.title = post.title + " — K Beauty Premium Blog";
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = post.excerpt || post.title;
+
+    // Blog post schema
+    var postSchema = document.createElement("script");
+    postSchema.type = "application/ld+json";
+    postSchema.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "description": post.excerpt || "",
+      "image": post.cover || "",
+      "datePublished": post.date,
+      "author": { "@type": "Organization", "name": "K Beauty Premium" },
+      "publisher": { "@type": "Organization", "name": "K Beauty Premium" }
+    });
+    document.head.appendChild(postSchema);
+
+    var dateStr = post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "";
+    var tagsHTML = (post.tags || []).map(function(t) { return '<span class="post-tag">' + t + '</span>'; }).join("");
+    var coverHTML = post.cover ? '<img src="' + post.cover + '" alt="' + post.title + '" class="post-cover">' : '';
+    var contentHTML = markdownToHTML(post.content || "");
+
+    // Find prev/next posts
+    var idx = posts.indexOf(post);
+    var prev = idx < posts.length - 1 ? posts[idx + 1] : null;
+    var next = idx > 0 ? posts[idx - 1] : null;
+    var navHTML = '<div class="post-nav">';
+    navHTML += prev ? '<a href="/blog/' + prev.slug + '">← ' + prev.title.substring(0, 40) + '...</a>' : '<span></span>';
+    navHTML += next ? '<a href="/blog/' + next.slug + '">' + next.title.substring(0, 40) + '... →</a>' : '<span></span>';
+    navHTML += '</div>';
+
+    container.innerHTML = 
+      '<div class="post-breadcrumb"><a href="/">Home</a> › <a href="/blog">Blog</a> › <span>' + post.title.substring(0, 50) + '...</span></div>' +
+      '<div class="post-date">' + dateStr + '</div>' +
+      '<h1 class="post-title">' + post.title + '</h1>' +
+      (tagsHTML ? '<div class="post-tags">' + tagsHTML + '</div>' : '') +
+      coverHTML +
+      '<div class="post-content">' + contentHTML + '</div>' +
+      navHTML;
+
+  } catch(e) {
+    container.innerHTML = '<div class="post-not-found"><h2>Error Loading Post</h2><p>Something went wrong.</p><a href="/blog" style="color:var(--accent);">← Back to Blog</a></div>';
+  }
+}
+loadBlogPost();
+</script>
+</body>
+</html>
