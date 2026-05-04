@@ -253,6 +253,8 @@ function renderNav(activePage, searchFunction) {
     var cls = key === activePage ? ' class="active"' : '';
     links += '<a href="/' + key + '"' + cls + '>' + label + '</a>';
   });
+  links += '<a href="/best-sellers"' + (activePage === "bestsellers" ? ' class="active"' : '') + '>🏆 Best Sellers</a>';
+  links += '<a href="/blog"' + (activePage === "blog" ? ' class="active"' : '') + '>📝 Blog</a>';
 
   // Desktop nav - always include global search
   var globalSearchHTML = '<div class="search-wrap global-search"><input type="text" placeholder="Search all products..." id="globalSearchInput" onkeyup="handleSearchKey(event, this.value)" autocomplete="off"><span class="search-icon" onclick="submitSearch()" style="cursor:pointer;">🔍</span><div class="search-results" id="globalSearchResults"></div></div>';
@@ -300,6 +302,10 @@ function renderNav(activePage, searchFunction) {
     '<div class="drawer" id="drawer">' +
       '<div class="drawer-header"><h3>K <span style="color:var(--champagne);">Beauty</span></h3><button class="drawer-close" onclick="closeDrawer()">✕</button></div>' +
       '<div class="drawer-section"><div class="drawer-section-title">Categories</div>' + drawerLinks + '</div>' +
+      '<div class="drawer-section">' +
+        '<a class="drawer-link" href="/best-sellers">🏆 Best Sellers</a>' +
+        '<a class="drawer-link" href="/blog">📝 Blog</a>' +
+      '</div>' +
     '</div>';
 
   el.innerHTML = desktopNav + mobileNav + drawer;
@@ -360,6 +366,8 @@ function renderFooter() {
     '</div>' +
     '<div class="footer-links"><h3>Categories</h3>' + catLinks + '</div>' +
     '<div class="footer-links"><h3>More Pages</h3>' +
+    '<a href="/blog">Blog</a>' +
+    '<a href="/best-sellers">Best Sellers</a>' +
     '<a href="/about">About Us</a>' +
     '<a href="/contact">Contact</a>' +
     '<a href="/privacy">Privacy Policy</a>' +
