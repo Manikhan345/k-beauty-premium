@@ -26,17 +26,24 @@
 .scroll-arrow-right { right: -10px; }
 @media (max-width: 768px) { .scroll-arrow { display: none; } }
 
-/* TIKTOK CARDS */
-.tiktok-card { min-width: 260px; max-width: 260px; scroll-snap-align: start; display: block; }
-.tiktok-thumb { width: 260px; height: 460px; border-radius: 14px; overflow: hidden; position: relative; cursor: pointer; background: #111; }
-.tiktok-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s, filter 0.3s; }
-.tiktok-thumb:hover img { transform: scale(1.05); filter: brightness(0.85); }
-.tiktok-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.2s; }
-.tiktok-thumb:hover .tiktok-play { transform: translate(-50%, -50%) scale(1.15); background: #fff; }
-.tiktok-badge { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; font-family: 'Outfit', sans-serif; letter-spacing: 0.3px; }
-.tiktok-card-caption { font-size: 0.85rem; font-weight: 500; color: var(--text); margin-top: 10px; padding: 0 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
-.tiktok-card-author { font-size: 0.75rem; color: var(--accent); padding: 0 4px; margin-top: 3px; font-weight: 500; }
-@media (max-width: 768px) { .tiktok-card { min-width: 200px; max-width: 200px; } .tiktok-thumb { width: 200px; height: 350px; } .tiktok-play { width: 52px; height: 52px; font-size: 1.3rem; } }
+/* TIKTOK / VIDEO SECTION — YouTube Style */
+.tt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.tt-video-card { }
+.tt-player { width: 100%; aspect-ratio: 9/16; border-radius: 12px; overflow: hidden; position: relative; background: #111; cursor: pointer; }
+.tt-player.tt-playing { cursor: default; }
+.tt-poster { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s, filter 0.3s; }
+.tt-poster-empty { width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e, #16213e); }
+.tt-player:hover .tt-poster { transform: scale(1.03); filter: brightness(0.8); }
+.tt-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 72px; height: 72px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--accent); box-shadow: 0 6px 30px rgba(0,0,0,0.4); transition: all 0.25s; cursor: pointer; padding-left: 4px; }
+.tt-player:hover .tt-play-btn { transform: translate(-50%, -50%) scale(1.12); background: #fff; }
+.tt-player.tt-playing .tt-play-btn { display: none; }
+.tt-duration { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.75); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; font-family: 'Outfit', sans-serif; }
+.tt-player.tt-playing .tt-duration { display: none; }
+.tt-info { padding: 10px 2px 0; }
+.tt-title { font-size: 0.92rem; font-weight: 600; color: var(--text); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tt-author { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
+@media (max-width: 900px) { .tt-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@media (max-width: 480px) { .tt-grid { grid-template-columns: 1fr; gap: 16px; } .tt-play-btn { width: 60px; height: 60px; font-size: 1.5rem; } }
 .promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
 .promo h2 { font-family: 'Noto Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
 .promo p { font-weight: 300; opacity: 0.9; margin-bottom: 16px; }
@@ -61,16 +68,12 @@
 </section>
 
 <!-- TIKTOK CAROUSEL -->
-<section id="tiktokSection" style="display:none;max-width:1200px;margin:20px auto;padding:0 16px;">
+<section id="tiktokSection" style="display:none;max-width:1200px;margin:28px auto;padding:0 16px;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--accent-light);">
-    <h2 style="font-family:'Noto Serif Display',serif;font-size:1.4rem;font-weight:600;">🎵 Watch Our Latest K-Beauty Videos</h2>
-    <a href="https://www.tiktok.com/@kbeautypremium" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">Follow us on TikTok →</a>
+    <h2 style="font-family:'Noto Serif Display',serif;font-size:1.4rem;font-weight:600;">🎬 K-Beauty Videos</h2>
+    <a href="https://www.tiktok.com/@kbeautypremium" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">Follow on TikTok →</a>
   </div>
-  <div style="position:relative;">
-    <button class="scroll-arrow scroll-arrow-left" onclick="scrollCarousel('tiktokScroll',-1)" aria-label="Previous">‹</button>
-    <div id="tiktokScroll" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:8px;scrollbar-width:thin;scroll-behavior:smooth;"></div>
-    <button class="scroll-arrow scroll-arrow-right" onclick="scrollCarousel('tiktokScroll',1)" aria-label="Next">›</button>
-  </div>
+  <div id="tiktokScroll" class="tt-grid"></div>
 </section>
 
 <main class="container" id="mainContent"></main>
@@ -154,7 +157,7 @@ function getTopRandomProducts(products, limit) {
   return picked;
 }
 
-// ── TIKTOK CAROUSEL ──
+// ── TIKTOK VIDEO SECTION ──
 async function loadTikTokCarousel() {
   try {
     var resp = await fetch("/data/tiktok.json");
@@ -166,23 +169,32 @@ async function loadTikTokCarousel() {
     var container = document.getElementById("tiktokScroll");
     section.style.display = "block";
 
-    container.innerHTML = videos.map(function(v) {
+    container.innerHTML = videos.map(function(v, i) {
       var caption = v.caption || "K-Beauty Video";
       var thumb = v.thumbnail || "";
       var author = v.author ? "@" + v.author : "";
       
-      return '<a class="tiktok-card" href="' + v.url + '" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">' +
-        '<div class="tiktok-thumb">' +
-          (thumb ? '<img src="' + thumb + '" alt="' + caption + '" loading="lazy">' : '') +
-          '<div class="tiktok-play">▶</div>' +
-          '<div class="tiktok-badge">TikTok</div>' +
+      return '<div class="tt-video-card">' +
+        '<div class="tt-player" id="ttPlayer' + i + '">' +
+          (thumb ? '<img src="' + thumb + '" alt="' + caption + '" class="tt-poster" loading="lazy">' : '<div class="tt-poster-empty"></div>') +
+          '<div class="tt-play-btn" onclick="playTikTokInline(' + i + ',\'' + v.videoId + '\')">▶</div>' +
+          '<div class="tt-duration">TikTok</div>' +
         '</div>' +
-        '<div class="tiktok-card-caption">' + caption.substring(0, 80) + '</div>' +
-        (author ? '<div class="tiktok-card-author">' + author + '</div>' : '') +
-      '</a>';
+        '<div class="tt-info">' +
+          '<div class="tt-title">' + caption + '</div>' +
+          (author ? '<div class="tt-author">' + author + ' · K-Beauty Premium</div>' : '<div class="tt-author">K-Beauty Premium</div>') +
+        '</div>' +
+      '</div>';
     }).join("");
 
-  } catch(e) { /* no tiktok videos */ }
+  } catch(e) {}
+}
+
+function playTikTokInline(index, videoId) {
+  var player = document.getElementById("ttPlayer" + index);
+  if (!player) return;
+  player.innerHTML = '<iframe src="https://www.tiktok.com/embed/v2/' + videoId + '?autoplay=1" allowfullscreen allow="encrypted-media; autoplay" style="width:100%;height:100%;border:none;border-radius:12px;"></iframe>';
+  player.classList.add("tt-playing");
 }
 
 async function buildHomepage() {
