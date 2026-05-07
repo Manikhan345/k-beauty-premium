@@ -60,9 +60,6 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   .mobile-menu-toggle { display: block !important; }
 }
 
-/* MAIN TAB NAV - hidden, replaced by sidebar */
-.tab-nav { display: none !important; }
-
 /* TAB CONTENT */
 .tab-content { margin: 0; padding: 0; }
 .tab-panel { display: none; }
@@ -227,11 +224,10 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
     </div>
   </div>
   
-  <!-- OVERLAY for mobile -->
-  <div class="admin-overlay" id="adminOverlay" onclick="toggleAdminSidebar()"></div>
-
   <!-- MAIN CONTENT -->
   <div class="admin-main">
+    <!-- OVERLAY for mobile (positioned fixed, doesn't affect layout) -->
+    <div class="admin-overlay" id="adminOverlay" onclick="toggleAdminSidebar()"></div>
     <div class="tab-content" id="tabContent">
 
 <!-- ═══════════ TAB 1: PRODUCT MANAGER ═══════════ -->
