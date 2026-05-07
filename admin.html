@@ -455,10 +455,10 @@ function switchTab(tabId, btn) {
 
 function sidebarSwitch(tabId, el) {
   switchTab(tabId, el);
-  // Load data for specific tabs
   if (tabId === "blog" && token) { loadBlogPosts(); }
   if (tabId === "tiktok" && token) { loadTikTokVideos(); }
-  // Close mobile sidebar
+  if (tabId === "categories") renderCategoryList();
+  if (tabId === "redirects") loadRedirects();
   var sidebar = document.getElementById("adminSidebar");
   var overlay = document.getElementById("adminOverlay");
   if (sidebar) sidebar.classList.remove("open");
@@ -470,13 +470,6 @@ function toggleAdminSidebar() {
   var overlay = document.getElementById("adminOverlay");
   sidebar.classList.toggle("open");
   overlay.classList.toggle("open");
-}
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('tab-' + tabId).classList.add('active');
-  btn.classList.add('active');
-  if (tabId === 'categories') renderCategoryList();
-  if (tabId === 'redirects') loadRedirects();
 }
 
 // ═══════════════════════════════════════════════════════════════
