@@ -202,19 +202,19 @@ async function buildHomepage() {
   renderNav("home");
   renderFooter();
 
-  // Preload all products in background for instant search
-  loadAllProducts();
-
-  // Load TikTok videos
-  loadTikTokCarousel();
-
-  // Check for search query
+  // Check for search query FIRST
   var urlParams = new URLSearchParams(window.location.search);
   var searchQuery = urlParams.get("search");
   if (searchQuery && searchQuery.trim().length >= 2) {
     showSearchResults(searchQuery.trim());
     return;
   }
+
+  // Load TikTok videos
+  loadTikTokCarousel();
+
+  // Preload all products in background for instant search
+  loadAllProducts();
 
   var main = document.getElementById("mainContent");
   var categories = Object.keys(CATEGORY_META);

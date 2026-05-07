@@ -521,26 +521,34 @@ function initSubscribeForm() {
 var globalSearchCache = null;
 var globalSearchTimer = null;
 
+var globalSearchLoading = null;
 async function loadAllProducts() {
   if (globalSearchCache) return globalSearchCache;
-  globalSearchCache = [];
-  var keys = Object.keys(CATEGORY_META);
-  // Load ALL categories in parallel for speed
-  var promises = keys.map(function(key) {
-    return fetchProducts(CATEGORY_META[key].file).then(function(products) {
-      products.forEach(function(p) { p._cat = key; });
-      return products;
-    }).catch(function() { return []; });
-  });
-  var results = await Promise.all(promises);
-  results.forEach(function(products) {
-    globalSearchCache = globalSearchCache.concat(products);
-  });
-  // Pre-build search index for speed
-  globalSearchCache.forEach(function(p) {
-    p._searchText = (p.name + " " + (p.tag || "") + " " + (p.subtag || "") + " " + (p._cat || "") + " " + (p.bought || "")).toLowerCase();
-  });
-  return globalSearchCache;
+  if (globalSearchLoading) return globalSearchLoading;
+  
+  globalSearchLoading = (async function() {
+    globalSearchCache = [];
+    var keys = Object.keys(CATEGORY_META);
+    var promises = keys.map(function(key) {
+      return fetchProducts(CATEGORY_META[key].file).then(function(products) {
+        products.forEach(function(p) { p._cat = key; });
+        return products;
+      }).catch(function() { return []; });
+    });
+    var results = await Promise.all(promises);
+    var allProducts = [];
+    results.forEach(function(products) {
+      allProducts = allProducts.concat(products);
+    });
+    allProducts.forEach(function(p) {
+      p._searchText = (p.name + " " + (p.tag || "") + " " + (p.subtag || "") + " " + (p._cat || "") + " " + (p.bought || "")).toLowerCase();
+    });
+    globalSearchCache = allProducts;
+    globalSearchLoading = null;
+    return globalSearchCache;
+  })();
+  
+  return globalSearchLoading;
 }
 
 function searchScore(product, words) {
