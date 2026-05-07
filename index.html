@@ -242,8 +242,11 @@ async function buildHomepage() {
   }
 }
 
+var searchResultsAll = [];
+var searchResultsShown = 0;
+var SEARCH_BATCH = 60;
+
 async function showSearchResults(query) {
-  // Hide everything except search results
   var introSection = document.querySelector(".intro-section");
   var ttSection = document.getElementById("tiktokSection");
   var mainContent = document.getElementById("mainContent");
@@ -251,10 +254,9 @@ async function showSearchResults(query) {
   if (ttSection) ttSection.style.display = "none";
   if (mainContent) mainContent.innerHTML = "";
 
-  // Create clean search results container
   var container = document.createElement("div");
   container.style.cssText = "max-width:1200px;margin:0 auto;padding:20px 16px;";
-  container.innerHTML = '<h2 style="font-family:Noto Serif Display,serif;font-size:1.6rem;margin-bottom:6px;">Search Results</h2><p id="searchResultInfo" style="color:var(--text-light);margin-bottom:20px;">Searching for "<strong>' + query + '</strong>"...</p><div id="searchResultsGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;"><p style="color:var(--text-light);grid-column:1/-1;">Loading...</p></div>';
+  container.innerHTML = '<h2 style="font-family:Noto Serif Display,serif;font-size:1.6rem;margin-bottom:6px;">Search Results</h2><p id="searchResultInfo" style="color:var(--text-light);margin-bottom:20px;">Searching for "<strong>' + query + '</strong>"...</p><div id="searchResultsGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;"><p style="color:var(--text-light);grid-column:1/-1;">Loading...</p></div><div id="loadMoreWrap" style="display:none;text-align:center;padding:24px 0;"><button id="loadMoreBtn" onclick="loadMoreResults()" style="padding:12px 40px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;transition:all 0.2s;">Load More Products</button><p id="loadMoreCount" style="font-size:0.78rem;color:var(--text-light);margin-top:8px;"></p></div>';
   mainContent.appendChild(container);
 
   var di = document.getElementById("globalSearchInput");
@@ -286,16 +288,35 @@ async function showSearchResults(query) {
   }
 
   scored.sort(function(a, b) { return b.score - a.score; });
-  var allResults = scored.slice(0, 60);
+  searchResultsAll = scored;
+  searchResultsShown = 0;
 
   var grid = document.getElementById("searchResultsGrid");
   var info = document.getElementById("searchResultInfo");
-  if (allResults.length === 0) {
+  if (searchResultsAll.length === 0) {
     grid.innerHTML = '<p style="color:var(--text-light);grid-column:1/-1;text-align:center;padding:40px;">No products found for "' + query + '". Try different keywords like "toner", "cleanser", or "serum".</p>';
     info.innerHTML = 'No results for "<strong>' + query + '</strong>"';
   } else {
-    grid.innerHTML = allResults.map(function(r) { return renderProductCard(r.product, null, r.product._cat); }).join("");
-    info.innerHTML = 'Found <strong>' + allResults.length + '</strong> products for "<strong>' + query + '</strong>"';
+    grid.innerHTML = "";
+    info.innerHTML = 'Found <strong>' + searchResultsAll.length + '</strong> products for "<strong>' + query + '</strong>"';
+    loadMoreResults();
+  }
+}
+
+function loadMoreResults() {
+  var grid = document.getElementById("searchResultsGrid");
+  var batch = searchResultsAll.slice(searchResultsShown, searchResultsShown + SEARCH_BATCH);
+  var html = batch.map(function(r) { return renderProductCard(r.product, null, r.product._cat); }).join("");
+  grid.innerHTML += html;
+  searchResultsShown += batch.length;
+
+  var wrap = document.getElementById("loadMoreWrap");
+  var countEl = document.getElementById("loadMoreCount");
+  if (searchResultsShown < searchResultsAll.length) {
+    wrap.style.display = "block";
+    countEl.textContent = "Showing " + searchResultsShown + " of " + searchResultsAll.length + " products";
+  } else {
+    wrap.style.display = "none";
   }
 }
 buildHomepage();
