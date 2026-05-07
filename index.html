@@ -68,7 +68,11 @@
     <h2 style="font-family:'Noto Serif Display',serif;font-size:1.4rem;font-weight:600;">🎬 K-Beauty Videos</h2>
     <a href="https://www.tiktok.com/@kbeautypremium" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">Follow on TikTok →</a>
   </div>
-  <div id="tiktokScroll" class="tt-grid"></div>
+  <div style="position:relative;">
+    <button class="scroll-arrow scroll-arrow-left" onclick="scrollCarousel('tiktokScroll',-1)" aria-label="Previous">‹</button>
+    <div id="tiktokScroll" class="tt-grid"></div>
+    <button class="scroll-arrow scroll-arrow-right" onclick="scrollCarousel('tiktokScroll',1)" aria-label="Next">›</button>
+  </div>
 </section>
 
 <main class="container" id="mainContent"></main>
