@@ -178,11 +178,6 @@ async function loadTikTokCarousel() {
         '<div class="tt-player" id="ttPlayer' + i + '">' +
           (thumb ? '<img src="' + thumb + '" alt="' + caption + '" class="tt-poster" loading="lazy">' : '<div class="tt-poster-empty"></div>') +
           '<div class="tt-play-btn" onclick="playTikTokInline(' + i + ',\'' + v.videoId + '\')">▶</div>' +
-          '<div class="tt-duration">TikTok</div>' +
-        '</div>' +
-        '<div class="tt-info">' +
-          '<div class="tt-title">' + caption + '</div>' +
-          (author ? '<div class="tt-author">' + author + ' · K-Beauty Premium</div>' : '<div class="tt-author">K-Beauty Premium</div>') +
         '</div>' +
       '</div>';
     }).join("");
