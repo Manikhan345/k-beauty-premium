@@ -64,7 +64,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .tab-nav { display: none !important; }
 
 /* TAB CONTENT */
-.tab-content { max-width: 1200px; margin: 0 auto; padding: 0; display: none; }
+.tab-content { max-width: 1200px; margin: 0 auto; padding: 0; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
@@ -527,8 +527,8 @@ var addedSinceLastPush = 0;
 function checkSavedToken(){var s=localStorage.getItem("kb_github_token");if(s){token=s;verifyAndConnect();}}
 async function connectGitHub(){var input=document.getElementById("tokenInput").value.trim();if(!input)return;token=input;document.getElementById("authError").style.display="none";try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Invalid");var user=await resp.json();localStorage.setItem("kb_github_token",token);showToast("Connected as "+user.login,"success");await loadConfigForAdmin();showMainUI();loadAllData();}catch(e){document.getElementById("authError").style.display="block";token="";}}
 async function verifyAndConnect(){try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Expired");await loadConfigForAdmin();showMainUI();loadAllData();}catch(e){localStorage.removeItem("kb_github_token");token="";}}
-function logout(){localStorage.removeItem("kb_github_token");token="";data={};fileSHAs={};document.getElementById("adminLayout").style.display="none";document.getElementById("tabContent").style.display="none";document.getElementById("authScreen").style.display="block";document.getElementById("statusDot").className="status-dot disconnected";document.getElementById("statusText").textContent="Not connected";document.getElementById("btnLogout").style.display="none";}
-function showMainUI(){document.getElementById("authScreen").style.display="none";document.getElementById("adminLayout").style.display="grid";document.getElementById("tabContent").style.display="block";document.getElementById("statusDot").className="status-dot connected";document.getElementById("statusText").textContent="Connected to GitHub";document.getElementById("btnLogout").style.display="inline-block";updateTagDropdown();}
+function logout(){localStorage.removeItem("kb_github_token");token="";data={};fileSHAs={};document.getElementById("adminLayout").style.display="none";document.getElementById("authScreen").style.display="block";document.getElementById("statusDot").className="status-dot disconnected";document.getElementById("statusText").textContent="Not connected";document.getElementById("btnLogout").style.display="none";}
+function showMainUI(){document.getElementById("authScreen").style.display="none";document.getElementById("adminLayout").style.display="grid";document.getElementById("statusDot").className="status-dot connected";document.getElementById("statusText").textContent="Connected to GitHub";document.getElementById("btnLogout").style.display="inline-block";updateTagDropdown();}
 
 // ═══════════════════════════════════════════════════════════════
 // PRODUCT MANAGER
