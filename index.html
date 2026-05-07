@@ -27,15 +27,16 @@
 @media (max-width: 768px) { .scroll-arrow { display: none; } }
 
 /* TIKTOK CARDS */
-.tiktok-card { min-width: 220px; max-width: 220px; scroll-snap-align: start; }
-.tiktok-thumb { width: 220px; height: 380px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; background: #111; }
-.tiktok-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-.tiktok-thumb:hover img { transform: scale(1.05); }
-.tiktok-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.2s; }
-.tiktok-thumb:hover .tiktok-play { background: #fff; transform: translate(-50%, -50%) scale(1.1); }
-.tiktok-card-caption { font-size: 0.82rem; font-weight: 500; color: var(--text); margin-top: 8px; padding: 0 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
-.tiktok-card-author { font-size: 0.72rem; color: var(--text-light); padding: 0 4px; margin-top: 2px; }
-@media (max-width: 768px) { .tiktok-card { min-width: 180px; max-width: 180px; } .tiktok-thumb { width: 180px; height: 310px; } .tiktok-play { width: 48px; height: 48px; font-size: 1.2rem; } }
+.tiktok-card { min-width: 260px; max-width: 260px; scroll-snap-align: start; display: block; }
+.tiktok-thumb { width: 260px; height: 460px; border-radius: 14px; overflow: hidden; position: relative; cursor: pointer; background: #111; }
+.tiktok-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s, filter 0.3s; }
+.tiktok-thumb:hover img { transform: scale(1.05); filter: brightness(0.85); }
+.tiktok-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--accent); box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.2s; }
+.tiktok-thumb:hover .tiktok-play { transform: translate(-50%, -50%) scale(1.15); background: #fff; }
+.tiktok-badge { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; font-family: 'Outfit', sans-serif; letter-spacing: 0.3px; }
+.tiktok-card-caption { font-size: 0.85rem; font-weight: 500; color: var(--text); margin-top: 10px; padding: 0 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+.tiktok-card-author { font-size: 0.75rem; color: var(--accent); padding: 0 4px; margin-top: 3px; font-weight: 500; }
+@media (max-width: 768px) { .tiktok-card { min-width: 200px; max-width: 200px; } .tiktok-thumb { width: 200px; height: 350px; } .tiktok-play { width: 52px; height: 52px; font-size: 1.3rem; } }
 .promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
 .promo h2 { font-family: 'Noto Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
 .promo p { font-weight: 300; opacity: 0.9; margin-bottom: 16px; }
@@ -165,39 +166,23 @@ async function loadTikTokCarousel() {
     var container = document.getElementById("tiktokScroll");
     section.style.display = "block";
 
-    container.innerHTML = videos.map(function(v, i) {
+    container.innerHTML = videos.map(function(v) {
       var caption = v.caption || "K-Beauty Video";
       var thumb = v.thumbnail || "";
       var author = v.author ? "@" + v.author : "";
       
-      if (thumb) {
-        return '<div class="tiktok-card">' +
-          '<div class="tiktok-thumb" id="ttCard' + i + '" onclick="playTikTok(' + i + ',\'' + v.videoId + '\')">' +
-            '<img src="' + thumb + '" alt="' + caption + '" loading="lazy">' +
-            '<div class="tiktok-play">▶</div>' +
-          '</div>' +
-          '<div class="tiktok-card-caption">' + caption.substring(0, 60) + '</div>' +
-          (author ? '<div class="tiktok-card-author">' + author + '</div>' : '') +
-        '</div>';
-      } else {
-        return '<div class="tiktok-card">' +
-          '<div class="tiktok-thumb" style="background:#000;display:flex;align-items:center;justify-content:center;" onclick="window.open(\'' + v.url + '\',\'_blank\')">' +
-            '<div class="tiktok-play">▶</div>' +
-          '</div>' +
-          '<div class="tiktok-card-caption">' + caption.substring(0, 60) + '</div>' +
-        '</div>';
-      }
+      return '<a class="tiktok-card" href="' + v.url + '" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">' +
+        '<div class="tiktok-thumb">' +
+          (thumb ? '<img src="' + thumb + '" alt="' + caption + '" loading="lazy">' : '') +
+          '<div class="tiktok-play">▶</div>' +
+          '<div class="tiktok-badge">TikTok</div>' +
+        '</div>' +
+        '<div class="tiktok-card-caption">' + caption.substring(0, 80) + '</div>' +
+        (author ? '<div class="tiktok-card-author">' + author + '</div>' : '') +
+      '</a>';
     }).join("");
 
   } catch(e) { /* no tiktok videos */ }
-}
-
-function playTikTok(index, videoId) {
-  var card = document.getElementById("ttCard" + index);
-  if (!card) return;
-  card.innerHTML = '<iframe src="https://www.tiktok.com/embed/v2/' + videoId + '" allowfullscreen allow="encrypted-media" style="width:100%;height:100%;border:none;border-radius:12px;"></iframe>';
-  card.style.cursor = "default";
-  card.onclick = null;
 }
 
 async function buildHomepage() {
