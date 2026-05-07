@@ -167,14 +167,21 @@ async function loadTikTokCarousel() {
       var thumb = v.thumbnail || "";
       
       return '<div class="tt-video-card">' +
-        '<div class="tt-player" onclick="window.open(\'' + v.url + '\',\'_blank\')">' +
+        '<div class="tt-player" id="ttPlayer' + i + '">' +
           (thumb ? '<img src="' + thumb + '" alt="' + caption + '" class="tt-poster" loading="lazy">' : '<div class="tt-poster-empty"></div>') +
-          '<div class="tt-play-btn">▶</div>' +
+          '<div class="tt-play-btn" onclick="playTT(' + i + ',\'' + v.videoId + '\')">▶</div>' +
         '</div>' +
       '</div>';
     }).join("");
 
   } catch(e) {}
+}
+
+function playTT(i, videoId) {
+  var player = document.getElementById("ttPlayer" + i);
+  if (!player) return;
+  player.innerHTML = '<iframe src="https://www.tiktok.com/embed/v2/' + videoId + '?autoplay=1" allowfullscreen allow="encrypted-media; autoplay" style="width:100%;height:100%;border:none;border-radius:10px;"></iframe>';
+  player.style.cursor = "default";
 }
 
 async function buildHomepage() {
