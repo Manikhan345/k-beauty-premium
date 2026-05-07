@@ -31,12 +31,14 @@
 .tt-grid::-webkit-scrollbar { display: none; }
 .tt-video-card { min-width: 240px; max-width: 240px; scroll-snap-align: start; }
 .tt-player { width: 240px; height: 420px; border-radius: 10px; overflow: hidden; position: relative; background: #111; cursor: pointer; }
+.tt-player.playing { height: 420px; overflow: hidden; }
+.tt-player.playing iframe { width: 100%; height: 500px; border: none; border-radius: 10px; margin-top: -10px; }
 .tt-poster { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s, filter 0.3s; }
 .tt-poster-empty { width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e, #16213e); }
 .tt-player:hover .tt-poster { transform: scale(1.03); filter: brightness(0.85); }
 .tt-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: all 0.2s; cursor: pointer; padding-left: 3px; }
 .tt-player:hover .tt-play-btn { transform: translate(-50%, -50%) scale(1.1); background: #fff; }
-@media (max-width: 768px) { .tt-video-card { min-width: 200px; max-width: 200px; } .tt-player { width: 200px; height: 350px; } .tt-play-btn { width: 48px; height: 48px; font-size: 1.2rem; } }
+@media (max-width: 768px) { .tt-video-card { min-width: 200px; max-width: 200px; } .tt-player { width: 200px; height: 350px; } .tt-player.playing iframe { height: 430px; } .tt-play-btn { width: 48px; height: 48px; font-size: 1.2rem; } }
 .promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
 .promo h2 { font-family: 'Noto Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
 .promo p { font-weight: 300; opacity: 0.9; margin-bottom: 16px; }
@@ -180,8 +182,8 @@ async function loadTikTokCarousel() {
 function playTT(i, videoId) {
   var player = document.getElementById("ttPlayer" + i);
   if (!player) return;
-  player.innerHTML = '<iframe src="https://www.tiktok.com/player/v1/' + videoId + '?music_info=0&description=0&autoplay=1&loop=1" allowfullscreen allow="encrypted-media; autoplay" style="width:100%;height:100%;border:none;border-radius:10px;vertical-align:top;"></iframe>';
-  player.style.cursor = "default";
+  player.classList.add("playing");
+  player.innerHTML = '<iframe src="https://www.tiktok.com/player/v1/' + videoId + '?music_info=0&description=0&autoplay=1&loop=1" allowfullscreen allow="encrypted-media; autoplay"></iframe>';
 }
 
 async function buildHomepage() {
