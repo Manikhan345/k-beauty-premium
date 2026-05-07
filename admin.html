@@ -1124,11 +1124,10 @@ function renderTikTokList() {
   var list = document.getElementById("tiktokVideoList");
   if (!tiktokVideos.length) { list.innerHTML = '<div class="empty-state"><p>No TikTok videos yet. Add your first video above!</p></div>'; return; }
   list.innerHTML = tiktokVideos.map(function(v, i) {
-    var idMatch = v.url.match(/video\/(\d+)/);
-    var videoId = idMatch ? idMatch[1] : "?";
+    var thumb = v.thumbnail ? '<img src="' + v.thumbnail + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:1.5rem;">🎵</span>';
     return '<div class="plist-item">' +
-      '<div class="plist-img"><span style="font-size:1.5rem;">🎵</span></div>' +
-      '<div class="plist-name">' + (v.caption || 'TikTok Video') + '<div style="margin-top:2px;"><span style="font-size:0.65rem;color:var(--text-light);">ID: ' + videoId + '</span></div></div>' +
+      '<div class="plist-img">' + thumb + '</div>' +
+      '<div class="plist-name">' + (v.caption || 'TikTok Video') + (v.author ? '<div style="margin-top:2px;"><span style="font-size:0.65rem;color:var(--text-light);">@' + v.author + '</span></div>' : '') + '</div>' +
       '<div class="plist-price" style="font-size:0.7rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--blue);">' + v.url + '</div>' +
       '<div class="plist-actions">' +
         '<button class="btn-del" onclick="deleteTikTokVideo(' + i + ')">Del</button>' +
@@ -1147,17 +1146,40 @@ async function addTikTokVideo() {
     return;
   }
 
-  // Extract video ID to get thumbnail
   var idMatch = url.match(/video\/(\d+)/);
   if (!idMatch) {
-    status.textContent = "Could not extract video ID from URL. Make sure it's a video link.";
+    status.textContent = "Could not extract video ID. Make sure it's a video link.";
     return;
+  }
+
+  status.textContent = "Fetching video info from TikTok...";
+
+  var thumbnail = "";
+  var title = caption;
+  var author = "";
+
+  try {
+    // Use TikTok oEmbed API to get thumbnail
+    var oembedResp = await fetch("https://www.tiktok.com/oembed?url=" + encodeURIComponent(url));
+    if (oembedResp.ok) {
+      var oembedData = await oembedResp.json();
+      thumbnail = oembedData.thumbnail_url || "";
+      if (!caption) title = oembedData.title || "K-Beauty Video";
+      author = oembedData.author_name || "";
+      status.textContent = "✅ Got thumbnail! Saving...";
+    } else {
+      status.textContent = "Could not fetch thumbnail. Saving without it...";
+    }
+  } catch(e) {
+    status.textContent = "Could not fetch thumbnail. Saving without it...";
   }
 
   tiktokVideos.push({
     url: url,
-    caption: caption || "",
+    caption: title || "K-Beauty Video",
     videoId: idMatch[1],
+    thumbnail: thumbnail,
+    author: author,
     added: new Date().toISOString()
   });
 
