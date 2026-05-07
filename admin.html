@@ -334,6 +334,19 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
     <h2>Published Posts <span style="font-size:0.82rem;font-weight:400;color:var(--text-mid);" id="blogListCount"></span></h2>
     <div id="blogPostList"></div>
   </div>
+
+  <!-- TIKTOK VIDEO MANAGER -->
+  <div class="panel">
+    <h2>🎵 TikTok Videos (Homepage Carousel)</h2>
+    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:12px;">Add TikTok video URLs to display on the homepage. Paste the full URL like <code>https://www.tiktok.com/@username/video/1234567890</code></p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input type="text" id="tiktokUrl" placeholder="Paste TikTok video URL..." style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
+      <input type="text" id="tiktokCaption" placeholder="Short caption (optional)" style="width:250px;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
+      <button class="btn-green" onclick="addTikTokVideo()" style="white-space:nowrap;">+ Add Video</button>
+    </div>
+    <div id="tiktokStatus" style="font-size:0.78rem;color:var(--text-mid);margin-bottom:8px;"></div>
+    <div id="tiktokVideoList"></div>
+  </div>
 </div>
 
 <div class="tab-panel" id="tab-redirects">
@@ -1083,8 +1096,103 @@ async function pushBlogToGitHub(message) {
 var origSwitchTab = window.switchTab;
 window.switchTab = function(tab, btn) {
   origSwitchTab(tab, btn);
-  if (tab === "blog" && token) loadBlogPosts();
+  if (tab === "blog" && token) { loadBlogPosts(); loadTikTokVideos(); }
 };
+
+// ═══════════════════════════════════════════════════════════════
+// TIKTOK VIDEO MANAGER
+// ═══════════════════════════════════════════════════════════════
+var tiktokVideos = [];
+var tiktokSHA = null;
+
+async function loadTikTokVideos() {
+  try {
+    var listResp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
+    if (!listResp.ok) { tiktokVideos = []; return; }
+    var files = await listResp.json();
+    var ttFile = files.find(function(f) { return f.name === "tiktok.json"; });
+    if (!ttFile) { tiktokVideos = []; tiktokSHA = null; renderTikTokList(); return; }
+    tiktokSHA = ttFile.sha;
+    var rawResp = await fetch(ttFile.download_url, { cache: "no-cache" });
+    if (rawResp.ok) tiktokVideos = await rawResp.json();
+    else tiktokVideos = [];
+  } catch(e) { tiktokVideos = []; }
+  renderTikTokList();
+}
+
+function renderTikTokList() {
+  var list = document.getElementById("tiktokVideoList");
+  if (!tiktokVideos.length) { list.innerHTML = '<div class="empty-state"><p>No TikTok videos yet. Add your first video above!</p></div>'; return; }
+  list.innerHTML = tiktokVideos.map(function(v, i) {
+    var idMatch = v.url.match(/video\/(\d+)/);
+    var videoId = idMatch ? idMatch[1] : "?";
+    return '<div class="plist-item">' +
+      '<div class="plist-img"><span style="font-size:1.5rem;">🎵</span></div>' +
+      '<div class="plist-name">' + (v.caption || 'TikTok Video') + '<div style="margin-top:2px;"><span style="font-size:0.65rem;color:var(--text-light);">ID: ' + videoId + '</span></div></div>' +
+      '<div class="plist-price" style="font-size:0.7rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--blue);">' + v.url + '</div>' +
+      '<div class="plist-actions">' +
+        '<button class="btn-del" onclick="deleteTikTokVideo(' + i + ')">Del</button>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+}
+
+async function addTikTokVideo() {
+  var url = document.getElementById("tiktokUrl").value.trim();
+  var caption = document.getElementById("tiktokCaption").value.trim();
+  var status = document.getElementById("tiktokStatus");
+
+  if (!url || !url.includes("tiktok.com")) {
+    status.textContent = "Please paste a valid TikTok URL.";
+    return;
+  }
+
+  // Extract video ID to get thumbnail
+  var idMatch = url.match(/video\/(\d+)/);
+  if (!idMatch) {
+    status.textContent = "Could not extract video ID from URL. Make sure it's a video link.";
+    return;
+  }
+
+  tiktokVideos.push({
+    url: url,
+    caption: caption || "",
+    videoId: idMatch[1],
+    added: new Date().toISOString()
+  });
+
+  await pushTikTokToGitHub("Added TikTok video");
+  document.getElementById("tiktokUrl").value = "";
+  document.getElementById("tiktokCaption").value = "";
+}
+
+function deleteTikTokVideo(i) {
+  if (!confirm("Remove this TikTok video?")) return;
+  tiktokVideos.splice(i, 1);
+  pushTikTokToGitHub("Removed TikTok video");
+}
+
+async function pushTikTokToGitHub(message) {
+  var status = document.getElementById("tiktokStatus");
+  status.textContent = "Saving...";
+  try {
+    var jsonStr = JSON.stringify(tiktokVideos, null, 2);
+    var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+    var body = { message: message, content: encoded, branch: GITHUB_BRANCH };
+    if (tiktokSHA) body.sha = tiktokSHA;
+    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data/tiktok.json", {
+      method: "PUT",
+      headers: { "Authorization": "token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!resp.ok) { status.textContent = "Error saving."; return; }
+    var result = await resp.json();
+    tiktokSHA = result.content.sha;
+    status.textContent = "✅ Saved! Homepage will update in ~30 seconds.";
+    renderTikTokList();
+    showToast("TikTok video saved!", "success");
+  } catch(e) { status.textContent = "Error: " + e.message; }
+}
 
 checkSavedToken();
 </script>
