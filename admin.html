@@ -64,7 +64,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .tab-nav { display: none !important; }
 
 /* TAB CONTENT */
-.tab-content { max-width: 1200px; margin: 0 auto; padding: 0; }
+.tab-content { margin: 0; padding: 0; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
@@ -95,7 +95,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .blog-toolbar-btn:hover { background: var(--rose-light); color: var(--rose); border-color: var(--rose); }
 
 /* PRODUCT MANAGER LAYOUT */
-.pm-layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+.pm-layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 20px; }
 .pm-left { position: sticky; top: 80px; align-self: start; }
 .pm-right { display: flex; flex-direction: column; gap: 20px; min-width: 0; overflow: hidden; }
 .save-bar { background: var(--card); border-radius: 12px; padding: 16px 20px; border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; }
