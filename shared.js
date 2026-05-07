@@ -525,15 +525,60 @@ async function loadAllProducts() {
   if (globalSearchCache) return globalSearchCache;
   globalSearchCache = [];
   var keys = Object.keys(CATEGORY_META);
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    try {
-      var products = await fetchProducts(CATEGORY_META[key].file);
+  // Load ALL categories in parallel for speed
+  var promises = keys.map(function(key) {
+    return fetchProducts(CATEGORY_META[key].file).then(function(products) {
       products.forEach(function(p) { p._cat = key; });
-      globalSearchCache = globalSearchCache.concat(products);
-    } catch(e) {}
-  }
+      return products;
+    }).catch(function() { return []; });
+  });
+  var results = await Promise.all(promises);
+  results.forEach(function(products) {
+    globalSearchCache = globalSearchCache.concat(products);
+  });
+  // Pre-build search index for speed
+  globalSearchCache.forEach(function(p) {
+    p._searchText = (p.name + " " + (p.tag || "") + " " + (p.subtag || "") + " " + (p._cat || "") + " " + (p.bought || "")).toLowerCase();
+  });
   return globalSearchCache;
+}
+
+function searchScore(product, words) {
+  var text = product._searchText;
+  var name = product.name.toLowerCase();
+  var score = 0;
+  var allMatch = true;
+  
+  for (var i = 0; i < words.length; i++) {
+    var w = words[i];
+    if (text.indexOf(w) === -1) { allMatch = false; break; }
+    // Bonus for name match vs tag/subtag match
+    if (name.indexOf(w) !== -1) score += 10;
+    else score += 3;
+    // Bonus if word appears at start of name
+    if (name.indexOf(w) === 0) score += 5;
+  }
+  
+  if (!allMatch) return 0;
+  
+  // Bonus for exact phrase match
+  var phrase = words.join(" ");
+  if (name.indexOf(phrase) !== -1) score += 20;
+  
+  // Bonus for popular products
+  if (product.bought) {
+    var boughtMatch = product.bought.match(/(\d+)([KkMm])?/);
+    if (boughtMatch) {
+      var num = parseInt(boughtMatch[1]);
+      var mult = (boughtMatch[2] && (boughtMatch[2] === 'K' || boughtMatch[2] === 'k')) ? 1000 : 1;
+      score += Math.min(num * mult / 1000, 10); // up to 10 bonus points for popular items
+    }
+  }
+  
+  // Bonus for high rating
+  if (product.rating >= 4.5) score += 3;
+  
+  return score;
 }
 
 function globalSearch(query) {
@@ -559,23 +604,44 @@ function globalSearch(query) {
     if (resultsEl) { resultsEl.innerHTML = '<div class="search-no-result">Searching...</div>'; resultsEl.style.display = "block"; }
 
     var allProducts = await loadAllProducts();
-    var matches = allProducts.filter(function(p) {
-      return p.name.toLowerCase().includes(q) ||
-        (p.tag && p.tag.toLowerCase().includes(q)) ||
-        (p.subtag && p.subtag.toLowerCase().includes(q)) ||
-        (p._cat && p._cat.toLowerCase().includes(q));
-    }).slice(0, 8);
+    
+    // Split query into individual words for flexible matching
+    var words = q.split(/\s+/).filter(function(w) { return w.length >= 2; });
+    if (words.length === 0) words = [q];
+    
+    // Score and rank all products
+    var scored = [];
+    for (var i = 0; i < allProducts.length; i++) {
+      var s = searchScore(allProducts[i], words);
+      if (s > 0) scored.push({ product: allProducts[i], score: s });
+    }
+    
+    // Sort by score descending, take top 10
+    scored.sort(function(a, b) { return b.score - a.score; });
+    var matches = scored.slice(0, 10).map(function(s) { return s.product; });
 
     if (matches.length === 0) {
-      if (resultsEl) { resultsEl.innerHTML = '<div class="search-no-result">No products found for "' + query + '"</div>'; resultsEl.style.display = "block"; }
-      return;
+      // Try partial match — if any single word matches, show those
+      var partialMatches = [];
+      for (var j = 0; j < allProducts.length && partialMatches.length < 8; j++) {
+        var txt = allProducts[j]._searchText;
+        for (var k = 0; k < words.length; k++) {
+          if (txt.indexOf(words[k]) !== -1) { partialMatches.push(allProducts[j]); break; }
+        }
+      }
+      if (partialMatches.length > 0) {
+        matches = partialMatches;
+      } else {
+        if (resultsEl) { resultsEl.innerHTML = '<div class="search-no-result">No products found for "' + query + '"</div>'; resultsEl.style.display = "block"; }
+        return;
+      }
     }
 
     var html = matches.map(function(p) {
       var catMeta = CATEGORY_META[p._cat];
       var catLabel = catMeta ? catMeta.title.replace(/^[^\w]*/, "").trim() : p._cat;
       var img = (p.image && p.image.trim()) ? '<img src="' + p.image + '" alt="">' : '<span style="font-size:1.5rem;">📦</span>';
-      return '<a class="search-result-item" href="/p/' + p._cat + '/' + p.id + '">' +
+      return '<a class="search-result-item" href="/p/' + p._cat + '/' + p.id + '" target="_blank">' +
         '<div class="search-result-img">' + img + '</div>' +
         '<div class="search-result-info">' +
           '<div class="search-result-name">' + p.name + '</div>' +
@@ -585,7 +651,7 @@ function globalSearch(query) {
     }).join("");
 
     if (resultsEl) { resultsEl.innerHTML = html; resultsEl.style.display = "block"; }
-  }, 300);
+  }, 250);
 }
 
 document.addEventListener("click", function(e) {

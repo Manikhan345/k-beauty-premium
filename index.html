@@ -241,34 +241,53 @@ async function buildHomepage() {
 
 async function showSearchResults(query) {
   var main = document.getElementById("mainContent");
-  main.innerHTML = '<div style="max-width:1200px;margin:0 auto;padding:20px 16px;"><h2 style="font-family:Noto Serif Display,serif;font-size:1.6rem;margin-bottom:6px;">Search Results</h2><p style="color:var(--text-light);margin-bottom:20px;">Showing results for "<strong>' + query + '</strong>"</p><div id="searchResultsGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;"><p style="color:var(--text-light);grid-column:1/-1;">Searching...</p></div></div>';
+  // Hide TikTok section during search
+  var ttSection = document.getElementById("tiktokSection");
+  if (ttSection) ttSection.style.display = "none";
+  
+  main.innerHTML = '<div style="max-width:1200px;margin:0 auto;padding:20px 16px;"><h2 style="font-family:Noto Serif Display,serif;font-size:1.6rem;margin-bottom:6px;">Search Results</h2><p id="searchResultInfo" style="color:var(--text-light);margin-bottom:20px;">Searching for "<strong>' + query + '</strong>"...</p><div id="searchResultsGrid" class="product-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;"><p style="color:var(--text-light);grid-column:1/-1;">Loading products...</p></div></div>';
 
-  // Fill search input
   var di = document.getElementById("globalSearchInput");
   var mi = document.getElementById("mobileGlobalSearch");
   if (di) di.value = query;
   if (mi) mi.value = query;
 
-  var q = query.toLowerCase();
-  var allResults = [];
-  var keys = Object.keys(CATEGORY_META);
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    var products = await fetchProducts(CATEGORY_META[key].file);
-    products.forEach(function(p) {
-      if (p.name.toLowerCase().includes(q) || (p.tag && p.tag.toLowerCase().includes(q)) || (p.subtag && p.subtag.toLowerCase().includes(q)) || key.includes(q)) {
-        allResults.push({product: p, cat: key});
+  var allProducts = await loadAllProducts();
+  var q = query.toLowerCase().trim();
+  var words = q.split(/\s+/).filter(function(w) { return w.length >= 2; });
+  if (words.length === 0) words = [q];
+
+  // Score all products
+  var scored = [];
+  for (var i = 0; i < allProducts.length; i++) {
+    var s = searchScore(allProducts[i], words);
+    if (s > 0) scored.push({ product: allProducts[i], score: s });
+  }
+  
+  // If no results with ALL words, try ANY word
+  if (scored.length === 0 && words.length > 1) {
+    for (var j = 0; j < allProducts.length; j++) {
+      var txt = allProducts[j]._searchText;
+      for (var k = 0; k < words.length; k++) {
+        if (txt.indexOf(words[k]) !== -1) {
+          scored.push({ product: allProducts[j], score: 1 });
+          break;
+        }
       }
-    });
+    }
   }
 
+  scored.sort(function(a, b) { return b.score - a.score; });
+  var allResults = scored.slice(0, 60); // Max 60 results
+
   var grid = document.getElementById("searchResultsGrid");
+  var info = document.getElementById("searchResultInfo");
   if (allResults.length === 0) {
-    grid.innerHTML = '<p style="color:var(--text-light);grid-column:1/-1;text-align:center;padding:40px;">No products found for "' + query + '". Try a different search term.</p>';
+    grid.innerHTML = '<p style="color:var(--text-light);grid-column:1/-1;text-align:center;padding:40px;">No products found for "' + query + '". Try different keywords like "toner", "cleanser", or "serum".</p>';
+    info.innerHTML = 'No results for "<strong>' + query + '</strong>"';
   } else {
-    grid.innerHTML = allResults.map(function(r) { return renderProductCard(r.product, null, r.cat); }).join("");
-    var countEl = main.querySelector("p");
-    if (countEl) countEl.innerHTML = 'Found <strong>' + allResults.length + '</strong> products for "<strong>' + query + '</strong>"';
+    grid.innerHTML = allResults.map(function(r) { return renderProductCard(r.product, null, r.product._cat); }).join("");
+    info.innerHTML = 'Found <strong>' + allResults.length + '</strong> products for "<strong>' + query + '</strong>"';
   }
 }
 buildHomepage();
