@@ -274,6 +274,13 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 <div class="tab-panel" id="tab-blog">
   <div class="panel">
     <h2 id="blogFormTitle">📝 New Blog Post</h2>
+    <div style="margin-bottom:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span style="font-size:0.78rem;color:var(--text-mid);font-weight:600;">START FROM TEMPLATE:</span>
+      <button onclick="loadBlogTemplate('listicle')" class="blog-toolbar-btn" style="padding:8px 14px;">📋 Best Products List</button>
+      <button onclick="loadBlogTemplate('comparison')" class="blog-toolbar-btn" style="padding:8px 14px;">⚖️ Product Comparison</button>
+      <button onclick="loadBlogTemplate('routine')" class="blog-toolbar-btn" style="padding:8px 14px;">🧴 Routine Guide</button>
+      <button onclick="loadBlogTemplate('review')" class="blog-toolbar-btn" style="padding:8px 14px;">⭐ Product Review</button>
+    </div>
     <div class="form-row-half">
       <div class="form-row"><label>POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin"></div>
       <div class="form-row"><label>SLUG (URL)</label><input type="text" id="blogSlug" placeholder="auto-generated from title"><small>Will appear as /blog/your-slug</small></div>
@@ -838,6 +845,53 @@ document.getElementById("blogCover").addEventListener("input", function() {
     preview.innerHTML = 'No cover image';
   }
 });
+
+// ── BLOG TEMPLATES ──
+function loadBlogTemplate(type) {
+  if (document.getElementById("blogContent").value.trim() && !confirm("This will replace your current content. Continue?")) return;
+  
+  var templates = {
+    listicle: {
+      title: "Best Korean [PRODUCT TYPE] on Amazon ([YEAR])",
+      excerpt: "Discover the top-rated Korean [PRODUCT TYPE] available on Amazon. We've curated the best picks for every skin type and budget.",
+      tags: "Skincare, Best Of, Amazon Finds",
+      content: '## Why Korean [PRODUCT TYPE] Are Different\n\n[WRITE 2-3 SENTENCES: What makes Korean products in this category special? Why should someone choose K-beauty over Western alternatives?]\n\n---\n\n## Our Top Picks\n\n### 1. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES: Key benefits, who it\'s best for, standout ingredients]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 2. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 3. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 4. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 5. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n## How to Choose the Right [PRODUCT TYPE]\n\n[WRITE 3-4 SENTENCES: Quick buying guide — what to look for, key ingredients to watch, skin type considerations]\n\n## Final Thoughts\n\n[WRITE 2-3 SENTENCES: Summary recommendation, link to your category page]\n\n[Browse all Korean [PRODUCT TYPE] →](/[CATEGORY_SLUG])'
+    },
+    comparison: {
+      title: "[PRODUCT A] vs [PRODUCT B]: Which Korean [TYPE] Is Better?",
+      excerpt: "We compare [PRODUCT A] and [PRODUCT B] head-to-head — price, ingredients, results, and which one you should buy.",
+      tags: "Comparison, Skincare, Product Review",
+      content: '## The Showdown: [PRODUCT A] vs [PRODUCT B]\n\n[WRITE 2-3 SENTENCES: Why are people comparing these two? What do they have in common?]\n\n![Both products side by side](PASTE_COMPARISON_IMAGE_HERE)\n\n---\n\n## [PRODUCT A] — Quick Overview\n\n![PRODUCT A](PASTE_IMAGE_URL_HERE)\n\n- **Price:** $[PRICE]\n- **Size:** [SIZE]\n- **Key ingredients:** [LIST INGREDIENTS]\n- **Best for:** [SKIN TYPE]\n- **Rating:** ⭐ [RATING] ([NUMBER] reviews)\n\n**What it does well:** [WRITE 2-3 SENTENCES]\n\n**Downsides:** [WRITE 1-2 SENTENCES]\n\n[Shop [PRODUCT A] on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## [PRODUCT B] — Quick Overview\n\n![PRODUCT B](PASTE_IMAGE_URL_HERE)\n\n- **Price:** $[PRICE]\n- **Size:** [SIZE]\n- **Key ingredients:** [LIST INGREDIENTS]\n- **Best for:** [SKIN TYPE]\n- **Rating:** ⭐ [RATING] ([NUMBER] reviews)\n\n**What it does well:** [WRITE 2-3 SENTENCES]\n\n**Downsides:** [WRITE 1-2 SENTENCES]\n\n[Shop [PRODUCT B] on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Head-to-Head Comparison\n\n### Price\n[WHICH IS MORE AFFORDABLE? VALUE FOR MONEY?]\n\n### Ingredients\n[COMPARE KEY INGREDIENTS — WHICH FORMULA IS STRONGER?]\n\n### Results\n[WHICH DELIVERS BETTER RESULTS? FOR WHAT SKIN TYPES?]\n\n### Texture & Feel\n[COMPARE TEXTURES — LIGHTWEIGHT VS RICH, SCENTED VS UNSCENTED]\n\n---\n\n## The Verdict\n\n**Choose [PRODUCT A] if:** [1-2 SENTENCES — WHO SHOULD BUY THIS]\n\n**Choose [PRODUCT B] if:** [1-2 SENTENCES — WHO SHOULD BUY THIS]\n\n**Our pick:** [YOUR RECOMMENDATION AND WHY]\n\n---\n\n[Browse more Korean [CATEGORY] →](/[CATEGORY_SLUG])'
+    },
+    routine: {
+      title: "Korean [SKIN TYPE/CONCERN] Routine: Step-by-Step Guide With Products",
+      excerpt: "Build the perfect Korean skincare routine for [SKIN TYPE/CONCERN]. Every step explained with our top Amazon product picks.",
+      tags: "Routine, Guide, Skincare",
+      content: '## Why a Korean [SKIN TYPE] Routine Works\n\n[WRITE 3-4 SENTENCES: Why is the Korean approach effective for this skin type/concern? What makes it different from Western routines?]\n\n![Korean skincare routine flatlay](PASTE_COVER_IMAGE_HERE)\n\n---\n\n## The Routine: Step by Step\n\n### Step 1: [STEP NAME e.g. Oil Cleanser]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES: Why this step matters, how to do it, why this product]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 2: [STEP NAME e.g. Water Cleanser]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 3: [STEP NAME e.g. Toner]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 4: [STEP NAME e.g. Serum/Essence]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 5: [STEP NAME e.g. Moisturizer]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 6: [STEP NAME e.g. Sunscreen (AM only)]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Total Routine Cost\n\n**All [NUMBER] products:** $[TOTAL PRICE] on Amazon\n\n> That\'s less than a single luxury skincare product — and you get a complete routine!\n\n## Tips for Best Results\n\n- [TIP 1: e.g. Wait 30 seconds between steps for absorption]\n- [TIP 2: e.g. Use morning and night for best results]\n- [TIP 3: e.g. Patch test new products before full application]\n- [TIP 4: e.g. Give it 4-6 weeks to see real results]\n\n## Final Thoughts\n\n[WRITE 2-3 SENTENCES: Encouragement, summary, link to browse more]\n\n[Browse all Korean Skincare →](/skincare)'
+    },
+    review: {
+      title: "[PRODUCT NAME] Review: Is It Worth the Hype?",
+      excerpt: "An honest review of [PRODUCT NAME] — ingredients, results, pros & cons, and whether it's worth buying on Amazon.",
+      tags: "Review, Skincare, Honest Review",
+      content: '## [PRODUCT NAME] — First Impressions\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n- **Brand:** [BRAND NAME]\n- **Price:** $[PRICE] on Amazon\n- **Size:** [SIZE]\n- **Rating:** ⭐ [RATING] ([NUMBER] reviews on Amazon)\n- **Best for:** [SKIN TYPE/CONCERN]\n\n[WRITE 2-3 SENTENCES: What is this product? Why is it popular? What claims does it make?]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Key Ingredients\n\n[WRITE ABOUT 3-4 KEY INGREDIENTS AND WHAT THEY DO]\n\n- **[INGREDIENT 1]:** [WHAT IT DOES — 1 SENTENCE]\n- **[INGREDIENT 2]:** [WHAT IT DOES — 1 SENTENCE]\n- **[INGREDIENT 3]:** [WHAT IT DOES — 1 SENTENCE]\n- **[INGREDIENT 4]:** [WHAT IT DOES — 1 SENTENCE]\n\n---\n\n## How to Use It\n\n[WRITE 2-3 SENTENCES: Application instructions, when to use in routine, how much to apply]\n\n---\n\n## What We Like\n\n- [PRO 1: e.g. Lightweight, absorbs quickly]\n- [PRO 2: e.g. Visible results within 2 weeks]\n- [PRO 3: e.g. Great value for the price]\n- [PRO 4: e.g. Fragrance-free, sensitive skin friendly]\n\n## What Could Be Better\n\n- [CON 1: e.g. Packaging could be more hygienic]\n- [CON 2: e.g. Takes time to see dramatic results]\n\n---\n\n## Who Should Buy This?\n\n**Best for:** [DESCRIBE IDEAL USER — SKIN TYPE, CONCERN, BUDGET]\n\n**Skip if:** [DESCRIBE WHO SHOULDN\'T BUY — ALTERNATIVE SUGGESTION]\n\n---\n\n## The Verdict\n\n[WRITE 3-4 SENTENCES: Overall opinion, rating out of 10, would you recommend it?]\n\n**Our rating:** [X]/10\n\n[Shop [PRODUCT NAME] on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Similar Products Worth Checking\n\n- [ALTERNATIVE 1](PASTE_PRODUCT_PAGE_LINK) — $[PRICE]\n- [ALTERNATIVE 2](PASTE_PRODUCT_PAGE_LINK) — $[PRICE]\n- [ALTERNATIVE 3](PASTE_PRODUCT_PAGE_LINK) — $[PRICE]\n\n[Browse all Korean [CATEGORY] →](/[CATEGORY_SLUG])'
+    }
+  };
+
+  var t = templates[type];
+  if (!t) return;
+  
+  document.getElementById("blogTitle").value = t.title;
+  document.getElementById("blogSlug").value = t.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").replace(/[\[\]]/g, "").slice(0, 60);
+  document.getElementById("blogExcerpt").value = t.excerpt;
+  document.getElementById("blogTags").value = t.tags;
+  document.getElementById("blogContent").value = t.content;
+  document.getElementById("blogCover").value = "";
+  document.getElementById("blogCoverPreview").innerHTML = "No cover image";
+  editingBlogIndex = -1;
+  document.getElementById("blogFormTitle").textContent = "📝 New Blog Post";
+  document.getElementById("blogSaveBtn").textContent = "🚀 Publish Post";
+  showToast("Template loaded! Fill in the [BRACKETS] with your content.", "success");
+}
 
 async function loadBlogPosts() {
   try {
