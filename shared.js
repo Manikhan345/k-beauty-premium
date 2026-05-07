@@ -551,12 +551,43 @@ function searchScore(product, words) {
   
   for (var i = 0; i < words.length; i++) {
     var w = words[i];
-    if (text.indexOf(w) === -1) { allMatch = false; break; }
-    // Bonus for name match vs tag/subtag match
-    if (name.indexOf(w) !== -1) score += 10;
-    else score += 3;
-    // Bonus if word appears at start of name
-    if (name.indexOf(w) === 0) score += 5;
+    var found = false;
+    
+    // Direct match
+    if (text.indexOf(w) !== -1) {
+      found = true;
+      if (name.indexOf(w) !== -1) score += 10;
+      else score += 3;
+      if (name.indexOf(w) === 0) score += 5;
+    }
+    
+    // If not found, try splitting compound word (e.g. "facemask" → "face" + "mask")
+    if (!found && w.length >= 6) {
+      for (var j = 3; j < w.length - 2; j++) {
+        var part1 = w.substring(0, j);
+        var part2 = w.substring(j);
+        if (text.indexOf(part1) !== -1 && text.indexOf(part2) !== -1) {
+          found = true;
+          score += 6;
+          break;
+        }
+      }
+    }
+    
+    // If still not found, try partial match (at least 4 chars)
+    if (!found && w.length >= 4) {
+      // Check if any substring of 4+ chars matches
+      for (var k = 0; k <= w.length - 4; k++) {
+        var sub = w.substring(k, k + 4);
+        if (text.indexOf(sub) !== -1) {
+          found = true;
+          score += 2;
+          break;
+        }
+      }
+    }
+    
+    if (!found) { allMatch = false; break; }
   }
   
   if (!allMatch) return 0;
