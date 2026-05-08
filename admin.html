@@ -363,6 +363,10 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
         <button onclick="blogInsert('- ','')" class="blog-toolbar-btn" title="Bullet list">•</button>
         <button onclick="blogInsert('> ','')" class="blog-toolbar-btn" title="Blockquote">❝</button>
         <button onclick="blogInsert('\n---\n','')" class="blog-toolbar-btn" title="Horizontal line">—</button>
+        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
+        <button onclick="openTableBuilder()" class="blog-toolbar-btn" title="Insert table">📊 Table</button>
+        <button onclick="blogInsert('1. ','')" class="blog-toolbar-btn" title="Numbered list">1.</button>
+        <button onclick="blogInsert('\n> **Pro Tip:** ','')" class="blog-toolbar-btn" title="Pro tip callout">💡 Tip</button>
       </div>
       <textarea id="blogContent" rows="20" placeholder="Write your blog post here using Markdown...&#10;&#10;## Your First Heading&#10;&#10;Start writing your content here. Use **bold** for emphasis and *italic* for styling.&#10;&#10;### Add Images&#10;![description](https://image-url.jpg)&#10;&#10;### Add Links&#10;[Check out this product](https://amazon.com/dp/...)&#10;&#10;> Use blockquotes for tips or callouts"></textarea>
     </div>
@@ -375,6 +379,34 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   </div>
 
   <!-- Preview Panel -->
+  <!-- TABLE BUILDER -->
+  <div id="tableBuilder" class="panel" style="display:none;max-width:780px;margin:0 auto 20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--rose-light);">
+      <h2 style="margin:0;padding:0;border:0;">📊 Table Builder</h2>
+      <button onclick="document.getElementById('tableBuilder').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#999;">✕</button>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:12px;align-items:center;">
+      <div>
+        <label style="font-size:0.75rem;font-weight:600;color:var(--text-mid);">COLUMNS</label>
+        <input type="number" id="tableCols" value="3" min="2" max="8" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;">
+      </div>
+      <div>
+        <label style="font-size:0.75rem;font-weight:600;color:var(--text-mid);">ROWS (excluding header)</label>
+        <input type="number" id="tableRows" value="3" min="1" max="20" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;">
+      </div>
+      <button onclick="generateTableGrid()" class="btn-green" style="padding:8px 16px;margin-top:14px;">Generate</button>
+    </div>
+    <div id="tableGridWrap" style="overflow-x:auto;margin-bottom:12px;"></div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="addTableRow()" class="blog-toolbar-btn" style="padding:8px 14px;">+ Add Row</button>
+      <button onclick="addTableCol()" class="blog-toolbar-btn" style="padding:8px 14px;">+ Add Column</button>
+      <button onclick="removeTableRow()" class="blog-toolbar-btn" style="padding:8px 14px;">- Remove Row</button>
+      <button onclick="removeTableCol()" class="blog-toolbar-btn" style="padding:8px 14px;">- Remove Column</button>
+      <div style="flex:1;"></div>
+      <button onclick="insertTableMarkdown()" class="btn-green" style="padding:8px 20px;">Insert Table</button>
+    </div>
+  </div>
+
   <div id="blogPreview" class="panel" style="display:none;max-width:780px;margin:0 auto 20px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--rose-light);">
       <h2 style="margin:0;padding:0;border:0;">👁️ Live Preview</h2>
@@ -935,6 +967,132 @@ document.getElementById("blogCover").addEventListener("input", function() {
   }
 });
 
+// ── TABLE BUILDER ──
+var tableGridData = { cols: 3, rows: 3, cells: [] };
+
+function openTableBuilder() {
+  document.getElementById("tableBuilder").style.display = "block";
+  generateTableGrid();
+  document.getElementById("tableBuilder").scrollIntoView({ behavior: "smooth" });
+}
+
+function generateTableGrid() {
+  var cols = parseInt(document.getElementById("tableCols").value) || 3;
+  var rows = parseInt(document.getElementById("tableRows").value) || 3;
+  tableGridData.cols = cols;
+  tableGridData.rows = rows;
+  tableGridData.cells = [];
+  
+  // Init cells: row 0 = headers
+  for (var r = 0; r <= rows; r++) {
+    tableGridData.cells[r] = [];
+    for (var c = 0; c < cols; c++) {
+      tableGridData.cells[r][c] = r === 0 ? "Header " + (c + 1) : "";
+    }
+  }
+  renderTableGrid();
+}
+
+function renderTableGrid() {
+  var wrap = document.getElementById("tableGridWrap");
+  var html = '<table style="width:100%;border-collapse:collapse;font-size:0.82rem;">';
+  
+  for (var r = 0; r <= tableGridData.rows; r++) {
+    var isHeader = r === 0;
+    html += '<tr>';
+    for (var c = 0; c < tableGridData.cols; c++) {
+      var val = (tableGridData.cells[r] && tableGridData.cells[r][c]) || "";
+      var bg = isHeader ? "background:#F7E8D8;" : "";
+      html += '<td style="padding:2px;' + bg + '">' +
+        '<input type="text" value="' + val.replace(/"/g, '&quot;') + '" ' +
+        'onchange="tableGridData.cells[' + r + '][' + c + ']=this.value" ' +
+        'placeholder="' + (isHeader ? "Header" : "Cell") + '" ' +
+        'style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;font-family:Outfit,sans-serif;font-size:0.82rem;' + (isHeader ? 'font-weight:700;' : '') + '">' +
+        '</td>';
+    }
+    html += '</tr>';
+    if (isHeader) {
+      html += '<tr><td colspan="' + tableGridData.cols + '" style="height:4px;background:var(--accent-light);"></td></tr>';
+    }
+  }
+  html += '</table>';
+  wrap.innerHTML = html;
+}
+
+function addTableRow() {
+  tableGridData.rows++;
+  tableGridData.cells[tableGridData.rows] = [];
+  for (var c = 0; c < tableGridData.cols; c++) {
+    tableGridData.cells[tableGridData.rows][c] = "";
+  }
+  document.getElementById("tableRows").value = tableGridData.rows;
+  renderTableGrid();
+}
+
+function addTableCol() {
+  tableGridData.cols++;
+  for (var r = 0; r <= tableGridData.rows; r++) {
+    if (!tableGridData.cells[r]) tableGridData.cells[r] = [];
+    tableGridData.cells[r][tableGridData.cols - 1] = r === 0 ? "Header " + tableGridData.cols : "";
+  }
+  document.getElementById("tableCols").value = tableGridData.cols;
+  renderTableGrid();
+}
+
+function removeTableRow() {
+  if (tableGridData.rows <= 1) return;
+  tableGridData.cells.splice(tableGridData.rows, 1);
+  tableGridData.rows--;
+  document.getElementById("tableRows").value = tableGridData.rows;
+  renderTableGrid();
+}
+
+function removeTableCol() {
+  if (tableGridData.cols <= 2) return;
+  for (var r = 0; r <= tableGridData.rows; r++) {
+    if (tableGridData.cells[r]) tableGridData.cells[r].splice(tableGridData.cols - 1, 1);
+  }
+  tableGridData.cols--;
+  document.getElementById("tableCols").value = tableGridData.cols;
+  renderTableGrid();
+}
+
+function insertTableMarkdown() {
+  // Read current values from inputs
+  var inputs = document.querySelectorAll("#tableGridWrap input");
+  var idx = 0;
+  for (var r = 0; r <= tableGridData.rows; r++) {
+    for (var c = 0; c < tableGridData.cols; c++) {
+      if (inputs[idx]) {
+        tableGridData.cells[r][c] = inputs[idx].value;
+        idx++;
+      }
+    }
+  }
+  
+  // Build markdown table
+  var md = "\n";
+  // Header row
+  md += "| " + tableGridData.cells[0].join(" | ") + " |\n";
+  // Separator
+  md += "|" + tableGridData.cells[0].map(function() { return "---"; }).join("|") + "|\n";
+  // Data rows
+  for (var r = 1; r <= tableGridData.rows; r++) {
+    md += "| " + (tableGridData.cells[r] || []).join(" | ") + " |\n";
+  }
+  md += "\n";
+  
+  // Insert into blog content
+  var ta = document.getElementById("blogContent");
+  var pos = ta.selectionStart;
+  ta.value = ta.value.substring(0, pos) + md + ta.value.substring(pos);
+  ta.focus();
+  
+  // Hide builder
+  document.getElementById("tableBuilder").style.display = "none";
+  showToast("Table inserted!", "success");
+}
+
 // ── BLOG TEMPLATES ──
 function loadBlogTemplate(type) {
   if (document.getElementById("blogContent").value.trim() && !confirm("This will replace your current content. Continue?")) return;
@@ -1033,8 +1191,30 @@ function previewBlogPost() {
   var title = document.getElementById("blogTitle").value;
   var preview = document.getElementById("blogPreview");
   var previewContent = document.getElementById("blogPreviewContent");
-  // Simple markdown to HTML
   var html = content;
+  
+  // Tables
+  html = html.replace(/(?:^|\n)((?:\|[^\n]+\|\n?)+)/gm, function(match, tableBlock) {
+    var rows = tableBlock.trim().split('\n').filter(function(r) { return r.trim(); });
+    if (rows.length < 2) return match;
+    var parseRow = function(row) { return row.split('|').filter(function(c, i, arr) { return i > 0 && i < arr.length - 1; }).map(function(c) { return c.trim(); }); };
+    var hasSeparator = /^\|[\s\-:]+\|/.test(rows[1]);
+    var headerCells = parseRow(rows[0]);
+    var startIdx = hasSeparator ? 2 : 1;
+    var t = '<div style="overflow-x:auto;margin:16px 0;border-radius:8px;border:1px solid var(--border);"><table style="width:100%;border-collapse:collapse;font-size:0.88rem;"><thead style="background:linear-gradient(135deg,#C4956A,#D4A08C);"><tr>';
+    headerCells.forEach(function(c) { t += '<th style="padding:10px 14px;text-align:left;color:#fff;font-weight:600;font-size:0.8rem;">' + c + '</th>'; });
+    t += '</tr></thead><tbody>';
+    for (var i = startIdx; i < rows.length; i++) {
+      var cells = parseRow(rows[i]);
+      var isTotal = cells.join('').toLowerCase().indexOf('total') !== -1;
+      t += '<tr style="' + (isTotal ? 'background:#FFF8F0;font-weight:600;' : '') + '">';
+      cells.forEach(function(c) { c = c.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); t += '<td style="padding:8px 14px;border-bottom:1px solid var(--border);">' + c + '</td>'; });
+      t += '</tr>';
+    }
+    t += '</tbody></table></div>';
+    return t;
+  });
+  
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
   html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
