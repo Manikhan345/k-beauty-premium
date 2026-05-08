@@ -371,7 +371,8 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
       <textarea id="blogContent" rows="20" placeholder="Write your blog post here using Markdown...&#10;&#10;## Your First Heading&#10;&#10;Start writing your content here. Use **bold** for emphasis and *italic* for styling.&#10;&#10;### Add Images&#10;![description](https://image-url.jpg)&#10;&#10;### Add Links&#10;[Check out this product](https://amazon.com/dp/...)&#10;&#10;> Use blockquotes for tips or callouts"></textarea>
     </div>
     <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-      <button class="btn-green" onclick="saveBlogPost()" id="blogSaveBtn" style="padding:12px 28px;">🚀 Publish Post</button>
+      <button class="btn-green" onclick="saveBlogPost('published')" id="blogSaveBtn" style="padding:12px 28px;">🚀 Publish Post</button>
+      <button onclick="saveBlogPost('draft')" style="padding:12px 20px;background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;font-weight:600;">📝 Save as Draft</button>
       <button class="btn-blue" onclick="previewBlogPost()">👁️ Preview</button>
       <button onclick="clearBlogForm()" style="padding:8px 16px;background:var(--bg);color:var(--text-mid);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">Clear</button>
       <span id="blogStatus" style="font-size:0.82rem;color:var(--text-mid);margin-left:auto;"></span>
@@ -1158,7 +1159,9 @@ async function loadBlogPosts() {
 
 function renderBlogList() {
   var list = document.getElementById("blogPostList");
-  document.getElementById("blogListCount").textContent = "(" + blogPosts.length + ")";
+  var drafts = blogPosts.filter(function(p) { return p.status === "draft"; }).length;
+  var published = blogPosts.length - drafts;
+  document.getElementById("blogListCount").textContent = "(" + published + " published" + (drafts ? ", " + drafts + " drafts" : "") + ")";
   if (!blogPosts.length) { list.innerHTML = '<div class="empty-state"><p>No blog posts yet. Write your first post above!</p></div>'; return; }
   var sorted = blogPosts.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
   list.innerHTML = sorted.map(function(p, i) {
@@ -1166,9 +1169,11 @@ function renderBlogList() {
     var dateStr = p.date ? new Date(p.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
     var tags = (p.tags || []).map(function(t) { return '<span style="font-size:0.65rem;background:#EBF8FF;color:var(--blue);padding:1px 6px;border-radius:3px;margin-right:3px;">' + t + '</span>'; }).join("");
     var coverThumb = p.cover ? '<img src="' + p.cover + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:1.5rem;">📝</span>';
-    return '<div class="plist-item">' +
+    var isDraft = p.status === "draft";
+    var statusBadge = isDraft ? '<span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">DRAFT</span>' : '<span style="font-size:0.65rem;background:#F0FFF4;color:var(--green);padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">LIVE</span>';
+    return '<div class="plist-item" style="' + (isDraft ? 'opacity:0.7;' : '') + '">' +
       '<div class="plist-img">' + coverThumb + '</div>' +
-      '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + tags + '<span style="font-size:0.65rem;color:var(--text-light);">' + dateStr + '</span></div></div>' +
+      '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + statusBadge + tags + '<span style="font-size:0.65rem;color:var(--text-light);">' + dateStr + '</span></div></div>' +
       '<div class="plist-price" style="font-size:0.75rem;color:var(--text-light);">/' + p.slug + '</div>' +
       '<div class="plist-actions"><button class="btn-edit" onclick="editBlogPost(' + realIndex + ')">Edit</button><button class="btn-del" onclick="deleteBlogPost(' + realIndex + ')">Del</button></div>' +
     '</div>';
@@ -1268,7 +1273,7 @@ function deleteBlogPost(i) {
   pushBlogToGitHub("Deleted blog post");
 }
 
-async function saveBlogPost() {
+async function saveBlogPost(status) {
   var title = document.getElementById("blogTitle").value.trim();
   var slug = document.getElementById("blogSlug").value.trim();
   var excerpt = document.getElementById("blogExcerpt").value.trim();
@@ -1276,8 +1281,12 @@ async function saveBlogPost() {
   var tags = document.getElementById("blogTags").value.split(",").map(function(t) { return t.trim(); }).filter(Boolean);
   var content = document.getElementById("blogContent").value;
 
-  if (!title || !slug || !content) {
-    document.getElementById("blogStatus").textContent = "Title, slug, and content are required.";
+  if (!title || !slug) {
+    document.getElementById("blogStatus").textContent = "Title and slug are required.";
+    return;
+  }
+  if (status === "published" && !content) {
+    document.getElementById("blogStatus").textContent = "Content is required to publish.";
     return;
   }
 
@@ -1295,6 +1304,7 @@ async function saveBlogPost() {
     cover: cover,
     tags: tags,
     content: content,
+    status: status || "published",
     date: editingBlogIndex >= 0 ? (blogPosts[editingBlogIndex].date || new Date().toISOString()) : new Date().toISOString()
   };
 
@@ -1304,7 +1314,8 @@ async function saveBlogPost() {
     blogPosts.unshift(post);
   }
 
-  await pushBlogToGitHub(editingBlogIndex >= 0 ? "Updated blog: " + title : "New blog: " + title);
+  var msg = status === "draft" ? "Saved draft: " + title : (editingBlogIndex >= 0 ? "Updated blog: " + title : "Published: " + title);
+  await pushBlogToGitHub(msg);
   clearBlogForm();
 }
 

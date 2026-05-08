@@ -19,6 +19,7 @@
 .post-content { font-size: 1.05rem; line-height: 1.8; color: var(--text); }
 .post-content h2 { font-family: 'Noto Serif Display', serif; font-size: 1.5rem; margin: 32px 0 12px; color: var(--text); }
 .post-content h3 { font-family: 'Noto Serif Display', serif; font-size: 1.2rem; margin: 24px 0 10px; color: var(--text); }
+.post-content h4 { font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; color: var(--text); }
 .post-content p { margin: 0 0 16px; }
 .post-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
 .post-content ul, .post-content ol { margin: 0 0 16px; padding-left: 24px; }
@@ -101,8 +102,9 @@ function markdownToHTML(md) {
     return tableHTML;
   });
   
-  // Headers
+  // H4 support
   html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+  // Headers
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
   html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
   html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
@@ -123,8 +125,9 @@ function markdownToHTML(md) {
   html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
   // Horizontal rule
   html = html.replace(/^---+$/gm, '<hr>');
-  // Paragraphs
-  html = html.split('\n\n').map(function(block) {
+  // Paragraphs - handle both \n\n and single \n after headings
+  var blocks = html.split(/\n{2,}|\n(?=<h[2-4])|(?<=<\/h[2-4]>)\n/);
+  html = blocks.map(function(block) {
     block = block.trim();
     if (!block) return '';
     if (block.startsWith('<h') || block.startsWith('<ul') || block.startsWith('<ol') || block.startsWith('<blockquote') || block.startsWith('<hr') || block.startsWith('<img') || block.startsWith('<div') || block.startsWith('<table')) return block;
@@ -154,7 +157,7 @@ async function loadBlogPost() {
     posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
     
     var post = posts.find(function(p) { return p.slug === slug; });
-    if (!post) {
+    if (!post || post.status === "draft") {
       container.innerHTML = '<div class="post-not-found"><h2>Post Not Found</h2><p>This post doesn\'t exist or has been removed.</p><a href="/blog" style="color:var(--accent);">← Back to Blog</a></div>';
       return;
     }

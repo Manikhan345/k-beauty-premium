@@ -61,6 +61,8 @@ async function loadBlogPosts() {
     var posts = await resp.json();
     
     // Sort by date descending
+    // Hide drafts from public view
+    posts = posts.filter(function(p) { return p.status !== "draft"; });
     posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
     
     if (posts.length === 0) {
