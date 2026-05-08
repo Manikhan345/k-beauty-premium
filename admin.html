@@ -91,6 +91,19 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .blog-toolbar-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: var(--text-mid); transition: all 0.15s; }
 .blog-toolbar-btn:hover { background: var(--rose-light); color: var(--rose); border-color: var(--rose); }
 
+/* WORDPRESS-STYLE EDITOR */
+.wp-editor { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; }
+.wp-toolbar { position: sticky; top: 56px; z-index: 30; background: #f1f1f1; border-bottom: 1px solid #ddd; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+.wp-toolbar-row { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+.wp-toolbar-right { display: flex; align-items: center; gap: 8px; }
+.wp-btn { width: 34px; height: 34px; border: 1px solid transparent; border-radius: 4px; background: transparent; cursor: pointer; font-size: 0.92rem; color: #555; display: flex; align-items: center; justify-content: center; transition: all 0.1s; font-family: 'Outfit', sans-serif; }
+.wp-btn:hover { background: #e0e0e0; border-color: #ccc; color: #333; }
+.wp-btn:active { background: #d0d0d0; }
+.wp-sep { width: 1px; height: 24px; background: #ccc; margin: 0 4px; }
+.wp-textarea { width: 100%; min-height: 500px; padding: 24px; border: none; outline: none; font-family: 'Outfit', sans-serif; font-size: 0.95rem; line-height: 1.8; resize: vertical; color: var(--text); }
+.wp-textarea::placeholder { color: #bbb; }
+.wp-word-count { font-size: 0.72rem; color: #999; font-family: 'Outfit', sans-serif; white-space: nowrap; }
+
 /* PRODUCT MANAGER LAYOUT */
 .pm-layout { display: flex; flex-direction: column; gap: 20px; }
 .pm-left { }
@@ -336,45 +349,58 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
       <button onclick="loadBlogTemplate('review')" class="blog-toolbar-btn" style="padding:8px 14px;">⭐ Product Review</button>
     </div>
     <div class="form-row-half">
-      <div class="form-row"><label>POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin"></div>
+      <div class="form-row"><label>POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin" style="font-size:1.1rem;font-weight:600;padding:12px;"></div>
       <div class="form-row"><label>SLUG (URL)</label><input type="text" id="blogSlug" placeholder="auto-generated from title"><small>Will appear as /blog/your-slug</small></div>
     </div>
-    <div class="form-row"><label>EXCERPT (preview text for listing)</label><input type="text" id="blogExcerpt" placeholder="Short 1-2 sentence summary that appears on the blog listing page..."></div>
+    <div class="form-row"><label>EXCERPT</label><input type="text" id="blogExcerpt" placeholder="Short 1-2 sentence summary for the blog listing page..."></div>
     <div class="form-row-half">
-      <div class="form-row"><label>COVER IMAGE URL</label><input type="text" id="blogCover" placeholder="https://images.unsplash.com/..."><small>Tip: Use Unsplash, Pexels, or Canva for free images</small></div>
+      <div class="form-row"><label>COVER IMAGE URL</label><input type="text" id="blogCover" placeholder="https://images.unsplash.com/..."><small>Tip: Use Unsplash, Pexels, or Canva</small></div>
       <div class="form-row"><label>TAGS (comma separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide"></div>
     </div>
     <div class="form-row" style="margin-top:4px;">
       <label>COVER PREVIEW</label>
-      <div id="blogCoverPreview" style="width:100%;height:160px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.82rem;overflow:hidden;margin-bottom:12px;">No cover image</div>
+      <div id="blogCoverPreview" style="width:100%;height:140px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.82rem;overflow:hidden;margin-bottom:12px;">No cover image</div>
     </div>
-    <div class="form-row">
-      <label>CONTENT (Markdown supported)</label>
-      <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;background:var(--bg);padding:8px 10px;border-radius:8px;border:1px solid var(--border);">
-        <button onclick="blogInsert('**','**')" class="blog-toolbar-btn" title="Bold"><strong>B</strong></button>
-        <button onclick="blogInsert('*','*')" class="blog-toolbar-btn" title="Italic"><em>I</em></button>
-        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
-        <button onclick="blogInsert('## ','')" class="blog-toolbar-btn" title="Heading 2">H2</button>
-        <button onclick="blogInsert('### ','')" class="blog-toolbar-btn" title="Heading 3">H3</button>
-        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
-        <button onclick="blogInsert('![alt](',')')" class="blog-toolbar-btn" title="Insert image">🖼️</button>
-        <button onclick="blogInsert('[link text](',')')" class="blog-toolbar-btn" title="Insert link">🔗</button>
-        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
-        <button onclick="blogInsert('- ','')" class="blog-toolbar-btn" title="Bullet list">•</button>
-        <button onclick="blogInsert('> ','')" class="blog-toolbar-btn" title="Blockquote">❝</button>
-        <button onclick="blogInsert('\n---\n','')" class="blog-toolbar-btn" title="Horizontal line">—</button>
-        <span style="width:1px;background:var(--border);margin:0 4px;"></span>
-        <button onclick="openTableBuilder()" class="blog-toolbar-btn" title="Insert table">📊 Table</button>
-        <button onclick="blogInsert('1. ','')" class="blog-toolbar-btn" title="Numbered list">1.</button>
-        <button onclick="blogInsert('\n> **Pro Tip:** ','')" class="blog-toolbar-btn" title="Pro tip callout">💡 Tip</button>
+    
+    <!-- WORDPRESS-STYLE EDITOR -->
+    <div class="wp-editor">
+      <div class="wp-toolbar" id="wpToolbar">
+        <div class="wp-toolbar-row">
+          <button onclick="blogInsert('**','**')" class="wp-btn" title="Bold (Ctrl+B)"><strong>B</strong></button>
+          <button onclick="blogInsert('*','*')" class="wp-btn" title="Italic (Ctrl+I)"><em>I</em></button>
+          <button onclick="blogInsert('~~','~~')" class="wp-btn" title="Strikethrough"><s>S</s></button>
+          <span class="wp-sep"></span>
+          <button onclick="blogInsert('## ','')" class="wp-btn" title="Heading 2">H2</button>
+          <button onclick="blogInsert('### ','')" class="wp-btn" title="Heading 3">H3</button>
+          <button onclick="blogInsert('#### ','')" class="wp-btn" title="Heading 4">H4</button>
+          <span class="wp-sep"></span>
+          <button onclick="blogInsert('- ','')" class="wp-btn" title="Bullet List">&#8226;</button>
+          <button onclick="blogInsert('1. ','')" class="wp-btn" title="Numbered List">1.</button>
+          <button onclick="blogInsert('> ','')" class="wp-btn" title="Blockquote">&#10077;</button>
+          <span class="wp-sep"></span>
+          <button onclick="insertLink()" class="wp-btn" title="Insert Link">&#128279;</button>
+          <button onclick="insertImage()" class="wp-btn" title="Insert Image">&#128247;</button>
+          <button onclick="openTableBuilder()" class="wp-btn" title="Insert Table">&#128202;</button>
+          <span class="wp-sep"></span>
+          <button onclick="blogInsert('\n---\n','')" class="wp-btn" title="Horizontal Line">&#8213;</button>
+          <button onclick="blogInsert('\n> **Pro Tip:** ','')" class="wp-btn" title="Pro Tip Callout">&#128161;</button>
+          <button onclick="blogInsert('\n> **Warning:** ','')" class="wp-btn" title="Warning Callout">&#9888;</button>
+          <span class="wp-sep"></span>
+          <button onclick="undoEditor()" class="wp-btn" title="Undo">&#8617;</button>
+          <button onclick="redoEditor()" class="wp-btn" title="Redo">&#8618;</button>
+        </div>
+        <div class="wp-toolbar-right">
+          <span id="wordCount" class="wp-word-count">0 words</span>
+        </div>
       </div>
-      <textarea id="blogContent" rows="20" placeholder="Write your blog post here using Markdown...&#10;&#10;## Your First Heading&#10;&#10;Start writing your content here. Use **bold** for emphasis and *italic* for styling.&#10;&#10;### Add Images&#10;![description](https://image-url.jpg)&#10;&#10;### Add Links&#10;[Check out this product](https://amazon.com/dp/...)&#10;&#10;> Use blockquotes for tips or callouts"></textarea>
+      <textarea id="blogContent" class="wp-textarea" placeholder="Start writing your blog post here..."></textarea>
     </div>
-    <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-      <button class="btn-green" onclick="saveBlogPost('published')" id="blogSaveBtn" style="padding:12px 28px;">🚀 Publish Post</button>
-      <button onclick="saveBlogPost('draft')" style="padding:12px 20px;background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;font-weight:600;">📝 Save as Draft</button>
-      <button class="btn-blue" onclick="previewBlogPost()">👁️ Preview</button>
-      <button onclick="clearBlogForm()" style="padding:8px 16px;background:var(--bg);color:var(--text-mid);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">Clear</button>
+
+    <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+      <button class="btn-green" onclick="saveBlogPost('published')" id="blogSaveBtn" style="padding:12px 28px;">&#128640; Publish</button>
+      <button onclick="saveBlogPost('draft')" id="blogDraftBtn" style="padding:12px 20px;background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;font-weight:600;">&#128221; Save Draft</button>
+      <button class="btn-blue" onclick="previewInNewTab()">&#128065; Preview</button>
+      <button onclick="closeBlogEditor()" style="padding:8px 16px;background:var(--bg);color:var(--text-mid);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;">&#10005; Close</button>
       <span id="blogStatus" style="font-size:0.82rem;color:var(--text-mid);margin-left:auto;"></span>
     </div>
   </div>
@@ -406,14 +432,6 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
       <div style="flex:1;"></div>
       <button onclick="insertTableMarkdown()" class="btn-green" style="padding:8px 20px;">Insert Table</button>
     </div>
-  </div>
-
-  <div id="blogPreview" class="panel" style="display:none;max-width:780px;margin:0 auto 20px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--rose-light);">
-      <h2 style="margin:0;padding:0;border:0;">👁️ Live Preview</h2>
-      <button onclick="document.getElementById('blogPreview').style.display='none'" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#999;">✕</button>
-    </div>
-    <div id="blogPreviewContent" style="font-size:1rem;line-height:1.8;"></div>
   </div>
 
   <!-- Blog Post List -->
@@ -1189,7 +1207,101 @@ function blogInsert(before, after) {
   ta.focus();
   ta.selectionStart = start + before.length;
   ta.selectionEnd = start + before.length + selected.length;
+  updateWordCount();
 }
+
+function insertLink() {
+  var url = prompt("Enter URL:");
+  if (!url) return;
+  var ta = document.getElementById("blogContent");
+  var selected = ta.value.substring(ta.selectionStart, ta.selectionEnd) || "link text";
+  blogInsert("[" + selected + "](", ")");
+  // Put URL in
+  var pos = ta.selectionStart;
+  ta.value = ta.value.substring(0, pos) + url + ta.value.substring(pos);
+  ta.focus();
+}
+
+function insertImage() {
+  var url = prompt("Enter image URL:");
+  if (!url) return;
+  var alt = prompt("Enter image description (alt text):", "");
+  blogInsert("\n![" + (alt || "image") + "](" + url + ")\n", "");
+}
+
+function previewInNewTab() {
+  var content = document.getElementById("blogContent").value;
+  var title = document.getElementById("blogTitle").value || "Untitled";
+  var cover = document.getElementById("blogCover").value;
+  
+  var previewHTML = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Preview: ' + title + '</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>body{font-family:Outfit,sans-serif;max-width:780px;margin:40px auto;padding:0 20px;color:#3D2B1F;line-height:1.8;}h1{font-family:Noto Serif Display,serif;font-size:2.2rem;margin-bottom:16px;}h2{font-family:Noto Serif Display,serif;font-size:1.5rem;margin:32px 0 12px;}h3{font-family:Noto Serif Display,serif;font-size:1.2rem;margin:24px 0 10px;}h4{font-size:1.05rem;font-weight:600;margin:20px 0 8px;}img{max-width:100%;border-radius:10px;margin:16px 0;}blockquote{border-left:3px solid #C4956A;padding:12px 20px;margin:16px 0;background:#FFF8F0;border-radius:0 8px 8px 0;font-style:italic;}a{color:#C4956A;}table{width:100%;border-collapse:collapse;margin:20px 0;font-size:0.9rem;}thead{background:linear-gradient(135deg,#C4956A,#D4A08C);}th{padding:12px 16px;text-align:left;color:#fff;font-weight:600;}td{padding:10px 16px;border-bottom:1px solid #eee;}tbody tr:hover{background:#FFF8F0;}s{text-decoration:line-through;color:#999;}.cover-img{width:100%;max-height:400px;object-fit:cover;border-radius:12px;margin-bottom:24px;}</style></head><body>';
+  if (cover) previewHTML += '<img src="' + cover + '" class="cover-img">';
+  previewHTML += '<h1>' + title + '</h1>';
+  
+  // Render markdown
+  var html = content;
+  // Tables
+  html = html.replace(/(?:^|\n)((?:\|[^\n]+\|\n?)+)/gm, function(match, tb) {
+    var rows = tb.trim().split("\\n").length < 2 ? tb.trim().split("\n") : tb.trim().split("\n");
+    if (rows.length < 2) return match;
+    var pr = function(r) { return r.split("|").filter(function(c,i,a){return i>0&&i<a.length-1;}).map(function(c){return c.trim();}); };
+    var hs = /^\|[\s\-:]+\|/.test(rows[1]);
+    var hc = pr(rows[0]);
+    var si = hs ? 2 : 1;
+    var t = "<table><thead><tr>"; hc.forEach(function(c){t+="<th>"+c+"</th>";}); t+="</tr></thead><tbody>";
+    for(var i=si;i<rows.length;i++){var cs=pr(rows[i]);if(!cs.length)continue;t+="<tr>";cs.forEach(function(c){c=c.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");t+="<td>"+c+"</td>";});t+="</tr>";}
+    t+="</tbody></table>";return t;
+  });
+  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/~~(.+?)~~/g, '<s>$1</s>');
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+  html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/^---+$/gm, '<hr>');
+  html = html.split('\n\n').map(function(b){b=b.trim();if(!b||b.startsWith('<'))return b;return '<p>'+b.replace(/\n/g,'<br>')+'</p>';}).join('\n');
+  
+  previewHTML += html + '</body></html>';
+  var win = window.open('', '_blank');
+  win.document.write(previewHTML);
+  win.document.close();
+}
+
+function closeBlogEditor() {
+  if (document.getElementById("blogContent").value.trim() && !confirm("Close editor? Unsaved changes will be lost.")) return;
+  clearBlogForm();
+}
+
+function updateWordCount() {
+  var text = document.getElementById("blogContent").value.trim();
+  var words = text ? text.split(/\s+/).length : 0;
+  var el = document.getElementById("wordCount");
+  if (el) el.textContent = words + " words";
+}
+
+function undoEditor() { document.execCommand("undo"); }
+function redoEditor() { document.execCommand("redo"); }
+
+// Word count on input
+document.addEventListener("DOMContentLoaded", function() {
+  var ta = document.getElementById("blogContent");
+  if (ta) {
+    ta.addEventListener("input", updateWordCount);
+    // Keyboard shortcuts
+    ta.addEventListener("keydown", function(e) {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === "b") { e.preventDefault(); blogInsert("**", "**"); }
+        if (e.key === "i") { e.preventDefault(); blogInsert("*", "*"); }
+        if (e.key === "k") { e.preventDefault(); insertLink(); }
+        if (e.key === "s") { e.preventDefault(); saveBlogPost("draft"); }
+      }
+    });
+  }
+});
 
 function previewBlogPost() {
   var content = document.getElementById("blogContent").value;
@@ -1316,7 +1428,14 @@ async function saveBlogPost(status) {
 
   var msg = status === "draft" ? "Saved draft: " + title : (editingBlogIndex >= 0 ? "Updated blog: " + title : "Published: " + title);
   await pushBlogToGitHub(msg);
-  clearBlogForm();
+  if (status !== "draft") {
+    clearBlogForm();
+  } else {
+    // Keep editor open for drafts, just update the index
+    if (editingBlogIndex < 0) editingBlogIndex = 0; // Just added at index 0
+    document.getElementById("blogStatus").textContent = "Draft saved!";
+    renderBlogList();
+  }
 }
 
 async function pushBlogToGitHub(message) {
