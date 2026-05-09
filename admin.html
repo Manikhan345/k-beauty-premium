@@ -91,18 +91,86 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .blog-toolbar-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: var(--text-mid); transition: all 0.15s; }
 .blog-toolbar-btn:hover { background: var(--rose-light); color: var(--rose); border-color: var(--rose); }
 
-/* WORDPRESS-STYLE EDITOR */
-.wp-editor { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; }
-.wp-toolbar { position: sticky; top: 56px; z-index: 30; background: #f1f1f1; border-bottom: 1px solid #ddd; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
-.wp-toolbar-row { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
-.wp-toolbar-right { display: flex; align-items: center; gap: 8px; }
-.wp-btn { width: 34px; height: 34px; border: 1px solid transparent; border-radius: 4px; background: transparent; cursor: pointer; font-size: 0.92rem; color: #555; display: flex; align-items: center; justify-content: center; transition: all 0.1s; font-family: 'Outfit', sans-serif; }
-.wp-btn:hover { background: #e0e0e0; border-color: #ccc; color: #333; }
-.wp-btn:active { background: #d0d0d0; }
-.wp-sep { width: 1px; height: 24px; background: #ccc; margin: 0 4px; }
-.wp-textarea { width: 100%; min-height: 500px; padding: 24px; border: none; outline: none; font-family: 'Outfit', sans-serif; font-size: 0.95rem; line-height: 1.8; resize: vertical; color: var(--text); }
-.wp-textarea::placeholder { color: #bbb; }
-.wp-word-count { font-size: 0.72rem; color: #999; font-family: 'Outfit', sans-serif; white-space: nowrap; }
+/* WORDPRESS CLASSIC EDITOR */
+.wp-layout { display: grid; grid-template-columns: minmax(0,1fr) 280px; gap: 20px; }
+@media (max-width: 1024px) { .wp-layout { grid-template-columns: 1fr; } }
+.wp-main-col { min-width: 0; }
+
+.wp-title-input { width: 100%; padding: 14px 16px; border: 1px solid #ddd; border-radius: 4px; font-size: 1.5rem; font-family: 'Outfit', sans-serif; font-weight: 500; outline: none; background: #fff; color: #23282d; margin-bottom: 6px; }
+.wp-title-input:focus { border-color: #007cba; box-shadow: 0 0 0 1px #007cba; }
+.wp-permalink { font-size: 0.82rem; color: #555; padding: 2px 4px 10px; }
+.wp-permalink strong { color: #23282d; }
+.wp-permalink input { padding: 4px 8px; border: 1px solid #ddd; border-radius: 3px; font-family: monospace; font-size: 0.78rem; background: #f9f9f9; }
+
+.wp-media-bar { background: #f5f5f5; border: 1px solid #e1e1e1; border-bottom: none; border-radius: 4px 4px 0 0; padding: 8px 10px; display: flex; gap: 6px; align-items: center; }
+.wp-add-media-btn { padding: 6px 12px; background: #f5f5f5; border: 1px solid #ccc; border-radius: 3px; font-size: 0.82rem; font-family: 'Outfit', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: #555; }
+.wp-add-media-btn:hover { background: #fff; border-color: #007cba; color: #007cba; }
+.wp-mode-tabs { display: flex; margin-left: auto; }
+.wp-mode-tab { padding: 6px 14px; background: #ececec; border: 1px solid #ccc; border-bottom: none; border-radius: 3px 3px 0 0; font-size: 0.82rem; font-family: 'Outfit', sans-serif; cursor: pointer; color: #555; margin-left: -1px; }
+.wp-mode-tab.active { background: #fff; border-color: #ccc; color: #23282d; font-weight: 600; }
+
+.wp-toolbar-classic { background: #f5f5f5; border: 1px solid #e1e1e1; padding: 6px 8px; }
+.wp-toolbar-row { display: flex; gap: 0; flex-wrap: wrap; align-items: center; width: 100%; }
+.wp-toolbar-row.row-2 { display: none; padding-top: 6px; margin-top: 6px; border-top: 1px solid #e0e0e0; }
+.wp-toolbar-row.row-2.shown { display: flex; }
+.wp-fmt-select { padding: 4px 8px; border: 1px solid #ddd; border-radius: 3px; background: #fff; font-size: 0.82rem; font-family: 'Outfit', sans-serif; cursor: pointer; height: 28px; margin-right: 6px; min-width: 120px; }
+.wp-tb-btn { width: 28px; height: 28px; border: 1px solid transparent; border-radius: 3px; background: transparent; cursor: pointer; font-size: 0.85rem; color: #555; display: inline-flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; padding: 0; }
+.wp-tb-btn:hover { background: #fff; border-color: #ccc; color: #23282d; }
+.wp-tb-btn.active { background: #ddd; border-color: #999; color: #000; }
+.wp-tb-btn svg { width: 14px; height: 14px; }
+.wp-tb-sep { width: 1px; height: 20px; background: #ccc; margin: 0 4px; }
+
+.wp-edit-body { background: #fff; border: 1px solid #e1e1e1; border-top: none; border-radius: 0 0 4px 4px; }
+.wp-visual-area { min-height: 500px; padding: 20px 24px; outline: none; font-family: 'Outfit', sans-serif; font-size: 1rem; line-height: 1.7; color: #1a1a1a; max-height: 700px; overflow-y: auto; }
+.wp-visual-area:empty::before { content: attr(data-placeholder); color: #bbb; pointer-events: none; }
+.wp-visual-area p { margin: 0 0 1em; }
+.wp-visual-area h1 { font-size: 1.8rem; margin: 0.8em 0 0.4em; font-weight: 700; }
+.wp-visual-area h2 { font-size: 1.5rem; margin: 0.8em 0 0.4em; font-weight: 700; }
+.wp-visual-area h3 { font-size: 1.25rem; margin: 0.7em 0 0.3em; font-weight: 600; }
+.wp-visual-area h4 { font-size: 1.1rem; margin: 0.6em 0 0.3em; font-weight: 600; }
+.wp-visual-area ul, .wp-visual-area ol { margin: 0 0 1em 1.5em; }
+.wp-visual-area blockquote { border-left: 3px solid #C4956A; padding: 8px 16px; margin: 1em 0; background: #FFF8F0; color: #555; font-style: italic; }
+.wp-visual-area pre { background: #f5f5f5; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 0.88rem; overflow-x: auto; }
+.wp-visual-area img { max-width: 100%; height: auto; border-radius: 4px; }
+.wp-visual-area a { color: #007cba; }
+.wp-visual-area table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+.wp-visual-area th, .wp-visual-area td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+.wp-visual-area th { background: #f5f5f5; font-weight: 600; }
+.wp-text-area { width: 100%; min-height: 500px; padding: 20px 24px; border: none; outline: none; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.6; resize: vertical; display: none; }
+
+body.wp-fullscreen .wp-edit-wrap { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; flex-direction: column; }
+body.wp-fullscreen .wp-edit-wrap .wp-edit-body { flex: 1; overflow: hidden; }
+body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wrap .wp-text-area { max-height: none; height: 100%; }
+
+.wp-edit-footer { background: #f5f5f5; border: 1px solid #e1e1e1; border-top: none; border-radius: 0 0 4px 4px; padding: 6px 12px; font-size: 0.78rem; color: #777; display: flex; justify-content: space-between; }
+
+.wp-sidebar { display: flex; flex-direction: column; gap: 14px; }
+.wp-meta-box { background: #fff; border: 1px solid #e1e1e1; border-radius: 4px; }
+.wp-meta-header { background: #f5f5f5; padding: 10px 14px; border-bottom: 1px solid #e1e1e1; font-weight: 600; font-size: 0.92rem; color: #23282d; }
+.wp-meta-body { padding: 14px; }
+.wp-publish-actions { display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+.wp-mini-btn { padding: 6px 12px; background: #f7f7f7; border: 1px solid #ccc; border-radius: 3px; font-size: 0.82rem; font-family: 'Outfit', sans-serif; cursor: pointer; color: #23282d; }
+.wp-mini-btn:hover { background: #fff; border-color: #999; }
+.wp-meta-row { padding: 6px 0; font-size: 0.85rem; color: #555; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.wp-meta-row .icon { font-size: 0.95rem; opacity: 0.6; width: 18px; }
+.wp-meta-row strong { color: #23282d; font-weight: 600; }
+.wp-meta-row .edit-link { color: #007cba; cursor: pointer; font-size: 0.82rem; margin-left: auto; text-decoration: underline; }
+.wp-meta-row select, .wp-meta-row input[type="datetime-local"] { padding: 4px 6px; border: 1px solid #ddd; border-radius: 3px; font-size: 0.82rem; font-family: 'Outfit', sans-serif; flex: 1; min-width: 0; }
+.wp-publish-footer { display: flex; padding: 12px 14px; background: #f5f5f5; border-top: 1px solid #e1e1e1; border-radius: 0 0 4px 4px; align-items: center; }
+.wp-trash-link { color: #a00; font-size: 0.85rem; cursor: pointer; }
+.wp-trash-link:hover { color: #dc3232; text-decoration: underline; }
+.wp-publish-btn { padding: 8px 18px; background: #007cba; color: #fff; border: 1px solid #006799; border-radius: 3px; font-size: 0.88rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+.wp-publish-btn:hover { background: #006799; }
+.wp-publish-btn:disabled { background: #ccc; border-color: #bbb; cursor: not-allowed; }
+
+.wp-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9000; align-items: center; justify-content: center; padding: 20px; }
+.wp-modal-overlay.open { display: flex; }
+.wp-modal { background: #fff; border-radius: 6px; max-width: 500px; width: 100%; }
+.wp-modal-header { padding: 14px 18px; border-bottom: 1px solid #e1e1e1; display: flex; justify-content: space-between; background: #f5f5f5; border-radius: 6px 6px 0 0; }
+.wp-modal-header h3 { font-size: 1rem; font-weight: 600; }
+.wp-modal-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #555; }
+.wp-modal-body { padding: 18px; }
+.wp-modal-footer { padding: 12px 18px; border-top: 1px solid #e1e1e1; display: flex; gap: 8px; justify-content: flex-end; background: #f5f5f5; border-radius: 0 0 6px 6px; }
 
 /* PRODUCT MANAGER LAYOUT */
 .pm-layout { display: flex; flex-direction: column; gap: 20px; }
@@ -339,28 +407,297 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 <!-- ═══════════ TAB 3: REDIRECT MANAGER ═══════════ -->
 <!-- BLOG MANAGER TAB -->
 <div class="tab-panel" id="tab-blog">
-  <div class="panel">
-    <h2 id="blogFormTitle">📝 New Blog Post</h2>
-    <div style="margin-bottom:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+
+  <!-- Template loader -->
+  <div class="panel" style="padding:14px 18px;margin-bottom:14px;">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span style="font-size:0.78rem;color:var(--text-mid);font-weight:600;">START FROM TEMPLATE:</span>
-      <button onclick="loadBlogTemplate('listicle')" class="blog-toolbar-btn" style="padding:8px 14px;">📋 Best Products List</button>
-      <button onclick="loadBlogTemplate('comparison')" class="blog-toolbar-btn" style="padding:8px 14px;">⚖️ Product Comparison</button>
-      <button onclick="loadBlogTemplate('routine')" class="blog-toolbar-btn" style="padding:8px 14px;">🧴 Routine Guide</button>
-      <button onclick="loadBlogTemplate('review')" class="blog-toolbar-btn" style="padding:8px 14px;">⭐ Product Review</button>
+      <button onclick="loadBlogTemplate('listicle')" class="blog-toolbar-btn">📋 Best Products List</button>
+      <button onclick="loadBlogTemplate('comparison')" class="blog-toolbar-btn">⚖️ Product Comparison</button>
+      <button onclick="loadBlogTemplate('routine')" class="blog-toolbar-btn">🧴 Routine Guide</button>
+      <button onclick="loadBlogTemplate('review')" class="blog-toolbar-btn">⭐ Product Review</button>
+      <div style="margin-left:auto;font-size:0.78rem;color:var(--text-mid);" id="blogPostState">📝 New Post</div>
     </div>
-    <div class="form-row-half">
-      <div class="form-row"><label>POST TITLE</label><input type="text" id="blogTitle" placeholder="e.g. 10 Best Korean Toners for Oily Skin" style="font-size:1.1rem;font-weight:600;padding:12px;"></div>
-      <div class="form-row"><label>SLUG (URL)</label><input type="text" id="blogSlug" placeholder="auto-generated from title"><small>Will appear as /blog/your-slug</small></div>
+  </div>
+
+  <!-- WP-style layout: editor on left, publish sidebar on right -->
+  <div class="wp-layout">
+
+    <!-- LEFT COLUMN: Editor -->
+    <div class="wp-main-col">
+
+      <input type="text" class="wp-title-input" id="blogTitle" placeholder="Add title">
+
+      <div class="wp-permalink" id="permalinkRow" style="display:none;">
+        <strong>Permalink:</strong> https://kbeauty.fun/blog/<input type="text" id="blogSlug" style="width:auto;min-width:200px;">
+      </div>
+
+      <!-- Excerpt + Tags + Cover -->
+      <div class="form-row-half" style="margin-bottom:12px;">
+        <div class="form-row" style="margin:0;"><label>Excerpt</label><input type="text" id="blogExcerpt" placeholder="Short summary..."></div>
+        <div class="form-row" style="margin:0;"><label>Tags (comma-separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide"></div>
+      </div>
+      <div class="form-row-half" style="margin-bottom:14px;">
+        <div class="form-row" style="margin:0;"><label>Cover Image URL</label><input type="text" id="blogCover" placeholder="https://..."></div>
+        <div class="form-row" style="margin:0;"><label>Cover Preview</label>
+          <div id="blogCoverPreview" style="width:100%;height:38px;background:var(--bg);border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.78rem;overflow:hidden;">No cover</div>
+        </div>
+      </div>
+
+      <!-- WP Editor -->
+      <div class="wp-edit-wrap">
+
+        <!-- Add Media + Visual/Text tabs -->
+        <div class="wp-media-bar">
+          <button class="wp-add-media-btn" onclick="openMediaModal()">
+            <span style="font-size:1rem;">📷</span> Add Media
+          </button>
+          <div class="wp-mode-tabs">
+            <button class="wp-mode-tab active" id="modeVisual" onclick="switchMode('visual')">Visual</button>
+            <button class="wp-mode-tab" id="modeText" onclick="switchMode('text')">Text</button>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="wp-toolbar-classic">
+          <div class="wp-toolbar-row">
+            <select class="wp-fmt-select" id="fmtSelect" onchange="execFormat(this.value);this.value='';">
+              <option value="">Paragraph</option>
+              <option value="h1">Heading 1</option>
+              <option value="h2">Heading 2</option>
+              <option value="h3">Heading 3</option>
+              <option value="h4">Heading 4</option>
+              <option value="h5">Heading 5</option>
+              <option value="h6">Heading 6</option>
+              <option value="pre">Preformatted</option>
+              <option value="p">Paragraph</option>
+            </select>
+            <button class="wp-tb-btn" onclick="execCmd('bold')" title="Bold (Ctrl+B)"><strong>B</strong></button>
+            <button class="wp-tb-btn" onclick="execCmd('italic')" title="Italic (Ctrl+I)"><em style="font-family:Georgia,serif;">I</em></button>
+            <button class="wp-tb-btn" onclick="execCmd('insertUnorderedList')" title="Bulleted list">
+              <svg viewBox="0 0 20 20" fill="currentColor"><circle cx="3" cy="5" r="1.5"/><circle cx="3" cy="10" r="1.5"/><circle cx="3" cy="15" r="1.5"/><rect x="7" y="4" width="11" height="2"/><rect x="7" y="9" width="11" height="2"/><rect x="7" y="14" width="11" height="2"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="execCmd('insertOrderedList')" title="Numbered list">
+              <svg viewBox="0 0 20 20" fill="currentColor"><text x="0" y="7" font-size="6" font-weight="700">1.</text><text x="0" y="13" font-size="6" font-weight="700">2.</text><text x="0" y="19" font-size="6" font-weight="700">3.</text><rect x="7" y="4" width="11" height="2"/><rect x="7" y="9" width="11" height="2"/><rect x="7" y="14" width="11" height="2"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="execFormat('blockquote')" title="Blockquote">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 5h5v5H5v3H3V5zm9 0h5v5h-3v3h-2V5z"/></svg>
+            </button>
+            <span class="wp-tb-sep"></span>
+            <button class="wp-tb-btn" onclick="execCmd('justifyLeft')" title="Align left">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="4" width="16" height="2"/><rect x="2" y="8" width="10" height="2"/><rect x="2" y="12" width="16" height="2"/><rect x="2" y="16" width="10" height="2"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="execCmd('justifyCenter')" title="Align center">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="4" width="16" height="2"/><rect x="5" y="8" width="10" height="2"/><rect x="2" y="12" width="16" height="2"/><rect x="5" y="16" width="10" height="2"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="execCmd('justifyRight')" title="Align right">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="4" width="16" height="2"/><rect x="8" y="8" width="10" height="2"/><rect x="2" y="12" width="16" height="2"/><rect x="8" y="16" width="10" height="2"/></svg>
+            </button>
+            <span class="wp-tb-sep"></span>
+            <button class="wp-tb-btn" onclick="openLinkModal()" title="Insert/edit link (Ctrl+K)">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M8 12a3 3 0 0 1 0-4l3-3a3 3 0 0 1 4 4l-1 1-1.5-1.5 1-1a1 1 0 0 0-1.5-1.5l-3 3a1 1 0 0 0 0 1.5L8 12zm4-4a3 3 0 0 1 0 4l-3 3a3 3 0 0 1-4-4l1-1 1.5 1.5-1 1a1 1 0 0 0 1.5 1.5l3-3a1 1 0 0 0 0-1.5L12 8z"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="execCmd('unlink')" title="Remove link">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 3l14 14-1.5 1.5L1.5 4.5 3 3z"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="insertReadMore()" title="Insert Read More tag">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="3" width="16" height="2"/><path d="M2 9h2v2H2zm4 0h2v2H6zm4 0h2v2h-2zm4 0h2v2h-2z"/><rect x="2" y="15" width="16" height="2"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="toggleToolbar2()" title="Toolbar Toggle" id="toolbarToggleBtn">
+              <svg viewBox="0 0 20 20" fill="currentColor"><rect x="2" y="6" width="16" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="4" y="8" width="2" height="2"/><rect x="7" y="8" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="13" y="8" width="2" height="2"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="toggleFullscreen()" title="Fullscreen mode">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 2v6h2V4h4V2H2zm10 0v2h4v4h2V2h-6zm4 12v4h-4v2h6v-6h-2zM2 18h6v-2H4v-4H2v6z"/></svg>
+            </button>
+          </div>
+          <div class="wp-toolbar-row row-2" id="toolbar2">
+            <button class="wp-tb-btn" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+            <button class="wp-tb-btn" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+            <button class="wp-tb-btn" onclick="execCmd('insertHorizontalRule')" title="Horizontal line">―</button>
+            <span class="wp-tb-sep"></span>
+            <button class="wp-tb-btn" onclick="openColorPicker()" title="Text color">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 16l5-12 5 12h-2l-1-3H8l-1 3H5zm4-5h2l-1-3-1 3z"/><rect x="3" y="17" width="14" height="2" fill="#D4596A"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="openTableModal()" title="Insert table">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12"/><line x1="3" y1="8" x2="17" y2="8"/><line x1="3" y1="12" x2="17" y2="12"/><line x1="9" y1="4" x2="9" y2="16"/><line x1="13" y1="4" x2="13" y2="16"/></svg>
+            </button>
+            <button class="wp-tb-btn" onclick="execFormat('pre')" title="Code block">{ }</button>
+            <span class="wp-tb-sep"></span>
+            <button class="wp-tb-btn" onclick="execCmd('outdent')" title="Decrease indent">⇤</button>
+            <button class="wp-tb-btn" onclick="execCmd('indent')" title="Increase indent">⇥</button>
+            <span class="wp-tb-sep"></span>
+            <button class="wp-tb-btn" onclick="execCmd('undo')" title="Undo">↶</button>
+            <button class="wp-tb-btn" onclick="execCmd('redo')" title="Redo">↷</button>
+            <span class="wp-tb-sep"></span>
+            <button class="wp-tb-btn" onclick="insertCallout('tip')" title="Pro Tip callout">💡</button>
+            <button class="wp-tb-btn" onclick="insertCallout('warning')" title="Warning callout">⚠️</button>
+            <button class="wp-tb-btn" onclick="execCmd('removeFormat')" title="Clear formatting">✕</button>
+          </div>
+        </div>
+
+        <!-- Editor body -->
+        <div class="wp-edit-body">
+          <div class="wp-visual-area" id="blogVisual" contenteditable="true" data-placeholder="Start writing your blog post..."></div>
+          <textarea id="blogContentText" class="wp-text-area" placeholder="Switch to Visual mode for rich editing..."></textarea>
+        </div>
+
+        <div class="wp-edit-footer">
+          <span id="wordCount">0 words</span>
+          <span id="lastSavedHint" style="color:#999;"></span>
+        </div>
+      </div>
     </div>
-    <div class="form-row"><label>EXCERPT</label><input type="text" id="blogExcerpt" placeholder="Short 1-2 sentence summary for the blog listing page..."></div>
-    <div class="form-row-half">
-      <div class="form-row"><label>COVER IMAGE URL</label><input type="text" id="blogCover" placeholder="https://images.unsplash.com/..."><small>Tip: Use Unsplash, Pexels, or Canva</small></div>
-      <div class="form-row"><label>TAGS (comma separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide"></div>
+
+    <!-- RIGHT COLUMN: Publish meta box -->
+    <div class="wp-sidebar">
+
+      <div class="wp-meta-box">
+        <div class="wp-meta-header">Publish</div>
+        <div class="wp-meta-body">
+          <div class="wp-publish-actions">
+            <button class="wp-mini-btn" onclick="saveBlogPost('draft')" id="btnSaveDraft">Save Draft</button>
+            <button class="wp-mini-btn" onclick="previewInNewTab()">Preview</button>
+          </div>
+
+          <div class="wp-meta-row">
+            <span class="icon">🔑</span>
+            <span>Status: <strong id="metaStatus">Draft</strong></span>
+            <span class="edit-link" onclick="toggleStatusEdit()">Edit</span>
+          </div>
+          <div class="wp-meta-row" id="statusEditRow" style="display:none;">
+            <select id="statusSelect">
+              <option value="draft">Draft</option>
+              <option value="pending">Pending Review</option>
+              <option value="published">Published</option>
+            </select>
+            <button class="wp-mini-btn" onclick="applyStatusEdit()" style="padding:3px 10px;">OK</button>
+          </div>
+
+          <div class="wp-meta-row">
+            <span class="icon">👁</span>
+            <span>Visibility: <strong id="metaVisibility">Public</strong></span>
+            <span class="edit-link" onclick="toggleVisibilityEdit()">Edit</span>
+          </div>
+          <div class="wp-meta-row" id="visibilityEditRow" style="display:none;">
+            <select id="visibilitySelect">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+            <button class="wp-mini-btn" onclick="applyVisibilityEdit()" style="padding:3px 10px;">OK</button>
+          </div>
+
+          <div class="wp-meta-row">
+            <span class="icon">📅</span>
+            <span id="publishDateText">Publish <strong>immediately</strong></span>
+            <span class="edit-link" onclick="toggleDateEdit()">Edit</span>
+          </div>
+          <div class="wp-meta-row" id="dateEditRow" style="display:none;">
+            <input type="datetime-local" id="publishDateInput">
+            <button class="wp-mini-btn" onclick="applyDateEdit()" style="padding:3px 10px;">OK</button>
+          </div>
+
+          <div id="blogStatus" style="font-size:0.78rem;color:var(--text-mid);margin-top:10px;"></div>
+        </div>
+        <div class="wp-publish-footer">
+          <a class="wp-trash-link" onclick="moveToTrash()" id="trashLink" style="display:none;">Move to Trash</a>
+          <span style="flex:1;"></span>
+          <button class="wp-publish-btn" onclick="publishOrUpdate()" id="btnPublish">Publish</button>
+        </div>
+      </div>
+
+      <div class="wp-meta-box">
+        <div class="wp-meta-header">Featured Image</div>
+        <div class="wp-meta-body">
+          <div id="featuredImagePreview" style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>
+          <button class="wp-mini-btn" onclick="document.getElementById('blogCover').focus()" style="width:100%;">Set featured image</button>
+        </div>
+      </div>
+
     </div>
-    <div class="form-row" style="margin-top:4px;">
-      <label>COVER PREVIEW</label>
-      <div id="blogCoverPreview" style="width:100%;height:140px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:0.82rem;overflow:hidden;margin-bottom:12px;">No cover image</div>
+
+  </div>
+
+  <!-- All Posts list -->
+  <div class="panel" style="margin-top:20px;">
+    <h2>All Posts <span style="font-size:0.82rem;font-weight:400;color:var(--text-mid);" id="blogListCount"></span></h2>
+    <div id="blogPostList"></div>
+  </div>
+
+</div>
+
+<!-- LINK MODAL -->
+<div class="wp-modal-overlay" id="linkModal">
+  <div class="wp-modal">
+    <div class="wp-modal-header">
+      <h3>Insert/edit link</h3>
+      <button class="wp-modal-close" onclick="closeLinkModal()">×</button>
     </div>
+    <div class="wp-modal-body">
+      <div class="form-row"><label>URL</label><input type="text" id="linkUrl" placeholder="https://"></div>
+      <div class="form-row"><label>Link Text</label><input type="text" id="linkText" placeholder="(uses selected text if empty)"></div>
+      <div class="checkbox-row"><input type="checkbox" id="linkNewTab"><label for="linkNewTab">Open in a new tab</label></div>
+    </div>
+    <div class="wp-modal-footer">
+      <button class="wp-mini-btn" onclick="closeLinkModal()">Cancel</button>
+      <button class="wp-publish-btn" onclick="applyLink()">Add Link</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEDIA MODAL -->
+<div class="wp-modal-overlay" id="mediaModal">
+  <div class="wp-modal">
+    <div class="wp-modal-header">
+      <h3>Add Media</h3>
+      <button class="wp-modal-close" onclick="closeMediaModal()">×</button>
+    </div>
+    <div class="wp-modal-body">
+      <div class="form-row"><label>Image URL</label><input type="text" id="mediaUrl" placeholder="https://..."></div>
+      <div class="form-row"><label>Alt Text</label><input type="text" id="mediaAlt" placeholder="Describe the image"></div>
+      <div class="form-row"><label>Alignment</label>
+        <select id="mediaAlign">
+          <option value="none">None</option>
+          <option value="left">Left</option>
+          <option value="center" selected>Center</option>
+          <option value="right">Right</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Link to</label>
+        <select id="mediaLinkTo">
+          <option value="none">None</option>
+          <option value="image">Image URL</option>
+          <option value="custom">Custom URL</option>
+        </select>
+      </div>
+      <div class="form-row" id="mediaCustomLinkRow" style="display:none;"><label>Custom URL</label><input type="text" id="mediaCustomLink" placeholder="https://"></div>
+    </div>
+    <div class="wp-modal-footer">
+      <button class="wp-mini-btn" onclick="closeMediaModal()">Cancel</button>
+      <button class="wp-publish-btn" onclick="applyMedia()">Insert into post</button>
+    </div>
+  </div>
+</div>
+
+<!-- TABLE MODAL -->
+<div class="wp-modal-overlay" id="tableModal">
+  <div class="wp-modal">
+    <div class="wp-modal-header">
+      <h3>Insert Table</h3>
+      <button class="wp-modal-close" onclick="closeTableModal()">×</button>
+    </div>
+    <div class="wp-modal-body">
+      <div class="form-row-half">
+        <div class="form-row"><label>Columns</label><input type="number" id="tableModalCols" value="3" min="1" max="10"></div>
+        <div class="form-row"><label>Rows (excl. header)</label><input type="number" id="tableModalRows" value="3" min="1" max="20"></div>
+      </div>
+      <div class="checkbox-row"><input type="checkbox" id="tableModalHeader" checked><label for="tableModalHeader">Include header row</label></div>
+    </div>
+    <div class="wp-modal-footer">
+      <button class="wp-mini-btn" onclick="closeTableModal()">Cancel</button>
+      <button class="wp-publish-btn" onclick="applyTable()">Insert Table</button>
+    </div>
+  </div>
+</div>
     
     <!-- WORDPRESS-STYLE EDITOR -->
     <div class="wp-editor">
@@ -961,207 +1298,380 @@ document.getElementById("fTag").addEventListener("change",function(){updateSubta
 document.getElementById("fSubtag").addEventListener("change",updateTagInfo);
 
 // ═══════════════════════════════════════════════════════════════
-// BLOG MANAGER
+// BLOG MANAGER (WordPress-style WYSIWYG)
 // ═══════════════════════════════════════════════════════════════
 var blogPosts = [];
 var blogSHA = null;
 var editingBlogIndex = -1;
+var blogEditorMode = "visual";
+var blogPostMeta = { status: "draft", visibility: "public", date: null };
+var savedSelection = null;
 
-// Auto-generate slug from title
+// Auto-generate slug from title (only for new posts)
 document.getElementById("blogTitle").addEventListener("input", function() {
+  document.getElementById("permalinkRow").style.display = this.value.trim() ? "block" : "none";
   if (editingBlogIndex === -1) {
     var slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
     document.getElementById("blogSlug").value = slug;
   }
 });
 
-// Cover image preview
+// Cover preview
 document.getElementById("blogCover").addEventListener("input", function() {
+  updateCoverPreview(this.value.trim());
+});
+
+function updateCoverPreview(url) {
   var preview = document.getElementById("blogCoverPreview");
-  var url = this.value.trim();
+  var featured = document.getElementById("featuredImagePreview");
   if (url) {
-    preview.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.parentElement.innerHTML=\'❌ Invalid image URL\'">';
+    preview.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML=\'❌ Invalid URL\'">';
+    featured.innerHTML = '<img src="' + url + '" style="max-width:100%;border-radius:4px;margin-bottom:8px;"><div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;" onclick="document.getElementById(\'blogCover\').value=\'\';updateCoverPreview(\'\');">Remove featured image</div>';
   } else {
-    preview.innerHTML = 'No cover image';
+    preview.innerHTML = "No cover";
+    featured.innerHTML = '<div style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>';
+  }
+}
+
+// Mode switching
+function switchMode(mode) {
+  var visual = document.getElementById("blogVisual");
+  var text = document.getElementById("blogContentText");
+  var tabV = document.getElementById("modeVisual");
+  var tabT = document.getElementById("modeText");
+  if (mode === "text") {
+    text.value = visual.innerHTML;
+    visual.style.display = "none";
+    text.style.display = "block";
+    tabT.classList.add("active"); tabV.classList.remove("active");
+    blogEditorMode = "text";
+  } else {
+    visual.innerHTML = text.value || visual.innerHTML;
+    text.style.display = "none";
+    visual.style.display = "block";
+    tabV.classList.add("active"); tabT.classList.remove("active");
+    blogEditorMode = "visual";
+  }
+  updateWordCount();
+}
+
+function getEditorContent() {
+  if (blogEditorMode === "text") return document.getElementById("blogContentText").value;
+  return document.getElementById("blogVisual").innerHTML;
+}
+function setEditorContent(html) {
+  document.getElementById("blogVisual").innerHTML = html || "";
+  document.getElementById("blogContentText").value = html || "";
+  updateWordCount();
+}
+
+// execCommand wrapper
+function execCmd(cmd, val) {
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  document.getElementById("blogVisual").focus();
+  try { document.execCommand(cmd, false, val || null); } catch(e) {}
+  updateWordCount();
+}
+function execFormat(tag) {
+  if (!tag) return;
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  document.getElementById("blogVisual").focus();
+  try { document.execCommand("formatBlock", false, "<" + tag + ">"); }
+  catch(e) { try { document.execCommand("formatBlock", false, tag); } catch(e2) {} }
+  updateWordCount();
+}
+
+function toggleToolbar2() {
+  document.getElementById("toolbar2").classList.toggle("shown");
+  document.getElementById("toolbarToggleBtn").classList.toggle("active");
+}
+function toggleFullscreen() { document.body.classList.toggle("wp-fullscreen"); }
+function insertReadMore() {
+  if (blogEditorMode !== "visual") return;
+  document.getElementById("blogVisual").focus();
+  document.execCommand("insertHTML", false, '<p style="border:1px dashed #aaa;background:#f9f9f9;color:#999;text-align:center;padding:4px;font-size:0.75rem;" data-readmore="1">— MORE —</p>');
+}
+function insertCallout(type) {
+  if (blogEditorMode !== "visual") return;
+  document.getElementById("blogVisual").focus();
+  var html = type === "tip"
+    ? '<blockquote style="background:#FFF8F0;border-left:3px solid #C4956A;padding:8px 16px;"><strong>💡 Pro Tip:</strong> </blockquote><p></p>'
+    : '<blockquote style="background:#FFF5F5;border-left:3px solid #E53E3E;padding:8px 16px;"><strong>⚠️ Warning:</strong> </blockquote><p></p>';
+  document.execCommand("insertHTML", false, html);
+}
+function openColorPicker() {
+  var color = prompt("Enter color (e.g. #D4596A or red):", "#D4596A");
+  if (color) execCmd("foreColor", color);
+}
+
+// Selection save/restore for modals
+function saveSelection() {
+  var sel = window.getSelection();
+  if (sel.rangeCount > 0) savedSelection = sel.getRangeAt(0).cloneRange();
+}
+function restoreSelection() {
+  if (!savedSelection) return;
+  var sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedSelection);
+}
+
+// LINK MODAL
+function openLinkModal() {
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  saveSelection();
+  var selText = window.getSelection().toString();
+  document.getElementById("linkText").value = selText || "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("linkNewTab").checked = false;
+  document.getElementById("linkModal").classList.add("open");
+  setTimeout(function(){document.getElementById("linkUrl").focus();}, 50);
+}
+function closeLinkModal() { document.getElementById("linkModal").classList.remove("open"); }
+function applyLink() {
+  var url = document.getElementById("linkUrl").value.trim();
+  var text = document.getElementById("linkText").value.trim();
+  var newTab = document.getElementById("linkNewTab").checked;
+  if (!url) { showToast("URL required", "error"); return; }
+  if (!/^https?:\/\//.test(url) && !url.startsWith("/") && !url.startsWith("#") && !url.startsWith("mailto:")) url = "https://" + url;
+  document.getElementById("blogVisual").focus();
+  restoreSelection();
+  var html = '<a href="' + url.replace(/"/g, "&quot;") + '"' + (newTab ? ' target="_blank" rel="noopener"' : '') + '>' + (text || url) + '</a>';
+  document.execCommand("insertHTML", false, html);
+  closeLinkModal();
+  updateWordCount();
+}
+
+// MEDIA MODAL
+function openMediaModal() {
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  saveSelection();
+  document.getElementById("mediaUrl").value = "";
+  document.getElementById("mediaAlt").value = "";
+  document.getElementById("mediaAlign").value = "center";
+  document.getElementById("mediaLinkTo").value = "none";
+  document.getElementById("mediaCustomLink").value = "";
+  document.getElementById("mediaCustomLinkRow").style.display = "none";
+  document.getElementById("mediaModal").classList.add("open");
+  setTimeout(function(){document.getElementById("mediaUrl").focus();}, 50);
+}
+function closeMediaModal() { document.getElementById("mediaModal").classList.remove("open"); }
+document.getElementById("mediaLinkTo").addEventListener("change", function(){
+  document.getElementById("mediaCustomLinkRow").style.display = this.value === "custom" ? "block" : "none";
+});
+function applyMedia() {
+  var url = document.getElementById("mediaUrl").value.trim();
+  var alt = document.getElementById("mediaAlt").value.trim();
+  var align = document.getElementById("mediaAlign").value;
+  var linkTo = document.getElementById("mediaLinkTo").value;
+  var customLink = document.getElementById("mediaCustomLink").value.trim();
+  if (!url) { showToast("Image URL required", "error"); return; }
+  var imgStyle = "max-width:100%;height:auto;border-radius:4px;";
+  if (align === "center") imgStyle += "display:block;margin:12px auto;";
+  else if (align === "left") imgStyle += "float:left;margin:8px 16px 8px 0;";
+  else if (align === "right") imgStyle += "float:right;margin:8px 0 8px 16px;";
+  var imgTag = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + alt.replace(/"/g, "&quot;") + '" style="' + imgStyle + '">';
+  var finalHTML = imgTag;
+  if (linkTo === "image") finalHTML = '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + imgTag + '</a>';
+  else if (linkTo === "custom" && customLink) finalHTML = '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + imgTag + '</a>';
+  document.getElementById("blogVisual").focus();
+  restoreSelection();
+  document.execCommand("insertHTML", false, finalHTML + "<p></p>");
+  closeMediaModal();
+  updateWordCount();
+}
+
+// TABLE MODAL
+function openTableModal() {
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  saveSelection();
+  document.getElementById("tableModal").classList.add("open");
+}
+function closeTableModal() { document.getElementById("tableModal").classList.remove("open"); }
+function applyTable() {
+  var cols = parseInt(document.getElementById("tableModalCols").value) || 3;
+  var rows = parseInt(document.getElementById("tableModalRows").value) || 3;
+  var includeHeader = document.getElementById("tableModalHeader").checked;
+  var html = '<table style="width:100%;border-collapse:collapse;margin:12px 0;">';
+  if (includeHeader) {
+    html += '<thead><tr>';
+    for (var c = 0; c < cols; c++) html += '<th style="border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;">Header ' + (c+1) + '</th>';
+    html += '</tr></thead>';
+  }
+  html += '<tbody>';
+  for (var r = 0; r < rows; r++) {
+    html += '<tr>';
+    for (var c = 0; c < cols; c++) html += '<td style="border:1px solid #ddd;padding:8px;">&nbsp;</td>';
+    html += '</tr>';
+  }
+  html += '</tbody></table><p></p>';
+  document.getElementById("blogVisual").focus();
+  restoreSelection();
+  document.execCommand("insertHTML", false, html);
+  closeTableModal();
+  updateWordCount();
+}
+
+// Word count
+function updateWordCount() {
+  var text = "";
+  if (blogEditorMode === "visual") text = document.getElementById("blogVisual").innerText || "";
+  else text = (document.getElementById("blogContentText").value || "").replace(/<[^>]+>/g, " ");
+  text = text.trim();
+  var words = text ? text.split(/\s+/).length : 0;
+  document.getElementById("wordCount").textContent = words + " words";
+}
+
+// Sync visual <-> text
+document.getElementById("blogVisual").addEventListener("input", function() {
+  document.getElementById("blogContentText").value = this.innerHTML;
+  updateWordCount();
+});
+document.getElementById("blogContentText").addEventListener("input", updateWordCount);
+
+// Keyboard shortcuts
+document.getElementById("blogVisual").addEventListener("keydown", function(e) {
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === "b" || e.key === "B") { e.preventDefault(); execCmd("bold"); }
+    else if (e.key === "i" || e.key === "I") { e.preventDefault(); execCmd("italic"); }
+    else if (e.key === "u" || e.key === "U") { e.preventDefault(); execCmd("underline"); }
+    else if (e.key === "k" || e.key === "K") { e.preventDefault(); openLinkModal(); }
+    else if (e.key === "s" || e.key === "S") { e.preventDefault(); saveBlogPost("draft"); }
   }
 });
 
-// ── TABLE BUILDER ──
-var tableGridData = { cols: 3, rows: 3, cells: [] };
-
-function openTableBuilder() {
-  document.getElementById("tableBuilder").style.display = "block";
-  generateTableGrid();
-  document.getElementById("tableBuilder").scrollIntoView({ behavior: "smooth" });
+// PUBLISH SIDEBAR meta editing
+function toggleStatusEdit() {
+  var row = document.getElementById("statusEditRow");
+  if (row.style.display === "none") {
+    document.getElementById("statusSelect").value = blogPostMeta.status;
+    row.style.display = "flex";
+  } else row.style.display = "none";
 }
-
-function generateTableGrid() {
-  var cols = parseInt(document.getElementById("tableCols").value) || 3;
-  var rows = parseInt(document.getElementById("tableRows").value) || 3;
-  tableGridData.cols = cols;
-  tableGridData.rows = rows;
-  tableGridData.cells = [];
-  
-  // Init cells: row 0 = headers
-  for (var r = 0; r <= rows; r++) {
-    tableGridData.cells[r] = [];
-    for (var c = 0; c < cols; c++) {
-      tableGridData.cells[r][c] = r === 0 ? "Header " + (c + 1) : "";
-    }
+function applyStatusEdit() {
+  blogPostMeta.status = document.getElementById("statusSelect").value;
+  document.getElementById("metaStatus").textContent = blogPostMeta.status === "draft" ? "Draft" : (blogPostMeta.status === "pending" ? "Pending Review" : "Published");
+  document.getElementById("statusEditRow").style.display = "none";
+  updatePublishButtonLabel();
+}
+function toggleVisibilityEdit() {
+  var row = document.getElementById("visibilityEditRow");
+  if (row.style.display === "none") {
+    document.getElementById("visibilitySelect").value = blogPostMeta.visibility;
+    row.style.display = "flex";
+  } else row.style.display = "none";
+}
+function applyVisibilityEdit() {
+  blogPostMeta.visibility = document.getElementById("visibilitySelect").value;
+  document.getElementById("metaVisibility").textContent = blogPostMeta.visibility.charAt(0).toUpperCase() + blogPostMeta.visibility.slice(1);
+  document.getElementById("visibilityEditRow").style.display = "none";
+}
+function toggleDateEdit() {
+  var row = document.getElementById("dateEditRow");
+  if (row.style.display === "none") {
+    var d = blogPostMeta.date ? new Date(blogPostMeta.date) : new Date();
+    var pad = function(n){return n<10?"0"+n:n;};
+    document.getElementById("publishDateInput").value = d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes());
+    row.style.display = "flex";
+  } else row.style.display = "none";
+}
+function applyDateEdit() {
+  var v = document.getElementById("publishDateInput").value;
+  if (v) {
+    blogPostMeta.date = new Date(v).toISOString();
+    var d = new Date(blogPostMeta.date);
+    var dStr = d.toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"})+" at "+d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+    var futureLabel = (d > new Date()) ? "Schedule for" : "Published on";
+    document.getElementById("publishDateText").innerHTML = futureLabel + " <strong>" + dStr + "</strong>";
+  } else {
+    blogPostMeta.date = null;
+    document.getElementById("publishDateText").innerHTML = 'Publish <strong>immediately</strong>';
   }
-  renderTableGrid();
+  document.getElementById("dateEditRow").style.display = "none";
+  updatePublishButtonLabel();
 }
 
-function renderTableGrid() {
-  var wrap = document.getElementById("tableGridWrap");
-  var html = '<table style="width:100%;border-collapse:collapse;font-size:0.82rem;">';
-  
-  for (var r = 0; r <= tableGridData.rows; r++) {
-    var isHeader = r === 0;
-    html += '<tr>';
-    for (var c = 0; c < tableGridData.cols; c++) {
-      var val = (tableGridData.cells[r] && tableGridData.cells[r][c]) || "";
-      var bg = isHeader ? "background:#F7E8D8;" : "";
-      html += '<td style="padding:2px;' + bg + '">' +
-        '<input type="text" value="' + val.replace(/"/g, '&quot;') + '" ' +
-        'onchange="tableGridData.cells[' + r + '][' + c + ']=this.value" ' +
-        'placeholder="' + (isHeader ? "Header" : "Cell") + '" ' +
-        'style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;font-family:Outfit,sans-serif;font-size:0.82rem;' + (isHeader ? 'font-weight:700;' : '') + '">' +
-        '</td>';
-    }
-    html += '</tr>';
-    if (isHeader) {
-      html += '<tr><td colspan="' + tableGridData.cols + '" style="height:4px;background:var(--accent-light);"></td></tr>';
-    }
-  }
-  html += '</table>';
-  wrap.innerHTML = html;
+function updatePublishButtonLabel() {
+  var btn = document.getElementById("btnPublish");
+  if (editingBlogIndex >= 0 && blogPosts[editingBlogIndex] && blogPosts[editingBlogIndex].status === "published") btn.textContent = "Update";
+  else if (blogPostMeta.date && new Date(blogPostMeta.date) > new Date()) btn.textContent = "Schedule";
+  else btn.textContent = "Publish";
 }
 
-function addTableRow() {
-  tableGridData.rows++;
-  tableGridData.cells[tableGridData.rows] = [];
-  for (var c = 0; c < tableGridData.cols; c++) {
-    tableGridData.cells[tableGridData.rows][c] = "";
-  }
-  document.getElementById("tableRows").value = tableGridData.rows;
-  renderTableGrid();
+function publishOrUpdate() {
+  blogPostMeta.status = "published";
+  document.getElementById("metaStatus").textContent = "Published";
+  saveBlogPost("published");
 }
 
-function addTableCol() {
-  tableGridData.cols++;
-  for (var r = 0; r <= tableGridData.rows; r++) {
-    if (!tableGridData.cells[r]) tableGridData.cells[r] = [];
-    tableGridData.cells[r][tableGridData.cols - 1] = r === 0 ? "Header " + tableGridData.cols : "";
-  }
-  document.getElementById("tableCols").value = tableGridData.cols;
-  renderTableGrid();
+function moveToTrash() {
+  if (editingBlogIndex < 0) { clearBlogForm(); return; }
+  if (!confirm("Move this post to trash? This will delete it permanently.")) return;
+  blogPosts.splice(editingBlogIndex, 1);
+  pushBlogToGitHub("Moved blog post to trash");
+  clearBlogForm();
 }
 
-function removeTableRow() {
-  if (tableGridData.rows <= 1) return;
-  tableGridData.cells.splice(tableGridData.rows, 1);
-  tableGridData.rows--;
-  document.getElementById("tableRows").value = tableGridData.rows;
-  renderTableGrid();
-}
-
-function removeTableCol() {
-  if (tableGridData.cols <= 2) return;
-  for (var r = 0; r <= tableGridData.rows; r++) {
-    if (tableGridData.cells[r]) tableGridData.cells[r].splice(tableGridData.cols - 1, 1);
-  }
-  tableGridData.cols--;
-  document.getElementById("tableCols").value = tableGridData.cols;
-  renderTableGrid();
-}
-
-function insertTableMarkdown() {
-  // Read current values from inputs
-  var inputs = document.querySelectorAll("#tableGridWrap input");
-  var idx = 0;
-  for (var r = 0; r <= tableGridData.rows; r++) {
-    for (var c = 0; c < tableGridData.cols; c++) {
-      if (inputs[idx]) {
-        tableGridData.cells[r][c] = inputs[idx].value;
-        idx++;
-      }
-    }
-  }
-  
-  // Build markdown table
-  var md = "\n";
-  // Header row
-  md += "| " + tableGridData.cells[0].join(" | ") + " |\n";
-  // Separator
-  md += "|" + tableGridData.cells[0].map(function() { return "---"; }).join("|") + "|\n";
-  // Data rows
-  for (var r = 1; r <= tableGridData.rows; r++) {
-    md += "| " + (tableGridData.cells[r] || []).join(" | ") + " |\n";
-  }
-  md += "\n";
-  
-  // Insert into blog content
-  var ta = document.getElementById("blogContent");
-  var pos = ta.selectionStart;
-  ta.value = ta.value.substring(0, pos) + md + ta.value.substring(pos);
-  ta.focus();
-  
-  // Hide builder
-  document.getElementById("tableBuilder").style.display = "none";
-  showToast("Table inserted!", "success");
-}
-
-// ── BLOG TEMPLATES ──
+// Templates (HTML)
 function loadBlogTemplate(type) {
-  if (document.getElementById("blogContent").value.trim() && !confirm("This will replace your current content. Continue?")) return;
-  
-  var templates = {
+  if (getEditorContent().replace(/<[^>]+>/g,"").trim() && !confirm("This will replace your current content. Continue?")) return;
+  var T = {
     listicle: {
-      title: "Best Korean [PRODUCT TYPE] on Amazon ([YEAR])",
-      excerpt: "Discover the top-rated Korean [PRODUCT TYPE] available on Amazon. We've curated the best picks for every skin type and budget.",
+      title: "Best Korean [PRODUCT TYPE] on Amazon",
+      excerpt: "Discover the top-rated Korean [PRODUCT TYPE] available on Amazon.",
       tags: "Skincare, Best Of, Amazon Finds",
-      content: '## Why Korean [PRODUCT TYPE] Are Different\n\n[WRITE 2-3 SENTENCES: What makes Korean products in this category special? Why should someone choose K-beauty over Western alternatives?]\n\n---\n\n## Our Top Picks\n\n### 1. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES: Key benefits, who it\'s best for, standout ingredients]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 2. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 3. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 4. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n### 5. [PRODUCT NAME] — $[PRICE]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Why we love it:** [WRITE 2-3 SENTENCES]\n\n**Key ingredients:** [LIST 2-3 HERO INGREDIENTS]\n\n**Best for:** [SKIN TYPE / CONCERN]\n\n⭐ [RATING] stars ([NUMBER] reviews) · [BOUGHT COUNT] bought in past month\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK_HERE)\n\n---\n\n## How to Choose the Right [PRODUCT TYPE]\n\n[WRITE 3-4 SENTENCES: Quick buying guide — what to look for, key ingredients to watch, skin type considerations]\n\n## Final Thoughts\n\n[WRITE 2-3 SENTENCES: Summary recommendation, link to your category page]\n\n[Browse all Korean [PRODUCT TYPE] →](/[CATEGORY_SLUG])'
+      html: '<h2>Why Korean [PRODUCT TYPE] Are Different</h2><p>[Write 2-3 sentences about what makes K-beauty special in this category.]</p><hr><h2>Our Top Picks</h2><h3>1. [Product Name] — $[Price]</h3><p><strong>Why we love it:</strong> [2-3 sentences]</p><p><strong>Best for:</strong> [skin type]</p><p><a href="">Shop on Amazon →</a></p><hr><h3>2. [Product Name] — $[Price]</h3><p><strong>Why we love it:</strong> [2-3 sentences]</p><p><a href="">Shop on Amazon →</a></p><hr><h3>3. [Product Name] — $[Price]</h3><p><strong>Why we love it:</strong> [2-3 sentences]</p><p><a href="">Shop on Amazon →</a></p><h2>How to Choose</h2><p>[Buying guide]</p><h2>Final Thoughts</h2><p>[Summary]</p>'
     },
     comparison: {
-      title: "[PRODUCT A] vs [PRODUCT B]: Which Korean [TYPE] Is Better?",
-      excerpt: "We compare [PRODUCT A] and [PRODUCT B] head-to-head — price, ingredients, results, and which one you should buy.",
-      tags: "Comparison, Skincare, Product Review",
-      content: '## The Showdown: [PRODUCT A] vs [PRODUCT B]\n\n[WRITE 2-3 SENTENCES: Why are people comparing these two? What do they have in common?]\n\n![Both products side by side](PASTE_COMPARISON_IMAGE_HERE)\n\n---\n\n## [PRODUCT A] — Quick Overview\n\n![PRODUCT A](PASTE_IMAGE_URL_HERE)\n\n- **Price:** $[PRICE]\n- **Size:** [SIZE]\n- **Key ingredients:** [LIST INGREDIENTS]\n- **Best for:** [SKIN TYPE]\n- **Rating:** ⭐ [RATING] ([NUMBER] reviews)\n\n**What it does well:** [WRITE 2-3 SENTENCES]\n\n**Downsides:** [WRITE 1-2 SENTENCES]\n\n[Shop [PRODUCT A] on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## [PRODUCT B] — Quick Overview\n\n![PRODUCT B](PASTE_IMAGE_URL_HERE)\n\n- **Price:** $[PRICE]\n- **Size:** [SIZE]\n- **Key ingredients:** [LIST INGREDIENTS]\n- **Best for:** [SKIN TYPE]\n- **Rating:** ⭐ [RATING] ([NUMBER] reviews)\n\n**What it does well:** [WRITE 2-3 SENTENCES]\n\n**Downsides:** [WRITE 1-2 SENTENCES]\n\n[Shop [PRODUCT B] on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Head-to-Head Comparison\n\n### Price\n[WHICH IS MORE AFFORDABLE? VALUE FOR MONEY?]\n\n### Ingredients\n[COMPARE KEY INGREDIENTS — WHICH FORMULA IS STRONGER?]\n\n### Results\n[WHICH DELIVERS BETTER RESULTS? FOR WHAT SKIN TYPES?]\n\n### Texture & Feel\n[COMPARE TEXTURES — LIGHTWEIGHT VS RICH, SCENTED VS UNSCENTED]\n\n---\n\n## The Verdict\n\n**Choose [PRODUCT A] if:** [1-2 SENTENCES — WHO SHOULD BUY THIS]\n\n**Choose [PRODUCT B] if:** [1-2 SENTENCES — WHO SHOULD BUY THIS]\n\n**Our pick:** [YOUR RECOMMENDATION AND WHY]\n\n---\n\n[Browse more Korean [CATEGORY] →](/[CATEGORY_SLUG])'
+      title: "[Product A] vs [Product B]: Which Is Better?",
+      excerpt: "Head-to-head comparison.",
+      tags: "Comparison, Skincare, Review",
+      html: '<h2>The Showdown</h2><p>[Why people compare these]</p><h2>[Product A] Overview</h2><p><strong>Price:</strong> $[X] · <strong>Rating:</strong> ⭐ [X]</p><p>[Pros and cons]</p><h2>[Product B] Overview</h2><p><strong>Price:</strong> $[X] · <strong>Rating:</strong> ⭐ [X]</p><p>[Pros and cons]</p><h2>Head-to-Head</h2><h3>Price</h3><p>[comparison]</p><h3>Ingredients</h3><p>[comparison]</p><h3>Results</h3><p>[comparison]</p><h2>The Verdict</h2><p><strong>Choose [A] if:</strong> [text]</p><p><strong>Choose [B] if:</strong> [text]</p>'
     },
     routine: {
-      title: "Korean [SKIN TYPE/CONCERN] Routine: Step-by-Step Guide With Products",
-      excerpt: "Build the perfect Korean skincare routine for [SKIN TYPE/CONCERN]. Every step explained with our top Amazon product picks.",
+      title: "Korean [Skin Type] Routine: Step-by-Step",
+      excerpt: "Build the perfect routine.",
       tags: "Routine, Guide, Skincare",
-      content: '## Why a Korean [SKIN TYPE] Routine Works\n\n[WRITE 3-4 SENTENCES: Why is the Korean approach effective for this skin type/concern? What makes it different from Western routines?]\n\n![Korean skincare routine flatlay](PASTE_COVER_IMAGE_HERE)\n\n---\n\n## The Routine: Step by Step\n\n### Step 1: [STEP NAME e.g. Oil Cleanser]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES: Why this step matters, how to do it, why this product]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 2: [STEP NAME e.g. Water Cleanser]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 3: [STEP NAME e.g. Toner]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 4: [STEP NAME e.g. Serum/Essence]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 5: [STEP NAME e.g. Moisturizer]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n### Step 6: [STEP NAME e.g. Sunscreen (AM only)]\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n**Our pick:** [PRODUCT NAME] — $[PRICE]\n\n[WRITE 2-3 SENTENCES]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Total Routine Cost\n\n**All [NUMBER] products:** $[TOTAL PRICE] on Amazon\n\n> That\'s less than a single luxury skincare product — and you get a complete routine!\n\n## Tips for Best Results\n\n- [TIP 1: e.g. Wait 30 seconds between steps for absorption]\n- [TIP 2: e.g. Use morning and night for best results]\n- [TIP 3: e.g. Patch test new products before full application]\n- [TIP 4: e.g. Give it 4-6 weeks to see real results]\n\n## Final Thoughts\n\n[WRITE 2-3 SENTENCES: Encouragement, summary, link to browse more]\n\n[Browse all Korean Skincare →](/skincare)'
+      html: '<h2>Why It Works</h2><p>[Why this approach is effective]</p><h2>Step by Step</h2><h3>Step 1: Oil Cleanser</h3><p><strong>Our pick:</strong> [Product] — $[Price]</p><h3>Step 2: Water Cleanser</h3><p><strong>Our pick:</strong> [Product] — $[Price]</p><h3>Step 3: Toner</h3><p><strong>Our pick:</strong> [Product] — $[Price]</p><h3>Step 4: Serum</h3><p><strong>Our pick:</strong> [Product] — $[Price]</p><h3>Step 5: Moisturizer</h3><p><strong>Our pick:</strong> [Product] — $[Price]</p><h3>Step 6: Sunscreen (AM)</h3><p><strong>Our pick:</strong> [Product] — $[Price]</p><blockquote style="background:#FFF8F0;border-left:3px solid #C4956A;padding:8px 16px;"><strong>💡 Pro Tip:</strong> Wait 30 seconds between steps for absorption.</blockquote>'
     },
     review: {
-      title: "[PRODUCT NAME] Review: Is It Worth the Hype?",
-      excerpt: "An honest review of [PRODUCT NAME] — ingredients, results, pros & cons, and whether it's worth buying on Amazon.",
-      tags: "Review, Skincare, Honest Review",
-      content: '## [PRODUCT NAME] — First Impressions\n\n![PRODUCT NAME](PASTE_IMAGE_URL_HERE)\n\n- **Brand:** [BRAND NAME]\n- **Price:** $[PRICE] on Amazon\n- **Size:** [SIZE]\n- **Rating:** ⭐ [RATING] ([NUMBER] reviews on Amazon)\n- **Best for:** [SKIN TYPE/CONCERN]\n\n[WRITE 2-3 SENTENCES: What is this product? Why is it popular? What claims does it make?]\n\n[Shop on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Key Ingredients\n\n[WRITE ABOUT 3-4 KEY INGREDIENTS AND WHAT THEY DO]\n\n- **[INGREDIENT 1]:** [WHAT IT DOES — 1 SENTENCE]\n- **[INGREDIENT 2]:** [WHAT IT DOES — 1 SENTENCE]\n- **[INGREDIENT 3]:** [WHAT IT DOES — 1 SENTENCE]\n- **[INGREDIENT 4]:** [WHAT IT DOES — 1 SENTENCE]\n\n---\n\n## How to Use It\n\n[WRITE 2-3 SENTENCES: Application instructions, when to use in routine, how much to apply]\n\n---\n\n## What We Like\n\n- [PRO 1: e.g. Lightweight, absorbs quickly]\n- [PRO 2: e.g. Visible results within 2 weeks]\n- [PRO 3: e.g. Great value for the price]\n- [PRO 4: e.g. Fragrance-free, sensitive skin friendly]\n\n## What Could Be Better\n\n- [CON 1: e.g. Packaging could be more hygienic]\n- [CON 2: e.g. Takes time to see dramatic results]\n\n---\n\n## Who Should Buy This?\n\n**Best for:** [DESCRIBE IDEAL USER — SKIN TYPE, CONCERN, BUDGET]\n\n**Skip if:** [DESCRIBE WHO SHOULDN\'T BUY — ALTERNATIVE SUGGESTION]\n\n---\n\n## The Verdict\n\n[WRITE 3-4 SENTENCES: Overall opinion, rating out of 10, would you recommend it?]\n\n**Our rating:** [X]/10\n\n[Shop [PRODUCT NAME] on Amazon →](PASTE_AFFILIATE_LINK)\n\n---\n\n## Similar Products Worth Checking\n\n- [ALTERNATIVE 1](PASTE_PRODUCT_PAGE_LINK) — $[PRICE]\n- [ALTERNATIVE 2](PASTE_PRODUCT_PAGE_LINK) — $[PRICE]\n- [ALTERNATIVE 3](PASTE_PRODUCT_PAGE_LINK) — $[PRICE]\n\n[Browse all Korean [CATEGORY] →](/[CATEGORY_SLUG])'
+      title: "[Product Name] Review",
+      excerpt: "An honest review.",
+      tags: "Review, Skincare",
+      html: '<h2>First Impressions</h2><p><strong>Brand:</strong> [Brand] · <strong>Price:</strong> $[X] · <strong>Rating:</strong> ⭐ [X]</p><h2>Key Ingredients</h2><ul><li><strong>[Ingredient]:</strong> [what it does]</li><li><strong>[Ingredient]:</strong> [what it does]</li></ul><h2>What We Like</h2><ul><li>[Pro 1]</li><li>[Pro 2]</li></ul><h2>What Could Be Better</h2><ul><li>[Con 1]</li></ul><h2>The Verdict</h2><p>[Final opinion]</p><p><strong>Our rating:</strong> [X]/10</p>'
     }
   };
-
-  var t = templates[type];
-  if (!t) return;
-  
+  var t = T[type]; if (!t) return;
   document.getElementById("blogTitle").value = t.title;
   document.getElementById("blogSlug").value = t.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").replace(/[\[\]]/g, "").slice(0, 60);
   document.getElementById("blogExcerpt").value = t.excerpt;
   document.getElementById("blogTags").value = t.tags;
-  document.getElementById("blogContent").value = t.content;
+  setEditorContent(t.html);
   document.getElementById("blogCover").value = "";
-  document.getElementById("blogCoverPreview").innerHTML = "No cover image";
+  updateCoverPreview("");
+  document.getElementById("permalinkRow").style.display = "block";
   editingBlogIndex = -1;
-  document.getElementById("blogFormTitle").textContent = "📝 New Blog Post";
-  document.getElementById("blogSaveBtn").textContent = "🚀 Publish Post";
-  showToast("Template loaded! Fill in the [BRACKETS] with your content.", "success");
+  blogPostMeta = { status: "draft", visibility: "public", date: null };
+  refreshSidebarMeta();
+  document.getElementById("blogPostState").textContent = "📝 New Post (template)";
+  showToast("Template loaded", "success");
+}
+
+function refreshSidebarMeta() {
+  document.getElementById("metaStatus").textContent = blogPostMeta.status === "draft" ? "Draft" : (blogPostMeta.status === "pending" ? "Pending Review" : "Published");
+  document.getElementById("metaVisibility").textContent = blogPostMeta.visibility.charAt(0).toUpperCase() + blogPostMeta.visibility.slice(1);
+  if (blogPostMeta.date) {
+    var d = new Date(blogPostMeta.date);
+    var dStr = d.toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"})+" at "+d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+    var futureLabel = (d > new Date()) ? "Schedule for" : "Published on";
+    document.getElementById("publishDateText").innerHTML = futureLabel + " <strong>" + dStr + "</strong>";
+  } else document.getElementById("publishDateText").innerHTML = 'Publish <strong>immediately</strong>';
+  document.getElementById("trashLink").style.display = editingBlogIndex >= 0 ? "inline" : "none";
+  updatePublishButtonLabel();
 }
 
 async function loadBlogPosts() {
   try {
-    // Try raw URL first (handles large files)
     var listResp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
     if (!listResp.ok) { blogPosts = []; return; }
     var files = await listResp.json();
@@ -1169,182 +1679,52 @@ async function loadBlogPosts() {
     if (!blogFile) { blogPosts = []; blogSHA = null; return; }
     blogSHA = blogFile.sha;
     var rawResp = await fetch(blogFile.download_url, { cache: "no-cache" });
-    if (rawResp.ok) { blogPosts = await rawResp.json(); }
-    else { blogPosts = []; }
+    if (rawResp.ok) blogPosts = await rawResp.json();
+    else blogPosts = [];
   } catch(e) { console.error("Load blog error:", e); blogPosts = []; }
   renderBlogList();
 }
 
 function renderBlogList() {
   var list = document.getElementById("blogPostList");
-  var drafts = blogPosts.filter(function(p) { return p.status === "draft"; }).length;
-  var published = blogPosts.length - drafts;
-  document.getElementById("blogListCount").textContent = "(" + published + " published" + (drafts ? ", " + drafts + " drafts" : "") + ")";
-  if (!blogPosts.length) { list.innerHTML = '<div class="empty-state"><p>No blog posts yet. Write your first post above!</p></div>'; return; }
-  var sorted = blogPosts.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-  list.innerHTML = sorted.map(function(p, i) {
+  var drafts = blogPosts.filter(function(p){return p.status==="draft";}).length;
+  var published = blogPosts.filter(function(p){return p.status==="published";}).length;
+  var pending = blogPosts.filter(function(p){return p.status==="pending";}).length;
+  var summary = published + " published";
+  if (drafts) summary += ", " + drafts + " draft" + (drafts>1?"s":"");
+  if (pending) summary += ", " + pending + " pending";
+  document.getElementById("blogListCount").textContent = "(" + summary + ")";
+  if (!blogPosts.length) { list.innerHTML = '<div class="empty-state"><p>No blog posts yet.</p></div>'; return; }
+  var sorted = blogPosts.slice().sort(function(a,b){return new Date(b.date||0) - new Date(a.date||0);});
+  list.innerHTML = sorted.map(function(p) {
     var realIndex = blogPosts.indexOf(p);
     var dateStr = p.date ? new Date(p.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
     var tags = (p.tags || []).map(function(t) { return '<span style="font-size:0.65rem;background:#EBF8FF;color:var(--blue);padding:1px 6px;border-radius:3px;margin-right:3px;">' + t + '</span>'; }).join("");
     var coverThumb = p.cover ? '<img src="' + p.cover + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:1.5rem;">📝</span>';
-    var isDraft = p.status === "draft";
-    var statusBadge = isDraft ? '<span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">DRAFT</span>' : '<span style="font-size:0.65rem;background:#F0FFF4;color:var(--green);padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">LIVE</span>';
-    return '<div class="plist-item" style="' + (isDraft ? 'opacity:0.7;' : '') + '">' +
+    var statusBadge;
+    if (p.status === "draft") statusBadge = '<span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">DRAFT</span>';
+    else if (p.status === "pending") statusBadge = '<span style="font-size:0.65rem;background:#E0E7FF;color:#3730A3;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">PENDING</span>';
+    else statusBadge = '<span style="font-size:0.65rem;background:#F0FFF4;color:var(--green);padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">LIVE</span>';
+    return '<div class="plist-item" style="' + (p.status !== "published" ? 'opacity:0.7;' : '') + '">' +
       '<div class="plist-img">' + coverThumb + '</div>' +
-      '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + statusBadge + tags + '<span style="font-size:0.65rem;color:var(--text-light);">' + dateStr + '</span></div></div>' +
-      '<div class="plist-price" style="font-size:0.75rem;color:var(--text-light);">/' + p.slug + '</div>' +
+      '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + statusBadge + tags + '<span style="font-size:0.65rem;color:#999;">' + dateStr + '</span></div></div>' +
+      '<div class="plist-price" style="font-size:0.75rem;color:#777;">/' + p.slug + '</div>' +
+      '<div></div>' +
       '<div class="plist-actions"><button class="btn-edit" onclick="editBlogPost(' + realIndex + ')">Edit</button><button class="btn-del" onclick="deleteBlogPost(' + realIndex + ')">Del</button></div>' +
     '</div>';
   }).join("");
 }
 
-function blogInsert(before, after) {
-  var ta = document.getElementById("blogContent");
-  var start = ta.selectionStart;
-  var end = ta.selectionEnd;
-  var selected = ta.value.substring(start, end);
-  ta.value = ta.value.substring(0, start) + before + selected + after + ta.value.substring(end);
-  ta.focus();
-  ta.selectionStart = start + before.length;
-  ta.selectionEnd = start + before.length + selected.length;
-  updateWordCount();
-}
-
-function insertLink() {
-  var url = prompt("Enter URL:");
-  if (!url) return;
-  var ta = document.getElementById("blogContent");
-  var selected = ta.value.substring(ta.selectionStart, ta.selectionEnd) || "link text";
-  blogInsert("[" + selected + "](", ")");
-  // Put URL in
-  var pos = ta.selectionStart;
-  ta.value = ta.value.substring(0, pos) + url + ta.value.substring(pos);
-  ta.focus();
-}
-
-function insertImage() {
-  var url = prompt("Enter image URL:");
-  if (!url) return;
-  var alt = prompt("Enter image description (alt text):", "");
-  blogInsert("\n![" + (alt || "image") + "](" + url + ")\n", "");
-}
-
 function previewInNewTab() {
-  var content = document.getElementById("blogContent").value;
+  var content = getEditorContent();
   var title = document.getElementById("blogTitle").value || "Untitled";
   var cover = document.getElementById("blogCover").value;
-  
-  var previewHTML = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Preview: ' + title + '</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>body{font-family:Outfit,sans-serif;max-width:780px;margin:40px auto;padding:0 20px;color:#3D2B1F;line-height:1.8;}h1{font-family:Noto Serif Display,serif;font-size:2.2rem;margin-bottom:16px;}h2{font-family:Noto Serif Display,serif;font-size:1.5rem;margin:32px 0 12px;}h3{font-family:Noto Serif Display,serif;font-size:1.2rem;margin:24px 0 10px;}h4{font-size:1.05rem;font-weight:600;margin:20px 0 8px;}img{max-width:100%;border-radius:10px;margin:16px 0;}blockquote{border-left:3px solid #C4956A;padding:12px 20px;margin:16px 0;background:#FFF8F0;border-radius:0 8px 8px 0;font-style:italic;}a{color:#C4956A;}table{width:100%;border-collapse:collapse;margin:20px 0;font-size:0.9rem;}thead{background:linear-gradient(135deg,#C4956A,#D4A08C);}th{padding:12px 16px;text-align:left;color:#fff;font-weight:600;}td{padding:10px 16px;border-bottom:1px solid #eee;}tbody tr:hover{background:#FFF8F0;}s{text-decoration:line-through;color:#999;}.cover-img{width:100%;max-height:400px;object-fit:cover;border-radius:12px;margin-bottom:24px;}</style></head><body>';
-  if (cover) previewHTML += '<img src="' + cover + '" class="cover-img">';
-  previewHTML += '<h1>' + title + '</h1>';
-  
-  // Render markdown
-  var html = content;
-  // Tables
-  html = html.replace(/(?:^|\n)((?:\|[^\n]+\|\n?)+)/gm, function(match, tb) {
-    var rows = tb.trim().split("\\n").length < 2 ? tb.trim().split("\n") : tb.trim().split("\n");
-    if (rows.length < 2) return match;
-    var pr = function(r) { return r.split("|").filter(function(c,i,a){return i>0&&i<a.length-1;}).map(function(c){return c.trim();}); };
-    var hs = /^\|[\s\-:]+\|/.test(rows[1]);
-    var hc = pr(rows[0]);
-    var si = hs ? 2 : 1;
-    var t = "<table><thead><tr>"; hc.forEach(function(c){t+="<th>"+c+"</th>";}); t+="</tr></thead><tbody>";
-    for(var i=si;i<rows.length;i++){var cs=pr(rows[i]);if(!cs.length)continue;t+="<tr>";cs.forEach(function(c){c=c.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");t+="<td>"+c+"</td>";});t+="</tr>";}
-    t+="</tbody></table>";return t;
-  });
-  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  html = html.replace(/~~(.+?)~~/g, '<s>$1</s>');
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
-  html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/^---+$/gm, '<hr>');
-  html = html.split('\n\n').map(function(b){b=b.trim();if(!b||b.startsWith('<'))return b;return '<p>'+b.replace(/\n/g,'<br>')+'</p>';}).join('\n');
-  
-  previewHTML += html + '</body></html>';
-  var win = window.open('', '_blank');
-  win.document.write(previewHTML);
-  win.document.close();
-}
-
-function closeBlogEditor() {
-  if (document.getElementById("blogContent").value.trim() && !confirm("Close editor? Unsaved changes will be lost.")) return;
-  clearBlogForm();
-}
-
-function updateWordCount() {
-  var text = document.getElementById("blogContent").value.trim();
-  var words = text ? text.split(/\s+/).length : 0;
-  var el = document.getElementById("wordCount");
-  if (el) el.textContent = words + " words";
-}
-
-function undoEditor() { document.execCommand("undo"); }
-function redoEditor() { document.execCommand("redo"); }
-
-// Word count on input
-document.addEventListener("DOMContentLoaded", function() {
-  var ta = document.getElementById("blogContent");
-  if (ta) {
-    ta.addEventListener("input", updateWordCount);
-    // Keyboard shortcuts
-    ta.addEventListener("keydown", function(e) {
-      if (e.ctrlKey || e.metaKey) {
-        if (e.key === "b") { e.preventDefault(); blogInsert("**", "**"); }
-        if (e.key === "i") { e.preventDefault(); blogInsert("*", "*"); }
-        if (e.key === "k") { e.preventDefault(); insertLink(); }
-        if (e.key === "s") { e.preventDefault(); saveBlogPost("draft"); }
-      }
-    });
-  }
-});
-
-function previewBlogPost() {
-  var content = document.getElementById("blogContent").value;
-  var title = document.getElementById("blogTitle").value;
-  var preview = document.getElementById("blogPreview");
-  var previewContent = document.getElementById("blogPreviewContent");
-  var html = content;
-  
-  // Tables
-  html = html.replace(/(?:^|\n)((?:\|[^\n]+\|\n?)+)/gm, function(match, tableBlock) {
-    var rows = tableBlock.trim().split('\n').filter(function(r) { return r.trim(); });
-    if (rows.length < 2) return match;
-    var parseRow = function(row) { return row.split('|').filter(function(c, i, arr) { return i > 0 && i < arr.length - 1; }).map(function(c) { return c.trim(); }); };
-    var hasSeparator = /^\|[\s\-:]+\|/.test(rows[1]);
-    var headerCells = parseRow(rows[0]);
-    var startIdx = hasSeparator ? 2 : 1;
-    var t = '<div style="overflow-x:auto;margin:16px 0;border-radius:8px;border:1px solid var(--border);"><table style="width:100%;border-collapse:collapse;font-size:0.88rem;"><thead style="background:linear-gradient(135deg,#C4956A,#D4A08C);"><tr>';
-    headerCells.forEach(function(c) { t += '<th style="padding:10px 14px;text-align:left;color:#fff;font-weight:600;font-size:0.8rem;">' + c + '</th>'; });
-    t += '</tr></thead><tbody>';
-    for (var i = startIdx; i < rows.length; i++) {
-      var cells = parseRow(rows[i]);
-      var isTotal = cells.join('').toLowerCase().indexOf('total') !== -1;
-      t += '<tr style="' + (isTotal ? 'background:#FFF8F0;font-weight:600;' : '') + '">';
-      cells.forEach(function(c) { c = c.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); t += '<td style="padding:8px 14px;border-bottom:1px solid var(--border);">' + c + '</td>'; });
-      t += '</tr>';
-    }
-    t += '</tbody></table></div>';
-    return t;
-  });
-  
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:12px 0;">');
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:var(--accent);">$1</a>');
-  html = html.replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid var(--accent);padding:8px 16px;margin:12px 0;background:var(--accent-light);border-radius:0 6px 6px 0;font-style:italic;">$1</blockquote>');
-  html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/^---+$/gm, '<hr>');
-  html = html.split('\n\n').map(function(b) { b = b.trim(); if (!b || b.startsWith('<')) return b; return '<p>' + b + '</p>'; }).join('\n');
-  previewContent.innerHTML = '<h1 style="font-family:Noto Serif Display,serif;font-size:1.8rem;margin-bottom:16px;">' + (title || 'Untitled') + '</h1>' + html;
-  preview.style.display = "block";
-  preview.scrollIntoView({ behavior: "smooth" });
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Preview: ' + title + '</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>body{font-family:Outfit,sans-serif;max-width:780px;margin:40px auto;padding:0 20px;color:#3D2B1F;line-height:1.8;}h1{font-family:Noto Serif Display,serif;font-size:2.2rem;margin-bottom:16px;}h2{font-family:Noto Serif Display,serif;font-size:1.5rem;margin:32px 0 12px;}h3{font-family:Noto Serif Display,serif;font-size:1.2rem;margin:24px 0 10px;}img{max-width:100%;border-radius:10px;margin:16px 0;}blockquote{border-left:3px solid #C4956A;padding:12px 20px;margin:16px 0;background:#FFF8F0;border-radius:0 8px 8px 0;font-style:italic;}a{color:#C4956A;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{padding:8px 12px;border:1px solid #ddd;text-align:left;}th{background:#f5f5f5;}.cover-img{width:100%;max-height:400px;object-fit:cover;border-radius:12px;margin-bottom:24px;}</style></head><body>';
+  if (cover) html += '<img src="' + cover + '" class="cover-img">';
+  html += '<h1>' + title + '</h1>' + content + '</body></html>';
+  var w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
 }
 
 function clearBlogForm() {
@@ -1353,11 +1733,14 @@ function clearBlogForm() {
   document.getElementById("blogExcerpt").value = "";
   document.getElementById("blogCover").value = "";
   document.getElementById("blogTags").value = "";
-  document.getElementById("blogContent").value = "";
-  document.getElementById("blogPreview").style.display = "none";
+  setEditorContent("");
+  updateCoverPreview("");
+  document.getElementById("permalinkRow").style.display = "none";
   editingBlogIndex = -1;
-  document.getElementById("blogFormTitle").textContent = "📝 New Blog Post";
-  document.getElementById("blogSaveBtn").textContent = "Publish Post";
+  blogPostMeta = { status: "draft", visibility: "public", date: null };
+  refreshSidebarMeta();
+  document.getElementById("blogPostState").textContent = "📝 New Post";
+  document.getElementById("blogStatus").textContent = "";
 }
 
 function editBlogPost(i) {
@@ -1369,18 +1752,17 @@ function editBlogPost(i) {
   document.getElementById("blogExcerpt").value = post.excerpt || "";
   document.getElementById("blogCover").value = post.cover || "";
   document.getElementById("blogTags").value = (post.tags || []).join(", ");
-  document.getElementById("blogContent").value = post.content || "";
-  document.getElementById("blogFormTitle").textContent = "✏️ Edit Blog Post";
-  document.getElementById("blogSaveBtn").textContent = "Save Changes";
-  // Show cover preview
-  var preview = document.getElementById("blogCoverPreview");
-  if (post.cover) { preview.innerHTML = '<img src="' + post.cover + '" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">'; }
-  else { preview.innerHTML = 'No cover image'; }
-  document.getElementById("blogFormTitle").scrollIntoView({ behavior: "smooth" });
+  setEditorContent(post.content || "");
+  updateCoverPreview(post.cover || "");
+  document.getElementById("permalinkRow").style.display = post.title ? "block" : "none";
+  blogPostMeta = { status: post.status || "draft", visibility: post.visibility || "public", date: post.date || null };
+  refreshSidebarMeta();
+  document.getElementById("blogPostState").textContent = "✏️ Editing: " + post.title;
+  document.querySelector(".wp-layout").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function deleteBlogPost(i) {
-  if (!confirm("Delete this blog post?")) return;
+  if (!confirm("Delete this blog post permanently?")) return;
   blogPosts.splice(i, 1);
   pushBlogToGitHub("Deleted blog post");
 }
@@ -1390,101 +1772,73 @@ async function saveBlogPost(status) {
   var slug = document.getElementById("blogSlug").value.trim();
   var excerpt = document.getElementById("blogExcerpt").value.trim();
   var cover = document.getElementById("blogCover").value.trim();
-  var tags = document.getElementById("blogTags").value.split(",").map(function(t) { return t.trim(); }).filter(Boolean);
-  var content = document.getElementById("blogContent").value;
+  var tags = document.getElementById("blogTags").value.split(",").map(function(t){return t.trim();}).filter(Boolean);
+  var content = getEditorContent();
+  var statusEl = document.getElementById("blogStatus");
 
-  if (!title || !slug) {
-    document.getElementById("blogStatus").textContent = "Title and slug are required.";
-    return;
-  }
-  if (status === "published" && !content) {
-    document.getElementById("blogStatus").textContent = "Content is required to publish.";
-    return;
-  }
+  if (!title || !slug) { statusEl.textContent = "Title and slug are required."; showToast("Title and slug required", "error"); return; }
+  if (status === "published" && !content.replace(/<[^>]+>/g, "").trim()) { statusEl.textContent = "Content required to publish."; showToast("Add content before publishing", "error"); return; }
 
-  // Check duplicate slug
-  var existing = blogPosts.findIndex(function(p) { return p.slug === slug; });
-  if (existing !== -1 && existing !== editingBlogIndex) {
-    document.getElementById("blogStatus").textContent = "A post with this slug already exists!";
-    return;
-  }
+  var existing = blogPosts.findIndex(function(p){return p.slug === slug;});
+  if (existing !== -1 && existing !== editingBlogIndex) { statusEl.textContent = "A post with this slug already exists!"; showToast("Duplicate slug", "error"); return; }
+
+  blogPostMeta.status = status;
+  var postDate;
+  if (blogPostMeta.date) postDate = blogPostMeta.date;
+  else if (editingBlogIndex >= 0 && blogPosts[editingBlogIndex].date) postDate = blogPosts[editingBlogIndex].date;
+  else postDate = new Date().toISOString();
 
   var post = {
-    title: title,
-    slug: slug,
-    excerpt: excerpt,
-    cover: cover,
-    tags: tags,
-    content: content,
-    status: status || "published",
-    date: editingBlogIndex >= 0 ? (blogPosts[editingBlogIndex].date || new Date().toISOString()) : new Date().toISOString()
+    title: title, slug: slug, excerpt: excerpt, cover: cover, tags: tags,
+    content: content, contentFormat: "html",
+    status: status, visibility: blogPostMeta.visibility, date: postDate
   };
 
-  if (editingBlogIndex >= 0) {
-    blogPosts[editingBlogIndex] = post;
-  } else {
-    blogPosts.unshift(post);
-  }
+  if (editingBlogIndex >= 0) blogPosts[editingBlogIndex] = post;
+  else { blogPosts.unshift(post); editingBlogIndex = 0; }
 
-  var msg = status === "draft" ? "Saved draft: " + title : (editingBlogIndex >= 0 ? "Updated blog: " + title : "Published: " + title);
+  var msg = status === "draft" ? "Saved draft: " + title : (status === "pending" ? "Pending review: " + title : "Published: " + title);
   await pushBlogToGitHub(msg);
-  if (status !== "draft") {
-    clearBlogForm();
-  } else {
-    // Keep editor open for drafts, just update the index
-    if (editingBlogIndex < 0) editingBlogIndex = 0; // Just added at index 0
-    document.getElementById("blogStatus").textContent = "Draft saved!";
-    renderBlogList();
-  }
+  refreshSidebarMeta();
+  document.getElementById("metaStatus").textContent = status === "draft" ? "Draft" : (status === "pending" ? "Pending Review" : "Published");
 }
 
 async function pushBlogToGitHub(message) {
-  var btn = document.getElementById("blogSaveBtn");
-  var status = document.getElementById("blogStatus");
-  btn.disabled = true;
-  btn.textContent = "Pushing...";
-  status.textContent = "Saving to GitHub...";
-
+  var btnPub = document.getElementById("btnPublish");
+  var btnDraft = document.getElementById("btnSaveDraft");
+  var statusEl = document.getElementById("blogStatus");
+  btnPub.disabled = true; btnDraft.disabled = true;
+  var origPub = btnPub.textContent, origDraft = btnDraft.textContent;
+  btnPub.textContent = "Saving..."; btnDraft.textContent = "Saving...";
+  statusEl.textContent = "Saving to GitHub...";
   try {
     var jsonStr = JSON.stringify(blogPosts, null, 2);
     var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
     var body = { message: message || "Update blog", content: encoded, branch: GITHUB_BRANCH };
     if (blogSHA) body.sha = blogSHA;
-
-    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data/blog.json", {
-      method: "PUT",
-      headers: { "Authorization": "token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-
+    var resp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data/blog.json", { method: "PUT", headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, body: JSON.stringify(body) });
     if (!resp.ok) {
       var err = await resp.json();
-      status.textContent = "Error: " + (err.message || "Failed to save");
-      btn.disabled = false;
-      btn.textContent = "Publish Post";
+      statusEl.textContent = "Error: " + (err.message || "Failed to save");
+      btnPub.disabled = false; btnDraft.disabled = false;
+      btnPub.textContent = origPub; btnDraft.textContent = origDraft;
+      showToast("Save failed", "error");
       return;
     }
-
     var result = await resp.json();
     blogSHA = result.content.sha;
-    status.textContent = "✅ Published! Live in ~30 seconds.";
+    statusEl.textContent = "✅ Saved! Live in ~30 seconds.";
+    document.getElementById("lastSavedHint").textContent = "Saved " + new Date().toLocaleTimeString();
     renderBlogList();
-    showToast("Blog post published!", "success");
+    showToast(message || "Saved!", "success");
   } catch(e) {
-    status.textContent = "Error: " + e.message;
+    statusEl.textContent = "Error: " + e.message;
+    showToast("Save failed", "error");
   }
-
-  btn.disabled = false;
-  btn.textContent = editingBlogIndex >= 0 ? "Save Changes" : "Publish Post";
+  btnPub.disabled = false; btnDraft.disabled = false;
+  btnPub.textContent = origPub; btnDraft.textContent = origDraft;
+  updatePublishButtonLabel();
 }
-
-// Load blog/tiktok when switching via old tab system (backward compat)
-var origSwitchTab = window.switchTab;
-window.switchTab = function(tab, btn) {
-  origSwitchTab(tab, btn);
-  if (tab === "blog" && token) { loadBlogPosts(); }
-  if (tab === "tiktok" && token) { loadTikTokVideos(); }
-};
 
 // ═══════════════════════════════════════════════════════════════
 // TIKTOK VIDEO MANAGER
