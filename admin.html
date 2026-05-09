@@ -1872,6 +1872,10 @@ function pasteIntoTable(startCell, rows) {
     }
   }
 }
+  function syncEditorContent() {
+  document.getElementById("blogContentText").value = document.getElementById("blogVisual").innerHTML;
+  updateWordCount();
+}
 // Word count
 function updateWordCount() {
   var text = "";
