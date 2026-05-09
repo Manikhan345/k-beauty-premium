@@ -1490,6 +1490,11 @@ function searchProductsForBlog() {
     return;
   }
 
+  // Tokenize query — split on whitespace, drop short noise words
+  var tokens = query.split(/\s+/).filter(function(t) {
+    return t.length >= 2; // ignore single chars
+  });
+
   // Search across all loaded category data
   var matches = [];
   var cats = catFilter ? [catFilter] : Object.keys(data);
@@ -1497,20 +1502,45 @@ function searchProductsForBlog() {
     if (!data[cat]) return;
     data[cat].forEach(function(p) {
       if (!p.name) return;
-      if (query && p.name.toLowerCase().indexOf(query) === -1) return;
-      matches.push({ product: p, category: cat });
+      var name = p.name.toLowerCase();
+      var tagText = ((p.tag || "") + " " + (p.subtag || "")).toLowerCase();
+      var haystack = name + " " + tagText;
+
+      // If no query tokens (just category filter), include everything
+      if (!tokens.length) {
+        matches.push({ product: p, category: cat, score: 0 });
+        return;
+      }
+
+      // Score: every token must appear somewhere in the haystack
+      var score = 0;
+      var allMatch = tokens.every(function(tok) {
+        var idx = haystack.indexOf(tok);
+        if (idx === -1) return false;
+        // Bonus for exact substring matches earlier in the name
+        score += (haystack.length - idx);
+        // Extra bonus if the token starts a word (preceded by space or at start)
+        if (idx === 0 || haystack[idx - 1] === " ") score += 50;
+        return true;
+      });
+
+      if (allMatch) matches.push({ product: p, category: cat, score: score });
     });
   });
 
+  // Sort by score (highest first) so most relevant matches show first
+  matches.sort(function(a, b) { return b.score - a.score; });
+
   if (!matches.length) {
-    resultsEl.innerHTML = '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">No products found. Try a different search.</p>';
+    resultsEl.innerHTML = '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">No products found. Try fewer or different keywords.</p>';
     return;
   }
 
   // Cap at 30 results
+  var totalMatches = matches.length;
   matches = matches.slice(0, 30);
 
-  resultsEl.innerHTML = matches.map(function(m, i) {
+  resultsEl.innerHTML = matches.map(function(m) {
     var p = m.product;
     var img = p.image ? '<img src="' + p.image + '" style="width:50px;height:50px;object-fit:contain;border-radius:4px;background:#fff;">' : '<span style="font-size:1.5rem;">📦</span>';
     var price = p.price ? '$' + parseFloat(p.price).toFixed(2) : '';
@@ -1523,9 +1553,9 @@ function searchProductsForBlog() {
       '</div>' +
       '<button style="padding:6px 12px;background:#007cba;color:#fff;border:none;border-radius:3px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;flex-shrink:0;">+ Insert</button>' +
     '</div>';
-  }).join("") + (matches.length === 30 ? '<p style="font-size:0.72rem;color:#999;text-align:center;padding:8px;">Showing first 30 results. Refine search for more.</p>' : '');
+  }).join("") + (totalMatches > 30 ? '<p style="font-size:0.72rem;color:#999;text-align:center;padding:8px;">Showing top 30 of ' + totalMatches + ' results. Refine search for fewer.</p>' : '');
 }
-
+  
 function insertProductCard(cat, productId) {
   if (!data[cat]) { showToast("Category data not loaded", "error"); return; }
   var product = data[cat].find(function(p) { return p.id === productId; });
