@@ -518,6 +518,8 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
             <button class="wp-tb-btn" onclick="openColorPicker()" title="Text color">
               <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 16l5-12 5 12h-2l-1-3H8l-1 3H5zm4-5h2l-1-3-1 3z"/><rect x="3" y="17" width="14" height="2" fill="#D4596A"/></svg>
             </button>
+            <button class="wp-tb-btn" onclick="openProductModal()" title="Insert product card" style="font-size:1rem;">🛍</button>
+            <span class="wp-tb-sep"></span>
             <button class="wp-tb-btn" onclick="openTableModal()" title="Insert table">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12"/><line x1="3" y1="8" x2="17" y2="8"/><line x1="3" y1="12" x2="17" y2="12"/><line x1="9" y1="4" x2="9" y2="16"/><line x1="13" y1="4" x2="13" y2="16"/></svg>
             </button>
@@ -712,7 +714,34 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
     </div>
   </div>
 </div>
-    
+      
+<!-- PRODUCT PICKER MODAL -->
+<div class="wp-modal-overlay" id="productModal">
+  <div class="wp-modal" style="max-width:700px;">
+    <div class="wp-modal-header">
+      <h3>Insert Product Card</h3>
+      <button class="wp-modal-close" onclick="closeProductModal()">×</button>
+    </div>
+    <div class="wp-modal-body">
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <input type="text" id="productSearch" placeholder="🔍 Search by product name..." oninput="searchProductsForBlog()" style="flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:4px;font-family:'Outfit',sans-serif;font-size:0.92rem;outline:none;">
+        <select id="productCatFilter" onchange="searchProductsForBlog()" style="padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-family:'Outfit',sans-serif;font-size:0.85rem;background:#fff;">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+      <div id="productSearchResults" style="max-height:380px;overflow-y:auto;border:1px solid #eee;border-radius:4px;padding:8px;background:#fafafa;">
+        <p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">Type to search products...</p>
+      </div>
+      <div style="margin-top:12px;font-size:0.78rem;color:#777;">
+        💡 Tip: The card will link to your product page on kbeauty.fun (not directly to Amazon).
+      </div>
+    </div>
+    <div class="wp-modal-footer">
+      <button class="wp-mini-btn" onclick="closeProductModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+      
    
 
 <!-- ═══════════ TAB: TIKTOK VIDEOS ═══════════ -->
@@ -1423,6 +1452,113 @@ function openTableModal() {
   if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
   saveSelection();
   document.getElementById("tableModal").classList.add("open");
+}
+  // ── Insert Product Card ──
+function openProductModal() {
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  saveSelection();
+
+  // Populate category filter from CATEGORIES (already loaded by admin)
+  var sel = document.getElementById("productCatFilter");
+  if (sel.options.length <= 1) {
+    Object.keys(CATEGORIES).forEach(function(key) {
+      var opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = CATEGORIES[key];
+      sel.appendChild(opt);
+    });
+  }
+
+  document.getElementById("productSearch").value = "";
+  document.getElementById("productCatFilter").value = "";
+  document.getElementById("productSearchResults").innerHTML = '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">Type to search products...</p>';
+  document.getElementById("productModal").classList.add("open");
+  setTimeout(function(){ document.getElementById("productSearch").focus(); }, 50);
+}
+
+function closeProductModal() {
+  document.getElementById("productModal").classList.remove("open");
+}
+
+function searchProductsForBlog() {
+  var query = document.getElementById("productSearch").value.toLowerCase().trim();
+  var catFilter = document.getElementById("productCatFilter").value;
+  var resultsEl = document.getElementById("productSearchResults");
+
+  if (!query && !catFilter) {
+    resultsEl.innerHTML = '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">Type to search products...</p>';
+    return;
+  }
+
+  // Search across all loaded category data
+  var matches = [];
+  var cats = catFilter ? [catFilter] : Object.keys(data);
+  cats.forEach(function(cat) {
+    if (!data[cat]) return;
+    data[cat].forEach(function(p) {
+      if (!p.name) return;
+      if (query && p.name.toLowerCase().indexOf(query) === -1) return;
+      matches.push({ product: p, category: cat });
+    });
+  });
+
+  if (!matches.length) {
+    resultsEl.innerHTML = '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">No products found. Try a different search.</p>';
+    return;
+  }
+
+  // Cap at 30 results
+  matches = matches.slice(0, 30);
+
+  resultsEl.innerHTML = matches.map(function(m, i) {
+    var p = m.product;
+    var img = p.image ? '<img src="' + p.image + '" style="width:50px;height:50px;object-fit:contain;border-radius:4px;background:#fff;">' : '<span style="font-size:1.5rem;">📦</span>';
+    var price = p.price ? '$' + parseFloat(p.price).toFixed(2) : '';
+    var rating = p.rating ? '⭐ ' + p.rating : '';
+    return '<div onclick="insertProductCard(\'' + m.category + '\',\'' + (p.id || "").replace(/'/g, "\\'") + '\')" style="display:flex;gap:10px;align-items:center;padding:8px;background:#fff;border:1px solid #eee;border-radius:4px;margin-bottom:6px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor=\'#007cba\';this.style.background=\'#f0f7fb\';" onmouseout="this.style.borderColor=\'#eee\';this.style.background=\'#fff\';">' +
+      '<div style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;border-radius:4px;flex-shrink:0;">' + img + '</div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="font-size:0.85rem;font-weight:500;line-height:1.3;color:#23282d;">' + p.name + '</div>' +
+        '<div style="font-size:0.72rem;color:#777;margin-top:2px;">' + price + (rating ? ' · ' + rating : '') + ' · <span style="color:#007cba;">' + (CATEGORIES[m.category] || m.category) + '</span></div>' +
+      '</div>' +
+      '<button style="padding:6px 12px;background:#007cba;color:#fff;border:none;border-radius:3px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;flex-shrink:0;">+ Insert</button>' +
+    '</div>';
+  }).join("") + (matches.length === 30 ? '<p style="font-size:0.72rem;color:#999;text-align:center;padding:8px;">Showing first 30 results. Refine search for more.</p>' : '');
+}
+
+function insertProductCard(cat, productId) {
+  if (!data[cat]) { showToast("Category data not loaded", "error"); return; }
+  var product = data[cat].find(function(p) { return p.id === productId; });
+  if (!product) { showToast("Product not found", "error"); return; }
+
+  var productUrl = "https://kbeauty.fun/p/" + cat + "/" + productId;
+  var imgUrl = product.image || "";
+  var name = (product.name || "").replace(/"/g, "&quot;");
+  var price = product.price ? "$" + parseFloat(product.price).toFixed(2) : "";
+  var origPrice = product.originalPrice ? "$" + parseFloat(product.originalPrice).toFixed(2) : "";
+  var rating = product.rating || "";
+  var reviews = product.reviews || "";
+
+  // Compact card HTML — uses inline styles so it renders correctly even without your site CSS
+  var card = '<div class="kb-product-card" style="display:flex;gap:14px;align-items:center;padding:14px;background:#fff;border:1px solid #e8e8e8;border-radius:10px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.04);max-width:100%;">' +
+    (imgUrl ? '<a href="' + productUrl + '" style="flex-shrink:0;display:block;"><img src="' + imgUrl + '" alt="' + name + '" style="width:90px;height:90px;object-fit:contain;background:#fafafa;border-radius:6px;"></a>' : '<div style="width:90px;height:90px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">📦</div>') +
+    '<div style="flex:1;min-width:0;">' +
+      '<a href="' + productUrl + '" style="text-decoration:none;color:#23282d;"><div style="font-size:0.95rem;font-weight:600;line-height:1.35;margin-bottom:4px;">' + name + '</div></a>' +
+      (rating ? '<div style="font-size:0.78rem;color:#666;margin-bottom:6px;">⭐ ' + rating + (reviews ? ' (' + reviews + ' reviews)' : '') + '</div>' : '') +
+      '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+        (price ? '<span style="font-size:1.05rem;font-weight:700;color:#23282d;">' + price + '</span>' : '') +
+        (origPrice ? '<span style="font-size:0.85rem;color:#999;text-decoration:line-through;">' + origPrice + '</span>' : '') +
+      '</div>' +
+    '</div>' +
+    '<a href="' + productUrl + '" style="padding:9px 18px;background:#C4956A;color:#fff;border-radius:6px;text-decoration:none;font-size:0.85rem;font-weight:600;font-family:Outfit,sans-serif;white-space:nowrap;flex-shrink:0;">View Product →</a>' +
+  '</div><p></p>';
+
+  document.getElementById("blogVisual").focus();
+  restoreSelection();
+  document.execCommand("insertHTML", false, card);
+  closeProductModal();
+  syncEditorContent();
+  showToast("Product inserted: " + product.name.slice(0, 40), "success");
 }
 function closeTableModal() { document.getElementById("tableModal").classList.remove("open"); }
 function applyTable() {
