@@ -1577,43 +1577,82 @@ document.getElementById("blogVisual").addEventListener("paste", function(e) {
   var html = clipboard.getData("text/html");
   var text = clipboard.getData("text/plain");
 
-  // If clipboard has HTML with a table already, let the browser paste it (default behavior)
-  // but if it's plain TSV/CSV-looking text, intercept
-  if (html && /<table[\s>]/i.test(html)) return;
+  if (!text && !html) return;
+
+  // 1. If clipboard contains real HTML with a table, parse THAT directly into rows.
+  //    Excel/Sheets/Word all put a clean <table> in the HTML clipboard.
+  if (html && /<table[\s>]/i.test(html)) {
+    var rows = parseHTMLTable(html);
+    if (rows && rows.length) {
+      e.preventDefault();
+      handleTabularPaste(rows);
+      return;
+    }
+    // If HTML had a table but we couldn't parse it, fall through to text-based detection
+  }
 
   if (!text) return;
 
-  // Heuristic: tabular if multiple lines AND (tabs OR consistent multi-spaces OR pipes)
-  var lines = text.replace(/\r\n/g, "\n").trim().split("\n");
-  if (lines.length < 2) return;
-  var hasTabs = text.indexOf("\t") !== -1;
-  var hasPipes = lines[0].split("|").length >= 3;
-  if (!hasTabs && !hasPipes) return;
+  // 2. Plain-text tabular detection — be more permissive
+  var normalized = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+  var lines = normalized.split("\n").filter(function(l){ return l.length > 0; });
 
-  // Are we currently inside an existing table cell?
+  var hasTabs = normalized.indexOf("\t") !== -1;
+  var hasPipes = lines.length >= 1 && lines[0].split("|").length >= 3;
+
+  // Single-line paste with tabs is still tabular (one row of cells)
+  if (lines.length < 1) return;
+  if (lines.length === 1 && !hasTabs && !hasPipes) return;
+  if (lines.length >= 2 && !hasTabs && !hasPipes) return;
+
+  e.preventDefault();
+  var rows = parseTabularData(text);
+  if (!rows.length) return;
+  handleTabularPaste(rows);
+});
+
+// Parse an HTML <table> blob into a 2D string array
+function parseHTMLTable(htmlString) {
+  try {
+    var temp = document.createElement("div");
+    temp.innerHTML = htmlString;
+    var table = temp.querySelector("table");
+    if (!table) return null;
+    var rows = [];
+    table.querySelectorAll("tr").forEach(function(tr) {
+      var cells = [];
+      tr.querySelectorAll("th, td").forEach(function(cell) {
+        // Strip nested formatting, keep text
+        cells.push((cell.innerText || cell.textContent || "").trim());
+      });
+      if (cells.length) rows.push(cells);
+    });
+    return rows;
+  } catch(e) { return null; }
+}
+
+// Decide whether to insert new table or fill existing cells
+function handleTabularPaste(rows) {
   var sel = window.getSelection();
   var cell = null;
   if (sel.rangeCount > 0) {
     var node = sel.getRangeAt(0).startContainer;
     if (node.nodeType === 3) node = node.parentElement;
-    cell = node && node.closest ? node.closest("td, th") : null;
+    // Only treat as "in-cell paste" if the cell is inside our editor
+    var visual = document.getElementById("blogVisual");
+    var possibleCell = node && node.closest ? node.closest("td, th") : null;
+    if (possibleCell && visual.contains(possibleCell)) cell = possibleCell;
   }
 
-  e.preventDefault();
-  var rows = parseTabularData(text);
-  if (!rows.length) return;
-
   if (cell) {
-    // Paste-into-cell: fill cells from current position outward
     pasteIntoTable(cell, rows);
   } else {
-    // Insert a new table
     var html2 = buildTableHTML(rows, true);
     document.execCommand("insertHTML", false, html2);
   }
   syncEditorContent();
   showToast("Pasted " + rows.length + " row" + (rows.length>1?"s":"") + " as table", "success");
-});
+}
 
 // Fill cells from a starting cell, expanding the table if needed
 function pasteIntoTable(startCell, rows) {
