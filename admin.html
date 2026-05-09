@@ -1876,6 +1876,136 @@ function pasteIntoTable(startCell, rows) {
   document.getElementById("blogContentText").value = document.getElementById("blogVisual").innerHTML;
   updateWordCount();
 }
+  // ── Interactive table controls (add/remove rows & columns) ──
+var activeTableCell = null;
+
+function getTableControls() {
+  var panel = document.getElementById("tableControls");
+  if (panel) return panel;
+  panel = document.createElement("div");
+  panel.id = "tableControls";
+  panel.style.cssText = "position:absolute;background:#23282d;color:#fff;padding:6px;border-radius:4px;display:none;gap:4px;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-family:'Outfit',sans-serif;font-size:0.72rem;flex-wrap:wrap;max-width:340px;";
+  panel.innerHTML =
+    '<button onclick="tblAddRow(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Row ↑</button>' +
+    '<button onclick="tblAddRow(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Row ↓</button>' +
+    '<button onclick="tblAddCol(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Col ←</button>' +
+    '<button onclick="tblAddCol(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Col →</button>' +
+    '<button onclick="tblDelRow()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">– Row</button>' +
+    '<button onclick="tblDelCol()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">– Col</button>' +
+    '<button onclick="tblDelete()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">🗑 Table</button>' +
+    '<button onclick="tblHideControls()" style="background:#555;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">✕</button>';
+  document.body.appendChild(panel);
+  return panel;
+}
+
+function tblShowControls(cell) {
+  activeTableCell = cell;
+  var panel = getTableControls();
+  var rect = cell.getBoundingClientRect();
+  panel.style.display = "flex";
+  panel.style.top = (window.scrollY + rect.top - 40) + "px";
+  panel.style.left = (window.scrollX + rect.left) + "px";
+}
+
+function tblHideControls() {
+  var panel = document.getElementById("tableControls");
+  if (panel) panel.style.display = "none";
+  activeTableCell = null;
+}
+
+function tblContext() {
+  if (!activeTableCell) return null;
+  var cell = activeTableCell;
+  var row = cell.parentElement;
+  var section = row.parentElement;
+  var table = section.parentElement;
+  var rowIndex = Array.prototype.indexOf.call(section.children, row);
+  var colIndex = Array.prototype.indexOf.call(row.children, cell);
+  return { cell: cell, row: row, section: section, table: table, rowIndex: rowIndex, colIndex: colIndex };
+}
+
+function tblAddRow(direction) {
+  var ctx = tblContext(); if (!ctx) return;
+  var newRow = document.createElement("tr");
+  var colCount = ctx.row.children.length;
+  for (var i = 0; i < colCount; i++) {
+    var td = document.createElement("td");
+    td.style.cssText = "border:1px solid #ddd;padding:8px;";
+    td.innerHTML = "&nbsp;";
+    newRow.appendChild(td);
+  }
+  if (direction === -1) ctx.section.insertBefore(newRow, ctx.row);
+  else if (ctx.row.nextSibling) ctx.section.insertBefore(newRow, ctx.row.nextSibling);
+  else ctx.section.appendChild(newRow);
+  syncEditorContent();
+}
+
+function tblAddCol(direction) {
+  var ctx = tblContext(); if (!ctx) return;
+  var allRows = ctx.table.querySelectorAll("tr");
+  allRows.forEach(function(r) {
+    var isHeader = r.parentElement.tagName.toLowerCase() === "thead";
+    var newCell = document.createElement(isHeader ? "th" : "td");
+    newCell.style.cssText = isHeader
+      ? "border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;"
+      : "border:1px solid #ddd;padding:8px;";
+    newCell.innerHTML = isHeader ? "Header" : "&nbsp;";
+    var refCell = r.children[ctx.colIndex];
+    if (!refCell) { r.appendChild(newCell); return; }
+    if (direction === -1) r.insertBefore(newCell, refCell);
+    else if (refCell.nextSibling) r.insertBefore(newCell, refCell.nextSibling);
+    else r.appendChild(newCell);
+  });
+  syncEditorContent();
+}
+
+function tblDelRow() {
+  var ctx = tblContext(); if (!ctx) return;
+  var totalRows = ctx.table.querySelectorAll("tr").length;
+  if (totalRows <= 1) { showToast("Can't delete the last row", "error"); return; }
+  ctx.row.remove();
+  tblHideControls();
+  syncEditorContent();
+}
+
+function tblDelCol() {
+  var ctx = tblContext(); if (!ctx) return;
+  var firstRow = ctx.table.querySelector("tr");
+  if (firstRow.children.length <= 1) { showToast("Can't delete the last column", "error"); return; }
+  ctx.table.querySelectorAll("tr").forEach(function(r) {
+    if (r.children[ctx.colIndex]) r.children[ctx.colIndex].remove();
+  });
+  tblHideControls();
+  syncEditorContent();
+}
+
+function tblDelete() {
+  var ctx = tblContext(); if (!ctx) return;
+  if (!confirm("Delete this entire table?")) return;
+  ctx.table.remove();
+  tblHideControls();
+  syncEditorContent();
+}
+
+// Click listener: show controls when clicking a table cell
+document.getElementById("blogVisual").addEventListener("click", function(e) {
+  var cell = e.target.closest("td, th");
+  if (cell && this.contains(cell)) {
+    tblShowControls(cell);
+  } else {
+    tblHideControls();
+  }
+});
+
+// Hide controls when clicking outside the editor
+document.addEventListener("click", function(e) {
+  var panel = document.getElementById("tableControls");
+  var visual = document.getElementById("blogVisual");
+  if (!panel) return;
+  if (e.target.closest("#tableControls")) return;
+  if (visual && visual.contains(e.target)) return;
+  tblHideControls();
+});
 // Word count
 function updateWordCount() {
   var text = "";
