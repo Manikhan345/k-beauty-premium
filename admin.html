@@ -814,7 +814,37 @@ function sidebarSwitch(tabId, el) {
   if (sidebar) sidebar.classList.remove("open");
   if (overlay) overlay.classList.remove("open");
 }
+// Sidebar click handler — respects Ctrl/Cmd/middle-click to open in new tab
+function sidebarClick(event, tabId, el) {
+  // If user is Ctrl/Cmd/middle clicking, let the browser handle it (opens in new tab)
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1) {
+    return true; // don't preventDefault, let the href take over
+  }
+  event.preventDefault();
+  // Update URL hash without reloading
+  if (history.pushState) history.pushState(null, "", "#" + tabId);
+  else location.hash = tabId;
+  sidebarSwitch(tabId, el);
+  return false;
+}
 
+// Open the correct tab based on URL hash on page load
+function openTabFromHash() {
+  var hash = (location.hash || "").replace("#", "");
+  var validTabs = ["products", "categories", "blog", "tiktok", "redirects"];
+  if (!hash || validTabs.indexOf(hash) === -1) hash = "products";
+  var link = document.querySelector('.sidebar-link[data-tab="' + hash + '"]');
+  sidebarSwitch(hash, link);
+}
+
+// Handle browser back/forward buttons
+window.addEventListener("hashchange", function() {
+  var hash = (location.hash || "").replace("#", "");
+  var validTabs = ["products", "categories", "blog", "tiktok", "redirects"];
+  if (!hash || validTabs.indexOf(hash) === -1) hash = "products";
+  var link = document.querySelector('.sidebar-link[data-tab="' + hash + '"]');
+  if (link) sidebarSwitch(hash, link);
+});
 function toggleAdminSidebar() {
   var sidebar = document.getElementById("adminSidebar");
   var overlay = document.getElementById("adminOverlay");
@@ -878,7 +908,15 @@ function checkSavedToken(){var s=localStorage.getItem("kb_github_token");if(s){t
 async function connectGitHub(){var input=document.getElementById("tokenInput").value.trim();if(!input)return;token=input;document.getElementById("authError").style.display="none";try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Invalid");var user=await resp.json();localStorage.setItem("kb_github_token",token);showToast("Connected as "+user.login,"success");await loadConfigForAdmin();showMainUI();loadAllData();}catch(e){document.getElementById("authError").style.display="block";token="";}}
 async function verifyAndConnect(){try{var resp=await fetch("https://api.github.com/user",{headers:{"Authorization":"token "+token}});if(!resp.ok)throw new Error("Expired");await loadConfigForAdmin();showMainUI();loadAllData();}catch(e){localStorage.removeItem("kb_github_token");token="";}}
 function logout(){localStorage.removeItem("kb_github_token");token="";data={};fileSHAs={};document.getElementById("adminLayout").style.display="none";document.getElementById("authScreen").style.display="block";document.getElementById("statusDot").className="status-dot disconnected";document.getElementById("statusText").textContent="Not connected";document.getElementById("btnLogout").style.display="none";}
-function showMainUI(){document.getElementById("authScreen").style.display="none";document.getElementById("adminLayout").style.display="grid";document.getElementById("statusDot").className="status-dot connected";document.getElementById("statusText").textContent="Connected to GitHub";document.getElementById("btnLogout").style.display="inline-block";updateTagDropdown();}
+function showMainUI(){
+  document.getElementById("authScreen").style.display="none";
+  document.getElementById("adminLayout").style.display="grid";
+  document.getElementById("statusDot").className="status-dot connected";
+  document.getElementById("statusText").textContent="Connected to GitHub";
+  document.getElementById("btnLogout").style.display="inline-block";
+  updateTagDropdown();
+  openTabFromHash();
+}
 
 // ═══════════════════════════════════════════════════════════════
 // PRODUCT MANAGER
