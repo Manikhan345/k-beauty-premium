@@ -1,5 +1,35 @@
 [
   {
+    "id": "cosrx_7_glycolic_acid_whitehea",
+    "name": "COSRX 7% Glycolic Acid Whitehead Removing Power Liquid, 3.38 fl.oz, AHA Exfoliant, Exfoliating Toner for Face & Body, Pore Minimizer, Korean Skin Care",
+    "price": 15.13,
+    "originalPrice": null,
+    "rating": 4.4,
+    "reviews": "1,804",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Exfoliators",
+    "image": "https://m.media-amazon.com/images/I/61UvDq1AmhL._SL1500_.jpg",
+    "url": "https://amzn.to/4tupvKD",
+    "bought": "700+ bought in past month",
+    "prime": true
+  },
+  {
+    "id": "cosrx_niacinamide_2_bha_4_blac",
+    "name": "COSRX Niacinamide 2% + BHA 4% Blackhead Exfoliant Toner 3.38 fl.oz / 100ml, Korean Toner, Blackhead Remover, Pore Minimizer for Enlarged Pores, for All Skin Types, Korean Skin Care",
+    "price": 15.99,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "4,170",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Toners & Astringents",
+    "image": "https://m.media-amazon.com/images/I/61YxQHrEIcL._SL1500_.jpg",
+    "url": "https://amzn.to/48Vewm2",
+    "bought": "5K+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "round_lab_birch_juice_mild_up_",
     "name": "ROUND LAB Birch Juice Mild-up UV LOCK SPF 50+, mineral sunscreen, broad spectrum, Zinc Oxide, reef safe sunscreen, lightweight, oil control for Sensitive Skin, Korean Sunscreen 1.69 Fl Oz",
     "price": 22.4,
