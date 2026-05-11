@@ -276,27 +276,27 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-title">Products</div>
-      <a class="sidebar-link active" onclick="sidebarSwitch('products', this)">
-        <span class="icon">📦</span> Product Manager
-      </a>
-      <a class="sidebar-link" onclick="sidebarSwitch('categories', this)">
-        <span class="icon">📂</span> Category Manager
-      </a>
+      <a class="sidebar-link active" href="#products" data-tab="products" onclick="return sidebarClick(event, 'products', this)">
+  <span class="icon">📦</span> Product Manager
+</a>
+      <a class="sidebar-link" href="#categories" data-tab="categories" onclick="return sidebarClick(event, 'categories', this)">
+  <span class="icon">📂</span> Category Manager
+</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-title">Content</div>
-      <a class="sidebar-link" onclick="sidebarSwitch('blog', this)">
-        <span class="icon">📝</span> Blog Manager
-      </a>
-      <a class="sidebar-link" onclick="sidebarSwitch('tiktok', this)">
-        <span class="icon">🎵</span> TikTok Videos
-      </a>
+      <a class="sidebar-link" href="#blog" data-tab="blog" onclick="return sidebarClick(event, 'blog', this)">
+    <span class="icon">📝</span> Blog Manager
+  </a>
+      <a class="sidebar-link" href="#tiktok" data-tab="tiktok" onclick="return sidebarClick(event, 'tiktok', this)">
+    <span class="icon">🎵</span> TikTok Videos
+  </a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-title">Settings</div>
-      <a class="sidebar-link" onclick="sidebarSwitch('redirects', this)">
-        <span class="icon">🔀</span> Redirects
-      </a>
+      <a class="sidebar-link" href="#redirects" data-tab="redirects" onclick="return sidebarClick(event, 'redirects', this)">
+    <span class="icon">🔀</span> Redirects
+  </a>
     </div>
     <div class="sidebar-section" style="margin-top:auto;padding:16px;">
       <a href="https://kbeauty.fun" target="_blank" class="sidebar-link" style="color:rgba(255,255,255,0.4);font-size:0.78rem;">
