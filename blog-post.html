@@ -49,7 +49,14 @@
   border: none !important;
   background: #fff !important;
 }
-
+.post-content table th[style*="border"],
+.post-content table td[style*="border"] {
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.post-content table thead th[style*="border"] {
+  border: none !important;
+}
 /* HEADER — only <thead> and only <th> cells */
 .post-content table thead {
   background: linear-gradient(135deg, #C4956A, #D4A08C) !important;
