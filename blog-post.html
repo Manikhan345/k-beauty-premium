@@ -34,6 +34,45 @@
 .post-content td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text); }
 .post-content tbody tr:hover { background: var(--accent-light); }
 .post-content tbody tr:last-child td { border-bottom: none; }
+  /* Force tables saved through admin WYSIWYG editor to match site styling.
+   The editor adds inline `background:#f5f5f5` to <th> cells and inline borders
+   to <td>/<th> cells, which conflict with the blog's rose-gradient theme.
+   These rules override those inline styles so all tables look consistent. */
+.post-content table {
+  border-collapse: collapse !important;
+  margin: 20px 0 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border) !important;
+}
+.post-content table thead,
+.post-content table tr:first-child {
+  background: linear-gradient(135deg, #C4956A, #D4A08C) !important;
+}
+.post-content table th {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  padding: 12px 16px !important;
+  border: none !important;
+  font-size: 0.82rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+}
+.post-content table td {
+  background: transparent !important;
+  color: var(--text) !important;
+  padding: 10px 16px !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.post-content table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+.post-content table tbody tr:hover {
+  background: var(--accent-light) !important;
+}
 .post-content .table-total { background: #FFF8F0; font-weight: 600; }
 .post-content .table-total td { border-top: 2px solid var(--accent); }
 .post-nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
