@@ -1785,14 +1785,19 @@ document.getElementById("blogVisual").addEventListener("paste", function(e) {
 
   // 1. If clipboard contains real HTML with a table, parse THAT directly into rows.
   //    Excel/Sheets/Word all put a clean <table> in the HTML clipboard.
-  if (html && /<table[\s>]/i.test(html)) {
-    var rows = parseHTMLTable(html);
-    if (rows && rows.length) {
-      e.preventDefault();
-      handleTabularPaste(rows);
-      return;
+  // 1. If clipboard contains real HTML with a table, parse THAT directly into rows.
+  if (html) {
+    // Strip Office/Word/Google Docs wrapper HTML that confuses the parser
+    var cleanHTML = html.replace(/<!--[\s\S]*?-->/g, "").replace(/<style[\s\S]*?<\/style>/gi, "");
+    if (/<table[\s>]/i.test(cleanHTML)) {
+      var rows = parseHTMLTable(cleanHTML);
+      if (rows && rows.length) {
+        e.preventDefault();
+        handleTabularPaste(rows);
+        return;
+      }
+      // HTML had a table but we couldn't parse — try text fallback below
     }
-    // If HTML had a table but we couldn't parse it, fall through to text-based detection
   }
 
   if (!text) return;
@@ -1820,19 +1825,31 @@ function parseHTMLTable(htmlString) {
   try {
     var temp = document.createElement("div");
     temp.innerHTML = htmlString;
+    // Find FIRST table — even if nested inside other tags
     var table = temp.querySelector("table");
     if (!table) return null;
+
     var rows = [];
-    table.querySelectorAll("tr").forEach(function(tr) {
+    var trs = table.querySelectorAll("tr");
+    trs.forEach(function(tr) {
       var cells = [];
       tr.querySelectorAll("th, td").forEach(function(cell) {
-        // Strip nested formatting, keep text
-        cells.push((cell.innerText || cell.textContent || "").trim());
+        // Skip cells that are clearly nested tables/widgets
+        // Extract just the readable text
+        var text = (cell.innerText || cell.textContent || "")
+          .replace(/\s+/g, " ")  // collapse multiple spaces/newlines
+          .trim();
+        cells.push(text);
       });
-      if (cells.length) rows.push(cells);
+      if (cells.length && cells.some(function(c){ return c.length > 0; })) {
+        rows.push(cells);
+      }
     });
-    return rows;
-  } catch(e) { return null; }
+    return rows.length ? rows : null;
+  } catch(e) {
+    console.error("parseHTMLTable error:", e);
+    return null;
+  }
 }
 
 // Decide whether to insert new table or fill existing cells
