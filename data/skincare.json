@@ -1,5 +1,35 @@
 [
   {
+    "id": "innisfree_green_tea_seed_hydra",
+    "name": "innisfree Green Tea Seed Hydrating Serum with Hyaluronic Acid & Niacinamide, Korean Face Serum for Glow & Skin Barrier Suport, Available in Refill & Sets",
+    "price": 30,
+    "originalPrice": null,
+    "rating": 4.6,
+    "reviews": "1,873",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Face Treatments",
+    "image": "https://m.media-amazon.com/images/I/615XCiKOJ6L._SL1500_.jpg",
+    "url": "https://amzn.to/4doGEiN",
+    "bought": "800+ bought in past month",
+    "prime": true
+  },
+  {
+    "id": "torriden_dive_in_hyaluronic_ac",
+    "name": "Torriden DIVE IN Hyaluronic Acid Serum for Deep Hydration | Korean K-Beauty Glass Skin Plump Glow | Lightweight Fast-Absorbing Face Serum 50ml (1.69 fl.oz.)",
+    "price": 22.5,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "3,750",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Face Treatments",
+    "image": "https://m.media-amazon.com/images/I/51IhsMajjFL._SL1500_.jpg",
+    "url": "https://amzn.to/4tq23y1",
+    "bought": "8K+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "cosrx_7_glycolic_acid_whitehea",
     "name": "COSRX 7% Glycolic Acid Whitehead Removing Power Liquid, 3.38 fl.oz, AHA Exfoliant, Exfoliating Toner for Face & Body, Pore Minimizer, Korean Skin Care",
     "price": 15.13,
