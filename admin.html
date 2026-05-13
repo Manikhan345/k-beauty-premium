@@ -1650,7 +1650,7 @@ function applyTable() {
   html += '<tbody>';
   for (var r = 0; r < rows; r++) {
     html += '<tr>';
-    for (var c = 0; c < cols; c++) html += '<td style="border:1px solid #ddd;padding:8px;">&nbsp;</td>';
+    for (var c = 0; c < cols; c++) html += '<td style="border:1px solid #ddd;padding:8px;"><br></td>';
     html += '</tr>';
   }
   html += '</tbody></table><p></p>';
@@ -1737,7 +1737,7 @@ function buildTableHTML(rows, hasHeader) {
     html += '<tr>';
     for (var c = 0; c < cols; c++) {
       var v = rows[r][c] || "";
-      html += '<td style="border:1px solid #ddd;padding:8px;">' + (v ? escapeHTML(v) : "&nbsp;") + '</td>';
+      html += '<td style="border:1px solid #ddd;padding:8px;">' + (v ? escapeHTML(v) : "<br>") + '</td>';
     }
     html += '</tr>';
   }
@@ -1906,7 +1906,7 @@ function pasteIntoTable(startCell, rows) {
       for (var i = 0; i < firstRowCellCount; i++) {
         var td = document.createElement("td");
         td.style.cssText = "border:1px solid #ddd;padding:8px;";
-        td.innerHTML = "&nbsp;";
+        td.innerHTML = "<br>";
         targetRow.appendChild(td);
       }
       // Append to tbody if it exists, else table
@@ -1926,7 +1926,7 @@ function pasteIntoTable(startCell, rows) {
           newCell.style.cssText = isHeader
             ? "border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;"
             : "border:1px solid #ddd;padding:8px;";
-          newCell.innerHTML = "&nbsp;";
+          newCell.innerHTML = "<br>";
           rr.appendChild(newCell);
         });
         targetCell = targetRow.children[targetColIdx];
@@ -1994,7 +1994,7 @@ function tblAddRow(direction) {
   for (var i = 0; i < colCount; i++) {
     var td = document.createElement("td");
     td.style.cssText = "border:1px solid #ddd;padding:8px;";
-    td.innerHTML = "&nbsp;";
+    td.innerHTML = "<br>";
     newRow.appendChild(td);
   }
   if (direction === -1) ctx.section.insertBefore(newRow, ctx.row);
@@ -2012,7 +2012,7 @@ function tblAddCol(direction) {
     newCell.style.cssText = isHeader
       ? "border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;"
       : "border:1px solid #ddd;padding:8px;";
-    newCell.innerHTML = isHeader ? "Header" : "&nbsp;";
+    newCell.innerHTML = isHeader ? "Header" : "<br>";
     var refCell = r.children[ctx.colIndex];
     if (!refCell) { r.appendChild(newCell); return; }
     if (direction === -1) r.insertBefore(newCell, refCell);
