@@ -34,119 +34,107 @@
 .post-content td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text); }
 .post-content tbody tr:hover { background: var(--accent-light); }
 .post-content tbody tr:last-child td { border-bottom: none; }
- /* ─────────────────────────────────────────────────────────
-   BLOG POST TABLES — clean version
-   Targets <thead><th> for header, <tbody><td> for body.
-   ───────────────────────────────────────────────────────── */
+ /* ─── TABLES (v2) — published view ─── */
+.post-content .tbl2-wrap {
+  margin: 24px 0;
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.post-content .tbl2-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #fff;
+  font-size: 0.95rem;
+}
+.post-content .tbl2-wrap thead {
+  background: linear-gradient(135deg, #C4956A, #D4A08C);
+}
+.post-content .tbl2-wrap thead th {
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 16px;
+  border: none;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  vertical-align: middle;
+  word-break: break-word;
+}
+.post-content .tbl2-wrap tbody td {
+  padding: 14px 16px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  word-break: break-word;
+  color: var(--text);
+  line-height: 1.5;
+  background: #fff;
+}
+.post-content .tbl2-wrap tbody tr:last-child td {
+  border-bottom: none;
+}
+.post-content .tbl2-wrap tbody tr:hover td {
+  background: #FFF8F0;
+}
 
-.post-content table {
-  width: 100% !important;
-  table-layout: fixed !important;
-  border-collapse: collapse !important;
-  margin: 24px 0 !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
-  border: none !important;
-  background: #fff !important;
+/* Backward compat: old tables that don't have .tbl2-wrap */
+.post-content table:not(.tbl2-wrap table) {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 24px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 0.95rem;
 }
-.post-content table th[style*="border"],
-.post-content table td[style*="border"] {
-  border: none !important;
-  border-bottom: 1px solid var(--border) !important;
+.post-content table:not(.tbl2-wrap table) thead {
+  background: linear-gradient(135deg, #C4956A, #D4A08C);
 }
-.post-content table thead th[style*="border"] {
-  border: none !important;
-}
-/* HEADER — only <thead> and only <th> cells */
-.post-content table thead {
-  background: linear-gradient(135deg, #C4956A, #D4A08C) !important;
-}
-
-.post-content table thead th {
+.post-content table:not(.tbl2-wrap table) thead th {
   background: transparent !important;
-  color: #ffffff !important;
+  color: #fff !important;
   font-weight: 600 !important;
   text-align: left !important;
   padding: 14px 16px !important;
   border: none !important;
-  font-size: 0.78rem !important;
+  font-size: 0.82rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.4px !important;
-  vertical-align: middle !important;
-  word-break: break-word !important;
 }
-
-/* BODY cells — only <td> inside <tbody> */
-.post-content table tbody td {
+.post-content table:not(.tbl2-wrap table) tbody td {
   background: #fff !important;
-  color: var(--text) !important;
   padding: 14px 16px !important;
   border: none !important;
   border-bottom: 1px solid var(--border) !important;
-  vertical-align: middle !important;
-  word-break: break-word !important;
+  color: var(--text) !important;
   font-size: 0.92rem !important;
   text-transform: none !important;
   font-weight: 400 !important;
   letter-spacing: normal !important;
-  line-height: 1.5 !important;
 }
-
-/* Last body row — no border */
-.post-content table tbody tr:last-child td {
+.post-content table:not(.tbl2-wrap table) tbody tr:last-child td {
   border-bottom: none !important;
 }
 
-/* Hover ONLY on body rows */
-.post-content table tbody tr:hover td {
-  background: #FFF8F0 !important;
-}
-
-/* Product cards inside table cells — compact vertical layout */
-.post-content table tbody td .kb-product-card {
-  display: block !important;
-  padding: 10px !important;
-  margin: 0 !important;
-  box-shadow: none !important;
-  border: 1px solid #f0f0f0 !important;
-  background: #fff !important;
-  text-align: center !important;
-}
-.post-content table tbody td .kb-product-card > a:first-child {
-  display: block !important;
-  margin: 0 auto 8px !important;
-}
-.post-content table tbody td .kb-product-card > a:first-child img {
-  width: 80px !important;
-  height: 80px !important;
-  margin: 0 auto !important;
-}
-.post-content table tbody td .kb-product-card > div {
-  text-align: center !important;
-  margin-bottom: 8px !important;
-}
-.post-content table tbody td .kb-product-card > div > a > div {
-  font-size: 0.78rem !important;
-  line-height: 1.3 !important;
-}
-.post-content table tbody td .kb-product-card > a:last-child {
-  display: inline-block !important;
-  width: auto !important;
-  font-size: 0.72rem !important;
-  padding: 6px 14px !important;
-  margin: 4px auto 0 !important;
-}
-
-/* Mobile — horizontal scroll */
+/* Mobile: scroll horizontally */
 @media (max-width: 768px) {
-  .post-content table {
-    display: block !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+  .post-content .tbl2-wrap,
+  .post-content table:not(.tbl2-wrap table) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  .post-content table td,
-  .post-content table th {
-    min-width: 120px !important;
+  .post-content .tbl2-wrap td,
+  .post-content .tbl2-wrap th,
+  .post-content table:not(.tbl2-wrap table) td,
+  .post-content table:not(.tbl2-wrap table) th {
+    min-width: 120px;
   }
 }
 .post-content .table-total { background: #FFF8F0; font-weight: 600; }
