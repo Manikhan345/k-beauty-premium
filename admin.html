@@ -134,14 +134,181 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .wp-visual-area img { max-width: 100%; height: auto; border-radius: 4px; }
 .wp-visual-area a { color: #007cba; }
 .wp-visual-area table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-.wp-visual-area th, .wp-visual-area td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-  .wp-visual-area table {
-  border-collapse: collapse !important;
-  border: none !important;
+  /* ─── TABLE v2 — Editor view ─── */
+.wp-visual-area .tbl2-wrap {
+  position: relative;
+  margin: 16px 0;
+  overflow: visible;
 }
-.wp-visual-area table th,
-.wp-visual-area table td {
+.wp-visual-area .tbl2-wrap table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  background: #fff;
   border: 1px solid #ddd !important;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.wp-visual-area .tbl2-wrap thead {
+  background: linear-gradient(135deg, #C4956A, #D4A08C);
+}
+.wp-visual-area .tbl2-wrap thead th {
+  color: #fff !important;
+  font-weight: 600;
+  padding: 10px 12px !important;
+  text-align: left;
+  border: none !important;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  position: relative;
+  vertical-align: middle;
+  word-break: break-word;
+}
+.wp-visual-area .tbl2-wrap tbody td {
+  padding: 10px 12px !important;
+  border: none !important;
+  border-bottom: 1px solid #eee !important;
+  vertical-align: top;
+  word-break: break-word;
+  font-size: 0.92rem;
+  background: #fff;
+  position: relative;
+}
+.wp-visual-area .tbl2-wrap tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Hover controls */
+.wp-visual-area .tbl2-ctrl {
+  position: absolute;
+  display: none;
+  z-index: 50;
+  background: #23282d;
+  color: #fff;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: 'Outfit', sans-serif;
+  gap: 3px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  white-space: nowrap;
+  user-select: none;
+}
+.wp-visual-area .tbl2-ctrl.show { display: inline-flex; }
+.wp-visual-area .tbl2-ctrl button {
+  background: #3a4148;
+  color: #fff;
+  border: none;
+  padding: 3px 7px;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+}
+.wp-visual-area .tbl2-ctrl button:hover { background: #4a5158; }
+.wp-visual-area .tbl2-ctrl button.danger { background: #a62828; }
+.wp-visual-area .tbl2-ctrl button.danger:hover { background: #c43030; }
+
+/* Column-control row (sits above the table) */
+.wp-visual-area .tbl2-col-ctrls {
+  display: flex;
+  gap: 0;
+  margin-bottom: -1px;
+  padding-left: 0;
+}
+.wp-visual-area .tbl2-col-handle {
+  flex: 1;
+  height: 22px;
+  border: 1px dashed transparent;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.wp-visual-area .tbl2-col-handle:hover {
+  background: rgba(196, 149, 106, 0.1);
+  border-color: #C4956A;
+}
+.wp-visual-area .tbl2-col-handle:hover .tbl2-col-buttons {
+  display: inline-flex;
+}
+.wp-visual-area .tbl2-col-buttons {
+  display: none;
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #23282d;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+  gap: 2px;
+  z-index: 60;
+  white-space: nowrap;
+}
+.wp-visual-area .tbl2-col-buttons button {
+  background: transparent;
+  color: #fff;
+  border: none;
+  padding: 2px 5px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-family: 'Outfit', sans-serif;
+  border-radius: 2px;
+}
+.wp-visual-area .tbl2-col-buttons button:hover { background: #4a5158; }
+.wp-visual-area .tbl2-col-buttons button.danger:hover { background: #a62828; }
+
+/* Row controls (left side) */
+.wp-visual-area .tbl2-row-handle {
+  position: absolute;
+  left: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #23282d;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  z-index: 55;
+}
+.wp-visual-area .tbl2-wrap tr:hover .tbl2-row-handle { display: flex; }
+.wp-visual-area .tbl2-row-handle:hover .tbl2-row-buttons { display: flex; }
+.wp-visual-area .tbl2-row-buttons {
+  display: none;
+  position: absolute;
+  right: 100%;
+  top: 0;
+  background: #23282d;
+  padding: 3px 5px;
+  border-radius: 4px;
+  margin-right: 4px;
+  gap: 2px;
+  white-space: nowrap;
+}
+.wp-visual-area .tbl2-row-buttons button {
+  background: transparent;
+  color: #fff;
+  border: none;
+  padding: 3px 7px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-family: 'Outfit', sans-serif;
+  border-radius: 2px;
+}
+.wp-visual-area .tbl2-row-buttons button:hover { background: #4a5158; }
+.wp-visual-area .tbl2-row-buttons button.danger:hover { background: #a62828; }
+
+/* Empty cell hint */
+.wp-visual-area .tbl2-wrap td:empty::before,
+.wp-visual-area .tbl2-wrap th:empty::before {
+  content: "\200B";
+  color: transparent;
 }
 .wp-visual-area th { background: #f5f5f5; font-weight: 600; }
 .wp-text-area { width: 100%; min-height: 500px; padding: 20px 24px; border: none; outline: none; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.6; resize: vertical; display: none; }
@@ -528,9 +695,9 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
             </button>
             <button class="wp-tb-btn" onclick="openProductModal()" title="Insert product card" style="font-size:1rem;">🛍</button>
             <span class="wp-tb-sep"></span>
-            <button class="wp-tb-btn" onclick="openTableModal()" title="Insert table">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12"/><line x1="3" y1="8" x2="17" y2="8"/><line x1="3" y1="12" x2="17" y2="12"/><line x1="9" y1="4" x2="9" y2="16"/><line x1="13" y1="4" x2="13" y2="16"/></svg>
-            </button>
+            <button class="wp-tb-btn" onclick="tbl2OpenModal()" title="Insert table">
+  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12"/><line x1="3" y1="8" x2="17" y2="8"/><line x1="3" y1="12" x2="17" y2="12"/><line x1="9" y1="4" x2="9" y2="16"/><line x1="13" y1="4" x2="13" y2="16"/></svg>
+</button>
             <button class="wp-tb-btn" onclick="execFormat('pre')" title="Code block">{ }</button>
             <span class="wp-tb-sep"></span>
             <button class="wp-tb-btn" onclick="execCmd('outdent')" title="Decrease indent">⇤</button>
@@ -688,37 +855,35 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
   </div>
 </div>
 
-<!-- TABLE MODAL -->
+<!-- TABLE MODAL (v2) -->
 <div class="wp-modal-overlay" id="tableModal">
-  <div class="wp-modal">
+  <div class="wp-modal" style="max-width:560px;">
     <div class="wp-modal-header">
       <h3>Insert Table</h3>
-      <button class="wp-modal-close" onclick="closeTableModal()">×</button>
+      <button class="wp-modal-close" onclick="tbl2CloseModal()">×</button>
     </div>
-   <div class="wp-modal-body">
-  <div style="display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid #e1e1e1;">
-    <button onclick="tblModalTab('manual')" id="tblTabManual" style="padding:8px 14px;background:#fff;border:1px solid #ccc;border-bottom:none;border-radius:3px 3px 0 0;font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;font-weight:600;">Build Table</button>
-    <button onclick="tblModalTab('paste')" id="tblTabPaste" style="padding:8px 14px;background:#ececec;border:1px solid #ccc;border-bottom:none;border-radius:3px 3px 0 0;font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;color:#555;">📋 Paste Table Data</button>
-  </div>
-
-  <div id="tblPanelManual">
-    <div class="form-row-half">
-      <div class="form-row"><label>Columns</label><input type="number" id="tableModalCols" value="3" min="1" max="10"></div>
-      <div class="form-row"><label>Rows (excl. header)</label><input type="number" id="tableModalRows" value="3" min="1" max="20"></div>
+    <div class="wp-modal-body">
+      <div style="display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid #e1e1e1;">
+        <button onclick="tbl2ModalTab('manual')" id="tbl2TabManual" style="padding:8px 14px;background:#fff;border:1px solid #ccc;border-bottom:none;border-radius:3px 3px 0 0;font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;font-weight:600;">Build Table</button>
+        <button onclick="tbl2ModalTab('paste')" id="tbl2TabPaste" style="padding:8px 14px;background:#ececec;border:1px solid #ccc;border-bottom:none;border-radius:3px 3px 0 0;font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;color:#555;">📋 Paste Data</button>
+      </div>
+      <div id="tbl2PanelManual">
+        <div class="form-row-half">
+          <div class="form-row"><label>Columns</label><input type="number" id="tbl2Cols" value="3" min="1" max="10"></div>
+          <div class="form-row"><label>Rows (excl. header)</label><input type="number" id="tbl2Rows" value="3" min="1" max="20"></div>
+        </div>
+        <div class="checkbox-row"><input type="checkbox" id="tbl2Header" checked><label for="tbl2Header">Include header row</label></div>
+      </div>
+      <div id="tbl2PanelPaste" style="display:none;">
+        <p style="font-size:0.82rem;color:#555;margin-bottom:8px;">Copy a table from Excel, Google Sheets, or Word and paste below.</p>
+        <textarea id="tbl2PasteData" rows="7" placeholder="Product&#9;Price&#10;COSRX&#9;$14" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-family:Consolas,monospace;font-size:0.82rem;outline:none;resize:vertical;"></textarea>
+        <div class="checkbox-row" style="margin-top:8px;"><input type="checkbox" id="tbl2PasteHeader" checked><label for="tbl2PasteHeader">First row is header</label></div>
+        <div id="tbl2PastePreview" style="margin-top:10px;font-size:0.78rem;color:#777;"></div>
+      </div>
     </div>
-    <div class="checkbox-row"><input type="checkbox" id="tableModalHeader" checked><label for="tableModalHeader">Include header row</label></div>
-  </div>
-
-  <div id="tblPanelPaste" style="display:none;">
-    <p style="font-size:0.82rem;color:#555;margin-bottom:8px;">Copy a table from Excel, Google Sheets, or Word and paste below. Use <strong>Tab</strong> between cells and <strong>Enter</strong> for new rows.</p>
-    <textarea id="tblPasteData" rows="8" placeholder="Product&#9;Price&#9;Rating&#10;COSRX Snail Mucin&#9;$14.72&#9;4.8&#10;Beauty of Joseon&#9;$17.50&#9;4.9" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-family:Consolas,monospace;font-size:0.82rem;outline:none;resize:vertical;"></textarea>
-    <div class="checkbox-row" style="margin-top:8px;"><input type="checkbox" id="tblPasteHeader" checked><label for="tblPasteHeader">First row is header</label></div>
-    <div id="tblPastePreview" style="margin-top:10px;font-size:0.78rem;color:#777;"></div>
-  </div>
-</div>
     <div class="wp-modal-footer">
-      <button class="wp-mini-btn" onclick="closeTableModal()">Cancel</button>
-      <button class="wp-publish-btn" onclick="applyTable()">Insert Table</button>
+      <button class="wp-mini-btn" onclick="tbl2CloseModal()">Cancel</button>
+      <button class="wp-publish-btn" onclick="tbl2InsertFromModal()">Insert Table</button>
     </div>
   </div>
 </div>
@@ -1494,11 +1659,7 @@ function applyMedia() {
 }
 
 // TABLE MODAL
-function openTableModal() {
-  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
-  saveSelection();
-  document.getElementById("tableModal").classList.add("open");
-}
+
   // ── Insert Product Card ──
 function openProductModal() {
   if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
@@ -1636,45 +1797,47 @@ function insertProductCard(cat, productId) {
   syncEditorContent();
   showToast("Product inserted: " + product.name.slice(0, 40), "success");
 }
-function closeTableModal() { document.getElementById("tableModal").classList.remove("open"); }
-function applyTable() {
-  var cols = parseInt(document.getElementById("tableModalCols").value) || 3;
-  var rows = parseInt(document.getElementById("tableModalRows").value) || 3;
-  var includeHeader = document.getElementById("tableModalHeader").checked;
-  var html = '<table style="width:100%;border-collapse:collapse;margin:12px 0;">';
-  if (includeHeader) {
-    html += '<thead><tr>';
-    for (var c = 0; c < cols; c++) html += '<th style="border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;">Header ' + (c+1) + '</th>';
-    html += '</tr></thead>';
-  }
-  html += '<tbody>';
-  for (var r = 0; r < rows; r++) {
-    html += '<tr>';
-    for (var c = 0; c < cols; c++) html += '<td style="border:1px solid #ddd;padding:8px;"><br></td>';
-    html += '</tr>';
-  }
-  html += '</tbody></table><p></p>';
-  document.getElementById("blogVisual").focus();
-  restoreSelection();
-  document.execCommand("insertHTML", false, html);
-  closeTableModal();
+function syncEditorContent() {
+  document.getElementById("blogContentText").value = document.getElementById("blogVisual").innerHTML;
   updateWordCount();
-}
-// ── Smart table paste ──
+}  
+// ═══════════════════════════════════════════════════════════════
+// TABLE v2 — clean rebuild
+// Features: bug-free cell editing, smart paste (fills from cell),
+// hover +/- controls per row/column, move row/col up/down/left/right,
+// no inline styles on saved tables (clean output for blog rendering)
+// ═══════════════════════════════════════════════════════════════
 
-// Switch tabs in the table modal
-function tblModalTab(which) {
-  var manual = document.getElementById("tblPanelManual");
-  var paste = document.getElementById("tblPanelPaste");
-  var tabM = document.getElementById("tblTabManual");
-  var tabP = document.getElementById("tblTabPaste");
+var tbl2SavedSelection = null;
+
+// ─────────── Modal control ───────────
+function tbl2OpenModal() {
+  if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
+  // Save cursor position before modal opens
+  var sel = window.getSelection();
+  if (sel.rangeCount > 0) tbl2SavedSelection = sel.getRangeAt(0).cloneRange();
+  document.getElementById("tableModal").classList.add("open");
+  tbl2ModalTab("manual");
+}
+
+function tbl2CloseModal() {
+  document.getElementById("tableModal").classList.remove("open");
+  document.getElementById("tbl2PasteData").value = "";
+  document.getElementById("tbl2PastePreview").textContent = "";
+}
+
+function tbl2ModalTab(which) {
+  var manual = document.getElementById("tbl2PanelManual");
+  var paste = document.getElementById("tbl2PanelPaste");
+  var tabM = document.getElementById("tbl2TabManual");
+  var tabP = document.getElementById("tbl2TabPaste");
   if (which === "paste") {
     manual.style.display = "none"; paste.style.display = "block";
     tabM.style.background = "#ececec"; tabM.style.color = "#555"; tabM.style.fontWeight = "400";
     tabP.style.background = "#fff"; tabP.style.color = "#23282d"; tabP.style.fontWeight = "600";
-    setTimeout(function(){document.getElementById("tblPasteData").focus();}, 50);
-    document.getElementById("tblPasteData").addEventListener("input", updatePastePreview);
-    updatePastePreview();
+    setTimeout(function(){document.getElementById("tbl2PasteData").focus();}, 50);
+    document.getElementById("tbl2PasteData").oninput = tbl2UpdatePreview;
+    tbl2UpdatePreview();
   } else {
     paste.style.display = "none"; manual.style.display = "block";
     tabP.style.background = "#ececec"; tabP.style.color = "#555"; tabP.style.fontWeight = "400";
@@ -1682,52 +1845,72 @@ function tblModalTab(which) {
   }
 }
 
-// Parse tab-separated / comma-separated / pipe-separated text into 2D array
-function parseTabularData(text) {
-  text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
-  if (!text) return [];
-  var lines = text.split("\n").filter(function(l){ return l.trim().length > 0; });
-  if (!lines.length) return [];
-
-  // Detect delimiter — prefer tab, then pipe, then comma, then 2+ spaces
-  var first = lines[0];
-  var delim;
-  if (first.indexOf("\t") !== -1) delim = "\t";
-  else if (first.indexOf("|") !== -1) delim = /\s*\|\s*/;
-  else if (first.indexOf(",") !== -1) delim = ",";
-  else delim = /\s{2,}/;
-
-  return lines.map(function(line) {
-    // Trim leading/trailing pipes for markdown-style tables
-    line = line.replace(/^\s*\|/, "").replace(/\|\s*$/, "");
-    // Skip markdown separator rows like |---|---|
-    if (/^[\s\-|:]+$/.test(line)) return null;
-    var cells = line.split(delim).map(function(c){ return c.trim(); });
-    return cells;
-  }).filter(function(row){ return row && row.length; });
-}
-
-// Update preview as user types
-function updatePastePreview() {
-  var text = document.getElementById("tblPasteData").value;
-  var preview = document.getElementById("tblPastePreview");
-  var rows = parseTabularData(text);
+function tbl2UpdatePreview() {
+  var text = document.getElementById("tbl2PasteData").value;
+  var preview = document.getElementById("tbl2PastePreview");
+  var rows = tbl2ParseText(text);
   if (!rows.length) { preview.textContent = ""; return; }
   var cols = Math.max.apply(null, rows.map(function(r){ return r.length; }));
   preview.textContent = "✓ Detected " + rows.length + " row" + (rows.length>1?"s":"") + " × " + cols + " column" + (cols>1?"s":"");
 }
 
-// Build HTML table from 2D array
-function buildTableHTML(rows, hasHeader) {
+function tbl2InsertFromModal() {
+  var pastePanel = document.getElementById("tbl2PanelPaste");
+  var isPasteMode = pastePanel && pastePanel.style.display !== "none";
+
+  var rows;
+  var hasHeader;
+
+  if (isPasteMode) {
+    var text = document.getElementById("tbl2PasteData").value;
+    hasHeader = document.getElementById("tbl2PasteHeader").checked;
+    rows = tbl2ParseText(text);
+    if (!rows.length) { showToast("Paste some data first", "error"); return; }
+  } else {
+    var cols = parseInt(document.getElementById("tbl2Cols").value) || 3;
+    var nRows = parseInt(document.getElementById("tbl2Rows").value) || 3;
+    hasHeader = document.getElementById("tbl2Header").checked;
+    rows = [];
+    if (hasHeader) {
+      var headerRow = [];
+      for (var c = 0; c < cols; c++) headerRow.push("Header " + (c+1));
+      rows.push(headerRow);
+    }
+    for (var r = 0; r < nRows; r++) {
+      var emptyRow = [];
+      for (var c = 0; c < cols; c++) emptyRow.push("");
+      rows.push(emptyRow);
+    }
+  }
+
+  var html = tbl2BuildHTML(rows, hasHeader);
+  document.getElementById("blogVisual").focus();
+  tbl2RestoreSelection();
+  document.execCommand("insertHTML", false, html);
+  tbl2CloseModal();
+  if (typeof syncEditorContent === "function") syncEditorContent();
+  tbl2EnhanceAll();
+  showToast("Table inserted", "success");
+}
+
+function tbl2RestoreSelection() {
+  if (!tbl2SavedSelection) return;
+  var sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(tbl2SavedSelection);
+}
+
+// ─────────── HTML builder (clean output, NO inline styles) ───────────
+function tbl2BuildHTML(rows, hasHeader) {
   if (!rows.length) return "";
   var cols = Math.max.apply(null, rows.map(function(r){ return r.length; }));
-  var html = '<table style="width:100%;border-collapse:collapse;margin:12px 0;">';
+  var html = '<div class="tbl2-wrap"><table>';
   var startRow = 0;
   if (hasHeader) {
     html += '<thead><tr>';
     for (var c = 0; c < cols; c++) {
-      var v = rows[0][c] || "";
-      html += '<th style="border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;">' + escapeHTML(v) + '</th>';
+      var v = (rows[0] && rows[0][c]) || "";
+      html += '<th>' + (v ? tbl2Escape(v) : "<br>") + '</th>';
     }
     html += '</tr></thead>';
     startRow = 1;
@@ -1736,51 +1919,63 @@ function buildTableHTML(rows, hasHeader) {
   for (var r = startRow; r < rows.length; r++) {
     html += '<tr>';
     for (var c = 0; c < cols; c++) {
-      var v = rows[r][c] || "";
-      html += '<td style="border:1px solid #ddd;padding:8px;">' + (v ? escapeHTML(v) : "<br>") + '</td>';
+      var v = (rows[r] && rows[r][c]) || "";
+      html += '<td>' + (v ? tbl2Escape(v) : "<br>") + '</td>';
     }
     html += '</tr>';
   }
-  html += '</tbody></table><p></p>';
+  html += '</tbody></table></div><p><br></p>';
   return html;
 }
 
-function escapeHTML(s) {
+function tbl2Escape(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-// Override applyTable to handle both modes
-var _origApplyTable = applyTable;
-applyTable = function() {
-  var pastePanel = document.getElementById("tblPanelPaste");
-  if (pastePanel && pastePanel.style.display !== "none") {
-    // Paste mode
-    var text = document.getElementById("tblPasteData").value;
-    var hasHeader = document.getElementById("tblPasteHeader").checked;
-    var rows = parseTabularData(text);
-    if (!rows.length) { showToast("Paste some table data first", "error"); return; }
-    var html = buildTableHTML(rows, hasHeader);
-    document.getElementById("blogVisual").focus();
-    restoreSelection();
-    document.execCommand("insertHTML", false, html);
-    closeTableModal();
-    document.getElementById("tblPasteData").value = "";
-    document.getElementById("tblPastePreview").textContent = "";
-    syncEditorContent();
-    showToast("Table inserted from pasted data", "success");
-  } else {
-    _origApplyTable();
-  }
-};
+// ─────────── Parser (tab/pipe/CSV/multi-space) ───────────
+function tbl2ParseText(text) {
+  if (!text) return [];
+  text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+  if (!text) return [];
+  var lines = text.split("\n").filter(function(l){ return l.trim().length > 0; });
+  if (!lines.length) return [];
 
-// Reset modal to manual tab when opened
-var _origOpenTableModal = openTableModal;
-openTableModal = function() {
-  _origOpenTableModal();
-  if (document.getElementById("tblPanelManual")) tblModalTab("manual");
-};
+  var first = lines[0];
+  var delim;
+  if (first.indexOf("\t") !== -1) delim = "\t";
+  else if (first.indexOf("|") !== -1) delim = /\s*\|\s*/;
+  else if (first.indexOf(",") !== -1) delim = ",";
+  else delim = /\s{2,}/;
 
-// Smart paste handler — when pasting INTO the editor, detect tabular data
+  return lines.map(function(line) {
+    line = line.replace(/^\s*\|/, "").replace(/\|\s*$/, "");
+    if (/^[\s\-|:]+$/.test(line)) return null;
+    return line.split(delim).map(function(c){ return c.trim(); });
+  }).filter(function(row){ return row && row.length; });
+}
+
+// ─────────── Parse HTML clipboard table ───────────
+function tbl2ParseHTMLTable(htmlString) {
+  try {
+    var clean = htmlString.replace(/<!--[\s\S]*?-->/g, "").replace(/<style[\s\S]*?<\/style>/gi, "");
+    var temp = document.createElement("div");
+    temp.innerHTML = clean;
+    var table = temp.querySelector("table");
+    if (!table) return null;
+    var rows = [];
+    table.querySelectorAll("tr").forEach(function(tr) {
+      var cells = [];
+      tr.querySelectorAll("th, td").forEach(function(cell) {
+        var text = (cell.innerText || cell.textContent || "").replace(/\s+/g, " ").trim();
+        cells.push(text);
+      });
+      if (cells.length && cells.some(function(c){return c.length > 0;})) rows.push(cells);
+    });
+    return rows.length ? rows : null;
+  } catch(e) { return null; }
+}
+
+// ─────────── Smart paste handler ───────────
 document.getElementById("blogVisual").addEventListener("paste", function(e) {
   if (blogEditorMode !== "visual") return;
   var clipboard = e.clipboardData || window.clipboardData;
@@ -1788,128 +1983,77 @@ document.getElementById("blogVisual").addEventListener("paste", function(e) {
 
   var html = clipboard.getData("text/html");
   var text = clipboard.getData("text/plain");
-
   if (!text && !html) return;
 
-  // 1. If clipboard contains real HTML with a table, parse THAT directly into rows.
-  //    Excel/Sheets/Word all put a clean <table> in the HTML clipboard.
-  // 1. If clipboard contains real HTML with a table, parse THAT directly into rows.
-  if (html) {
-    // Strip Office/Word/Google Docs wrapper HTML that confuses the parser
-    var cleanHTML = html.replace(/<!--[\s\S]*?-->/g, "").replace(/<style[\s\S]*?<\/style>/gi, "");
-    if (/<table[\s>]/i.test(cleanHTML)) {
-      var rows = parseHTMLTable(cleanHTML);
-      if (rows && rows.length) {
-        e.preventDefault();
-        handleTabularPaste(rows);
-        return;
-      }
-      // HTML had a table but we couldn't parse — try text fallback below
+  // Try HTML table first (Excel/Sheets/Word)
+  if (html && /<table[\s>]/i.test(html)) {
+    var htmlRows = tbl2ParseHTMLTable(html);
+    if (htmlRows && htmlRows.length) {
+      e.preventDefault();
+      tbl2HandlePaste(htmlRows);
+      return;
     }
   }
 
   if (!text) return;
 
-  // 2. Plain-text tabular detection — be more permissive
+  // Plain-text tabular detection
   var normalized = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
-  var lines = normalized.split("\n").filter(function(l){ return l.length > 0; });
-
+  var lines = normalized.split("\n").filter(function(l){return l.length > 0;});
   var hasTabs = normalized.indexOf("\t") !== -1;
   var hasPipes = lines.length >= 1 && lines[0].split("|").length >= 3;
-
-  // Single-line paste with tabs is still tabular (one row of cells)
   if (lines.length < 1) return;
-  if (lines.length === 1 && !hasTabs && !hasPipes) return;
-  if (lines.length >= 2 && !hasTabs && !hasPipes) return;
+  if (!hasTabs && !hasPipes) return;
 
   e.preventDefault();
-  var rows = parseTabularData(text);
+  var rows = tbl2ParseText(text);
   if (!rows.length) return;
-  handleTabularPaste(rows);
+  tbl2HandlePaste(rows);
 });
 
-// Parse an HTML <table> blob into a 2D string array
-function parseHTMLTable(htmlString) {
-  try {
-    var temp = document.createElement("div");
-    temp.innerHTML = htmlString;
-    // Find FIRST table — even if nested inside other tags
-    var table = temp.querySelector("table");
-    if (!table) return null;
-
-    var rows = [];
-    var trs = table.querySelectorAll("tr");
-    trs.forEach(function(tr) {
-      var cells = [];
-      tr.querySelectorAll("th, td").forEach(function(cell) {
-        // Skip cells that are clearly nested tables/widgets
-        // Extract just the readable text
-        var text = (cell.innerText || cell.textContent || "")
-          .replace(/\s+/g, " ")  // collapse multiple spaces/newlines
-          .trim();
-        cells.push(text);
-      });
-      if (cells.length && cells.some(function(c){ return c.length > 0; })) {
-        rows.push(cells);
-      }
-    });
-    return rows.length ? rows : null;
-  } catch(e) {
-    console.error("parseHTMLTable error:", e);
-    return null;
-  }
-}
-
-// Decide whether to insert new table or fill existing cells
-function handleTabularPaste(rows) {
+function tbl2HandlePaste(rows) {
   var sel = window.getSelection();
   var cell = null;
   if (sel.rangeCount > 0) {
     var node = sel.getRangeAt(0).startContainer;
     if (node.nodeType === 3) node = node.parentElement;
-    // Only treat as "in-cell paste" if the cell is inside our editor
     var visual = document.getElementById("blogVisual");
     var possibleCell = node && node.closest ? node.closest("td, th") : null;
     if (possibleCell && visual.contains(possibleCell)) cell = possibleCell;
   }
 
   if (cell) {
-    pasteIntoTable(cell, rows);
+    tbl2FillFromCell(cell, rows);
   } else {
-    var html2 = buildTableHTML(rows, true);
-    document.execCommand("insertHTML", false, html2);
+    var html = tbl2BuildHTML(rows, true);
+    document.execCommand("insertHTML", false, html);
   }
-  syncEditorContent();
-  showToast("Pasted " + rows.length + " row" + (rows.length>1?"s":"") + " as table", "success");
+  if (typeof syncEditorContent === "function") syncEditorContent();
+  tbl2EnhanceAll();
+  showToast("Pasted " + rows.length + " row" + (rows.length>1?"s":"") + "", "success");
 }
 
-// Fill cells from a starting cell, expanding the table if needed
-function pasteIntoTable(startCell, rows) {
+// ─────────── Fill cells from a starting cell, expanding if needed ───────────
+function tbl2FillFromCell(startCell, rows) {
   var startRow = startCell.parentElement;
-  var section = startRow.parentElement;
-  var table = section.parentElement;
-  var startRowIdx = Array.prototype.indexOf.call(section.children, startRow);
-  var startColIdx = Array.prototype.indexOf.call(startRow.children, startCell);
+  var table = startRow.closest("table");
+  if (!table) return;
 
-  // Combine thead + tbody rows in order so we can index across them
+  var startColIdx = Array.prototype.indexOf.call(startRow.children, startCell);
   var allRows = Array.prototype.slice.call(table.querySelectorAll("tr"));
-  // Find the index of startRow in allRows
   var globalStartRow = allRows.indexOf(startRow);
 
   for (var r = 0; r < rows.length; r++) {
     var targetRowIdx = globalStartRow + r;
     var targetRow = allRows[targetRowIdx];
-    // Add new rows if needed
     if (!targetRow) {
       targetRow = document.createElement("tr");
-      var firstRowCellCount = allRows[0].children.length;
-      for (var i = 0; i < firstRowCellCount; i++) {
+      var refCount = allRows[0].children.length;
+      for (var i = 0; i < refCount; i++) {
         var td = document.createElement("td");
-        td.style.cssText = "border:1px solid #ddd;padding:8px;";
         td.innerHTML = "<br>";
         targetRow.appendChild(td);
       }
-      // Append to tbody if it exists, else table
       var tbody = table.querySelector("tbody") || table;
       tbody.appendChild(targetRow);
       allRows.push(targetRow);
@@ -1918,14 +2062,11 @@ function pasteIntoTable(startCell, rows) {
     for (var c = 0; c < rows[r].length; c++) {
       var targetColIdx = startColIdx + c;
       var targetCell = targetRow.children[targetColIdx];
-      // Add new columns to ALL rows if needed
       if (!targetCell) {
+        // Need to add a column to ALL rows
         allRows.forEach(function(rr) {
-          var isHeader = rr.parentElement.tagName.toLowerCase() === "thead";
+          var isHeader = rr.parentElement && rr.parentElement.tagName.toLowerCase() === "thead";
           var newCell = document.createElement(isHeader ? "th" : "td");
-          newCell.style.cssText = isHeader
-            ? "border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;"
-            : "border:1px solid #ddd;padding:8px;";
           newCell.innerHTML = "<br>";
           rr.appendChild(newCell);
         });
@@ -1935,140 +2076,240 @@ function pasteIntoTable(startCell, rows) {
     }
   }
 }
-  function syncEditorContent() {
-  document.getElementById("blogContentText").value = document.getElementById("blogVisual").innerHTML;
-  updateWordCount();
-}
-  // ── Interactive table controls (add/remove rows & columns) ──
-var activeTableCell = null;
 
-function getTableControls() {
-  var panel = document.getElementById("tableControls");
-  if (panel) return panel;
-  panel = document.createElement("div");
-  panel.id = "tableControls";
-  panel.style.cssText = "position:absolute;background:#23282d;color:#fff;padding:6px;border-radius:4px;display:none;gap:4px;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-family:'Outfit',sans-serif;font-size:0.72rem;flex-wrap:wrap;max-width:340px;";
-  panel.innerHTML =
-    '<button onclick="tblAddRow(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Row ↑</button>' +
-    '<button onclick="tblAddRow(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Row ↓</button>' +
-    '<button onclick="tblAddCol(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Col ←</button>' +
-    '<button onclick="tblAddCol(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Col →</button>' +
-    '<button onclick="tblDelRow()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">– Row</button>' +
-    '<button onclick="tblDelCol()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">– Col</button>' +
-    '<button onclick="tblDelete()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">🗑 Table</button>' +
-    '<button onclick="tblHideControls()" style="background:#555;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">✕</button>';
-  document.body.appendChild(panel);
-  return panel;
+// ─────────── Enhance every table with v2 wrapper + hover controls ───────────
+function tbl2EnhanceAll() {
+  var visual = document.getElementById("blogVisual");
+  if (!visual) return;
+  // Wrap any bare <table> not already in a .tbl2-wrap
+  visual.querySelectorAll("table").forEach(function(t) {
+    if (!t.parentElement.classList.contains("tbl2-wrap")) {
+      var wrap = document.createElement("div");
+      wrap.className = "tbl2-wrap";
+      t.parentNode.insertBefore(wrap, t);
+      wrap.appendChild(t);
+    }
+    // Strip inline styles from cells (from old tables)
+    t.querySelectorAll("td, th, tr, thead, tbody").forEach(function(el) {
+      el.removeAttribute("style");
+    });
+    t.removeAttribute("style");
+    // Make sure empty cells have <br>
+    t.querySelectorAll("td, th").forEach(function(cell) {
+      if (!cell.innerHTML.trim() || cell.innerHTML.trim() === "&nbsp;") cell.innerHTML = "<br>";
+    });
+  });
+  tbl2AttachControls();
 }
 
-function tblShowControls(cell) {
-  activeTableCell = cell;
-  var panel = getTableControls();
+// ─────────── Floating hover controls (cell-based) ───────────
+var tbl2ActiveCell = null;
+var tbl2ControlPanel = null;
+
+function tbl2GetPanel() {
+  if (tbl2ControlPanel) return tbl2ControlPanel;
+  var p = document.createElement("div");
+  p.id = "tbl2ControlPanel";
+  p.style.cssText = "position:absolute;display:none;z-index:9999;background:#23282d;color:#fff;padding:5px;border-radius:5px;gap:3px;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-family:'Outfit',sans-serif;font-size:0.7rem;flex-wrap:wrap;max-width:380px;";
+  p.innerHTML =
+    '<button onclick="tbl2AddRow(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Row ↑</button>' +
+    '<button onclick="tbl2AddRow(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Row ↓</button>' +
+    '<button onclick="tbl2MoveRow(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">↑ Move</button>' +
+    '<button onclick="tbl2MoveRow(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">↓ Move</button>' +
+    '<button onclick="tbl2DelRow()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">– Row</button>' +
+    '<span style="width:1px;height:18px;background:#555;margin:0 2px;"></span>' +
+    '<button onclick="tbl2AddCol(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Col ←</button>' +
+    '<button onclick="tbl2AddCol(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">+ Col →</button>' +
+    '<button onclick="tbl2MoveCol(-1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">← Move</button>' +
+    '<button onclick="tbl2MoveCol(1)" style="background:#3a4148;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">→ Move</button>' +
+    '<button onclick="tbl2DelCol()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">– Col</button>' +
+    '<span style="width:1px;height:18px;background:#555;margin:0 2px;"></span>' +
+    '<button onclick="tbl2DeleteTable()" style="background:#a62828;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">🗑 Table</button>' +
+    '<button onclick="tbl2HidePanel()" style="background:#555;color:#fff;border:none;border-radius:3px;padding:4px 8px;cursor:pointer;font-size:0.7rem;">✕</button>';
+  document.body.appendChild(p);
+  tbl2ControlPanel = p;
+  return p;
+}
+
+function tbl2ShowPanel(cell) {
+  tbl2ActiveCell = cell;
+  var p = tbl2GetPanel();
   var rect = cell.getBoundingClientRect();
-  panel.style.display = "flex";
-  panel.style.top = (window.scrollY + rect.top - 40) + "px";
-  panel.style.left = (window.scrollX + rect.left) + "px";
+  p.style.display = "inline-flex";
+  p.style.top = (window.scrollY + rect.top - 42) + "px";
+  p.style.left = Math.max(8, window.scrollX + rect.left) + "px";
 }
 
-function tblHideControls() {
-  var panel = document.getElementById("tableControls");
-  if (panel) panel.style.display = "none";
-  activeTableCell = null;
+function tbl2HidePanel() {
+  if (tbl2ControlPanel) tbl2ControlPanel.style.display = "none";
+  tbl2ActiveCell = null;
 }
 
-function tblContext() {
-  if (!activeTableCell) return null;
-  var cell = activeTableCell;
+function tbl2Ctx() {
+  if (!tbl2ActiveCell) return null;
+  var cell = tbl2ActiveCell;
   var row = cell.parentElement;
+  var table = row.closest("table");
   var section = row.parentElement;
-  var table = section.parentElement;
-  var rowIndex = Array.prototype.indexOf.call(section.children, row);
   var colIndex = Array.prototype.indexOf.call(row.children, cell);
-  return { cell: cell, row: row, section: section, table: table, rowIndex: rowIndex, colIndex: colIndex };
+  return { cell: cell, row: row, section: section, table: table, colIndex: colIndex };
 }
 
-function tblAddRow(direction) {
-  var ctx = tblContext(); if (!ctx) return;
+function tbl2AddRow(dir) {
+  var ctx = tbl2Ctx(); if (!ctx) return;
   var newRow = document.createElement("tr");
-  var colCount = ctx.row.children.length;
-  for (var i = 0; i < colCount; i++) {
+  for (var i = 0; i < ctx.row.children.length; i++) {
     var td = document.createElement("td");
-    td.style.cssText = "border:1px solid #ddd;padding:8px;";
     td.innerHTML = "<br>";
     newRow.appendChild(td);
   }
-  if (direction === -1) ctx.section.insertBefore(newRow, ctx.row);
+  if (dir === -1) ctx.section.insertBefore(newRow, ctx.row);
   else if (ctx.row.nextSibling) ctx.section.insertBefore(newRow, ctx.row.nextSibling);
   else ctx.section.appendChild(newRow);
-  syncEditorContent();
+  if (typeof syncEditorContent === "function") syncEditorContent();
 }
 
-function tblAddCol(direction) {
-  var ctx = tblContext(); if (!ctx) return;
-  var allRows = ctx.table.querySelectorAll("tr");
-  allRows.forEach(function(r) {
-    var isHeader = r.parentElement.tagName.toLowerCase() === "thead";
+function tbl2AddCol(dir) {
+  var ctx = tbl2Ctx(); if (!ctx) return;
+  ctx.table.querySelectorAll("tr").forEach(function(r) {
+    var isHeader = r.parentElement && r.parentElement.tagName.toLowerCase() === "thead";
     var newCell = document.createElement(isHeader ? "th" : "td");
-    newCell.style.cssText = isHeader
-      ? "border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;"
-      : "border:1px solid #ddd;padding:8px;";
-    newCell.innerHTML = isHeader ? "Header" : "<br>";
+    newCell.innerHTML = "<br>";
     var refCell = r.children[ctx.colIndex];
     if (!refCell) { r.appendChild(newCell); return; }
-    if (direction === -1) r.insertBefore(newCell, refCell);
+    if (dir === -1) r.insertBefore(newCell, refCell);
     else if (refCell.nextSibling) r.insertBefore(newCell, refCell.nextSibling);
     else r.appendChild(newCell);
   });
-  syncEditorContent();
+  if (typeof syncEditorContent === "function") syncEditorContent();
 }
 
-function tblDelRow() {
-  var ctx = tblContext(); if (!ctx) return;
-  var totalRows = ctx.table.querySelectorAll("tr").length;
-  if (totalRows <= 1) { showToast("Can't delete the last row", "error"); return; }
-  ctx.row.remove();
-  tblHideControls();
-  syncEditorContent();
+function tbl2MoveRow(dir) {
+  var ctx = tbl2Ctx(); if (!ctx) return;
+  if (dir === -1 && ctx.row.previousElementSibling) {
+    ctx.section.insertBefore(ctx.row, ctx.row.previousElementSibling);
+  } else if (dir === 1 && ctx.row.nextElementSibling) {
+    ctx.section.insertBefore(ctx.row.nextElementSibling, ctx.row);
+  } else {
+    showToast("Can't move further", "error"); return;
+  }
+  tbl2ShowPanel(ctx.cell);
+  if (typeof syncEditorContent === "function") syncEditorContent();
 }
 
-function tblDelCol() {
-  var ctx = tblContext(); if (!ctx) return;
+function tbl2MoveCol(dir) {
+  var ctx = tbl2Ctx(); if (!ctx) return;
+  var newIdx = ctx.colIndex + dir;
   var firstRow = ctx.table.querySelector("tr");
-  if (firstRow.children.length <= 1) { showToast("Can't delete the last column", "error"); return; }
+  if (newIdx < 0 || newIdx >= firstRow.children.length) {
+    showToast("Can't move further", "error"); return;
+  }
+  ctx.table.querySelectorAll("tr").forEach(function(r) {
+    var cells = r.children;
+    if (dir === -1) {
+      r.insertBefore(cells[ctx.colIndex], cells[newIdx]);
+    } else {
+      r.insertBefore(cells[newIdx], cells[ctx.colIndex]);
+    }
+  });
+  tbl2HidePanel();
+  if (typeof syncEditorContent === "function") syncEditorContent();
+}
+
+function tbl2DelRow() {
+  var ctx = tbl2Ctx(); if (!ctx) return;
+  if (ctx.table.querySelectorAll("tr").length <= 1) { showToast("Can't delete last row", "error"); return; }
+  ctx.row.remove();
+  tbl2HidePanel();
+  if (typeof syncEditorContent === "function") syncEditorContent();
+}
+
+function tbl2DelCol() {
+  var ctx = tbl2Ctx(); if (!ctx) return;
+  var first = ctx.table.querySelector("tr");
+  if (first.children.length <= 1) { showToast("Can't delete last column", "error"); return; }
   ctx.table.querySelectorAll("tr").forEach(function(r) {
     if (r.children[ctx.colIndex]) r.children[ctx.colIndex].remove();
   });
-  tblHideControls();
-  syncEditorContent();
+  tbl2HidePanel();
+  if (typeof syncEditorContent === "function") syncEditorContent();
 }
 
-function tblDelete() {
-  var ctx = tblContext(); if (!ctx) return;
+function tbl2DeleteTable() {
+  var ctx = tbl2Ctx(); if (!ctx) return;
   if (!confirm("Delete this entire table?")) return;
-  ctx.table.remove();
-  tblHideControls();
-  syncEditorContent();
+  var wrap = ctx.table.closest(".tbl2-wrap");
+  (wrap || ctx.table).remove();
+  tbl2HidePanel();
+  if (typeof syncEditorContent === "function") syncEditorContent();
 }
 
-// Click listener: show controls when clicking a table cell
+// ─────────── Cell click → show controls + ensure cursor inside ───────────
+function tbl2AttachControls() {
+  // Click listener is attached once; this just makes sure wrappers exist
+}
+
 document.getElementById("blogVisual").addEventListener("click", function(e) {
   var cell = e.target.closest("td, th");
   if (cell && this.contains(cell)) {
-    tblShowControls(cell);
-  } else {
-    tblHideControls();
+    // If cell only contains <br>, place cursor at start so typing works
+    if (cell.innerHTML.trim().toLowerCase() === "<br>") {
+      var range = document.createRange();
+      range.setStart(cell, 0);
+      range.collapse(true);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    tbl2ShowPanel(cell);
+  } else if (!e.target.closest("#tbl2ControlPanel")) {
+    tbl2HidePanel();
   }
 });
 
-// Hide controls when clicking outside the editor
+// Hide panel when clicking elsewhere
 document.addEventListener("click", function(e) {
-  var panel = document.getElementById("tableControls");
-  var visual = document.getElementById("blogVisual");
-  if (!panel) return;
-  if (e.target.closest("#tableControls")) return;
-  if (visual && visual.contains(e.target)) return;
-  tblHideControls();
+  if (!tbl2ControlPanel) return;
+  if (e.target.closest("#tbl2ControlPanel")) return;
+  if (e.target.closest("#blogVisual")) return;
+  tbl2HidePanel();
 });
+
+// ─────────── Tab key navigation between cells ───────────
+document.getElementById("blogVisual").addEventListener("keydown", function(e) {
+  if (e.key !== "Tab") return;
+  var sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  var node = sel.getRangeAt(0).startContainer;
+  if (node.nodeType === 3) node = node.parentElement;
+  var cell = node && node.closest ? node.closest("td, th") : null;
+  if (!cell) return;
+
+  e.preventDefault();
+  var row = cell.parentElement;
+  var allCells = Array.prototype.slice.call(cell.closest("table").querySelectorAll("td, th"));
+  var idx = allCells.indexOf(cell);
+  var next = e.shiftKey ? allCells[idx - 1] : allCells[idx + 1];
+  if (next) {
+    var range = document.createRange();
+    if (next.firstChild) range.selectNodeContents(next);
+    else range.setStart(next, 0);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+});
+
+// ─────────── Run enhancement on existing tables when editor loads ───────────
+setTimeout(tbl2EnhanceAll, 500);
+// Also after editor content changes (e.g. switching between draft and new post)
+var _origSetEditorContent = typeof setEditorContent === "function" ? setEditorContent : null;
+if (_origSetEditorContent) {
+  setEditorContent = function(html) {
+    _origSetEditorContent(html);
+    setTimeout(tbl2EnhanceAll, 100);
+  };
+}
 // Word count
 function updateWordCount() {
   var text = "";
