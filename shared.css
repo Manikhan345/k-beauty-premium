@@ -207,22 +207,28 @@ html, body {
   padding: 14px !important;
 }
 @media (max-width: 600px) {
-  .post-content .kb-product-card > div:first-child {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
+  /* Force ALL divs inside the product card to stack vertically */
+  .post-content .kb-product-card div {
+    display: block !important;
+    flex-direction: unset !important;
     text-align: center !important;
-    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .post-content .kb-product-card a {
+    display: inline-block !important;
   }
   .post-content .kb-product-card img {
     width: 160px !important;
     height: 160px !important;
+    margin: 0 auto 12px !important;
+    display: block !important;
   }
-  .post-content .kb-product-card > div:first-child > div:last-child {
+  /* The "View Product" button — keep it full-width and centered */
+  .post-content .kb-product-card > a:last-child {
+    display: block !important;
     width: 100% !important;
-  }
-  .post-content .kb-product-card > div:first-child > div:last-child > div:last-child {
-    justify-content: center !important;
+    margin-top: 12px !important;
   }
 }
 
