@@ -1641,10 +1641,13 @@ function applyLink() {
   var newTab = document.getElementById("linkNewTab").checked;
   if (!url) { showToast("URL required", "error"); return; }
   if (!/^https?:\/\//.test(url) && !url.startsWith("/") && !url.startsWith("#") && !url.startsWith("mailto:")) url = "https://" + url;
-  document.getElementById("blogVisual").focus();
+ var visual = document.getElementById("blogVisual");
+  var scrollTop = visual.scrollTop;
+  visual.focus();
   restoreSelection();
   var html = '<a href="' + url.replace(/"/g, "&quot;") + '"' + (newTab ? ' target="_blank" rel="noopener"' : '') + '>' + (text || url) + '</a>';
   document.execCommand("insertHTML", false, html);
+  visual.scrollTop = scrollTop;
   closeLinkModal();
   updateWordCount();
 }
@@ -2369,6 +2372,178 @@ document.getElementById("blogVisual").addEventListener("input", function() {
   updateWordCount();
 });
 document.getElementById("blogContentText").addEventListener("input", updateWordCount);
+
+  // ═══════════════════════════════════════════════════════════════
+// Click-to-edit for existing images and links in the editor
+// ═══════════════════════════════════════════════════════════════
+var currentEditTarget = null;
+
+document.getElementById("blogVisual").addEventListener("click", function(e) {
+  // IMAGE clicked — open media modal pre-filled with current image
+  if (e.target.tagName === "IMG" && !e.target.closest(".kb-product-card") && !e.target.closest("table")) {
+    e.preventDefault();
+    e.stopPropagation();
+    var img = e.target;
+    currentEditTarget = img;
+    
+    // Pre-fill the media modal with current values
+    document.getElementById("mediaUrl").value = img.getAttribute("src") || "";
+    document.getElementById("mediaAlt").value = img.getAttribute("alt") || "";
+    
+    // Detect alignment from inline style
+    var style = img.getAttribute("style") || "";
+    var align = "none";
+    if (style.indexOf("margin:12px auto") !== -1 || style.indexOf("display:block;margin") !== -1) align = "center";
+    else if (style.indexOf("float:left") !== -1) align = "left";
+    else if (style.indexOf("float:right") !== -1) align = "right";
+    document.getElementById("mediaAlign").value = align;
+    
+    // Detect link wrapping
+    var parentLink = img.parentElement && img.parentElement.tagName === "A" ? img.parentElement : null;
+    if (parentLink) {
+      var href = parentLink.getAttribute("href") || "";
+      if (href === img.getAttribute("src")) {
+        document.getElementById("mediaLinkTo").value = "image";
+        document.getElementById("mediaCustomLinkRow").style.display = "none";
+      } else {
+        document.getElementById("mediaLinkTo").value = "custom";
+        document.getElementById("mediaCustomLink").value = href;
+        document.getElementById("mediaCustomLinkRow").style.display = "block";
+      }
+    } else {
+      document.getElementById("mediaLinkTo").value = "none";
+      document.getElementById("mediaCustomLinkRow").style.display = "none";
+    }
+    
+    // Change the modal's button to "Update" mode
+    var modalFooter = document.querySelector("#mediaModal .wp-modal-footer");
+    var insertBtn = modalFooter.querySelector(".wp-publish-btn");
+    insertBtn.textContent = "Update Image";
+    insertBtn.onclick = updateExistingMedia;
+    
+    document.getElementById("mediaModal").classList.add("open");
+    return;
+  }
+  
+  // LINK clicked (but not inside product card or button) — open link modal pre-filled
+  var linkEl = e.target.closest("a");
+  if (linkEl && !linkEl.closest(".kb-product-card") && !linkEl.querySelector("img") && this.contains(linkEl)) {
+    // Only intercept plain text links, not product card buttons or image-wrapped links
+    if (linkEl.children.length === 0 || (linkEl.children.length === 1 && linkEl.children[0].tagName !== "IMG")) {
+      e.preventDefault();
+      e.stopPropagation();
+      currentEditTarget = linkEl;
+      
+      document.getElementById("linkUrl").value = linkEl.getAttribute("href") || "";
+      document.getElementById("linkText").value = linkEl.textContent || "";
+      document.getElementById("linkNewTab").checked = linkEl.getAttribute("target") === "_blank";
+      
+      var modalFooter = document.querySelector("#linkModal .wp-modal-footer");
+      var insertBtn = modalFooter.querySelector(".wp-publish-btn");
+      insertBtn.textContent = "Update Link";
+      insertBtn.onclick = updateExistingLink;
+      
+      document.getElementById("linkModal").classList.add("open");
+      setTimeout(function() { document.getElementById("linkUrl").focus(); }, 50);
+    }
+  }
+});
+
+function updateExistingMedia() {
+  if (!currentEditTarget) { applyMedia(); return; }
+  var url = document.getElementById("mediaUrl").value.trim();
+  var alt = document.getElementById("mediaAlt").value.trim();
+  var align = document.getElementById("mediaAlign").value;
+  var linkTo = document.getElementById("mediaLinkTo").value;
+  var customLink = document.getElementById("mediaCustomLink").value.trim();
+  if (!url) { showToast("Image URL required", "error"); return; }
+  
+  var imgStyle = "max-width:100%;height:auto;border-radius:4px;";
+  if (align === "center") imgStyle += "display:block;margin:12px auto;";
+  else if (align === "left") imgStyle += "float:left;margin:8px 16px 8px 0;";
+  else if (align === "right") imgStyle += "float:right;margin:8px 0 8px 16px;";
+  
+  // Update the image attributes
+  currentEditTarget.setAttribute("src", url);
+  currentEditTarget.setAttribute("alt", alt);
+  currentEditTarget.setAttribute("style", imgStyle);
+  
+  // Handle the parent link
+  var parentLink = currentEditTarget.parentElement && currentEditTarget.parentElement.tagName === "A" ? currentEditTarget.parentElement : null;
+  if (linkTo === "none") {
+    // Remove any wrapping link
+    if (parentLink) {
+      parentLink.replaceWith(currentEditTarget);
+    }
+  } else {
+    var newHref = linkTo === "image" ? url : customLink;
+    if (parentLink) {
+      parentLink.setAttribute("href", newHref);
+    } else if (newHref) {
+      var newLink = document.createElement("a");
+      newLink.setAttribute("href", newHref);
+      if (linkTo === "image") newLink.setAttribute("target", "_blank");
+      currentEditTarget.parentNode.insertBefore(newLink, currentEditTarget);
+      newLink.appendChild(currentEditTarget);
+    }
+  }
+  
+  closeMediaModal();
+  resetMediaModalButton();
+  syncEditorContent();
+  showToast("Image updated", "success");
+  currentEditTarget = null;
+}
+
+function updateExistingLink() {
+  if (!currentEditTarget) { applyLink(); return; }
+  var url = document.getElementById("linkUrl").value.trim();
+  var text = document.getElementById("linkText").value.trim();
+  var newTab = document.getElementById("linkNewTab").checked;
+  if (!url) { showToast("URL required", "error"); return; }
+  if (!/^https?:\/\//.test(url) && !url.startsWith("/") && !url.startsWith("#") && !url.startsWith("mailto:")) url = "https://" + url;
+  
+  currentEditTarget.setAttribute("href", url);
+  currentEditTarget.textContent = text || url;
+  if (newTab) {
+    currentEditTarget.setAttribute("target", "_blank");
+    currentEditTarget.setAttribute("rel", "noopener");
+  } else {
+    currentEditTarget.removeAttribute("target");
+    currentEditTarget.removeAttribute("rel");
+  }
+  
+  closeLinkModal();
+  resetLinkModalButton();
+  syncEditorContent();
+  showToast("Link updated", "success");
+  currentEditTarget = null;
+}
+
+function resetMediaModalButton() {
+  var modalFooter = document.querySelector("#mediaModal .wp-modal-footer");
+  var insertBtn = modalFooter.querySelector(".wp-publish-btn");
+  insertBtn.textContent = "Insert into post";
+  insertBtn.onclick = applyMedia;
+}
+
+function resetLinkModalButton() {
+  var modalFooter = document.querySelector("#linkModal .wp-modal-footer");
+  var insertBtn = modalFooter.querySelector(".wp-publish-btn");
+  insertBtn.textContent = "Add Link";
+  insertBtn.onclick = applyLink;
+}
+
+// Reset button when modal closed
+document.querySelectorAll(".wp-modal-close").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    setTimeout(function() {
+      resetMediaModalButton();
+      resetLinkModalButton();
+      currentEditTarget = null;
+    }, 100);
+  });
+});
 
 // Keyboard shortcuts
 document.getElementById("blogVisual").addEventListener("keydown", function(e) {
