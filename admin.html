@@ -122,9 +122,9 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .wp-tb-sep { width: 1px; height: 20px; background: #ccc; margin: 0 4px; }
 
 .wp-edit-body { background: #fff; border: 1px solid #e1e1e1; border-top: none; border-radius: 0 0 4px 4px; }
-.wp-visual-area { min-height: 500px; padding: 20px 24px; outline: none; font-family: 'Outfit', sans-serif; font-size: 1rem; line-height: 1.7; color: #1a1a1a; max-height: 700px; overflow-y: auto; }
+.wp-visual-area { min-height: 600px; padding: 20px 24px; outline: none; font-family: 'Outfit', sans-serif; font-size: 1rem; line-height: 1.7; color: #1a1a1a; resize: vertical; overflow-y: auto; }
 .wp-visual-area:empty::before { content: attr(data-placeholder); color: #bbb; pointer-events: none; }
-  .wp-visual-area .kb-product-card:hover .kb-card-remove {
+.wp-visual-area .kb-product-card:hover .kb-card-remove {
   display: inline-flex !important;
 }
 .wp-visual-area .kb-product-card .kb-card-remove:hover {
@@ -324,7 +324,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   outline-offset: -2px;
 }
 .wp-visual-area th:not(.tbl2-wrap th) { background: #f5f5f5; font-weight: 600; }
-.wp-text-area { width: 100%; min-height: 500px; padding: 20px 24px; border: none; outline: none; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.6; resize: vertical; display: none; }
+.wp-text-area { width: 100%; min-height: 600px; padding: 20px 24px; border: none; outline: none; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.6; resize: vertical; display: none; }
 
 body.wp-fullscreen .wp-edit-wrap { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; flex-direction: column; }
 body.wp-fullscreen .wp-edit-wrap .wp-edit-body { flex: 1; overflow: hidden; }
