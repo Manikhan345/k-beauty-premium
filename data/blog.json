@@ -1,19 +1,5 @@
 [
   {
-    "title": "asdfasdfasdf",
-    "slug": "asdfasdfasdf",
-    "excerpt": "asdfasdfasdfasd",
-    "cover": "",
-    "tags": [
-      "asdfasdfasdf"
-    ],
-    "content": "<div class=\"kb-product-card\" contenteditable=\"false\" style=\"padding: 16px; background-image: initial; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial; border: 1px solid rgb(232, 232, 232); border-radius: 10px; margin: 16px 0px; box-shadow: rgba(0, 0, 0, 0.04) 0px 1px 3px; max-width: 100%; position: relative;\"><button class=\"kb-card-remove\" onclick=\"this.parentElement.remove();if(typeof syncEditorContent==='function')syncEditorContent();\" style=\"position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 50%; background: rgb(229, 62, 62); color: rgb(255, 255, 255); border-width: medium; border-style: none; border-color: currentcolor; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: none; align-items: center; justify-content: center; line-height: 1; font-family: Outfit, sans-serif; z-index: 2;\" title=\"Remove product card\">✕</button><div style=\"display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;\"><a href=\"https://kbeauty.fun/p/skincare/anua_heartleaf_quercetinol_por\" style=\"flex-shrink:0;display:block;\"><img src=\"https://m.media-amazon.com/images/I/51Kpw2r-pIL._AC_UL960_FMwebp_QL65_.jpg\" alt=\"Anua Heartleaf Quercetinol Pore Deep Cleansing Foam, Face wash for Pore Refining Cleanser, Hydrating Daily Facial Cleanser For Double Cleansing, Gentle Foaming with BHA, Korean Skincare, 5.07 fl.oz.\" style=\"width:90px;height:90px;object-fit:contain;background:#fafafa;border-radius:6px;\"></a><div style=\"flex:1;min-width:0;\"><a href=\"https://kbeauty.fun/p/skincare/anua_heartleaf_quercetinol_por\" style=\"text-decoration:none;color:#23282d;\"><div style=\"font-size:0.95rem;font-weight:600;line-height:1.35;margin-bottom:4px;\">Anua Heartleaf Quercetinol Pore Deep Cleansing Foam, Face wash for Pore Refining Cleanser, Hydrating Daily Facial Cleanser For Double Cleansing, Gentle Foaming with BHA, Korean Skincare, 5.07 fl.oz.</div></a><div style=\"font-size:0.78rem;color:#666;margin-bottom:6px;\">⭐ 4.6 (17,700 reviews)</div><div style=\"display:flex;align-items:center;gap:8px;flex-wrap:wrap;\"><span style=\"font-size:1.05rem;font-weight:700;color:#23282d;\">$13.00</span></div></div></div><a href=\"https://kbeauty.fun/p/skincare/anua_heartleaf_quercetinol_por\" style=\"display: block; text-align: center; padding: 10px 18px; background: rgb(196, 149, 106); color: rgb(255, 255, 255); border-radius: 6px; text-decoration: none; font-size: 0.88rem; font-weight: 600;\">View Product →</a></div><p></p><p></p>",
-    "contentFormat": "html",
-    "status": "published",
-    "visibility": "public",
-    "date": "2026-05-13T15:10:03.335Z"
-  },
-  {
     "title": "Korean Skincare: The Complete Guide to K-Beauty Products and Routines (2026)",
     "slug": "korean-skincare-complete-guide",
     "excerpt": "A comprehensive guide to Korean skincare covering the science behind K-beauty, the step-by-step routine, proven ingredients, product recommendations, and budget breakdowns. Written by skincare enthusiasts who have tested over 500 Korean beauty products.",
