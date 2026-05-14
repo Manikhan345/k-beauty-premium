@@ -2574,7 +2574,51 @@ function previewInNewTab() {
   w.document.write(html);
   w.document.close();
 }
-
+// ═══════════════════════════════════════════════════════════════
+// Add ✕ remove button to old product cards that don't have one
+// ═══════════════════════════════════════════════════════════════
+function upgradeOldProductCards() {
+  setTimeout(function() {
+    var visual = document.getElementById("blogVisual");
+    if (!visual) return;
+    
+    var cards = visual.querySelectorAll(".kb-product-card");
+    var upgradedCount = 0;
+    
+    cards.forEach(function(card) {
+      // Skip if already has a remove button
+      if (card.querySelector(".kb-card-remove")) return;
+      
+      // Make the card non-editable so it acts as a single block
+      card.setAttribute("contenteditable", "false");
+      
+      // Ensure the card has position:relative so the button can be absolutely positioned
+      var currentStyle = card.getAttribute("style") || "";
+      if (currentStyle.indexOf("position:relative") === -1 && currentStyle.indexOf("position: relative") === -1) {
+        card.setAttribute("style", currentStyle + ";position:relative;");
+      }
+      
+      // Build the remove button
+      var btn = document.createElement("button");
+      btn.className = "kb-card-remove";
+      btn.title = "Remove product card";
+      btn.innerHTML = "✕";
+      btn.setAttribute("style", "position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#E53E3E;color:#fff;border:none;font-size:0.85rem;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;font-family:Outfit,sans-serif;z-index:2;");
+      btn.onclick = function() {
+        card.remove();
+        if (typeof syncEditorContent === "function") syncEditorContent();
+      };
+      
+      // Insert as the first child of the card
+      card.insertBefore(btn, card.firstChild);
+      upgradedCount++;
+    });
+    
+    if (upgradedCount > 0) {
+      showToast("Added remove button to " + upgradedCount + " older product card" + (upgradedCount > 1 ? "s" : ""), "success");
+    }
+  }, 200);
+}
 function clearBlogForm() {
   document.getElementById("blogTitle").value = "";
   document.getElementById("blogSlug").value = "";
@@ -2601,6 +2645,7 @@ function editBlogPost(i) {
   document.getElementById("blogCover").value = post.cover || "";
   document.getElementById("blogTags").value = (post.tags || []).join(", ");
   setEditorContent(post.content || "");
+  upgradeOldProductCards();
   updateCoverPreview(post.cover || "");
   document.getElementById("permalinkRow").style.display = post.title ? "block" : "none";
   blogPostMeta = { status: post.status || "draft", visibility: post.visibility || "public", date: post.date || null };
