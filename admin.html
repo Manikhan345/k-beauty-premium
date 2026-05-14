@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel — K Beauty Premium</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin-seo.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root { --bg: #F4F5F7; --card: #FFF; --text: #1A1A1A; --text-mid: #555; --rose: #D4596A; --rose-light: #FFF0F2; --rose-dark: #B8344A; --border: #E0E0E0; --green: #38A169; --blue: #3182CE; --shadow: 0 2px 12px rgba(0,0,0,0.08); }
@@ -801,7 +802,24 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
           <button class="wp-mini-btn" onclick="document.getElementById('blogCover').focus()" style="width:100%;">Set featured image</button>
         </div>
       </div>
-
+      
+<!-- SEO ANALYSIS META BOX -->
+      <div class="wp-meta-box">
+        <div class="wp-meta-header" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>SEO Analysis</span>
+          <span id="seoScoreDot" class="seo-score-dot seo-score-empty">—</span>
+        </div>
+        <div class="wp-meta-body">
+          <div class="form-row" style="margin-bottom:10px;">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;">FOCUS KEYWORD</label>
+            <input type="text" id="seoFocusKeyword" placeholder="e.g. korean skincare routine" style="width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-size:0.85rem;font-family:Outfit,sans-serif;outline:none;">
+            <small style="font-size:0.7rem;color:#999;display:block;margin-top:3px;">The main term you want to rank for</small>
+          </div>
+          <div id="seoChecks">
+            <p class="seo-empty-state">Enter a focus keyword and start writing to see SEO analysis.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -2852,5 +2870,6 @@ async function pushTikTokToGitHub(message) {
 
 checkSavedToken();
 </script>
+<script src="/admin-seo.js"></script>
 </body>
 </html>
