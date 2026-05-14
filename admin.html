@@ -1681,9 +1681,12 @@ function applyMedia() {
   var finalHTML = imgTag;
   if (linkTo === "image") finalHTML = '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + imgTag + '</a>';
   else if (linkTo === "custom" && customLink) finalHTML = '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + imgTag + '</a>';
-  document.getElementById("blogVisual").focus();
+  var visual = document.getElementById("blogVisual");
+  var scrollTop = visual.scrollTop;
+  visual.focus();
   restoreSelection();
   document.execCommand("insertHTML", false, finalHTML + "<p></p>");
+  visual.scrollTop = scrollTop;
   closeMediaModal();
   updateWordCount();
 }
