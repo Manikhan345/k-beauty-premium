@@ -1,1 +1,70 @@
+/* ═══════════════════════════════════════════════════════════════
+   admin-seo.css — Styles for SEO Analysis meta box in Blog Manager
+   ═══════════════════════════════════════════════════════════════ */
 
+/* Score circle in the meta box header */
+.seo-score-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+}
+.seo-score-empty { background: #ccc; }
+.seo-score-good  { background: #38A169; }
+.seo-score-ok    { background: #D69E2E; }
+.seo-score-bad   { background: #E53E3E; }
+
+/* Empty / placeholder state */
+.seo-empty-state {
+  color: #999;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 0.82rem;
+}
+
+/* Category group (Basics, Content, etc.) */
+.seo-cat-group { margin-bottom: 12px; }
+.seo-cat-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Individual check rows */
+.seo-check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  background: #fafafa;
+  border-radius: 4px;
+  border-left: 3px solid #ccc;
+}
+.seo-check-pass { border-left-color: #38A169; }
+.seo-check-warn { border-left-color: #D69E2E; }
+.seo-check-fail { border-left-color: #E53E3E; }
+.seo-check-icon { font-size: 0.85rem; flex-shrink: 0; }
+.seo-check-body { flex: 1; min-width: 0; }
+.seo-check-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #23282d;
+}
+.seo-check-msg {
+  font-size: 0.72rem;
+  color: #555;
+  line-height: 1.4;
+  margin-top: 2px;
+}
