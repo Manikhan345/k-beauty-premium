@@ -43,7 +43,19 @@
 .tt-player.playing { height: 420px; overflow: hidden; }
 .tt-player.playing iframe { width: 100%; height: 800px; border: none; border-radius: 10px; margin-top: -70px; }
 @media (max-width: 768px) { .tt-video-card { min-width: 200px; max-width: 200px; } .tt-player { width: 200px; height: 350px; } .tt-play-btn { width: 48px; height: 48px; font-size: 1.2rem; } }
-.promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
+/* BLOG SECTION */
+.blog-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.blog-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: var(--text); transition: transform 0.25s, box-shadow 0.25s; display: flex; flex-direction: column; }
+.blog-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.blog-card-img { width: 100%; height: 180px; object-fit: cover; background: linear-gradient(135deg, var(--warm-cream), var(--accent-light)); }
+.blog-card-img-empty { width: 100%; height: 180px; background: linear-gradient(135deg, var(--warm-cream), var(--accent-light)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; opacity: 0.4; }
+.blog-card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+.blog-card-date { font-size: 0.72rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.blog-card-title { font-family: 'Noto Serif Display', serif; font-size: 1.1rem; font-weight: 600; line-height: 1.35; margin-bottom: 8px; }
+.blog-card-excerpt { font-size: 0.85rem; color: var(--text-mid); line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.blog-card-readmore { font-size: 0.82rem; color: var(--accent); font-weight: 600; margin-top: 12px; }
+@media (max-width: 900px) { .blog-cards-grid { grid-template-columns: 1fr; } }
+  .promo { margin: 30px 0; background: linear-gradient(135deg, var(--accent), var(--accent-rose)); border-radius: var(--radius); padding: 40px 30px; text-align: center; color: #fff; }
 .promo h2 { font-family: 'Noto Serif Display', serif; font-size: 1.8rem; margin-bottom: 8px; }
 .promo p { font-weight: 300; opacity: 0.9; margin-bottom: 16px; }
 .promo .cta { display: inline-block; padding: 12px 32px; background: #fff; color: var(--accent-dark); border-radius: 50px; font-weight: 600; text-decoration: none; transition: transform 0.2s; }
@@ -80,6 +92,15 @@
 </section>
 
 <main class="container" id="mainContent"></main>
+
+<!-- LATEST FROM THE BLOG -->
+<section id="blogSection" style="display:none;max-width:1200px;margin:28px auto;padding:0 16px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--accent-light);">
+    <h2 style="font-family:'Noto Serif Display',serif;font-size:1.4rem;font-weight:600;">📝 From the Blog</h2>
+    <a href="/blog" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">View All Posts →</a>
+  </div>
+  <div id="blogCards" class="blog-cards-grid"></div>
+</section>
 
 <div id="siteFooter"></div>
 
@@ -199,7 +220,42 @@ function playTT(i, videoId) {
   player.innerHTML = '<iframe src="https://www.tiktok.com/player/v1/' + videoId + '?music_info=0&description=0&autoplay=1&loop=1" allowfullscreen allow="encrypted-media; autoplay" style="width:100%;height:100%;border:none;border-radius:10px;vertical-align:top;"></iframe>';
   player.style.cursor = "default";
 }
+// ── BLOG SECTION ──
+async function loadBlogSection() {
+  try {
+    var resp = await fetch("/data/blog.json");
+    if (!resp.ok) return;
+    var posts = await resp.json();
+    if (!posts || !posts.length) return;
 
+    // Only published posts, newest first
+    var published = posts.filter(function(p) { return p.status === "published"; });
+    published.sort(function(a, b) { return new Date(b.date || 0) - new Date(a.date || 0); });
+    var recent = published.slice(0, 3);
+    if (!recent.length) return;
+
+    var section = document.getElementById("blogSection");
+    var container = document.getElementById("blogCards");
+    section.style.display = "block";
+
+    container.innerHTML = recent.map(function(p) {
+      var dateStr = p.date ? new Date(p.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "";
+      var img = p.cover
+        ? '<img src="' + p.cover + '" alt="' + (p.title || "Blog post") + '" class="blog-card-img" loading="lazy">'
+        : '<div class="blog-card-img-empty">📝</div>';
+      var excerpt = p.excerpt || "";
+      return '<a href="/blog/' + p.slug + '" class="blog-card">' +
+        img +
+        '<div class="blog-card-body">' +
+          '<div class="blog-card-date">' + dateStr + '</div>' +
+          '<div class="blog-card-title">' + (p.title || "Untitled") + '</div>' +
+          '<div class="blog-card-excerpt">' + excerpt + '</div>' +
+          '<div class="blog-card-readmore">Read more →</div>' +
+        '</div>' +
+      '</a>';
+    }).join("");
+  } catch(e) {}
+}
 async function buildHomepage() {
   await loadConfig();
   renderNav("home");
@@ -215,6 +271,9 @@ async function buildHomepage() {
 
   // Load TikTok videos
   loadTikTokCarousel();
+
+  // Load blog section
+  loadBlogSection();
 
   // Preload all products in background for instant search
   loadAllProducts();
@@ -252,9 +311,11 @@ var SEARCH_BATCH = 60;
 async function showSearchResults(query) {
   var introSection = document.querySelector(".intro-section");
   var ttSection = document.getElementById("tiktokSection");
+  var blogSection = document.getElementById("blogSection");
   var mainContent = document.getElementById("mainContent");
   if (introSection) introSection.style.display = "none";
   if (ttSection) ttSection.style.display = "none";
+  if (blogSection) blogSection.style.display = "none";
   if (mainContent) mainContent.innerHTML = "";
 
   var container = document.createElement("div");
