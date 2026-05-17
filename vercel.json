@@ -36,11 +36,6 @@
       "permanent": true
     },
     {
-      "source": "/https://kbeauty.fun/sunscreen",
-      "destination": "https://kbeauty.fun/skincare",
-      "permanent": true
-    },
-    {
       "source": "/https://kbeauty.fun/lipcare",
       "destination": "https://kbeauty.fun/skincare",
       "permanent": true
