@@ -34,6 +34,11 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/sunscreen",
+      "destination": "/skincare",
+      "permanent": true
     }
   ],
   "rewrites": [
