@@ -39,6 +39,11 @@
       "source": "/sunscreen",
       "destination": "/skincare",
       "permanent": true
+    },
+    {
+      "source": "/lipcare",
+      "destination": "/skincare",
+      "permanent": true
     }
   ],
   "rewrites": [
