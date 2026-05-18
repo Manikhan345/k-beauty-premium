@@ -30,51 +30,6 @@
     "prime": false
   },
   {
-    "id": "is_clinical_active_serum_helps",
-    "name": "iS CLINICAL Active Serum - Helps visibly even skin tone, Excellent for acne-prone skin, Anti-Aging, Face Serum",
-    "price": 96,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "875",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61oT64Q+KUL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0073RK3S2?tag=kbeauty000-20",
-    "bought": "300+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "prequel_skin_multi_quench_plum",
-    "name": "Prequel Skin Multi-Quench Plumping Hydration Serum for Face. Intensive Hydrating Facial Serum for Women with PGA Complex and Moisture-Binders. Deep Moisturizing for Dry and Sensitive Skin, 1.7oz",
-    "price": 27.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "752",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/611Esf0i+fL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0D9MR13R4?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "mad_hippie_super_a_retinol_ser",
-    "name": "Mad Hippie Super A Retinol Serum for Face - Potent Skin Repair & Anti-Aging Serum with 3 Retinoids, Bakuchiol + Hydrating Hyaluronic Acid, 1.02 Oz",
-    "price": 28.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "2,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/612h0+YM2GL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B00S8Q2O2A?tag=kbeauty000-20",
-    "bought": "1K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "mario_badescu_anti_acne_serum_",
     "name": "Mario Badescu Anti Acne Serum for Combination & Oily Skin | Clarifying Gel-Serum that Tackles Clogged Pores | Formulated with Salicylic Acid and Glycerin",
     "price": 20,
@@ -270,21 +225,6 @@
     "prime": false
   },
   {
-    "id": "truskin_tea_tree_oil_acne_trea",
-    "name": "TruSkin Tea Tree Oil Acne Treatment Serum for Face - Salicylic Acid, Niacinamide, Vitamin C & Retinol - Clarifying Super Facial Serum for Acne-Prone Skin & Pores, 2 Oz",
-    "price": 35.99,
-    "originalPrice": null,
-    "rating": 4.3,
-    "reviews": "10,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71+k+bOMoSL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0BKTWRLXS?tag=kbeauty000-20",
-    "bought": "200+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "salicylic_acid_face_serum_with",
     "name": "Salicylic Acid Face Serum with BHA & AHA - Blackhead Remover, Pore Refiner - For Acne Prone, Oily & Combination Skin - Gently Helps Clear Clogged Pores - Skin Care for Men & Women 30 ML",
     "price": 7.99,
@@ -312,21 +252,6 @@
     "image": "https://m.media-amazon.com/images/I/61NnOgDasYL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0F5YZ198F?tag=kbeauty000-20",
     "bought": "700+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "anua_azelaic_acid_10_hyaluron_",
-    "name": "Anua Azelaic Acid 10 Hyaluron Redness Soothing Serum, Facial Serum for Blemish-Prone & Oily-Prone Skin, Lightweight & Hydrating Blemish Care, Hyaluronic Acid, Korean Skincare, 1.01 fl oz.",
-    "price": 22,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "4,200",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61sSYnrc1zL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DG1DQ2S7?tag=kbeauty000-20",
-    "bought": "50K+ bought in past month",
     "prime": false
   },
   {
@@ -372,21 +297,6 @@
     "image": "https://m.media-amazon.com/images/I/61wIjmR66xL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B09ZYB8S31?tag=kbeauty000-20",
     "bought": "5K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "beauty_of_joseon_revive_snail_",
-    "name": "Beauty of Joseon Revive Snail Mucin Ginseng Serum Hydrating Peptide Facial Moisturizer Dark Spot Acne Scar Remover for Sensitive Face. Korean Skin Care for Men and Women, 30ml, 1fl. Oz",
-    "price": 15.5,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "3,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/610OIOc8anL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0B3R1R2DG?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
     "prime": false
   },
   {
@@ -600,21 +510,6 @@
     "prime": false
   },
   {
-    "id": "skin1004_madagascar_centella_p",
-    "name": "SKIN1004 Madagascar Centella Poremizing Fresh Ampoule 3.38 fl. oz(100ml) | Soothing Hydration | Oily Combination Skin",
-    "price": 12.29,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "4,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61zILb6PBuL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0B1JRGGLF?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "medicube_exosome_shot_zero_2_0",
     "name": "medicube Exosome Shot Zero 2,000 PPM Spicule Facial Serum | Liquid Skin Booster Serum | Exosome, AHA+BHA+PHA | Pore Care, Dead Skin Cells, Skin Texture | Korean Skincare, 1.01 fl.oz",
     "price": 19.99,
@@ -750,21 +645,6 @@
     "prime": false
   },
   {
-    "id": "dr_althea_vitamin_c_boosting_s",
-    "name": "Dr.Althea Vitamin C Boosting Serum | Daily Facial Serum with TRANEXAMIC ACID for All Skin Types | Helps Remove Dark Spots & Uneven Skin Tone | Korean Vegan Skin Care (Vitamin C Boosting RENEWED)",
-    "price": 22.8,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "2,700",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51FjGzm9kvL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DGLCRZZ3?tag=kbeauty000-20",
-    "bought": "9K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "salicylic_acid_2_serum_solutio",
     "name": "Salicylic Acid 2% Serum Solution for Face: Gently Exfoliating Facial Serum for Acne,Blackhead & Open Pores & Reduces Excess Oil - Hydrating& Soothing Skin Care Serum for Acne Prone&Oily Skin",
     "price": 7.49,
@@ -792,21 +672,6 @@
     "image": "https://m.media-amazon.com/images/I/71wxnDgF26L._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0DQM8JD5Q?tag=kbeauty000-20",
     "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "good_molecules_niacinamide_ser",
-    "name": "Good Molecules Niacinamide Serum - 10% Niacinamide to Target Blemishes, Nourishment, and Skin Tone - Ultra Hydrating Serum and Brightening Skin Care for Face",
-    "price": 5.97,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "12,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71AM7pP1uIL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B08R994Q1L?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
     "prime": false
   },
   {
@@ -855,21 +720,6 @@
     "prime": false
   },
   {
-    "id": "cerave_resurfacing_retinol_ser",
-    "name": "CeraVe Resurfacing Retinol Serum For Post Acne Marks, Formulated With Licorice Root Extract & Niacinamide, Brightening Serum & Pore Minimizer For Face, Post Acne Skin Barrier Repair, Non-Comedogenic",
-    "price": 18.68,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "55,900",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71zvPJqU7FL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07VWSN95S?tag=kbeauty000-20",
-    "bought": "30K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "the_ordinary_salicylic_acid_2_",
     "name": "The Ordinary Salicylic Acid 2% Solution, Acne-Fighting Serum for Blemish-Prone Skin",
     "price": 6.7,
@@ -881,21 +731,6 @@
     "subtag": "Serums & Essences",
     "image": "https://m.media-amazon.com/images/I/613CFOwbuGL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0C3PCJ6SD?tag=kbeauty000-20",
-    "bought": "40K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "anua_niacinamide_10_txa_4_seru",
-    "name": "Anua Niacinamide 10 + TXA 4 Serum, Dark Spot Care, Hyaluronic Acid, Tranexamic Acid, Lightweight & Hydrating All-in-One Daily Facial Serum for Glass Skin, Korean Skincare, 1.01 fl.oz",
-    "price": 21.85,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "14,600",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61EpVSwr1sL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CLLV2T1P?tag=kbeauty000-20",
     "bought": "40K+ bought in past month",
     "prime": false
   },
@@ -945,21 +780,6 @@
     "prime": false
   },
   {
-    "id": "prequel_skin_multi_quench_plum",
-    "name": "Prequel Skin Multi-Quench Plumping Hydration Serum for Face. Intensive Hydrating Facial Serum for Women with PGA Complex and Moisture-Binders. Deep Moisturizing for Dry and Sensitive Skin, 1.7oz",
-    "price": 27.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "752",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/611Esf0i+fL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0D9MR13R4?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "paula_s_choice_clinical_0_3_re",
     "name": "Paula's Choice CLINICAL 0.3% Retinol + 2% Bakuchiol Face Serum Treatment, Anti-Aging Serum for Face with Ceramides, Hylauronic Acid, Vitamin C & E, Deep Wrinkles & Fine Lines, Fragrance-Free, 1 oz",
     "price": 65,
@@ -986,21 +806,6 @@
     "subtag": "Serums & Essences",
     "image": "https://m.media-amazon.com/images/I/71JwUrMXh8L._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0CJ5YTR7H?tag=kbeauty000-20",
-    "bought": "1K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "mad_hippie_super_a_retinol_ser",
-    "name": "Mad Hippie Super A Retinol Serum for Face - Potent Skin Repair & Anti-Aging Serum with 3 Retinoids, Bakuchiol + Hydrating Hyaluronic Acid, 1.02 Oz",
-    "price": 28.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "2,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/612h0+YM2GL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B00S8Q2O2A?tag=kbeauty000-20",
     "bought": "1K+ bought in past month",
     "prime": false
   },
@@ -1335,21 +1140,6 @@
     "prime": false
   },
   {
-    "id": "retinol_collagen_serum_for_fac",
-    "name": "Retinol Collagen Serum for Face: Anti Aging & Anti Wrinkle Repair Peptide Serum with Boost Hydration Formula - Day/Night Facial Firming Neck Plump Skin Care for Women/Men(1.70 Fl Oz)",
-    "price": 21.99,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "15",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51B7edF9-CL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0GGH5PP6G?tag=kbeauty000-20",
-    "bought": "600+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "fortify_skincare_hyaluronic_ac",
     "name": "Fortify Skincare Hyaluronic Acid Serum for Face with Collagen - 3-in-1: Detox, Treat, Boost - Hydrating, Firming, Anti-Aging Serum - Dermatologist Tested Korean Skin Care - Clean Beauty - 1.69 Oz",
     "price": 9.49,
@@ -1377,21 +1167,6 @@
     "image": "https://m.media-amazon.com/images/I/51fvl0gR4-L._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0GF1H13Q1?tag=kbeauty000-20",
     "bought": "200+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "tree_of_life_face_serum_set_vi",
-    "name": "Tree of Life Face Serum Set - Vitamin C, Retinol & Hyaluronic Acid for Brightening, Firming & Hydrating - Anti Aging Skin Care Set - Dermatologist Tested - 1 Fl Oz (Pack of 3)",
-    "price": 19.99,
-    "originalPrice": null,
-    "rating": 4.4,
-    "reviews": "143,100",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/81I3EyYzdaL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B014PGEEO2?tag=kbeauty000-20",
-    "bought": "2K+ bought in past month",
     "prime": false
   },
   {
@@ -1437,21 +1212,6 @@
     "image": "https://m.media-amazon.com/images/I/81ho-qxajGL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B07TBDGL7N?tag=kbeauty000-20",
     "bought": "900+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "medicube_pdrn_pink_peptide_ser",
-    "name": "medicube PDRN Pink Peptide Serum with Salmon DNA | Pink Glow Serum with Peptides & Niacinamide for Hydration & Firm-Looking Skin | Uneven Tone Care | Korean Skincare, 1.01 fl. Oz",
-    "price": 18.9,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "14,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/615DOoCI6xL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DBF65JYY?tag=kbeauty000-20",
-    "bought": "70K+ bought in past month",
     "prime": false
   },
   {
@@ -1605,21 +1365,6 @@
     "prime": false
   },
   {
-    "id": "seoulceuticals_korean_skin_car",
-    "name": "SeoulCeuticals Korean Skin Care 20% Vitamin C Hyaluronic Acid Serum + CE Ferulic Acid - Potent Anti Aging, Anti Wrinkle Korean Beauty 1oz",
-    "price": 19.98,
-    "originalPrice": null,
-    "rating": 4.3,
-    "reviews": "27,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/81ofNgqKRUL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B072K1LNNY?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "la_roche_posay_hyalu_b5_suract",
     "name": "La Roche-Posay Hyalu B5 Suractivated Anti-Aging Face & Neck Cream, Firming Face Moisturizer With 3 Types of Hyaluronic Acid for All Skin Types, 72hr Hydration + Anti-Wrinkle, 1.7 fl oz",
     "price": 39.99,
@@ -1632,36 +1377,6 @@
     "image": "https://m.media-amazon.com/images/I/61NNU8kI+bL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0F226HQVW?tag=kbeauty000-20",
     "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "la_roche_posay_hyalu_b5_pure_h",
-    "name": "La Roche-Posay Hyalu B5 Pure Hyaluronic Acid Serum for Face, Vitamin B5 + Hyaluronic Acid + Madecassoside, Hydrating Serum Visibly Plumps Skin, Sensitive Skin Safe, Anti Aging, Oil-Free",
-    "price": 39.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "35,100",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61uFnomGpxL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B075VX4QVM?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "retinol_tallow_face_serum_for_",
-    "name": "Retinol Tallow Face Serum for Dry Skin, Hydrating & Firming Anti-Aging Serum with Peptides, Niacinamide & Bifida Ferment, Gentle Moisturizing Facial Serum, 100ml/ 3.53 oz (2 Pack)",
-    "price": 52.99,
-    "originalPrice": null,
-    "rating": 5,
-    "reviews": "3",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/613MP7NvJGL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0GY3PFRZL?tag=kbeauty000-20",
-    "bought": "",
     "prime": false
   },
   {
@@ -1740,21 +1455,6 @@
     "prime": false
   },
   {
-    "id": "retinol_collagen_serum_for_fac",
-    "name": "Retinol Collagen Serum for Face: Anti Aging &Anti Wrinkle Repair Peptide Serum with Hyaluronic Acid Boost Hydration-Day/Night Facial Firming Lifting Neck Plump Skin Care for Women/Men(1.70 Fl Oz)",
-    "price": 19.97,
-    "originalPrice": null,
-    "rating": 5,
-    "reviews": "19",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71zR8IRLtLL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0GGH2CC1F?tag=kbeauty000-20",
-    "bought": "",
-    "prime": false
-  },
-  {
     "id": "purito_retinol_0_1_retinal_0_1",
     "name": "PURITO Retinol 0.1% + Retinal 0.1% Anti-Aging Facial Serum | for Wrinkles, Fine Lines & Firmer Skin | Dual Retinoids with NAD+, Improve Elasticity & Skin Texture | Korean Skincare, 30mL 1.01 fl.oz",
     "price": 21.9,
@@ -1782,36 +1482,6 @@
     "image": "https://m.media-amazon.com/images/I/71R7zJGeXwL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B07XJ7XWLW?tag=kbeauty000-20",
     "bought": "9K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "l_oreal_paris_revitalift_1_5_p",
-    "name": "L'Oreal Paris Revitalift 1.5% Pure Hyaluronic Acid Serum for Face, Anti Aging Serum to Hydrate Skin & Reduce Wrinkles, Fragrance Free Skin Care for All Skin Types, 1 Oz",
-    "price": 23,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "49,700",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71IoE52LztL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07GVCVYB9?tag=kbeauty000-20",
-    "bought": "7K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "meditherapy_retinal_skin_boost",
-    "name": "MEDITHERAPY Retinal Skin Booster Serum | Retinaldehyde, Niacinamide Anti-Aging Serum - K-Beauty Facial Serum for Fine Lines, Firming & Radiance | Hydrating Face Serum All Skin Types, 5.07 fl oz",
-    "price": 19.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "4,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/41AJvdilT1L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DG4WXBCF?tag=kbeauty000-20",
-    "bought": "40K+ bought in past month",
     "prime": false
   },
   {
@@ -1950,21 +1620,6 @@
     "prime": false
   },
   {
-    "id": "anua_rice_ceramide_7_hydrating",
-    "name": "Anua Rice Ceramide 7 Hydrating Barrier Serum, Moisturizing Face Serum, Non-comodogenic, Hyaluronic Acid, Niacinamide, Lightweight, Fragrance Free, Sensitive Dry Skin, Korean Skincare, 1.69 fl oz",
-    "price": 22,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "2,700",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/41b3XamFfoL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0D54G6811?tag=kbeauty000-20",
-    "bought": "8K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "calming_relief_serum_with_niac",
     "name": "Calming Relief Serum with Niacinamide & Hyaluronic Acid for Sensitive Skin, Hydrating Barrier Repair Serum with Centella, Purslane & Snow Mushroom 1 fl Oz by Silver Mirror",
     "price": 88,
@@ -2052,21 +1707,6 @@
     "image": "https://m.media-amazon.com/images/I/51BQDUJSzXL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B07NMLCB1H?tag=kbeauty000-20",
     "bought": "700+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_tone_balancing_capsul",
-    "name": "SKIN1004 Tone Balancing Capsule Ampoule, Niacinamide & Centella Serum for Face, Korean Hydrating Facial Serum to Help Balance Uneven Skin Tone with Tranexamic Acid, Korean Skincare, 1.69 fl oz / 50 ml",
-    "price": 15.98,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "8,600",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/41tccxBa+QL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DBR61WV9?tag=kbeauty000-20",
-    "bought": "1K+ bought in past month",
     "prime": false
   },
   {
@@ -2175,21 +1815,6 @@
     "prime": false
   },
   {
-    "id": "cetaphil_ceramide_serum_hydrat",
-    "name": "Cetaphil Ceramide Serum, Hydrates and Restores Skin Barrier, Formulated with Ceramides & Centella Asiatica, Designed for Sensitive Skin, Fragrance Free, Dermatologist Tested, 1oz",
-    "price": 18.79,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "624",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61wCLgCPvqL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CZD72G5W?tag=kbeauty000-20",
-    "bought": "2K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "centella_asiatica_ampoule_seru",
     "name": "Centella Asiatica Ampoule Serum 95% Madagascar Extract Redness Relief & Barrier Repair with Peptides Ceramides & Madecassoside Soothing Hydrating Serum for Sensitive Irritated Skin 1 fl oz",
     "price": 14.99,
@@ -2250,21 +1875,6 @@
     "prime": false
   },
   {
-    "id": "skin1004_tea_trica_relief_ampo",
-    "name": "SKIN1004 Tea-Trica Relief Ampoule, 3.38 fl.oz,100ml, Korean Face Serum with Cica & Tea Tree, Facial Serum with Madagascar Centella, Hydrating & Calming Ampoule for Soothing Effect, Korean Skin Care",
-    "price": 22.01,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "648",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61F29NeyLWL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0B5WVY1VM?tag=kbeauty000-20",
-    "bought": "100+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "baloom_centella_ampoule_korean",
     "name": "BALOOM Centella Ampoule - Korean TECA Calming Skincare Face Serum with TECA 50,000ppm for Redness Relief Hydrating Skin Barrier Support Cica Sensitive Skin Calming Centella Asiatica Serum, 1.01 fl oz",
     "price": 18.95,
@@ -2292,21 +1902,6 @@
     "image": "https://m.media-amazon.com/images/I/61fZuOmOMZL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B093JZCD7M?tag=kbeauty000-20",
     "bought": "1K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "purito_centella_unscented_seru",
-    "name": "PURITO Centella Unscented Serum, for All Skin Types, Ampoule, Soothing, Calming, Facial Serum for face, Vegan & Cruelty-Free, Korean Skin Care, 60ml 2fl.oz",
-    "price": 22.79,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "2,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/412hUoSJfNL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B081ZQFNBK?tag=kbeauty000-20",
-    "bought": "50+ bought in past month",
     "prime": false
   },
   {
@@ -2385,36 +1980,6 @@
     "prime": false
   },
   {
-    "id": "skin1004_madagascar_centella_p",
-    "name": "SKIN1004 Madagascar Centella Poremizing Fresh Ampoule 3.38 fl. oz(100ml) | Soothing Hydration | Oily Combination Skin",
-    "price": 12.29,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "4,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61zILb6PBuL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0B1JRGGLF?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_tone_balancing_capsul",
-    "name": "SKIN1004 Tone Balancing Capsule Ampoule, Niacinamide & Centella Serum for Face, Korean Hydrating Facial Serum for Unevne Skin Tone with Tranexamic Acid, Korean Skin Care, 3.38 fl.oz / 100ml",
-    "price": 13.58,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "8,600",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61BitEhf6OL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B09TLFY4GP?tag=kbeauty000-20",
-    "bought": "8K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "skin1004_madagascar_centella_t",
     "name": "SKIN1004 Madagascar Centella TECA Ampoule, Korean Face Serum for Oil Balance & Moisture Barrier Support with TECA & PDRN, Hydrating Serum for Skin Firmness, Korean Skin Care, 1.69 fl oz / 50 ml",
     "price": 17,
@@ -2472,66 +2037,6 @@
     "image": "https://m.media-amazon.com/images/I/61mwjDjjQpL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0GSZPM83S?tag=kbeauty000-20",
     "bought": "1K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_madagascar_centella_a",
-    "name": "SKIN1004 Madagascar Centella Ampoule, Korean Face Serum with Centella Asiatica for Hydrating & Moisturizing Care, Soothing Facial Serum for Skin Balance and Glow, Korean Skin Care, 3.38 fl.oz / 100 ml",
-    "price": 15.69,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "12,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61iZUHSBgaL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B06Y15D1LH?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_probio_cica_intensive",
-    "name": "SKIN1004 Probio Cica Intensive Ampoule, Centella Serum for Face with Ceramide, Facial Serum for Nourishing & Soothing, Centella Ampoule for Skin Barrier Support, Korean Skin Care, 1.69fl.oz / 50ml",
-    "price": 15.95,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "3,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61JiFhR1YIL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0BTRWGQNV?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "the_ordinary_soothing_barrier_",
-    "name": "The Ordinary Soothing & Barrier Support Serum, Redness-Reducing & Hydrating Solution with Centella Asiatica for Skin Barrier Repair",
-    "price": 17,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "1,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51ZwtrS5QtL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CJ3CXTW6?tag=kbeauty000-20",
-    "bought": "9K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "purito_centella_unscented_seru",
-    "name": "PURITO Centella Unscented Serum for Sensitive Skin - Lightweight Calming & Skin Barrier Repair, 34,860 ppm Soothing Serum, Vegan & Cruelty-Free, Korean Skincare, 2 fl.oz / 60ml",
-    "price": 18.4,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "2,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51fNP-39wcL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CST174J1?tag=kbeauty000-20",
-    "bought": "3K+ bought in past month",
     "prime": false
   },
   {
@@ -2595,36 +2100,6 @@
     "prime": false
   },
   {
-    "id": "the_ordinary_soothing_barrier_",
-    "name": "The Ordinary Soothing & Barrier Support Serum, Redness-Reducing & Hydrating Solution with Centella Asiatica for Skin Barrier Repair",
-    "price": 34,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "1,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/5143Pq9r-7L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DNN5PG9V?tag=kbeauty000-20",
-    "bought": "",
-    "prime": false
-  },
-  {
-    "id": "prequel_skin_multi_quench_plum",
-    "name": "Prequel Skin Multi-Quench Plumping Hydration Serum for Face. Intensive Hydrating Facial Serum for Women with PGA Complex and Moisture-Binders. Deep Moisturizing for Dry and Sensitive Skin, 1.7oz",
-    "price": 27.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "752",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/611Esf0i+fL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0D9MR13R4?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "drunk_elephant_c_firma_fresh_d",
     "name": "Drunk Elephant C-Firma Fresh Day Serum - 28 ml/.94 fl oz - 15% Illuminating Vitamin C - Clean Clinical Skincare - Cruelty-Free - Dermatologist-Tested - Free of Essential Oils, Silicones, and Fragrance",
     "price": 79,
@@ -2637,21 +2112,6 @@
     "image": "https://m.media-amazon.com/images/I/611mzGAKIUL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B09B4B1ZJQ?tag=kbeauty000-20",
     "bought": "600+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "is_clinical_active_serum_helps",
-    "name": "iS CLINICAL Active Serum - Helps visibly even skin tone, Excellent for acne-prone skin, Anti-Aging, Face Serum",
-    "price": 96,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "875",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61oT64Q+KUL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0073RK3S2?tag=kbeauty000-20",
-    "bought": "300+ bought in past month",
     "prime": false
   },
   {
@@ -2697,21 +2157,6 @@
     "image": "https://m.media-amazon.com/images/I/51ruwNPjYWL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B08Z2BJ473?tag=kbeauty000-20",
     "bought": "2K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "arencia_vitamin_c_booster_shot",
-    "name": "Arencia Vitamin C Booster Shot Serum with Glutathione, Niacinamide and Vitamin E for Dark Spot Care, Fine Lines & Wrinkles, Glass Skin, Korean Skincare 30ml/1.01 fl.oz",
-    "price": 21.6,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "1,200",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51CF4EwEADL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0FX418XT8?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
     "prime": false
   },
   {
@@ -2805,21 +2250,6 @@
     "prime": false
   },
   {
-    "id": "e_l_f_skin_bright_icon_vitamin",
-    "name": "e.l.f. SKIN Bright Icon Vitamin C + E + Ferulic Face Serum Mini, Brightening & Soothing with 15% Vitamin C, Vegan & Cruelty-Free",
-    "price": 9,
-    "originalPrice": null,
-    "rating": 4.2,
-    "reviews": "1,600",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/614TYfkpkXL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0F3J9SPNJ?tag=kbeauty000-20",
-    "bought": "800+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "olay_vitamin_c_peptide_24_seru",
     "name": "Olay Vitamin C + Peptide 24 Serum, 40 mL (1.3 FL OZ)",
     "price": 22.44,
@@ -2892,21 +2322,6 @@
     "image": "https://m.media-amazon.com/images/I/71JDvqpgCgL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0GGGCV238?tag=kbeauty000-20",
     "bought": "6K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "la_roche_posay_pure_12_vitamin",
-    "name": "La Roche-Posay Pure 12% Vitamin C Serum For Face With Hyaluronic Acid & Salicylic Acid, Hydrating Face Serum, Boost Radiance & Reduce Wrinkles, 2 Formulas for Normal or Oily Skin Control",
-    "price": 44.99,
-    "originalPrice": null,
-    "rating": 4.4,
-    "reviews": "18,700",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/612rQ+tTL6L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07PM79MSC?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
     "prime": false
   },
   {
@@ -3060,21 +2475,6 @@
     "prime": false
   },
   {
-    "id": "premium_20_vitamin_c_serum_for",
-    "name": "Premium 20% Vitamin C Serum For Face with Hyaluronic Acid, Retinol & Amino Acids - Boost Skin Collagen,Hydrate & Plump Skin, Anti Aging & Wrinkle Facial Serum 60ml",
-    "price": 7.99,
-    "originalPrice": null,
-    "rating": 4.4,
-    "reviews": "32,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71XKWmqo+qL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0BNBF4LZR?tag=kbeauty000-20",
-    "bought": "6K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "eclat_skincare_vitamin_c_serum",
     "name": "Eclat Skincare Vitamin C Serum - Skin Care for Dark Spots, Vitamin C Serum for Face with Hyaluronic Acid, Ferulic Acid, & Vit E - Anti Aging and Skin Brightening Vit C Formula for Face Care 1 Fl Oz",
     "price": 18.99,
@@ -3117,21 +2517,6 @@
     "image": "https://m.media-amazon.com/images/I/61mLjjP-1vL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0GD948Z99?tag=kbeauty000-20",
     "bought": "600+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "truskin_vitamin_c_serum_for_fa",
-    "name": "TruSkin Vitamin C Serum for Face - Anti Aging Face Serum with Hyaluronic Acid & Vitamin E - Brightening Formula for Improving Appearance of Dark Spots, Fine Lines & Wrinkles - All Skin Types, 2 Fl Oz",
-    "price": 34.99,
-    "originalPrice": null,
-    "rating": 4.4,
-    "reviews": "155,200",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71BUbYFwDQL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B01EKUBU5Y?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
     "prime": false
   },
   {
@@ -3465,21 +2850,6 @@
     "prime": false
   },
   {
-    "id": "cerave_vitamin_c_serum_for_fac",
-    "name": "CeraVe Vitamin C Serum for Face with 10% Pure Vitamin C, Hyaluronic Acid & 3 Essential Ceramides, Skin Brightening Antioxidant Serum, Hydrates & Improves Skin Tone & Texture, Fragrance-Free, 1oz",
-    "price": 23.86,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "43,600",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71h9qjljxIL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07PNCCLD2?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "mad_hippie_super_a_retinol_ser",
     "name": "Mad Hippie Super A Retinol Serum for Face - Potent Skin Repair & Anti-Aging Serum with 3 Retinoids, Bakuchiol + Hydrating Hyaluronic Acid, 1.02 Oz",
     "price": 28.99,
@@ -3630,21 +3000,6 @@
     "prime": false
   },
   {
-    "id": "beauty_of_joseon_revive_snail_",
-    "name": "Beauty of Joseon Revive Snail Mucin Ginseng Serum Hydrating Peptide Facial Moisturizer Dark Spot Acne Scar Remover for Sensitive Face. Korean Skin Care for Men and Women, 30ml, 1fl. Oz",
-    "price": 15.5,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "3,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/610OIOc8anL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0B3R1R2DG?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "byoma_phyto_mucin_glow_serum_m",
     "name": "BYOMA Phyto-Mucin Glow Serum - Mucin Face Serum for Glass Skin - Plumps, Primes + Hydrates - Flawless Primer and Makeup Base - Strengthens Skin Barrier - 1.35 fl.oz",
     "price": 15.99,
@@ -3720,21 +3075,6 @@
     "prime": false
   },
   {
-    "id": "cetaphil_ceramide_serum_hydrat",
-    "name": "Cetaphil Ceramide Serum, Hydrates and Restores Skin Barrier, Formulated with Ceramides & Centella Asiatica, Designed for Sensitive Skin, Fragrance Free, Dermatologist Tested, 1oz",
-    "price": 18.79,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "624",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61wCLgCPvqL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CZD72G5W?tag=kbeauty000-20",
-    "bought": "2K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "premium_20_vitamin_c_serum_for",
     "name": "Premium 20% Vitamin C Serum For Face with Hyaluronic Acid, Retinol & Amino Acids - Boost Skin Collagen,Hydrate & Plump Skin, Anti Aging & Wrinkle Facial Serum 60ml",
     "price": 7.99,
@@ -3795,21 +3135,6 @@
     "prime": false
   },
   {
-    "id": "the_ordinary_soothing_barrier_",
-    "name": "The Ordinary Soothing & Barrier Support Serum, Redness-Reducing & Hydrating Solution with Centella Asiatica for Skin Barrier Repair",
-    "price": 17,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "1,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51ZwtrS5QtL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CJ3CXTW6?tag=kbeauty000-20",
-    "bought": "9K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "d_alba_piedmont_italian_white_",
     "name": "d'alba Piedmont Italian White Truffle First Spray Serum, Vegan Skin Care, Hydrating Face Moisturizer, Glow Serum for Radiant Skin, Non Comedogenic, All In One Mist (1.69 fl oz.)",
     "price": 15.99,
@@ -3840,36 +3165,6 @@
     "prime": false
   },
   {
-    "id": "prequel_skin_multi_quench_plum",
-    "name": "Prequel Skin Multi-Quench Plumping Hydration Serum for Face. Intensive Hydrating Facial Serum for Women with PGA Complex and Moisture-Binders. Deep Moisturizing for Dry and Sensitive Skin, 1.7oz",
-    "price": 27.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "752",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/611Esf0i+fL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0D9MR13R4?tag=kbeauty000-20",
-    "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "vichy_mineral_89_booster_pure_",
-    "name": "Vichy Mineral 89 Booster, Pure Hyaluronic Acid Serum for Face with Polyglutamic Acid for Skin Barrier Repair, Plumps & Hydrates, Lightweight Hydrating Serum, Oil-Free, Non-Sticky",
-    "price": 29.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "46,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71-oKV3Y7DL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B06XC5PQGL?tag=kbeauty000-20",
-    "bought": "6K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "dove_cream_serum_hyaluronic_hy",
     "name": "Dove Cream Serum Hyaluronic + Hydration for Extra Dry, Flaky Skin, with Pro-Ceramides, Niacinamide and Collagen Peptides Lotion, 8 oz",
     "price": 7.39,
@@ -3882,21 +3177,6 @@
     "image": "https://m.media-amazon.com/images/I/71CUFqnDyqL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0D9BR34BM?tag=kbeauty000-20",
     "bought": "2K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "medicube_pdrn_pink_peptide_ser",
-    "name": "medicube PDRN Pink Peptide Serum with Rose PDRN | Vegan Pink Glow Serum with Peptides & Niacinamide for Hydration & Firm-Looking Skin | Uneven Tone Care | Korean Skincare, 1.01 fl. Oz",
-    "price": 18.9,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "3,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61OewnOw5jL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DCJ7952P?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
     "prime": false
   },
   {
@@ -3945,81 +3225,6 @@
     "prime": false
   },
   {
-    "id": "meditherapy_retinal_skin_boost",
-    "name": "MEDITHERAPY Retinal Skin Booster Serum | Retinaldehyde, Niacinamide Anti-Aging Serum - K-Beauty Facial Serum for Fine Lines, Firming & Radiance | Hydrating Face Serum All Skin Types, 5.07 fl oz",
-    "price": 19.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "4,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/41AJvdilT1L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DG4WXBCF?tag=kbeauty000-20",
-    "bought": "40K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "byoma_hydrating_serum_moisturi",
-    "name": "BYOMA Hydrating Serum - Moisturizing Facial Serum with Squalane, Glycerin & Ceramides - Hydrating for Glowing, Dewy Skin - 1.01 fl. oz",
-    "price": 15.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "2,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/41eHpj5YgJL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0C7C88ZSK?tag=kbeauty000-20",
-    "bought": "7K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "good_molecules_niacinamide_ser",
-    "name": "Good Molecules Niacinamide Serum - 10% Niacinamide to Target Blemishes, Nourishment, and Skin Tone - Ultra Hydrating Serum and Brightening Skin Care for Face",
-    "price": 5.97,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "12,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71AM7pP1uIL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B08R994Q1L?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "3_pack_face_serum_set_includes",
-    "name": "3 Pack Face Serum Set - Includes Vitamin C, Retinol & Hyaluronic Acid - Firming, Brightening & Hydrating - Reset Your Skin Day and Night",
-    "price": 9.99,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "1,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71Ca0ipEh7L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07PKN9BFR?tag=kbeauty000-20",
-    "bought": "1K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "the_ordinary_niacinamide_10_zi",
-    "name": "The Ordinary Niacinamide 10% + Zinc 1%, Smoothing Serum for Blemish-Prone Skin",
-    "price": 6,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "55,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/612NxRjAoCL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B01MDTVZTZ?tag=kbeauty000-20",
-    "bought": "100K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "skin_aesthetics_hyaluronic_aci",
     "name": "Skin Aesthetics Hyaluronic Acid Serum for Face - Dermatologist Tested - with Collagen for Anti-Aging, Ultra Hydrating, Fine Lines, Wrinkles & Acne Scar Treatment - Clean Beauty, Korean Skincare",
     "price": 9.17,
@@ -4032,36 +3237,6 @@
     "image": "https://m.media-amazon.com/images/I/81d0eT1Gp2L._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B09V1K458M?tag=kbeauty000-20",
     "bought": "100+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "medicube_pdrn_pink_peptide_ser",
-    "name": "medicube PDRN Pink Peptide Serum with Salmon DNA | Pink Glow Serum with Peptides & Niacinamide for Hydration & Firm-Looking Skin | Uneven Tone Care | Korean Skincare, 1.01 fl. Oz",
-    "price": 18.9,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "14,400",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/615DOoCI6xL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DBF65JYY?tag=kbeauty000-20",
-    "bought": "70K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "anua_azelaic_acid_10_hyaluron_",
-    "name": "Anua Azelaic Acid 10 Hyaluron Redness Soothing Serum, Facial Serum for Blemish-Prone & Oily-Prone Skin, Lightweight & Hydrating Blemish Care, Hyaluronic Acid, Korean Skincare, 1.01 fl oz.",
-    "price": 22,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "4,200",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61sSYnrc1zL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DG1DQ2S7?tag=kbeauty000-20",
-    "bought": "50K+ bought in past month",
     "prime": false
   },
   {
@@ -4125,36 +3300,6 @@
     "prime": false
   },
   {
-    "id": "iunik_beta_glucan_power_moistu",
-    "name": "IUNIK Beta-Glucan Power Moisture Serum - Beta-Glucan & 7 Types of Peptides Deep Hydration Vegan Serum for Dry, Mature & Sensitive Skin, Korean Skincare, 50ml / 1.69 fl oz",
-    "price": 18.5,
-    "originalPrice": null,
-    "rating": 4.4,
-    "reviews": "2,300",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/511I55B59jL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07NNVZNQR?tag=kbeauty000-20",
-    "bought": "10K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_hyalu_cica_first_ampo",
-    "name": "SKIN1004 Hyalu-Cica First Ampoule, Korean Serum for Face with Hyaluronic Acid & Centella, Facial Ampoule Serum for Deep Moisture, Lightweight Centella Ampoule, Korean Skin Care, 1.69 fl.oz /50ml",
-    "price": 10.07,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "37",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61ZTfXr+E7L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0CTTRDRBK?tag=kbeauty000-20",
-    "bought": "400+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "skin1004_tone_balancing_capsul",
     "name": "SKIN1004 Tone Balancing Capsule Ampoule, Niacinamide & Centella Serum for Face, Korean Hydrating Facial Serum for Unevne Skin Tone with Tranexamic Acid, Korean Skin Care, 3.38 fl.oz / 100ml",
     "price": 13.58,
@@ -4197,21 +3342,6 @@
     "image": "https://m.media-amazon.com/images/I/61Potx9222L._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0BSP4T13Z?tag=kbeauty000-20",
     "bought": "4K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "cosrx_snail_mucin_96_repairing",
-    "name": "COSRX Snail Mucin 96% Repairing Serum, Hydrating Serum for Face with Snail Secretion Filtrate for Dull Skin & Fine Lines, 100ml, Korean Skin Care",
-    "price": 18.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "103,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/416kUGx2rQL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B00PBX3L7K?tag=kbeauty000-20",
-    "bought": "40K+ bought in past month",
     "prime": false
   },
   {
@@ -4260,51 +3390,6 @@
     "prime": false
   },
   {
-    "id": "good_molecules_hyaluronic_acid",
-    "name": "Good Molecules Hyaluronic Acid Serum - 1% Hyaluronic Acid Non-greasy Ultra Hydrating Serum, Facial Moisturizer for Plumper Skin, Skin Care for Face",
-    "price": 5.97,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "16,300",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/71K9pvIaZhL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B08TM8DLFJ?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "the_ordinary_hyaluronic_acid_2",
-    "name": "The Ordinary Hyaluronic Acid 2% + B5 (with Ceramides), Multi-Depth Hydration Serum for Plumper, Smoother Skin",
-    "price": 9.9,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "35,700",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61Se8Z9n4oL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B01MYEZPC8?tag=kbeauty000-20",
-    "bought": "100K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "anua_pdrn_hyaluronic_acid_caps",
-    "name": "Anua PDRN Hyaluronic Acid Capsule 100 Serum, Radiant Face Serum, Salmon DNA, Hyaluronic Acid, Hydration, Moisture Plumping Effect, Lightweight, Glass Skin, Korean Skincare, 1.01 fl. oz",
-    "price": 27.37,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "1,000",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51PTwuJN49L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B0DLB58CWR?tag=kbeauty000-20",
-    "bought": "8K+ bought in past month",
-    "prime": false
-  },
-  {
     "id": "drunk_elephant_b_hydra_hydrati",
     "name": "Drunk Elephant B-Hydra Hydration Serum - 50 ml/1.69 fl oz - Hydrating Vitamin B Serum - Clean Clinical Skincare - Cruelty-Free - Dermatologist-Tested - Free of Essential Oils, Silicones, and Fragrance",
     "price": 54,
@@ -4317,51 +3402,6 @@
     "image": "https://m.media-amazon.com/images/I/51A6Er4ymfL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B01B9OEDKS?tag=kbeauty000-20",
     "bought": "1K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_madagascar_centella_a",
-    "name": "SKIN1004 Madagascar Centella Ampoule, Korean Face Serum with Centella Asiatica for Hydrating & Moisturizing Care, Soothing Facial Serum for Skin Balance and Glow, Korean Skin Care, 3.38 fl.oz / 100 ml",
-    "price": 15.69,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "12,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61iZUHSBgaL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B06Y15D1LH?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "la_roche_posay_hyalu_b5_pure_h",
-    "name": "La Roche-Posay Hyalu B5 Pure Hyaluronic Acid Serum for Face, Vitamin B5 + Hyaluronic Acid + Madecassoside, Hydrating Serum Visibly Plumps Skin, Sensitive Skin Safe, Anti Aging, Oil-Free",
-    "price": 39.99,
-    "originalPrice": null,
-    "rating": 4.6,
-    "reviews": "35,100",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61uFnomGpxL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B075VX4QVM?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "torriden_dive_in_hyaluronic_ac",
-    "name": "Torriden DIVE IN Hyaluronic Acid Serum for Deep Hydration | Korean K-Beauty Glass Skin Plump Glow | Lightweight Fast-Absorbing Face Serum 50ml (1.69 fl.oz.)",
-    "price": 22.5,
-    "originalPrice": null,
-    "rating": 4.5,
-    "reviews": "3,800",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/51IhsMajjFL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07WZ2YTDP?tag=kbeauty000-20",
-    "bought": "8K+ bought in past month",
     "prime": false
   },
   {
@@ -4887,21 +3927,6 @@
     "image": "https://m.media-amazon.com/images/I/71GxGSrQOCL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B07BWHF8VQ?tag=kbeauty000-20",
     "bought": "2K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_madagascar_centella_a",
-    "name": "SKIN1004 Madagascar Centella Asiatica Ampoule Facial Serum 1.85 fl.oz, 55ml, Soothes Acne Prone and Sensitive Skin",
-    "price": 14.46,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "12,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61CIxJ0VQ2L._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B07ZKHPV9Y?tag=kbeauty000-20",
-    "bought": "6K+ bought in past month",
     "prime": false
   },
   {
