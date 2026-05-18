@@ -89,7 +89,7 @@
       "destination": "/product.html"
     },
     {
-      "source": "/:cat",
+      "source": "/:cat(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)",
       "destination": "/category.html"
     }
   ],
