@@ -990,11 +990,15 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
       <button class="wp-modal-close" onclick="closeDupeFinder()">×</button>
     </div>
     <div class="wp-modal-body" style="overflow-y:auto;flex:1;">
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
-        <label style="font-size:0.82rem;font-weight:600;color:#555;">Scan:</label>
-        <select id="dupeScopeSelect" style="padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
-          <option value="current">Current category only</option>
-          <option value="all">All categories</option>
+<div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+        <select id="dupeCatSelect" onchange="dupeOnCatChange()" style="padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
+          <option value="__all__">All Categories</option>
+        </select>
+        <select id="dupeTagSelect" onchange="dupeOnTagChange()" style="padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
+          <option value="">All Tags</option>
+        </select>
+        <select id="dupeSubtagSelect" style="padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
+          <option value="">All Sub-tags</option>
         </select>
         <button onclick="runDupeScan()" style="padding:7px 16px;background:var(--rose);color:#fff;border:none;border-radius:6px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;">Scan Now</button>
         <span id="dupeScanInfo" style="font-size:0.78rem;color:#777;"></span>
@@ -3112,6 +3116,14 @@ function openDupeFinder() {
     showToast("Products still loading — try again in a moment", "error");
     return;
   }
+  // Populate category dropdown
+  var catSel = document.getElementById("dupeCatSelect");
+  catSel.innerHTML = '<option value="__all__">All Categories</option>' +
+    Object.keys(CATEGORIES).map(function(k){
+      return '<option value="' + k + '">' + CATEGORIES[k] + '</option>';
+    }).join("");
+  catSel.value = activeCategory || "__all__";
+  dupeOnCatChange();
   document.getElementById("dupeModal").classList.add("open");
   document.getElementById("dupeResults").innerHTML =
     '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">Choose a scope and click "Scan Now".</p>';
@@ -3121,26 +3133,74 @@ function closeDupeFinder() {
   document.getElementById("dupeModal").classList.remove("open");
 }
 
+// Category changed → rebuild Tag dropdown
+function dupeOnCatChange() {
+  var cat = document.getElementById("dupeCatSelect").value;
+  var tagSel = document.getElementById("dupeTagSelect");
+  var subSel = document.getElementById("dupeSubtagSelect");
+  subSel.innerHTML = '<option value="">All Sub-tags</option>';
+  if (cat === "__all__") {
+    tagSel.innerHTML = '<option value="">All Tags</option>';
+    tagSel.disabled = true;
+    subSel.disabled = true;
+    return;
+  }
+  tagSel.disabled = false;
+  var tags = CATEGORY_TAGS[cat];
+  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
+  var keys = isNested ? Object.keys(tags) : (Array.isArray(tags) ? tags : []);
+  tagSel.innerHTML = '<option value="">All Tags</option>' +
+    keys.map(function(t){ return '<option value="' + t + '">' + t + '</option>'; }).join("");
+  dupeOnTagChange();
+}
+
+// Tag changed → rebuild Sub-tag dropdown
+function dupeOnTagChange() {
+  var cat = document.getElementById("dupeCatSelect").value;
+  var tag = document.getElementById("dupeTagSelect").value;
+  var subSel = document.getElementById("dupeSubtagSelect");
+  var tags = CATEGORY_TAGS[cat];
+  var isNested = tags && typeof tags === "object" && !Array.isArray(tags);
+  if (isNested && tag && tags[tag] && tags[tag].length) {
+    subSel.disabled = false;
+    subSel.innerHTML = '<option value="">All Sub-tags</option>' +
+      tags[tag].map(function(s){ return '<option value="' + s + '">' + s + '</option>'; }).join("");
+  } else {
+    subSel.disabled = true;
+    subSel.innerHTML = '<option value="">All Sub-tags</option>';
+  }
+}
+
 function runDupeScan() {
-  var scope = document.getElementById("dupeScopeSelect").value;
-  var cats = scope === "all" ? Object.keys(data) : [activeCategory];
+  var cat = document.getElementById("dupeCatSelect").value;
+  var tagFilter = document.getElementById("dupeTagSelect").value;
+  var subFilter = document.getElementById("dupeSubtagSelect").value;
+  var cats = cat === "__all__" ? Object.keys(data) : [cat];
   var groups = [];
   var scanned = 0;
 
-  cats.forEach(function(cat) {
-    var list = data[cat] || [];
+  cats.forEach(function(c) {
+    var full = data[c] || [];
+    // Apply tag / sub-tag filter (only when scanning a single category)
+    var list = full;
+    if (cat !== "__all__") {
+      if (tagFilter) list = list.filter(function(p){ return p && p.tag === tagFilter; });
+      if (subFilter) list = list.filter(function(p){ return p && p.subtag === subFilter; });
+    }
     scanned += list.length;
     var byId = {};
     var byName = {};
-    list.forEach(function(p, i) {
+    list.forEach(function(p) {
       if (!p) return;
+      // index is the position in the FULL category array, so deletes stay correct
+      var i = full.indexOf(p);
       var idKey = (p.id || "").trim();
       if (idKey) {
-        (byId[idKey] = byId[idKey] || []).push({ cat: cat, index: i, product: p });
+        (byId[idKey] = byId[idKey] || []).push({ cat: c, index: i, product: p });
       }
       var nKey = dupeNormalize(p.name);
       if (nKey) {
-        (byName[nKey] = byName[nKey] || []).push({ cat: cat, index: i, product: p });
+        (byName[nKey] = byName[nKey] || []).push({ cat: c, index: i, product: p });
       }
     });
     Object.keys(byId).forEach(function(k) {
@@ -3164,8 +3224,8 @@ function runDupeScan() {
             reason: "Very similar name (" + Math.round(sim * 100) + "% overlap)",
             confidence: "medium",
             items: [
-              { cat: cat, index: i, product: list[i] },
-              { cat: cat, index: j, product: list[j] }
+              { cat: c, index: full.indexOf(list[i]), product: list[i] },
+              { cat: c, index: full.indexOf(list[j]), product: list[j] }
             ]
           });
         }
