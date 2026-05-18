@@ -529,7 +529,7 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
       </div>
     </div>
     <div class="pm-right">
-      <div class="save-bar"><span class="saved" id="saveStatus">✓ All changes saved</span><button onclick="cleanAllNames()" style="padding:8px 14px;background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:6px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;margin-right:8px;">🧹 Clean Names</button><button class="btn-green" id="btnPush" onclick="pushToGitHub()">Push to Live Site</button></div>
+      <div class="save-bar"><span class="saved" id="saveStatus">✓ All changes saved</span><button onclick="cleanAllNames()" style="padding:8px 14px;background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:6px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;margin-right:8px;">🧹 Clean Names</button><button onclick="openDupeFinder()" style="padding:8px 14px;background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5;border-radius:6px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;margin-right:8px;">🔍 Find Duplicates</button><button class="btn-green" id="btnPush" onclick="pushToGitHub()">Push to Live Site</button></div>
       <div class="ai-panel">
         <h2>🔗 Import from Amazon</h2>
         <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:14px;">Paste JSON from Chrome extension.</p>
@@ -983,6 +983,32 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
 </div><!-- end tab-content -->
   </div><!-- end admin-main -->
 </div><!-- end admin-layout -->
+  <div class="wp-modal-overlay" id="dupeModal">
+  <div class="wp-modal" style="max-width:780px;max-height:85vh;display:flex;flex-direction:column;">
+    <div class="wp-modal-header">
+      <h3>🔍 Duplicate Finder</h3>
+      <button class="wp-modal-close" onclick="closeDupeFinder()">×</button>
+    </div>
+    <div class="wp-modal-body" style="overflow-y:auto;flex:1;">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+        <label style="font-size:0.82rem;font-weight:600;color:#555;">Scan:</label>
+        <select id="dupeScopeSelect" style="padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-family:Outfit,sans-serif;font-size:0.82rem;">
+          <option value="current">Current category only</option>
+          <option value="all">All categories</option>
+        </select>
+        <button onclick="runDupeScan()" style="padding:7px 16px;background:var(--rose);color:#fff;border:none;border-radius:6px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;">Scan Now</button>
+        <span id="dupeScanInfo" style="font-size:0.78rem;color:#777;"></span>
+      </div>
+      <div id="dupeResults">
+        <p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">Choose a scope and click "Scan Now".</p>
+      </div>
+    </div>
+    <div class="wp-modal-footer">
+      <span style="flex:1;font-size:0.75rem;color:#999;">Deletions apply immediately — remember to Push to Live Site afterwards.</span>
+      <button class="wp-mini-btn" onclick="closeDupeFinder()">Done</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -3045,6 +3071,199 @@ async function pushTikTokToGitHub(message) {
     showToast("TikTok video saved!", "success");
   } catch(e) { status.textContent = "Error: " + e.message; }
 }
+// ═══════════════════════════════════════════════════════════════
+// DUPLICATE FINDER
+// ═══════════════════════════════════════════════════════════════
+var DUPE_STOPWORDS = ["korean","skincare","skin","care","sunscreen","serum",
+  "essence","ampoule","face","facial","for","with","the","and","spf","pa",
+  "broad","spectrum","fl","oz","ml","g","fluid","ounce","count","pack",
+  "new","of","a","an","to","best","seller","prime"];
+
+function dupeNormalize(name) {
+  if (!name) return "";
+  var s = name.toLowerCase();
+  s = s.replace(/\([^)]*\)/g, " ").replace(/\[[^\]]*\]/g, " ");
+  s = s.replace(/[^a-z0-9\s]/g, " ");
+  var words = s.split(/\s+/).filter(function(w) {
+    if (!w) return false;
+    if (DUPE_STOPWORDS.indexOf(w) !== -1) return false;
+    if (/^\d+$/.test(w) && w.length <= 3) return false;
+    return true;
+  });
+  return words.sort().join(" ");
+}
+
+function dupeSimilarity(a, b) {
+  var wa = a.split(" ").filter(Boolean);
+  var wb = b.split(" ").filter(Boolean);
+  if (!wa.length || !wb.length) return 0;
+  var setB = {};
+  wb.forEach(function(w){ setB[w] = true; });
+  var shared = 0;
+  var seen = {};
+  wa.forEach(function(w){ if (setB[w] && !seen[w]) { shared++; seen[w] = true; } });
+  var union = {};
+  wa.concat(wb).forEach(function(w){ union[w] = true; });
+  return shared / Object.keys(union).length;
+}
+
+function openDupeFinder() {
+  if (typeof data === "undefined" || !Object.keys(data).length) {
+    showToast("Products still loading — try again in a moment", "error");
+    return;
+  }
+  document.getElementById("dupeModal").classList.add("open");
+  document.getElementById("dupeResults").innerHTML =
+    '<p style="color:#999;font-size:0.85rem;text-align:center;padding:30px 0;">Choose a scope and click "Scan Now".</p>';
+  document.getElementById("dupeScanInfo").textContent = "";
+}
+function closeDupeFinder() {
+  document.getElementById("dupeModal").classList.remove("open");
+}
+
+function runDupeScan() {
+  var scope = document.getElementById("dupeScopeSelect").value;
+  var cats = scope === "all" ? Object.keys(data) : [activeCategory];
+  var groups = [];
+  var scanned = 0;
+
+  cats.forEach(function(cat) {
+    var list = data[cat] || [];
+    scanned += list.length;
+    var byId = {};
+    var byName = {};
+    list.forEach(function(p, i) {
+      if (!p) return;
+      var idKey = (p.id || "").trim();
+      if (idKey) {
+        (byId[idKey] = byId[idKey] || []).push({ cat: cat, index: i, product: p });
+      }
+      var nKey = dupeNormalize(p.name);
+      if (nKey) {
+        (byName[nKey] = byName[nKey] || []).push({ cat: cat, index: i, product: p });
+      }
+    });
+    Object.keys(byId).forEach(function(k) {
+      if (byId[k].length > 1) {
+        groups.push({ reason: "Identical product ID", confidence: "high", items: byId[k] });
+      }
+    });
+    Object.keys(byName).forEach(function(k) {
+      if (byName[k].length > 1) {
+        groups.push({ reason: "Identical product name", confidence: "high", items: byName[k] });
+      }
+    });
+    var norm = list.map(function(p){ return p ? dupeNormalize(p.name) : ""; });
+    for (var i = 0; i < list.length; i++) {
+      for (var j = i + 1; j < list.length; j++) {
+        if (!norm[i] || !norm[j]) continue;
+        if (norm[i] === norm[j]) continue;
+        var sim = dupeSimilarity(norm[i], norm[j]);
+        if (sim >= 0.72) {
+          groups.push({
+            reason: "Very similar name (" + Math.round(sim * 100) + "% overlap)",
+            confidence: "medium",
+            items: [
+              { cat: cat, index: i, product: list[i] },
+              { cat: cat, index: j, product: list[j] }
+            ]
+          });
+        }
+      }
+    }
+  });
+
+  var seenSig = {};
+  groups = groups.filter(function(g) {
+    var sig = g.items.map(function(it){ return it.cat + "#" + (it.product.id||"") + "#" + it.product.name; })
+                     .sort().join("||") + "::" + g.reason;
+    if (seenSig[sig]) return false;
+    seenSig[sig] = true;
+    return true;
+  });
+
+  groups.sort(function(a, b){
+    if (a.confidence === b.confidence) return 0;
+    return a.confidence === "high" ? -1 : 1;
+  });
+
+  window._dupeGroups = groups;
+  document.getElementById("dupeScanInfo").textContent =
+    "Scanned " + scanned + " products — " + groups.length + " duplicate group" + (groups.length === 1 ? "" : "s");
+  renderDupeResults();
+}
+
+function renderDupeResults() {
+  var groups = window._dupeGroups || [];
+  var el = document.getElementById("dupeResults");
+  if (!groups.length) {
+    el.innerHTML = '<p style="color:var(--green);font-size:0.9rem;text-align:center;padding:30px 0;font-weight:600;">✓ No duplicates found.</p>';
+    return;
+  }
+  el.innerHTML = groups.map(function(g, gi) {
+    if (g._resolved) return "";
+    var badge = g.confidence === "high"
+      ? '<span style="background:#FEE2E2;color:#991B1B;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:10px;">HIGH</span>'
+      : '<span style="background:#FEF3C7;color:#92400E;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:10px;">MAYBE</span>';
+    var rows = g.items.map(function(it) {
+      if (it._deleted) {
+        return '<div style="padding:8px;color:#999;font-size:0.8rem;font-style:italic;">✓ deleted: ' + it.product.name + '</div>';
+      }
+      var p = it.product;
+      var img = p.image
+        ? '<img src="' + p.image + '" style="width:46px;height:46px;object-fit:contain;background:#fff;border-radius:4px;">'
+        : '<span style="font-size:1.3rem;">📦</span>';
+      var price = p.price != null ? '$' + parseFloat(p.price).toFixed(2) : '—';
+      return '<div style="display:flex;gap:10px;align-items:center;padding:8px;background:#fff;border:1px solid #eee;border-radius:6px;margin-bottom:6px;">' +
+        '<div style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;border-radius:4px;flex-shrink:0;">' + img + '</div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="font-size:0.82rem;font-weight:500;line-height:1.3;">' + (p.name || '(no name)') + '</div>' +
+          '<div style="font-size:0.7rem;color:#888;margin-top:2px;">' + price +
+            ' · ⭐ ' + (p.rating != null ? p.rating : '—') +
+            ' · id: <code style="font-size:0.68rem;">' + (p.id || '—') + '</code>' +
+            ' · <span style="color:var(--blue);">' + (CATEGORIES[it.cat] || it.cat) + '</span></div>' +
+        '</div>' +
+        '<button onclick="dupeDelete(' + gi + ',\'' + it.cat + '\',\'' + (p.id||'').replace(/'/g,"\\'") + '\',' + it.index + ')" ' +
+          'style="padding:6px 12px;background:#FED7D7;color:#E53E3E;border:none;border-radius:5px;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;flex-shrink:0;">Delete</button>' +
+      '</div>';
+    }).join("");
+    return '<div style="border:1px solid #e8e8e8;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa;">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">' + badge +
+        '<span style="font-size:0.8rem;font-weight:600;color:#555;">' + g.reason + '</span>' +
+      '</div>' + rows +
+    '</div>';
+  }).join("");
+}
+
+function dupeDelete(groupIndex, cat, productId, hintIndex) {
+  var group = (window._dupeGroups || [])[groupIndex];
+  if (!group) return;
+  var item = group.items.filter(function(it){
+    return it.cat === cat && (it.product.id||"") === productId && !it._deleted;
+  })[0];
+  if (!item) return;
+  if (!confirm("Delete this product?\n\n" + (item.product.name || "(no name)"))) return;
+
+  var list = data[cat] || [];
+  var realIdx = list.indexOf(item.product);
+  if (realIdx === -1) {
+    realIdx = list.findIndex(function(p){
+      return p && (p.id||"") === productId && p.name === item.product.name;
+    });
+  }
+  if (realIdx === -1) { showToast("Product already removed", "error"); return; }
+
+  list.splice(realIdx, 1);
+  item._deleted = true;
+  markDirty(cat);
+
+  var liveItems = group.items.filter(function(it){ return !it._deleted; });
+  if (liveItems.length <= 1) group._resolved = true;
+
+  if (cat === activeCategory) { renderList(); buildCatTabs(); }
+  renderDupeResults();
+  showToast("Deleted — remember to Push to Live Site", "success");
+}  
 
 checkSavedToken();
 </script>
