@@ -2769,7 +2769,7 @@ function renderBlogList() {
     if (p.status === "draft") statusBadge = '<span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">DRAFT</span>';
     else if (p.status === "pending") statusBadge = '<span style="font-size:0.65rem;background:#E0E7FF;color:#3730A3;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">PENDING</span>';
     else statusBadge = '<span style="font-size:0.65rem;background:#F0FFF4;color:var(--green);padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">LIVE</span>';
-    return '<div class="plist-item" style="' + (p.status !== "published" ? 'opacity:0.7;' : '') + '">' +
+    return '<div class="plist-item" style="grid-template-columns:50px 1fr 200px 60px 140px;' + (p.status !== "published" ? 'opacity:0.7;' : '') + '">' +
       '<div class="plist-img">' + coverThumb + '</div>' +
       '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + statusBadge + tags + '<span style="font-size:0.65rem;color:#999;">' + dateStr + '</span></div></div>' +
       '<div class="plist-price" style="font-size:0.75rem;color:#777;">/' + p.slug + '</div>' +
