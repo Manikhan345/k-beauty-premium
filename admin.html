@@ -752,7 +752,7 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
         <div class="wp-meta-header">Publish</div>
         <div class="wp-meta-body">
           <div class="wp-publish-actions">
-            <button class="wp-mini-btn" onclick="saveBlogPost('draft')" id="btnSaveDraft">Save Draft</button>
+            <button class="wp-mini-btn" id="btnSaveDraft">Save Draft</button>
             <button class="wp-mini-btn" onclick="previewInNewTab()">Preview</button>
           </div>
 
@@ -2723,9 +2723,17 @@ function refreshSidebarMeta() {
     document.getElementById("publishDateText").innerHTML = futureLabel + " <strong>" + dStr + "</strong>";
   } else document.getElementById("publishDateText").innerHTML = 'Publish <strong>immediately</strong>';
   document.getElementById("trashLink").style.display = editingBlogIndex >= 0 ? "inline" : "none";
+  updateDraftButtonLabel();
   updatePublishButtonLabel();
 }
 
+function updateDraftButtonLabel() {
+  var btn = document.getElementById("btnSaveDraft");
+  if (!btn) return;
+  var isPublished = editingBlogIndex >= 0 && blogPosts[editingBlogIndex] && blogPosts[editingBlogIndex].status === "published";
+  btn.textContent = isPublished ? "Save Changes" : "Save Draft";
+  btn.onclick = function() { saveBlogPost(isPublished ? "published" : "draft"); };
+}
 async function loadBlogPosts() {
   try {
     var listResp = await fetch("https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/contents/data?ref=" + GITHUB_BRANCH, { headers: { "Authorization": "token " + token } });
@@ -2856,6 +2864,9 @@ function upgradeOldProductCards() {
   }, 200);
 }
 function clearBlogForm() {
+  // Set the Save Draft button's default behavior for new posts
+  var sdBtn = document.getElementById("btnSaveDraft");
+  if (sdBtn) { sdBtn.textContent = "Save Draft"; sdBtn.onclick = function() { saveBlogPost("draft"); }; }
   document.getElementById("blogTitle").value = "";
   document.getElementById("blogSlug").value = "";
   document.getElementById("blogExcerpt").value = "";
