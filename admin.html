@@ -2766,7 +2766,7 @@ function renderBlogList() {
       '<div class="plist-name">' + p.title + '<div style="margin-top:2px;">' + statusBadge + tags + '<span style="font-size:0.65rem;color:#999;">' + dateStr + '</span></div></div>' +
       '<div class="plist-price" style="font-size:0.75rem;color:#777;">/' + p.slug + '</div>' +
       '<div></div>' +
-      '<div class="plist-actions"><button class="btn-view" onclick="viewBlogPost(\'' + p.slug + '\', \'' + (p.status || 'draft') + '\')">View</button><button class="btn-edit" onclick="editBlogPost(' + realIndex + ')">Edit</button><button class="btn-del" onclick="deleteBlogPost(' + realIndex + ')">Del</button></div>' +
+      '<div class="plist-actions"><button class="btn-edit" onclick="editBlogPost(' + realIndex + ')">Edit</button><button class="btn-del" onclick="deleteBlogPost(' + realIndex + ')">Del</button></div>' +
     '</div>';
   }).join("");
 }
