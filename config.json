@@ -10,7 +10,8 @@
           "Exfoliators",
           "Face Treatments",
           "Toners & Astringents",
-          "Serums & Essences"
+          "Serums & Essences",
+          "Acne patches"
         ],
         "Eyes": [
           "Creams",
@@ -27,10 +28,7 @@
           "Self-Tanners & Bronzers",
           "Sunscreens"
         ],
-        "Sets": [],
-        "Acne Care": [
-          "Acne Patches"
-        ]
+        "Sets": []
       }
     },
     "makeup": {
