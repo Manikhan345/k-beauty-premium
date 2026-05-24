@@ -60,6 +60,15 @@
   gtag("config", GA_ID);
 })();
 
+// ── Google AdSense ──
+(function() {
+  var s = document.createElement("script");
+  s.async = true;
+  s.crossOrigin = "anonymous";
+  s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4829107618117363";
+  document.head.appendChild(s);
+})();
+
 // ── These are populated from config.json ──
 var SITE_PAGES = {};
 var CATEGORY_META = {};
