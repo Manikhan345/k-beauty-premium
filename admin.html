@@ -141,19 +141,22 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .wp-visual-area pre { background: #f5f5f5; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 0.88rem; overflow-x: auto; }
 .wp-visual-area img { max-width: 100%; height: auto; border-radius: 4px; }
 
-/* ─── IMAGE HEIGHT + CROP + POSITION CLASSES (admin preview) ─── */
-.wp-visual-area .kb-img-small  { height: 200px !important; width: 100%; }
-.wp-visual-area .kb-img-medium { height: 400px !important; width: 100%; }
-.wp-visual-area .kb-img-large  { height: 600px !important; width: 100%; }
-.wp-visual-area .kb-img-hero   { height: 500px !important; width: 100%; }
+/* ─── IMAGE CROP STYLES (admin preview) ─── */
+.wp-visual-area .kb-img-cropped { display: block; background-color: #f5f5f5; }
+.wp-visual-area .kb-img-cropped:hover { outline: 2px solid var(--blue); cursor: pointer; }
+.wp-visual-area .kb-img:hover { outline: 2px solid var(--blue); cursor: pointer; }
+
+/* Legacy classes (for backwards compat with older posts) */
+.wp-visual-area .kb-img-small  { height: 200px !important; width: 100%; object-fit: cover; }
+.wp-visual-area .kb-img-medium { height: 400px !important; width: 100%; object-fit: cover; }
+.wp-visual-area .kb-img-large  { height: 600px !important; width: 100%; object-fit: cover; }
+.wp-visual-area .kb-img-hero   { height: 500px !important; width: 100%; object-fit: cover; }
 .wp-visual-area .kb-img-cover  { object-fit: cover; }
-.wp-visual-area .kb-img-contain{ object-fit: contain; background: #f5f5f5; }
-.wp-visual-area .kb-img-original{ object-fit: none; }
+.wp-visual-area .kb-img-contain{ object-fit: contain; }
 .wp-visual-area .kb-img-pos-top    { object-position: center top; }
 .wp-visual-area .kb-img-pos-center { object-position: center center; }
 .wp-visual-area .kb-img-pos-bottom { object-position: center bottom; }
 
-/* Cover image preview thumbnail */
 #blogCoverPreview img { object-fit: cover; }
 .wp-visual-area a { color: #007cba; }
 .wp-visual-area table { border-collapse: collapse; width: 100%; margin: 1em 0; }
@@ -920,51 +923,63 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
 
 <!-- MEDIA MODAL -->
 <div class="wp-modal-overlay" id="mediaModal">
-  <div class="wp-modal">
+  <div class="wp-modal" style="max-width:760px;">
     <div class="wp-modal-header">
       <h3>Add Media</h3>
       <button class="wp-modal-close" onclick="closeMediaModal()">×</button>
     </div>
-    <div class="wp-modal-body">
+    <div class="wp-modal-body" style="max-height:75vh;overflow-y:auto;">
       <div class="form-row"><label>Image URL</label><input type="text" id="mediaUrl" placeholder="https://..."></div>
       <div class="form-row"><label>Alt Text</label><input type="text" id="mediaAlt" placeholder="Describe the image"></div>
-      <div class="form-row-half">
-        <div class="form-row" style="margin:0;"><label>Alignment</label>
-          <select id="mediaAlign">
-            <option value="none">None</option>
-            <option value="left">Left</option>
-            <option value="center" selected>Center</option>
-            <option value="right">Right</option>
-          </select>
+
+      <div class="form-row"><label>Alignment</label>
+        <select id="mediaAlign">
+          <option value="none">None</option>
+          <option value="left">Left</option>
+          <option value="center" selected>Center</option>
+          <option value="right">Right</option>
+        </select>
+      </div>
+
+      <!-- Crop Frame Section (appears when URL is set) -->
+      <div class="form-row" id="mediaCropSection" style="display:none;">
+        <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;">
+          <div style="min-width:160px;">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;">ASPECT RATIO PRESET</label>
+            <select id="mediaRatio" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;outline:none;">
+              <option value="original" selected>Original (no crop)</option>
+              <option value="16:9">16:9 — Widescreen</option>
+              <option value="4:3">4:3 — Classic</option>
+              <option value="1:1">1:1 — Square</option>
+              <option value="3:4">3:4 — Portrait</option>
+              <option value="21:9">21:9 — Cinematic</option>
+            </select>
+          </div>
+          <button type="button" onclick="resetMediaCrop()" style="padding:7px 14px;background:#fff;color:var(--text-mid);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:Outfit,sans-serif;">Reset</button>
+          <div style="flex:1;text-align:right;font-size:0.78rem;color:var(--text-mid);">
+            <span id="mediaCropInfo" style="font-family:monospace;color:var(--blue);"></span>
+          </div>
         </div>
-        <div class="form-row" style="margin:0;"><label>Height</label>
-          <select id="mediaHeight">
-            <option value="auto" selected>Auto (natural)</option>
-            <option value="small">Small (200px)</option>
-            <option value="medium">Medium (400px)</option>
-            <option value="large">Large (600px)</option>
-            <option value="hero">Hero (500px)</option>
-          </select>
+
+        <div id="mediaCropCanvas" style="position:relative;width:100%;background:#1a1a1a;border-radius:8px;overflow:hidden;user-select:none;border:2px solid var(--border);display:none;">
+          <img id="mediaCropImg" src="" alt="" style="display:block;width:100%;height:auto;pointer-events:none;opacity:0.45;" draggable="false">
+          <div id="mediaCropBox" style="position:absolute;top:10%;left:10%;width:80%;height:45%;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,0.4);cursor:move;box-sizing:border-box;">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:0.7rem;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,0.7);">DRAG TO MOVE</div>
+            <div class="mcrop-handle" data-mcorner="tl" style="position:absolute;top:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
+            <div class="mcrop-handle" data-mcorner="tr" style="position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
+            <div class="mcrop-handle" data-mcorner="bl" style="position:absolute;bottom:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
+            <div class="mcrop-handle" data-mcorner="br" style="position:absolute;bottom:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
+            <div class="mcrop-handle" data-medge="t" style="position:absolute;top:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
+            <div class="mcrop-handle" data-medge="b" style="position:absolute;bottom:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
+            <div class="mcrop-handle" data-medge="l" style="position:absolute;left:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
+            <div class="mcrop-handle" data-medge="r" style="position:absolute;right:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:0.78rem;color:var(--text-mid);">
+          💡 Set a ratio then drag the white frame and resize using corners/edges.
         </div>
       </div>
-      <div class="form-row-half">
-        <div class="form-row" style="margin:0;"><label>Crop Style</label>
-          <select id="mediaCrop">
-            <option value="cover" selected>Cover (fills, may crop)</option>
-            <option value="contain">Contain (fits, no crop)</option>
-            <option value="original">Original (natural size)</option>
-          </select>
-          <small>Only matters if Height is set</small>
-        </div>
-        <div class="form-row" style="margin:0;"><label>Vertical Position</label>
-          <select id="mediaPosition">
-            <option value="top">Top</option>
-            <option value="center" selected>Center</option>
-            <option value="bottom">Bottom</option>
-          </select>
-          <small>Only when Crop = Cover</small>
-        </div>
-      </div>
+
       <div class="form-row"><label>Link to</label>
         <select id="mediaLinkTo">
           <option value="none">None</option>
@@ -2052,20 +2067,20 @@ function applyLink() {
   closeLinkModal();
   updateWordCount();
 }
-
-// MEDIA MODAL
+//MEDIA MODAL
 function openMediaModal() {
   if (blogEditorMode !== "visual") { showToast("Switch to Visual mode", "error"); return; }
   saveSelection();
   document.getElementById("mediaUrl").value = "";
   document.getElementById("mediaAlt").value = "";
   document.getElementById("mediaAlign").value = "center";
-  document.getElementById("mediaHeight").value = "auto";
-  document.getElementById("mediaCrop").value = "cover";
-  document.getElementById("mediaPosition").value = "center";
+  document.getElementById("mediaRatio").value = "original";
   document.getElementById("mediaLinkTo").value = "none";
   document.getElementById("mediaCustomLink").value = "";
   document.getElementById("mediaCustomLinkRow").style.display = "none";
+  // Reset media crop state
+  mediaCropState = { url: "", ratio: "original", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
+  refreshMediaCropUI();
   document.getElementById("mediaModal").classList.add("open");
   setTimeout(function(){document.getElementById("mediaUrl").focus();}, 50);
 }
@@ -2073,35 +2088,275 @@ function closeMediaModal() { document.getElementById("mediaModal").classList.rem
 document.getElementById("mediaLinkTo").addEventListener("change", function(){
   document.getElementById("mediaCustomLinkRow").style.display = this.value === "custom" ? "block" : "none";
 });
+// ═══════════════════════════════════════════════════════════════
+// BODY IMAGE — Crop Frame Over Image (matches cover image system)
+// ═══════════════════════════════════════════════════════════════
+var mediaCropState = {
+  url: "",
+  ratio: "original",
+  cropLeft: 10,
+  cropTop: 10,
+  cropWidth: 80,
+  cropHeight: 45
+};
+
+document.getElementById("mediaUrl").addEventListener("input", function() {
+  mediaCropState.url = this.value.trim();
+  refreshMediaCropUI();
+});
+
+document.getElementById("mediaRatio").addEventListener("change", function() {
+  mediaCropState.ratio = this.value;
+  if (this.value !== "original" && this.value !== "free") {
+    snapMediaCropToRatio(this.value);
+  }
+  refreshMediaCropUI();
+});
+
+function snapMediaCropToRatio(ratio) {
+  var parts = ratio.split(":");
+  var rW = parseFloat(parts[0]) || 16;
+  var rH = parseFloat(parts[1]) || 9;
+  var img = document.getElementById("mediaCropImg");
+  if (!img.naturalWidth) return;
+  var aspectImg = img.naturalWidth / img.naturalHeight;
+  var aspectTarget = rW / rH;
+  var cx = mediaCropState.cropLeft + mediaCropState.cropWidth / 2;
+  var cy = mediaCropState.cropTop + mediaCropState.cropHeight / 2;
+  var newW = mediaCropState.cropWidth;
+  var newH = (newW * aspectImg) / aspectTarget;
+  if (newH > 100) { newH = 100; newW = (newH * aspectTarget) / aspectImg; }
+  if (newW > 100) { newW = 100; newH = (newW * aspectImg) / aspectTarget; }
+  mediaCropState.cropWidth = newW;
+  mediaCropState.cropHeight = newH;
+  mediaCropState.cropLeft = Math.max(0, Math.min(100 - newW, cx - newW / 2));
+  mediaCropState.cropTop = Math.max(0, Math.min(100 - newH, cy - newH / 2));
+}
+
+function resetMediaCrop() {
+  mediaCropState.cropLeft = 10;
+  mediaCropState.cropTop = 10;
+  mediaCropState.cropWidth = 80;
+  mediaCropState.cropHeight = 45;
+  mediaCropState.ratio = "original";
+  document.getElementById("mediaRatio").value = "original";
+  refreshMediaCropUI();
+}
+
+function refreshMediaCropUI() {
+  var section = document.getElementById("mediaCropSection");
+  var canvas = document.getElementById("mediaCropCanvas");
+  var img = document.getElementById("mediaCropImg");
+  var box = document.getElementById("mediaCropBox");
+
+  if (!mediaCropState.url) {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+
+  if (img.src !== mediaCropState.url) {
+    img.onload = function() {
+      if (mediaCropState.ratio !== "original" && mediaCropState.ratio !== "free") {
+        snapMediaCropToRatio(mediaCropState.ratio);
+      }
+      applyMediaCropBoxPosition();
+    };
+    img.src = mediaCropState.url;
+  }
+
+  if (mediaCropState.ratio === "original") {
+    canvas.style.display = "none";
+  } else {
+    canvas.style.display = "block";
+    img.style.opacity = "0.45";
+  }
+
+  applyMediaCropBoxPosition();
+}
+
+function applyMediaCropBoxPosition() {
+  var box = document.getElementById("mediaCropBox");
+  if (!box) return;
+  box.style.left = mediaCropState.cropLeft + "%";
+  box.style.top = mediaCropState.cropTop + "%";
+  box.style.width = mediaCropState.cropWidth + "%";
+  box.style.height = mediaCropState.cropHeight + "%";
+  var info = document.getElementById("mediaCropInfo");
+  if (info) {
+    var img = document.getElementById("mediaCropImg");
+    if (img.naturalWidth && mediaCropState.ratio !== "original") {
+      var pixelW = (mediaCropState.cropWidth / 100) * img.naturalWidth;
+      var pixelH = (mediaCropState.cropHeight / 100) * img.naturalHeight;
+      info.textContent = "Crop: " + Math.round(pixelW) + "×" + Math.round(pixelH);
+    } else {
+      info.textContent = "";
+    }
+  }
+}
+
+// Drag + resize for media crop box
+(function() {
+  var canvas = document.getElementById("mediaCropCanvas");
+  var box = document.getElementById("mediaCropBox");
+  if (!canvas || !box) return;
+
+  var mode = null;
+  var startX = 0, startY = 0;
+  var startCrop = null;
+  var canvasRect = null;
+
+  function onDown(e) {
+    if (mediaCropState.ratio === "original") return;
+    var target = e.target;
+    var pt = e.touches ? e.touches[0] : e;
+    canvasRect = canvas.getBoundingClientRect();
+    startX = pt.clientX;
+    startY = pt.clientY;
+    startCrop = {
+      left: mediaCropState.cropLeft,
+      top: mediaCropState.cropTop,
+      width: mediaCropState.cropWidth,
+      height: mediaCropState.cropHeight
+    };
+
+    if (target.classList.contains("mcrop-handle")) {
+      mode = target.dataset.mcorner || target.dataset.medge;
+      if (mediaCropState.ratio !== "original" && mediaCropState.ratio !== "free") {
+        mediaCropState.ratio = "free";
+        var sel = document.getElementById("mediaRatio");
+        if (!sel.querySelector('option[value="free"]')) {
+          var opt = document.createElement("option");
+          opt.value = "free";
+          opt.textContent = "Free (custom)";
+          sel.appendChild(opt);
+        }
+        sel.value = "free";
+      }
+    } else if (target === box || target.parentElement === box) {
+      mode = "move";
+    } else {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function onMove(e) {
+    if (!mode) return;
+    var pt = e.touches ? e.touches[0] : e;
+    var dx = ((pt.clientX - startX) / canvasRect.width) * 100;
+    var dy = ((pt.clientY - startY) / canvasRect.height) * 100;
+
+    var nL = startCrop.left, nT = startCrop.top, nW = startCrop.width, nH = startCrop.height;
+
+    if (mode === "move") {
+      nL = startCrop.left + dx; nT = startCrop.top + dy;
+    } else if (mode === "tl") {
+      nL = startCrop.left + dx; nT = startCrop.top + dy;
+      nW = startCrop.width - dx; nH = startCrop.height - dy;
+    } else if (mode === "tr") {
+      nT = startCrop.top + dy;
+      nW = startCrop.width + dx; nH = startCrop.height - dy;
+    } else if (mode === "bl") {
+      nL = startCrop.left + dx;
+      nW = startCrop.width - dx; nH = startCrop.height + dy;
+    } else if (mode === "br") {
+      nW = startCrop.width + dx; nH = startCrop.height + dy;
+    } else if (mode === "t") {
+      nT = startCrop.top + dy; nH = startCrop.height - dy;
+    } else if (mode === "b") {
+      nH = startCrop.height + dy;
+    } else if (mode === "l") {
+      nL = startCrop.left + dx; nW = startCrop.width - dx;
+    } else if (mode === "r") {
+      nW = startCrop.width + dx;
+    }
+
+    if (nW < 5) { if (mode.indexOf("l") !== -1) nL = startCrop.left + startCrop.width - 5; nW = 5; }
+    if (nH < 5) { if (mode.indexOf("t") !== -1) nT = startCrop.top + startCrop.height - 5; nH = 5; }
+
+    nL = Math.max(0, Math.min(100 - nW, nL));
+    nT = Math.max(0, Math.min(100 - nH, nT));
+    nW = Math.max(5, Math.min(100 - nL, nW));
+    nH = Math.max(5, Math.min(100 - nT, nH));
+
+    mediaCropState.cropLeft = nL;
+    mediaCropState.cropTop = nT;
+    mediaCropState.cropWidth = nW;
+    mediaCropState.cropHeight = nH;
+    applyMediaCropBoxPosition();
+    e.preventDefault();
+  }
+
+  function onUp() { mode = null; }
+
+  canvas.addEventListener("mousedown", onDown);
+  document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseup", onUp);
+  canvas.addEventListener("touchstart", onDown, { passive: false });
+  document.addEventListener("touchmove", onMove, { passive: false });
+  document.addEventListener("touchend", onUp);
+})();
+
+// ───────────────────────────────────────────────────────────────
+function buildBodyImageHTML(url, alt, align, linkTo, customLink, cropState) {
+  var alignStyle = "";
+  if (align === "center") alignStyle = "display:block;margin:12px auto;";
+  else if (align === "left") alignStyle = "float:left;margin:8px 16px 8px 0;";
+  else if (align === "right") alignStyle = "float:right;margin:8px 0 8px 16px;";
+
+  var inner;
+  if (cropState && cropState.ratio !== "original" && typeof cropState.cropWidth === "number") {
+    // Cropped: render as a div with background-image
+    var cw = cropState.cropWidth;
+    var ch = cropState.cropHeight;
+    var scaleX = 100 / cw;
+    var scaleY = 100 / ch;
+    var posX = cw >= 100 ? 0 : (cropState.cropLeft / (100 - cw) * 100);
+    var posY = ch >= 100 ? 0 : (cropState.cropTop / (100 - ch) * 100);
+    var divStyle =
+      "width:100%;" +
+      "max-width:100%;" +
+      "padding-bottom:" + (ch / cw * 100) + "%;" +
+      "background-image:url('" + url + "');" +
+      "background-size:" + (scaleX * 100) + "% " + (scaleY * 100) + "%;" +
+      "background-position:" + posX + "% " + posY + "%;" +
+      "background-repeat:no-repeat;" +
+      "border-radius:4px;" +
+      alignStyle;
+    inner = '<div class="kb-img-cropped" role="img" aria-label="' + alt.replace(/"/g, "&quot;") + '" ' +
+            'data-cropleft="' + cropState.cropLeft + '" ' +
+            'data-croptop="' + cropState.cropTop + '" ' +
+            'data-cropwidth="' + cropState.cropWidth + '" ' +
+            'data-cropheight="' + cropState.cropHeight + '" ' +
+            'data-url="' + url.replace(/"/g, "&quot;") + '" ' +
+            'style="' + divStyle + '"></div>';
+  } else {
+    // No crop — use regular img
+    var imgStyle = "max-width:100%;height:auto;border-radius:4px;" + alignStyle;
+    inner = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + alt.replace(/"/g, "&quot;") + '" class="kb-img" style="' + imgStyle + '">';
+  }
+
+  if (linkTo === "image") {
+    return '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + inner + '</a>';
+  } else if (linkTo === "custom" && customLink) {
+    return '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + inner + '</a>';
+  }
+  return inner;
+}
+
 function applyMedia() {
   var url = document.getElementById("mediaUrl").value.trim();
   var alt = document.getElementById("mediaAlt").value.trim();
   var align = document.getElementById("mediaAlign").value;
-  var height = document.getElementById("mediaHeight").value;
-  var crop = document.getElementById("mediaCrop").value;
-  var position = document.getElementById("mediaPosition").value;
   var linkTo = document.getElementById("mediaLinkTo").value;
   var customLink = document.getElementById("mediaCustomLink").value.trim();
   if (!url) { showToast("Image URL required", "error"); return; }
 
-  // Build class list
-  var classes = ["kb-img"];
-  if (height && height !== "auto") classes.push("kb-img-" + height);
-  if (crop) classes.push("kb-img-" + crop);
-  if (crop === "cover" && position) classes.push("kb-img-pos-" + position);
-  var classAttr = classes.join(" ");
+  var finalHTML = buildBodyImageHTML(url, alt, align, linkTo, customLink, mediaCropState);
 
-  // Build inline style (alignment + base)
-  var imgStyle = "max-width:100%;border-radius:4px;";
-  if (height === "auto") imgStyle += "height:auto;";
-  if (align === "center") imgStyle += "display:block;margin:12px auto;";
-  else if (align === "left") imgStyle += "float:left;margin:8px 16px 8px 0;";
-  else if (align === "right") imgStyle += "float:right;margin:8px 0 8px 16px;";
-
-  var imgTag = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + alt.replace(/"/g, "&quot;") + '" class="' + classAttr + '" style="' + imgStyle + '">';
-  var finalHTML = imgTag;
-  if (linkTo === "image") finalHTML = '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + imgTag + '</a>';
-  else if (linkTo === "custom" && customLink) finalHTML = '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + imgTag + '</a>';
   var visual = document.getElementById("blogVisual");
   var scrollTop = visual.scrollTop;
   visual.focus();
@@ -2111,7 +2366,6 @@ function applyMedia() {
   closeMediaModal();
   updateWordCount();
 }
-
 // TABLE MODAL
 
   // ── Insert Product Card ──
@@ -2797,49 +3051,57 @@ document.getElementById("blogContentText").addEventListener("input", updateWordC
 var currentEditTarget = null;
 
 document.getElementById("blogVisual").addEventListener("click", function(e) {
-// IMAGE clicked — open media modal pre-filled with current image
-  if (e.target.tagName === "IMG" && !e.target.closest(".kb-product-card") && !e.target.closest("table")) {
+// IMAGE or CROPPED IMAGE clicked — open media modal pre-filled
+  var cropDiv = e.target.closest(".kb-img-cropped");
+  var isPlainImg = e.target.tagName === "IMG" && !e.target.closest(".kb-product-card") && !e.target.closest("table") && !cropDiv;
+
+  if (isPlainImg || cropDiv) {
     e.preventDefault();
     e.stopPropagation();
-    var img = e.target;
-    currentEditTarget = img;
-    
-    // Pre-fill the media modal with current values
-    document.getElementById("mediaUrl").value = img.getAttribute("src") || "";
-    document.getElementById("mediaAlt").value = img.getAttribute("alt") || "";
-    
-    // Detect alignment from inline style
-    var style = img.getAttribute("style") || "";
+    var target = cropDiv || e.target;
+    currentEditTarget = target;
+
+    var url = cropDiv ? (cropDiv.dataset.url || "") : (target.getAttribute("src") || "");
+    var alt = cropDiv ? (cropDiv.getAttribute("aria-label") || "") : (target.getAttribute("alt") || "");
+    document.getElementById("mediaUrl").value = url;
+    document.getElementById("mediaAlt").value = alt;
+
+    // Detect alignment from style
+    var style = target.getAttribute("style") || "";
     var align = "none";
     if (style.indexOf("margin:12px auto") !== -1 || style.indexOf("display:block;margin") !== -1) align = "center";
     else if (style.indexOf("float:left") !== -1) align = "left";
     else if (style.indexOf("float:right") !== -1) align = "right";
     document.getElementById("mediaAlign").value = align;
 
-    // Detect height/crop/position from classes
-    var cls = img.getAttribute("class") || "";
-    var height = "auto";
-    if (cls.indexOf("kb-img-small") !== -1) height = "small";
-    else if (cls.indexOf("kb-img-medium") !== -1) height = "medium";
-    else if (cls.indexOf("kb-img-large") !== -1) height = "large";
-    else if (cls.indexOf("kb-img-hero") !== -1) height = "hero";
-    document.getElementById("mediaHeight").value = height;
+    // Load crop state
+    if (cropDiv) {
+      mediaCropState = {
+        url: url,
+        ratio: "free",
+        cropLeft: parseFloat(cropDiv.dataset.cropleft) || 10,
+        cropTop: parseFloat(cropDiv.dataset.croptop) || 10,
+        cropWidth: parseFloat(cropDiv.dataset.cropwidth) || 80,
+        cropHeight: parseFloat(cropDiv.dataset.cropheight) || 45
+      };
+      var sel = document.getElementById("mediaRatio");
+      if (!sel.querySelector('option[value="free"]')) {
+        var opt = document.createElement("option");
+        opt.value = "free";
+        opt.textContent = "Free (custom)";
+        sel.appendChild(opt);
+      }
+      sel.value = "free";
+    } else {
+      mediaCropState = { url: url, ratio: "original", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
+      document.getElementById("mediaRatio").value = "original";
+    }
 
-    var crop = "cover";
-    if (cls.indexOf("kb-img-contain") !== -1) crop = "contain";
-    else if (cls.indexOf("kb-img-original") !== -1) crop = "original";
-    document.getElementById("mediaCrop").value = crop;
-
-    var position = "center";
-    if (cls.indexOf("kb-img-pos-top") !== -1) position = "top";
-    else if (cls.indexOf("kb-img-pos-bottom") !== -1) position = "bottom";
-    document.getElementById("mediaPosition").value = position;
-    
     // Detect link wrapping
-    var parentLink = img.parentElement && img.parentElement.tagName === "A" ? img.parentElement : null;
+    var parentLink = target.parentElement && target.parentElement.tagName === "A" ? target.parentElement : null;
     if (parentLink) {
       var href = parentLink.getAttribute("href") || "";
-      if (href === img.getAttribute("src")) {
+      if (href === url) {
         document.getElementById("mediaLinkTo").value = "image";
         document.getElementById("mediaCustomLinkRow").style.display = "none";
       } else {
@@ -2851,13 +3113,14 @@ document.getElementById("blogVisual").addEventListener("click", function(e) {
       document.getElementById("mediaLinkTo").value = "none";
       document.getElementById("mediaCustomLinkRow").style.display = "none";
     }
-    
-    // Change the modal's button to "Update" mode
+
+    refreshMediaCropUI();
+
     var modalFooter = document.querySelector("#mediaModal .wp-modal-footer");
     var insertBtn = modalFooter.querySelector(".wp-publish-btn");
     insertBtn.textContent = "Update Image";
     insertBtn.onclick = updateExistingMedia;
-    
+
     document.getElementById("mediaModal").classList.add("open");
     return;
   }
@@ -2891,53 +3154,24 @@ function updateExistingMedia() {
   var url = document.getElementById("mediaUrl").value.trim();
   var alt = document.getElementById("mediaAlt").value.trim();
   var align = document.getElementById("mediaAlign").value;
-  var height = document.getElementById("mediaHeight").value;
-  var crop = document.getElementById("mediaCrop").value;
-  var position = document.getElementById("mediaPosition").value;
   var linkTo = document.getElementById("mediaLinkTo").value;
   var customLink = document.getElementById("mediaCustomLink").value.trim();
   if (!url) { showToast("Image URL required", "error"); return; }
 
-  // Build class list
-  var classes = ["kb-img"];
-  if (height && height !== "auto") classes.push("kb-img-" + height);
-  if (crop) classes.push("kb-img-" + crop);
-  if (crop === "cover" && position) classes.push("kb-img-pos-" + position);
-  var classAttr = classes.join(" ");
+  // Build the new HTML
+  var newHTML = buildBodyImageHTML(url, alt, align, linkTo, customLink, mediaCropState);
 
-  // Build inline style (alignment + base)
-  var imgStyle = "max-width:100%;border-radius:4px;";
-  if (height === "auto") imgStyle += "height:auto;";
-  if (align === "center") imgStyle += "display:block;margin:12px auto;";
-  else if (align === "left") imgStyle += "float:left;margin:8px 16px 8px 0;";
-  else if (align === "right") imgStyle += "float:right;margin:8px 0 8px 16px;";
+  // Replace the existing element (img OR cropped div) with the new HTML
+  // First, find the outermost wrapper (the link if it exists, otherwise the element itself)
+  var outerEl = currentEditTarget.parentElement && currentEditTarget.parentElement.tagName === "A"
+    ? currentEditTarget.parentElement
+    : currentEditTarget;
 
-  // Update the image attributes
-  currentEditTarget.setAttribute("src", url);
-  currentEditTarget.setAttribute("alt", alt);
-  currentEditTarget.setAttribute("class", classAttr);
-  currentEditTarget.setAttribute("style", imgStyle);
-  
-  // Handle the parent link
-  var parentLink = currentEditTarget.parentElement && currentEditTarget.parentElement.tagName === "A" ? currentEditTarget.parentElement : null;
-  if (linkTo === "none") {
-    // Remove any wrapping link
-    if (parentLink) {
-      parentLink.replaceWith(currentEditTarget);
-    }
-  } else {
-    var newHref = linkTo === "image" ? url : customLink;
-    if (parentLink) {
-      parentLink.setAttribute("href", newHref);
-    } else if (newHref) {
-      var newLink = document.createElement("a");
-      newLink.setAttribute("href", newHref);
-      if (linkTo === "image") newLink.setAttribute("target", "_blank");
-      currentEditTarget.parentNode.insertBefore(newLink, currentEditTarget);
-      newLink.appendChild(currentEditTarget);
-    }
-  }
-  
+  var temp = document.createElement("div");
+  temp.innerHTML = newHTML;
+  var newEl = temp.firstChild;
+  outerEl.parentNode.replaceChild(newEl, outerEl);
+
   closeMediaModal();
   resetMediaModalButton();
   syncEditorContent();
