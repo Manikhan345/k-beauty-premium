@@ -16,6 +16,8 @@
 .post-tags { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
 .post-tag { font-size: 0.7rem; background: var(--accent-light); color: var(--accent); padding: 3px 12px; border-radius: 20px; font-weight: 500; }
 .post-cover { width: 100%; border-radius: 12px; margin-bottom: 28px; max-height: 420px; object-fit: cover; }
+/* When inline style sets aspect-ratio, max-height won't apply (aspect-ratio controls size) */
+.post-cover[style*="aspect-ratio"] { max-height: none; height: auto; }
 .post-content { font-size: 1.05rem; line-height: 1.8; color: var(--text); }
 .post-content h2 { font-family: 'Noto Serif Display', serif; font-size: 1.5rem; margin: 32px 0 12px; color: var(--text); }
 .post-content h3 { font-family: 'Noto Serif Display', serif; font-size: 1.2rem; margin: 24px 0 10px; color: var(--text); }
@@ -304,7 +306,24 @@ async function loadBlogPost() {
 
     var dateStr = post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "";
     var tagsHTML = (post.tags || []).map(function(t) { return '<span class="post-tag">' + t + '</span>'; }).join("");
-    var coverHTML = post.cover ? '<img src="' + post.cover + '" alt="' + post.title + '" class="post-cover">' : '';
+    // Handle cover — could be string (old format) or object (new format)
+    var coverHTML = '';
+    if (typeof post.cover === "string" && post.cover) {
+      coverHTML = '<img src="' + post.cover + '" alt="' + post.title + '" class="post-cover">';
+    } else if (post.cover && typeof post.cover === "object" && post.cover.url) {
+      var cv = post.cover;
+      var coverStyle = "width:100%;border-radius:12px;margin-bottom:28px;";
+      if (cv.ratio && cv.ratio !== "original") {
+        var parts = cv.ratio.split(":");
+        var rw = parseFloat(parts[0]) || 16;
+        var rh = parseFloat(parts[1]) || 9;
+        coverStyle += "aspect-ratio:" + rw + "/" + rh + ";object-fit:cover;";
+        var posX = typeof cv.x === "number" ? cv.x : 50;
+        var posY = typeof cv.y === "number" ? cv.y : 50;
+        coverStyle += "object-position:" + posX + "% " + posY + "%;";
+      }
+      coverHTML = '<img src="' + cv.url + '" alt="' + post.title + '" class="post-cover" style="' + coverStyle + '">';
+    }
     var contentHTML = markdownToHTML(post.content || "");
 
     // Find prev/next posts
