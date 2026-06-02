@@ -308,33 +308,41 @@ async function loadBlogPost() {
 
     var dateStr = post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "";
     var tagsHTML = (post.tags || []).map(function(t) { return '<span class="post-tag">' + t + '</span>'; }).join("");
-  // Handle cover — could be string (old format) or object (new format)
+// Handle cover — could be string (old format) or object (new format)
     var coverHTML = '';
     if (typeof post.cover === "string" && post.cover) {
       coverHTML = '<img src="' + post.cover + '" alt="' + post.title + '" class="post-cover">';
     } else if (post.cover && typeof post.cover === "object" && post.cover.url) {
       var cv = post.cover;
-      if (cv.ratio === "original" || typeof cv.cropWidth !== "number") {
-        // No cropping
+      var isFullImage = cv.ratio === "original" || typeof cv.cropWidth !== "number" ||
+        (cv.cropLeft === 0 && cv.cropTop === 0 && cv.cropWidth === 100 && cv.cropHeight === 100);
+
+      if (isFullImage) {
         coverHTML = '<img src="' + cv.url + '" alt="' + post.title + '" class="post-cover">';
       } else {
-        // Render the cropped region using background-image positioning
-        // The container has the crop's aspect ratio, image is positioned/sized to show only the crop area
-        var ratio = cv.cropWidth / cv.cropHeight; // crop aspect ratio
-        var scaleX = 100 / cv.cropWidth;
-        var scaleY = 100 / cv.cropHeight;
-        var posPercentX = cv.cropWidth >= 100 ? 0 : (cv.cropLeft / (100 - cv.cropWidth) * 100);
-        var posPercentY = cv.cropHeight >= 100 ? 0 : (cv.cropTop / (100 - cv.cropHeight) * 100);
-        var containerStyle =
+        // PURE CROP — no stretch, no zoom
+        // Wrapper has crop's aspect ratio. Image is sized larger than wrapper and shifted
+        // so only the crop region is visible.
+        var widthScale = 100 / (cv.cropWidth / 100);
+        var leftShift = -(cv.cropLeft / cv.cropWidth) * 100;
+        var topShift = -(cv.cropTop / cv.cropHeight) * (cv.cropHeight / cv.cropWidth) * 100;
+        var wrapStyle =
+          "position:relative;" +
+          "overflow:hidden;" +
           "width:100%;" +
           "padding-bottom:" + (cv.cropHeight / cv.cropWidth * 100) + "%;" +
-          "background-image:url('" + cv.url + "');" +
-          "background-size:" + (scaleX * 100) + "% " + (scaleY * 100) + "%;" +
-          "background-position:" + posPercentX + "% " + posPercentY + "%;" +
-          "background-repeat:no-repeat;" +
           "border-radius:12px;" +
           "margin-bottom:28px;";
-        coverHTML = '<div class="post-cover-cropped" style="' + containerStyle + '" role="img" aria-label="' + post.title.replace(/"/g, "&quot;") + '"></div>';
+        var imgStyle =
+          "position:absolute;" +
+          "top:" + topShift + "%;" +
+          "left:" + leftShift + "%;" +
+          "width:" + widthScale + "%;" +
+          "height:auto;" +
+          "max-width:none;";
+        coverHTML = '<div class="post-cover-wrap" style="' + wrapStyle + '">' +
+                    '<img src="' + cv.url + '" alt="' + post.title.replace(/"/g, "&quot;") + '" style="' + imgStyle + '">' +
+                    '</div>';
       }
     }
     var contentHTML = markdownToHTML(post.content || "");
