@@ -3198,14 +3198,32 @@ function previewInNewTab() {
   var title = document.getElementById("blogTitle").value || "Untitled";
   var coverUrl = document.getElementById("blogCover").value;
 
-  // Build cover CSS based on current crop state
-  var coverStyleAttr = "";
-  if (coverUrl && coverCropState.url === coverUrl && coverCropState.ratio !== "original") {
-    var parts = coverCropState.ratio.split(":");
-    var rw = parseFloat(parts[0]) || 16;
-    var rh = parseFloat(parts[1]) || 9;
-    coverStyleAttr = 'style="aspect-ratio:' + rw + '/' + rh + ';object-fit:cover;object-position:' + coverCropState.posX + '% ' + coverCropState.posY + '%;width:100%;max-height:none;height:auto;"';
+  // Build cover HTML using the current crop state (Instagram-style crop)
+  var coverBlockHTML = "";
+  if (coverUrl) {
+    if (coverCropState.url === coverUrl && coverCropState.ratio !== "original" && typeof coverCropState.cropWidth === "number") {
+      // Render the cropped region using background-image positioning
+      var cw = coverCropState.cropWidth;
+      var ch = coverCropState.cropHeight;
+      var scaleX = 100 / cw;
+      var scaleY = 100 / ch;
+      var posPercentX = cw >= 100 ? 0 : (coverCropState.cropLeft / (100 - cw) * 100);
+      var posPercentY = ch >= 100 ? 0 : (coverCropState.cropTop / (100 - ch) * 100);
+      var containerStyle =
+        "width:100%;" +
+        "padding-bottom:" + (ch / cw * 100) + "%;" +
+        "background-image:url(\\'" + coverUrl + "\\');" +
+        "background-size:" + (scaleX * 100) + "% " + (scaleY * 100) + "%;" +
+        "background-position:" + posPercentX + "% " + posPercentY + "%;" +
+        "background-repeat:no-repeat;" +
+        "border-radius:12px;" +
+        "margin-bottom:24px;";
+      coverBlockHTML = '<div style="' + containerStyle + '"></div>';
+    } else {
+      coverBlockHTML = '<img src="' + coverUrl + '" class="cover-img">';
+    }
   }
+
   var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Preview: ' + title + '</title>' +
     '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
     '<style>' +
@@ -3235,7 +3253,7 @@ function previewInNewTab() {
     '.kb-product-card{display:flex;gap:14px;align-items:center;padding:14px;background:#fff;border:1px solid #e8e8e8;border-radius:10px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.04);}' +
     '.kb-product-card img{width:90px;height:90px;object-fit:contain;background:#fafafa;border-radius:6px;}' +
     '</style></head><body>';
-  if (coverUrl) html += '<img src="' + coverUrl + '" class="cover-img" ' + coverStyleAttr + '>';
+  if (coverBlockHTML) html += coverBlockHTML;
   html += '<h1>' + title + '</h1>' + content + '</body></html>';
   var w = window.open('', '_blank');
   w.document.write(html);
