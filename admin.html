@@ -140,6 +140,21 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .wp-visual-area blockquote { border-left: 3px solid #C4956A; padding: 8px 16px; margin: 1em 0; background: #FFF8F0; color: #555; font-style: italic; }
 .wp-visual-area pre { background: #f5f5f5; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 0.88rem; overflow-x: auto; }
 .wp-visual-area img { max-width: 100%; height: auto; border-radius: 4px; }
+
+/* ─── IMAGE HEIGHT + CROP + POSITION CLASSES (admin preview) ─── */
+.wp-visual-area .kb-img-small  { height: 200px !important; width: 100%; }
+.wp-visual-area .kb-img-medium { height: 400px !important; width: 100%; }
+.wp-visual-area .kb-img-large  { height: 600px !important; width: 100%; }
+.wp-visual-area .kb-img-hero   { height: 500px !important; width: 100%; }
+.wp-visual-area .kb-img-cover  { object-fit: cover; }
+.wp-visual-area .kb-img-contain{ object-fit: contain; background: #f5f5f5; }
+.wp-visual-area .kb-img-original{ object-fit: none; }
+.wp-visual-area .kb-img-pos-top    { object-position: center top; }
+.wp-visual-area .kb-img-pos-center { object-position: center center; }
+.wp-visual-area .kb-img-pos-bottom { object-position: center bottom; }
+
+/* Cover image preview thumbnail */
+#blogCoverPreview img { object-fit: cover; }
 .wp-visual-area a { color: #007cba; }
 .wp-visual-area table { border-collapse: collapse; width: 100%; margin: 1em 0; }
   /* ─── TABLE v2 — Editor view ─── */
@@ -868,13 +883,42 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
     <div class="wp-modal-body">
       <div class="form-row"><label>Image URL</label><input type="text" id="mediaUrl" placeholder="https://..."></div>
       <div class="form-row"><label>Alt Text</label><input type="text" id="mediaAlt" placeholder="Describe the image"></div>
-      <div class="form-row"><label>Alignment</label>
-        <select id="mediaAlign">
-          <option value="none">None</option>
-          <option value="left">Left</option>
-          <option value="center" selected>Center</option>
-          <option value="right">Right</option>
-        </select>
+      <div class="form-row-half">
+        <div class="form-row" style="margin:0;"><label>Alignment</label>
+          <select id="mediaAlign">
+            <option value="none">None</option>
+            <option value="left">Left</option>
+            <option value="center" selected>Center</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="form-row" style="margin:0;"><label>Height</label>
+          <select id="mediaHeight">
+            <option value="auto" selected>Auto (natural)</option>
+            <option value="small">Small (200px)</option>
+            <option value="medium">Medium (400px)</option>
+            <option value="large">Large (600px)</option>
+            <option value="hero">Hero (500px)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row-half">
+        <div class="form-row" style="margin:0;"><label>Crop Style</label>
+          <select id="mediaCrop">
+            <option value="cover" selected>Cover (fills, may crop)</option>
+            <option value="contain">Contain (fits, no crop)</option>
+            <option value="original">Original (natural size)</option>
+          </select>
+          <small>Only matters if Height is set</small>
+        </div>
+        <div class="form-row" style="margin:0;"><label>Vertical Position</label>
+          <select id="mediaPosition">
+            <option value="top">Top</option>
+            <option value="center" selected>Center</option>
+            <option value="bottom">Bottom</option>
+          </select>
+          <small>Only when Crop = Cover</small>
+        </div>
       </div>
       <div class="form-row"><label>Link to</label>
         <select id="mediaLinkTo">
@@ -891,7 +935,6 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
     </div>
   </div>
 </div>
-
 <!-- TABLE MODAL (v2) -->
 <div class="wp-modal-overlay" id="tableModal">
   <div class="wp-modal" style="max-width:560px;">
@@ -1699,6 +1742,9 @@ function openMediaModal() {
   document.getElementById("mediaUrl").value = "";
   document.getElementById("mediaAlt").value = "";
   document.getElementById("mediaAlign").value = "center";
+  document.getElementById("mediaHeight").value = "auto";
+  document.getElementById("mediaCrop").value = "cover";
+  document.getElementById("mediaPosition").value = "center";
   document.getElementById("mediaLinkTo").value = "none";
   document.getElementById("mediaCustomLink").value = "";
   document.getElementById("mediaCustomLinkRow").style.display = "none";
@@ -1713,14 +1759,28 @@ function applyMedia() {
   var url = document.getElementById("mediaUrl").value.trim();
   var alt = document.getElementById("mediaAlt").value.trim();
   var align = document.getElementById("mediaAlign").value;
+  var height = document.getElementById("mediaHeight").value;
+  var crop = document.getElementById("mediaCrop").value;
+  var position = document.getElementById("mediaPosition").value;
   var linkTo = document.getElementById("mediaLinkTo").value;
   var customLink = document.getElementById("mediaCustomLink").value.trim();
   if (!url) { showToast("Image URL required", "error"); return; }
-  var imgStyle = "max-width:100%;height:auto;border-radius:4px;";
+
+  // Build class list
+  var classes = ["kb-img"];
+  if (height && height !== "auto") classes.push("kb-img-" + height);
+  if (crop) classes.push("kb-img-" + crop);
+  if (crop === "cover" && position) classes.push("kb-img-pos-" + position);
+  var classAttr = classes.join(" ");
+
+  // Build inline style (alignment + base)
+  var imgStyle = "max-width:100%;border-radius:4px;";
+  if (height === "auto") imgStyle += "height:auto;";
   if (align === "center") imgStyle += "display:block;margin:12px auto;";
   else if (align === "left") imgStyle += "float:left;margin:8px 16px 8px 0;";
   else if (align === "right") imgStyle += "float:right;margin:8px 0 8px 16px;";
-  var imgTag = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + alt.replace(/"/g, "&quot;") + '" style="' + imgStyle + '">';
+
+  var imgTag = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + alt.replace(/"/g, "&quot;") + '" class="' + classAttr + '" style="' + imgStyle + '">';
   var finalHTML = imgTag;
   if (linkTo === "image") finalHTML = '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + imgTag + '</a>';
   else if (linkTo === "custom" && customLink) finalHTML = '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + imgTag + '</a>';
@@ -2419,7 +2479,7 @@ document.getElementById("blogContentText").addEventListener("input", updateWordC
 var currentEditTarget = null;
 
 document.getElementById("blogVisual").addEventListener("click", function(e) {
-  // IMAGE clicked — open media modal pre-filled with current image
+// IMAGE clicked — open media modal pre-filled with current image
   if (e.target.tagName === "IMG" && !e.target.closest(".kb-product-card") && !e.target.closest("table")) {
     e.preventDefault();
     e.stopPropagation();
@@ -2437,6 +2497,25 @@ document.getElementById("blogVisual").addEventListener("click", function(e) {
     else if (style.indexOf("float:left") !== -1) align = "left";
     else if (style.indexOf("float:right") !== -1) align = "right";
     document.getElementById("mediaAlign").value = align;
+
+    // Detect height/crop/position from classes
+    var cls = img.getAttribute("class") || "";
+    var height = "auto";
+    if (cls.indexOf("kb-img-small") !== -1) height = "small";
+    else if (cls.indexOf("kb-img-medium") !== -1) height = "medium";
+    else if (cls.indexOf("kb-img-large") !== -1) height = "large";
+    else if (cls.indexOf("kb-img-hero") !== -1) height = "hero";
+    document.getElementById("mediaHeight").value = height;
+
+    var crop = "cover";
+    if (cls.indexOf("kb-img-contain") !== -1) crop = "contain";
+    else if (cls.indexOf("kb-img-original") !== -1) crop = "original";
+    document.getElementById("mediaCrop").value = crop;
+
+    var position = "center";
+    if (cls.indexOf("kb-img-pos-top") !== -1) position = "top";
+    else if (cls.indexOf("kb-img-pos-bottom") !== -1) position = "bottom";
+    document.getElementById("mediaPosition").value = position;
     
     // Detect link wrapping
     var parentLink = img.parentElement && img.parentElement.tagName === "A" ? img.parentElement : null;
@@ -2494,18 +2573,31 @@ function updateExistingMedia() {
   var url = document.getElementById("mediaUrl").value.trim();
   var alt = document.getElementById("mediaAlt").value.trim();
   var align = document.getElementById("mediaAlign").value;
+  var height = document.getElementById("mediaHeight").value;
+  var crop = document.getElementById("mediaCrop").value;
+  var position = document.getElementById("mediaPosition").value;
   var linkTo = document.getElementById("mediaLinkTo").value;
   var customLink = document.getElementById("mediaCustomLink").value.trim();
   if (!url) { showToast("Image URL required", "error"); return; }
-  
-  var imgStyle = "max-width:100%;height:auto;border-radius:4px;";
+
+  // Build class list
+  var classes = ["kb-img"];
+  if (height && height !== "auto") classes.push("kb-img-" + height);
+  if (crop) classes.push("kb-img-" + crop);
+  if (crop === "cover" && position) classes.push("kb-img-pos-" + position);
+  var classAttr = classes.join(" ");
+
+  // Build inline style (alignment + base)
+  var imgStyle = "max-width:100%;border-radius:4px;";
+  if (height === "auto") imgStyle += "height:auto;";
   if (align === "center") imgStyle += "display:block;margin:12px auto;";
   else if (align === "left") imgStyle += "float:left;margin:8px 16px 8px 0;";
   else if (align === "right") imgStyle += "float:right;margin:8px 0 8px 16px;";
-  
+
   // Update the image attributes
   currentEditTarget.setAttribute("src", url);
   currentEditTarget.setAttribute("alt", alt);
+  currentEditTarget.setAttribute("class", classAttr);
   currentEditTarget.setAttribute("style", imgStyle);
   
   // Handle the parent link
