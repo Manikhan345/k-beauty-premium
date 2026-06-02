@@ -1739,7 +1739,7 @@ function applyCoverCropPosition() {
   }
 }
 
-// Drag-to-position interaction
+// Drag-to-position interaction (free 360° movement)
 (function() {
   var frame = document.getElementById("coverCropFrame");
   if (!frame) return;
@@ -1763,9 +1763,11 @@ function applyCoverCropPosition() {
     if (!dragging) return;
     var pt = e.touches ? e.touches[0] : e;
     var rect = frame.getBoundingClientRect();
-    // Drag distance as % of frame size, then invert (dragging right reveals left side)
-    var dx = (pt.clientX - startX) / rect.width * 100;
-    var dy = (pt.clientY - startY) / rect.height * 100;
+    // Multiplier amplifies drag sensitivity so you can reach extreme positions
+    // Use 2x so a full-frame drag covers ~200% positioning range (clamped to 0-100)
+    var sensitivity = 2;
+    var dx = ((pt.clientX - startX) / rect.width) * 100 * sensitivity;
+    var dy = ((pt.clientY - startY) / rect.height) * 100 * sensitivity;
     coverCropState.posX = Math.max(0, Math.min(100, startPosX - dx));
     coverCropState.posY = Math.max(0, Math.min(100, startPosY - dy));
     applyCoverCropPosition();
@@ -1773,8 +1775,10 @@ function applyCoverCropPosition() {
   }
 
   function onUp() {
-    dragging = false;
-    frame.style.cursor = "grab";
+    if (dragging) {
+      dragging = false;
+      frame.style.cursor = "grab";
+    }
   }
 
   frame.addEventListener("mousedown", onDown);
@@ -3030,7 +3034,11 @@ function renderBlogList() {
     var realIndex = blogPosts.indexOf(p);
     var dateStr = p.date ? new Date(p.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
     var tags = (p.tags || []).map(function(t) { return '<span style="font-size:0.65rem;background:#EBF8FF;color:var(--blue);padding:1px 6px;border-radius:3px;margin-right:3px;">' + t + '</span>'; }).join("");
-    var coverThumb = p.cover ? '<img src="' + p.cover + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:1.5rem;">📝</span>';
+   // Get cover URL whether it's a string (old format) or object (new format)
+    var coverUrl = "";
+    if (typeof p.cover === "string") coverUrl = p.cover;
+    else if (p.cover && typeof p.cover === "object" && p.cover.url) coverUrl = p.cover.url;
+    var coverThumb = coverUrl ? '<img src="' + coverUrl + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:1.5rem;">📝</span>';
     var statusBadge;
     if (p.status === "draft") statusBadge = '<span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">DRAFT</span>';
     else if (p.status === "pending") statusBadge = '<span style="font-size:0.65rem;background:#E0E7FF;color:#3730A3;padding:1px 8px;border-radius:3px;margin-right:3px;font-weight:600;">PENDING</span>';
@@ -3048,7 +3056,16 @@ function renderBlogList() {
 function previewInNewTab() {
   var content = getEditorContent();
   var title = document.getElementById("blogTitle").value || "Untitled";
-  var cover = document.getElementById("blogCover").value;
+  var coverUrl = document.getElementById("blogCover").value;
+
+  // Build cover CSS based on current crop state
+  var coverStyleAttr = "";
+  if (coverUrl && coverCropState.url === coverUrl && coverCropState.ratio !== "original") {
+    var parts = coverCropState.ratio.split(":");
+    var rw = parseFloat(parts[0]) || 16;
+    var rh = parseFloat(parts[1]) || 9;
+    coverStyleAttr = 'style="aspect-ratio:' + rw + '/' + rh + ';object-fit:cover;object-position:' + coverCropState.posX + '% ' + coverCropState.posY + '%;width:100%;max-height:none;height:auto;"';
+  }
   var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Preview: ' + title + '</title>' +
     '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
     '<style>' +
@@ -3078,7 +3095,7 @@ function previewInNewTab() {
     '.kb-product-card{display:flex;gap:14px;align-items:center;padding:14px;background:#fff;border:1px solid #e8e8e8;border-radius:10px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.04);}' +
     '.kb-product-card img{width:90px;height:90px;object-fit:contain;background:#fafafa;border-radius:6px;}' +
     '</style></head><body>';
-  if (cover) html += '<img src="' + cover + '" class="cover-img">';
+  if (coverUrl) html += '<img src="' + coverUrl + '" class="cover-img" ' + coverStyleAttr + '>';
   html += '<h1>' + title + '</h1>' + content + '</body></html>';
   var w = window.open('', '_blank');
   w.document.write(html);
