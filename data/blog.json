@@ -151,7 +151,12 @@
     "title": "Best Korean Cleansers for Oily Skin — 6 Picks That Control Oil Without Stripping",
     "slug": "best-korean-cleansers-for-oily-skin",
     "excerpt": "Looking for the best Korean cleansers for oily skin? These 6 gentle picks balance sebum, deep-clean pores, and protect your barrier — all on Amazon US.",
-    "cover": "https://images.unsplash.com/photo-1761718209708-9ab9ba1c7252?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "cover": {
+      "url": "https://images.unsplash.com/photo-1761718209708-9ab9ba1c7252?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "ratio": "4:3",
+      "x": 0,
+      "y": 76.60968660968662
+    },
     "tags": [
       "Korean cleanser oily skin",
       "best Korean face cleanser",
