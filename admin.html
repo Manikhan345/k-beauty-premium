@@ -1688,7 +1688,13 @@ document.getElementById("blogCover").addEventListener("input", function() {
 
 document.getElementById("coverRatio").addEventListener("change", function() {
   coverCropState.ratio = this.value;
-  if (this.value !== "original" && this.value !== "free") {
+  if (this.value === "original") {
+    // Reset crop to full image
+    coverCropState.cropLeft = 0;
+    coverCropState.cropTop = 0;
+    coverCropState.cropWidth = 100;
+    coverCropState.cropHeight = 100;
+  } else if (this.value !== "free") {
     snapCropToRatio(this.value);
   }
   refreshCoverCropUI();
@@ -1768,18 +1774,14 @@ function refreshCoverCropUI() {
     applyCropBoxPosition();
   }
 
-  if (coverCropState.ratio === "original") {
-    box.style.display = "none";
-    img.style.opacity = "1";
-  } else {
-    box.style.display = "block";
-    img.style.opacity = "0.45";
-  }
+ // Crop box is ALWAYS visible (Option B)
+  // "Original" just means crop box defaults to 100% of image
+  box.style.display = "block";
+  img.style.opacity = "0.45";
 
   applyCropBoxPosition();
   updateFeaturedPreview();
 }
-
 function applyCropBoxPosition() {
   var box = document.getElementById("coverCropBox");
   if (!box) return;
@@ -1809,25 +1811,58 @@ function updateFeaturedPreview() {
   var featured = document.getElementById("featuredImagePreview");
   if (!coverCropState.url) return;
 
-  if (coverCropState.ratio === "original") {
-    featured.innerHTML = '<img src="' + coverCropState.url + '" style="max-width:100%;border-radius:4px;margin-bottom:8px;">' +
-      '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;" onclick="document.getElementById(\'blogCover\').value=\'\';coverCropState.url=\'\';refreshCoverCropUI();">Remove featured image</div>';
-    return;
+  // Build cropped preview using buildCroppedImageHTML (same logic everywhere)
+  var preview = buildCroppedImageHTML(coverCropState.url, "Cover preview", coverCropState, "max-width:100%;border-radius:4px;margin-bottom:8px;display:block;");
+  featured.innerHTML = preview +
+    '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;" onclick="document.getElementById(\'blogCover\').value=\'\';coverCropState.url=\'\';refreshCoverCropUI();">Remove featured image</div>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UNIVERSAL CROPPED IMAGE BUILDER
+// Produces pure-crop HTML — no stretching, no auto-zoom.
+// The cropped area displays at its actual proportions, scaled
+// proportionally to fit the container width.
+// ═══════════════════════════════════════════════════════════════
+function buildCroppedImageHTML(url, alt, cropState, extraStyle) {
+  extraStyle = extraStyle || "";
+  var safeUrl = url.replace(/"/g, "&quot;");
+  var safeAlt = (alt || "").replace(/"/g, "&quot;");
+
+  // No crop (Original = 0,0,100,100): just return a plain <img>
+  var isFullImage = cropState.ratio === "original" ||
+    (cropState.cropLeft === 0 && cropState.cropTop === 0 &&
+     cropState.cropWidth === 100 && cropState.cropHeight === 100);
+
+  if (isFullImage) {
+    return '<img src="' + safeUrl + '" alt="' + safeAlt + '" style="' + extraStyle + '">';
   }
 
-  // Build preview by positioning a wider image inside a constrained container
-  // Use background-image trick for accurate crop preview
-  var bgStyle =
+  // CROPPED: wrapper has crop's aspect ratio. Image inside is positioned
+  // so only the crop region is visible. Pure cropping — no stretch, no zoom.
+  // The trick: the image is sized to (100 / cropWidth * 100)% of the wrapper's width,
+  // and shifted left by (cropLeft / cropWidth * 100)% of the wrapper's width.
+  var widthScale = 100 / (cropState.cropWidth / 100); // % of wrapper width
+  var leftShift = -(cropState.cropLeft / cropState.cropWidth) * 100;
+  var topShift = -(cropState.cropTop / cropState.cropHeight) * (cropState.cropHeight / cropState.cropWidth) * 100;
+
+  var wrapStyle =
+    "position:relative;" +
+    "overflow:hidden;" +
     "width:100%;" +
-    "padding-bottom:" + (coverCropState.cropHeight / coverCropState.cropWidth * 100) + "%;" +
-    "background-image:url('" + coverCropState.url + "');" +
-    "background-size:" + (10000 / coverCropState.cropWidth) + "% " + (10000 / coverCropState.cropHeight) + "%;" +
-    "background-position:" + (coverCropState.cropLeft / (100 - coverCropState.cropWidth) * 100) + "% " + (coverCropState.cropTop / (100 - coverCropState.cropHeight) * 100) + "%;" +
-    "background-repeat:no-repeat;" +
-    "border-radius:4px;" +
-    "margin-bottom:8px;";
-  featured.innerHTML = '<div style="' + bgStyle + '"></div>' +
-    '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;" onclick="document.getElementById(\'blogCover\').value=\'\';coverCropState.url=\'\';refreshCoverCropUI();">Remove featured image</div>';
+    "padding-bottom:" + (cropState.cropHeight / cropState.cropWidth * 100) + "%;" +
+    extraStyle;
+
+  var imgStyle =
+    "position:absolute;" +
+    "top:" + topShift + "%;" +
+    "left:" + leftShift + "%;" +
+    "width:" + widthScale + "%;" +
+    "height:auto;" +
+    "max-width:none;";
+
+  return '<div class="kb-cropped-wrap" style="' + wrapStyle + '" data-cropleft="' + cropState.cropLeft + '" data-croptop="' + cropState.cropTop + '" data-cropwidth="' + cropState.cropWidth + '" data-cropheight="' + cropState.cropHeight + '" data-url="' + safeUrl + '">' +
+    '<img src="' + safeUrl + '" alt="' + safeAlt + '" style="' + imgStyle + '">' +
+    '</div>';
 }
 
 // ─── Drag + Resize for the crop box ───────────────────────────
@@ -2107,7 +2142,12 @@ document.getElementById("mediaUrl").addEventListener("input", function() {
 
 document.getElementById("mediaRatio").addEventListener("change", function() {
   mediaCropState.ratio = this.value;
-  if (this.value !== "original" && this.value !== "free") {
+  if (this.value === "original") {
+    mediaCropState.cropLeft = 0;
+    mediaCropState.cropTop = 0;
+    mediaCropState.cropWidth = 100;
+    mediaCropState.cropHeight = 100;
+  } else if (this.value !== "free") {
     snapMediaCropToRatio(this.value);
   }
   refreshMediaCropUI();
@@ -2166,12 +2206,9 @@ function refreshMediaCropUI() {
     img.src = mediaCropState.url;
   }
 
-  if (mediaCropState.ratio === "original") {
-    canvas.style.display = "none";
-  } else {
-    canvas.style.display = "block";
-    img.style.opacity = "0.45";
-  }
+  // Crop box always visible
+  canvas.style.display = "block";
+  img.style.opacity = "0.45";
 
   applyMediaCropBoxPosition();
 }
@@ -2307,37 +2344,8 @@ function buildBodyImageHTML(url, alt, align, linkTo, customLink, cropState) {
   else if (align === "left") alignStyle = "float:left;margin:8px 16px 8px 0;";
   else if (align === "right") alignStyle = "float:right;margin:8px 0 8px 16px;";
 
-  var inner;
-  if (cropState && cropState.ratio !== "original" && typeof cropState.cropWidth === "number") {
-    // Cropped: render as a div with background-image
-    var cw = cropState.cropWidth;
-    var ch = cropState.cropHeight;
-    var scaleX = 100 / cw;
-    var scaleY = 100 / ch;
-    var posX = cw >= 100 ? 0 : (cropState.cropLeft / (100 - cw) * 100);
-    var posY = ch >= 100 ? 0 : (cropState.cropTop / (100 - ch) * 100);
-    var divStyle =
-      "width:100%;" +
-      "max-width:100%;" +
-      "padding-bottom:" + (ch / cw * 100) + "%;" +
-      "background-image:url('" + url + "');" +
-      "background-size:" + (scaleX * 100) + "% " + (scaleY * 100) + "%;" +
-      "background-position:" + posX + "% " + posY + "%;" +
-      "background-repeat:no-repeat;" +
-      "border-radius:4px;" +
-      alignStyle;
-    inner = '<div class="kb-img-cropped" role="img" aria-label="' + alt.replace(/"/g, "&quot;") + '" ' +
-            'data-cropleft="' + cropState.cropLeft + '" ' +
-            'data-croptop="' + cropState.cropTop + '" ' +
-            'data-cropwidth="' + cropState.cropWidth + '" ' +
-            'data-cropheight="' + cropState.cropHeight + '" ' +
-            'data-url="' + url.replace(/"/g, "&quot;") + '" ' +
-            'style="' + divStyle + '"></div>';
-  } else {
-    // No crop — use regular img
-    var imgStyle = "max-width:100%;height:auto;border-radius:4px;" + alignStyle;
-    inner = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + alt.replace(/"/g, "&quot;") + '" class="kb-img" style="' + imgStyle + '">';
-  }
+  var baseStyle = "max-width:100%;border-radius:4px;" + alignStyle;
+  var inner = buildCroppedImageHTML(url, alt, cropState, baseStyle);
 
   if (linkTo === "image") {
     return '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + inner + '</a>';
@@ -3052,7 +3060,8 @@ var currentEditTarget = null;
 
 document.getElementById("blogVisual").addEventListener("click", function(e) {
 // IMAGE or CROPPED IMAGE clicked — open media modal pre-filled
-  var cropDiv = e.target.closest(".kb-img-cropped");
+  // Support both legacy .kb-img-cropped (background-image) and new .kb-cropped-wrap (img inside)
+  var cropDiv = e.target.closest(".kb-img-cropped, .kb-cropped-wrap");
   var isPlainImg = e.target.tagName === "IMG" && !e.target.closest(".kb-product-card") && !e.target.closest("table") && !cropDiv;
 
   if (isPlainImg || cropDiv) {
