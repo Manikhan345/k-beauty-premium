@@ -25,14 +25,16 @@
 .post-content p { margin: 0 0 16px; }
 .post-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
 
-/* ─── IMAGE HEIGHT + CROP + POSITION CLASSES (public view) ─── */
+/* ─── IMAGE CROP STYLES (public view) ─── */
+.post-content .kb-img-cropped { display: block; background-color: #f5f5f5; }
+
+/* Legacy classes (for older posts that used Height presets) */
 .post-content .kb-img-small  { height: 200px !important; width: 100%; object-fit: cover; }
 .post-content .kb-img-medium { height: 400px !important; width: 100%; object-fit: cover; }
 .post-content .kb-img-large  { height: 600px !important; width: 100%; object-fit: cover; }
 .post-content .kb-img-hero   { height: 500px !important; width: 100%; object-fit: cover; }
 .post-content .kb-img-cover  { object-fit: cover; }
-.post-content .kb-img-contain{ object-fit: contain; background: #f5f5f5; }
-.post-content .kb-img-original{ object-fit: none; }
+.post-content .kb-img-contain{ object-fit: contain; }
 .post-content .kb-img-pos-top    { object-position: center top; }
 .post-content .kb-img-pos-center { object-position: center center; }
 .post-content .kb-img-pos-bottom { object-position: center bottom; }
