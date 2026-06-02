@@ -652,36 +652,47 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
         <input type="text" id="blogCover" placeholder="https://...">
       </div>
 
-      <!-- Cover Image Aspect Ratio + Drag-Crop UI -->
+     <!-- Cover Image Crop Frame UI -->
       <div class="form-row" id="coverCropSection" style="margin-bottom:14px;display:none;">
         <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:160px;">
-            <label style="font-size:0.78rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;">ASPECT RATIO</label>
-            <select id="coverRatio" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;outline:none;">
+          <div style="min-width:160px;">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;">ASPECT RATIO PRESET</label>
+            <select id="coverRatio" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;outline:none;">
               <option value="16:9" selected>16:9 — Widescreen</option>
               <option value="4:3">4:3 — Classic</option>
               <option value="1:1">1:1 — Square</option>
               <option value="3:4">3:4 — Portrait</option>
               <option value="21:9">21:9 — Cinematic</option>
-              <option value="custom">Custom...</option>
               <option value="original">Original (no crop)</option>
             </select>
           </div>
-          <div id="coverCustomRatioRow" style="display:none;gap:6px;align-items:center;">
-            <input type="number" id="coverRatioW" placeholder="W" min="1" step="0.1" style="width:60px;padding:7px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;">
-            <span style="color:#999;">:</span>
-            <input type="number" id="coverRatioH" placeholder="H" min="1" step="0.1" style="width:60px;padding:7px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;">
-            <button type="button" onclick="applyCustomCoverRatio()" style="padding:7px 12px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:Outfit,sans-serif;">Apply</button>
+          <button type="button" onclick="resetCoverCrop()" style="padding:7px 14px;background:#fff;color:var(--text-mid);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:Outfit,sans-serif;">Reset</button>
+          <div style="flex:1;text-align:right;font-size:0.78rem;color:var(--text-mid);">
+            <span id="coverCropInfo" style="font-family:monospace;color:var(--blue);"></span>
           </div>
-          <button type="button" onclick="resetCoverCrop()" style="padding:7px 14px;background:#fff;color:var(--text-mid);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:Outfit,sans-serif;">Reset to Center</button>
         </div>
 
-        <div id="coverCropFrame" style="position:relative;width:100%;max-width:780px;margin:0 auto;background:#1a1a1a;border-radius:8px;overflow:hidden;cursor:grab;user-select:none;border:2px solid var(--border);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);">
-          <img id="coverCropImg" src="" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;" draggable="false">
+        <!-- Image canvas with overlay crop frame -->
+        <div id="coverCropCanvas" style="position:relative;width:100%;max-width:780px;margin:0 auto;background:#1a1a1a;border-radius:8px;overflow:hidden;user-select:none;border:2px solid var(--border);">
+          <img id="coverCropImg" src="" alt="" style="display:block;width:100%;height:auto;pointer-events:none;opacity:0.45;" draggable="false">
+          <!-- Crop frame (draggable + resizable rectangle that floats over the image) -->
+          <div id="coverCropBox" style="position:absolute;top:10%;left:10%;width:80%;height:45%;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,0.4);cursor:move;box-sizing:border-box;">
+            <!-- Center indicator -->
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:0.7rem;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,0.7);">DRAG TO MOVE</div>
+            <!-- Corner resize handles -->
+            <div class="crop-handle" data-corner="tl" style="position:absolute;top:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
+            <div class="crop-handle" data-corner="tr" style="position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
+            <div class="crop-handle" data-corner="bl" style="position:absolute;bottom:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
+            <div class="crop-handle" data-corner="br" style="position:absolute;bottom:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
+            <!-- Edge resize handles -->
+            <div class="crop-handle" data-edge="t" style="position:absolute;top:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
+            <div class="crop-handle" data-edge="b" style="position:absolute;bottom:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
+            <div class="crop-handle" data-edge="l" style="position:absolute;left:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
+            <div class="crop-handle" data-edge="r" style="position:absolute;right:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
+          </div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:0.78rem;color:var(--text-mid);">
-          <span>💡 Drag the image inside the frame to choose what users see</span>
-          <span id="coverPositionLabel" style="font-family:monospace;color:var(--blue);">Position: 50% 50%</span>
+        <div style="margin-top:8px;font-size:0.78rem;color:var(--text-mid);">
+          💡 Drag the white frame to position. Drag corners or edges to resize the crop area.
         </div>
       </div>
 
@@ -1640,15 +1651,19 @@ document.getElementById("blogTitle").addEventListener("input", function() {
   }
 });
 
-// Cover preview
 // ═══════════════════════════════════════════════════════════════
-// COVER IMAGE — Aspect Ratio + Drag-Crop
+// COVER IMAGE — Crop Frame Over Image (Instagram-style cropper)
 // ═══════════════════════════════════════════════════════════════
+// State stores the CROP RECTANGLE as percentages of the image
+// (left, top, width, height — all 0-100)
 var coverCropState = {
   url: "",
-  ratio: "16:9",   // string like "16:9" or "original"
-  posX: 50,         // 0-100 percentage
-  posY: 50          // 0-100 percentage
+  ratio: "16:9",  // current ratio preset or "free" or "original"
+  // Crop rectangle in % of image dimensions
+  cropLeft: 10,
+  cropTop: 10,
+  cropWidth: 80,
+  cropHeight: 45
 };
 
 document.getElementById("blogCover").addEventListener("input", function() {
@@ -1657,37 +1672,65 @@ document.getElementById("blogCover").addEventListener("input", function() {
 });
 
 document.getElementById("coverRatio").addEventListener("change", function() {
-  var v = this.value;
-  if (v === "custom") {
-    document.getElementById("coverCustomRatioRow").style.display = "inline-flex";
-    return;
+  coverCropState.ratio = this.value;
+  if (this.value !== "original" && this.value !== "free") {
+    snapCropToRatio(this.value);
   }
-  document.getElementById("coverCustomRatioRow").style.display = "none";
-  coverCropState.ratio = v;
   refreshCoverCropUI();
 });
 
-function applyCustomCoverRatio() {
-  var w = parseFloat(document.getElementById("coverRatioW").value);
-  var h = parseFloat(document.getElementById("coverRatioH").value);
-  if (!w || !h || w <= 0 || h <= 0) { showToast("Enter valid W and H values", "error"); return; }
-  coverCropState.ratio = w + ":" + h;
-  refreshCoverCropUI();
-  showToast("Custom ratio applied: " + w + ":" + h, "success");
+function snapCropToRatio(ratio) {
+  // Adjust current crop box to fit the new ratio
+  var parts = ratio.split(":");
+  var rW = parseFloat(parts[0]) || 16;
+  var rH = parseFloat(parts[1]) || 9;
+  // Try to keep current center, adjust box to target ratio
+  var canvas = document.getElementById("coverCropCanvas");
+  var img = document.getElementById("coverCropImg");
+  if (!canvas || !img.naturalWidth) {
+    // Defer until image loads
+    return;
+  }
+  // Image displayed dimensions
+  var imgRect = img.getBoundingClientRect();
+  var aspectImg = imgRect.width / imgRect.height;
+  var aspectTarget = rW / rH;
+  // Center of current crop in %
+  var cx = coverCropState.cropLeft + coverCropState.cropWidth / 2;
+  var cy = coverCropState.cropTop + coverCropState.cropHeight / 2;
+  // New crop dims keeping current width if possible
+  var newW = coverCropState.cropWidth;
+  var newH = (newW * aspectImg) / aspectTarget;
+  if (newH > 100) {
+    newH = 100;
+    newW = (newH * aspectTarget) / aspectImg;
+  }
+  if (newW > 100) {
+    newW = 100;
+    newH = (newW * aspectImg) / aspectTarget;
+  }
+  coverCropState.cropWidth = newW;
+  coverCropState.cropHeight = newH;
+  coverCropState.cropLeft = Math.max(0, Math.min(100 - newW, cx - newW / 2));
+  coverCropState.cropTop = Math.max(0, Math.min(100 - newH, cy - newH / 2));
 }
 
 function resetCoverCrop() {
-  coverCropState.posX = 50;
-  coverCropState.posY = 50;
-  applyCoverCropPosition();
-  showToast("Crop reset to center", "success");
+  coverCropState.cropLeft = 10;
+  coverCropState.cropTop = 10;
+  coverCropState.cropWidth = 80;
+  coverCropState.cropHeight = 45;
+  document.getElementById("coverRatio").value = "16:9";
+  coverCropState.ratio = "16:9";
+  refreshCoverCropUI();
+  showToast("Crop reset", "success");
 }
 
 function refreshCoverCropUI() {
   var section = document.getElementById("coverCropSection");
   var featured = document.getElementById("featuredImagePreview");
-  var frame = document.getElementById("coverCropFrame");
   var img = document.getElementById("coverCropImg");
+  var box = document.getElementById("coverCropBox");
 
   if (!coverCropState.url) {
     section.style.display = "none";
@@ -1697,94 +1740,190 @@ function refreshCoverCropUI() {
 
   section.style.display = "block";
 
-  // Set frame aspect ratio
+  // When image loads, snap to the chosen ratio
+  if (img.src !== coverCropState.url) {
+    img.onload = function() {
+      if (coverCropState.ratio !== "original" && coverCropState.ratio !== "free") {
+        snapCropToRatio(coverCropState.ratio);
+      }
+      applyCropBoxPosition();
+    };
+    img.src = coverCropState.url;
+  } else if (img.complete && img.naturalWidth) {
+    applyCropBoxPosition();
+  }
+
   if (coverCropState.ratio === "original") {
-    frame.style.aspectRatio = "";
-    frame.style.height = "auto";
-    img.style.height = "auto";
-    img.style.position = "static";
-    img.style.objectFit = "contain";
+    box.style.display = "none";
+    img.style.opacity = "1";
   } else {
-    var parts = coverCropState.ratio.split(":");
-    var w = parseFloat(parts[0]) || 16;
-    var h = parseFloat(parts[1]) || 9;
-    frame.style.aspectRatio = w + " / " + h;
-    frame.style.height = "";
-    img.style.position = "absolute";
-    img.style.height = "100%";
-    img.style.objectFit = "cover";
+    box.style.display = "block";
+    img.style.opacity = "0.45";
   }
 
-  img.src = coverCropState.url;
-  applyCoverCropPosition();
-
-  // Update featured image sidebar preview
-  var miniStyle = "max-width:100%;border-radius:4px;margin-bottom:8px;";
-  if (coverCropState.ratio !== "original") {
-    var p = coverCropState.ratio.split(":");
-    miniStyle += "aspect-ratio:" + p[0] + "/" + p[1] + ";object-fit:cover;object-position:" + coverCropState.posX + "% " + coverCropState.posY + "%;width:100%;height:auto;";
-  }
-  featured.innerHTML = '<img src="' + coverCropState.url + '" style="' + miniStyle + '"><div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;margin-top:6px;" onclick="document.getElementById(\'blogCover\').value=\'\';coverCropState.url=\'\';refreshCoverCropUI();">Remove featured image</div>';
+  applyCropBoxPosition();
+  updateFeaturedPreview();
 }
 
-function applyCoverCropPosition() {
-  var img = document.getElementById("coverCropImg");
-  img.style.objectPosition = coverCropState.posX + "% " + coverCropState.posY + "%";
-  document.getElementById("coverPositionLabel").textContent =
-    "Position: " + Math.round(coverCropState.posX) + "% " + Math.round(coverCropState.posY) + "%";
-  // Update featured image sidebar preview
-  var featuredImg = document.querySelector("#featuredImagePreview img");
-  if (featuredImg && coverCropState.ratio !== "original") {
-    featuredImg.style.objectPosition = coverCropState.posX + "% " + coverCropState.posY + "%";
+function applyCropBoxPosition() {
+  var box = document.getElementById("coverCropBox");
+  if (!box) return;
+  box.style.left = coverCropState.cropLeft + "%";
+  box.style.top = coverCropState.cropTop + "%";
+  box.style.width = coverCropState.cropWidth + "%";
+  box.style.height = coverCropState.cropHeight + "%";
+  // Show current ratio in the info label
+  var info = document.getElementById("coverCropInfo");
+  if (info) {
+    var img = document.getElementById("coverCropImg");
+    if (img.naturalWidth && coverCropState.ratio !== "original") {
+      var pixelW = (coverCropState.cropWidth / 100) * img.naturalWidth;
+      var pixelH = (coverCropState.cropHeight / 100) * img.naturalHeight;
+      var gcd = function(a, b) { return b === 0 ? a : gcd(b, a % b); };
+      var divisor = gcd(Math.round(pixelW), Math.round(pixelH));
+      var r1 = Math.round(pixelW / divisor);
+      var r2 = Math.round(pixelH / divisor);
+      info.textContent = "Crop: " + Math.round(pixelW) + "×" + Math.round(pixelH) + " · ~" + r1 + ":" + r2;
+    } else {
+      info.textContent = "";
+    }
   }
 }
 
-// Drag-to-position interaction (free 360° movement)
+function updateFeaturedPreview() {
+  var featured = document.getElementById("featuredImagePreview");
+  if (!coverCropState.url) return;
+
+  if (coverCropState.ratio === "original") {
+    featured.innerHTML = '<img src="' + coverCropState.url + '" style="max-width:100%;border-radius:4px;margin-bottom:8px;">' +
+      '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;" onclick="document.getElementById(\'blogCover\').value=\'\';coverCropState.url=\'\';refreshCoverCropUI();">Remove featured image</div>';
+    return;
+  }
+
+  // Build preview by positioning a wider image inside a constrained container
+  // Use background-image trick for accurate crop preview
+  var bgStyle =
+    "width:100%;" +
+    "padding-bottom:" + (coverCropState.cropHeight / coverCropState.cropWidth * 100) + "%;" +
+    "background-image:url('" + coverCropState.url + "');" +
+    "background-size:" + (10000 / coverCropState.cropWidth) + "% " + (10000 / coverCropState.cropHeight) + "%;" +
+    "background-position:" + (coverCropState.cropLeft / (100 - coverCropState.cropWidth) * 100) + "% " + (coverCropState.cropTop / (100 - coverCropState.cropHeight) * 100) + "%;" +
+    "background-repeat:no-repeat;" +
+    "border-radius:4px;" +
+    "margin-bottom:8px;";
+  featured.innerHTML = '<div style="' + bgStyle + '"></div>' +
+    '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;" onclick="document.getElementById(\'blogCover\').value=\'\';coverCropState.url=\'\';refreshCoverCropUI();">Remove featured image</div>';
+}
+
+// ─── Drag + Resize for the crop box ───────────────────────────
 (function() {
-  var frame = document.getElementById("coverCropFrame");
-  if (!frame) return;
-  var dragging = false;
+  var canvas = document.getElementById("coverCropCanvas");
+  var box = document.getElementById("coverCropBox");
+  if (!canvas || !box) return;
+
+  var mode = null; // "move", "tl", "tr", "bl", "br", "t", "b", "l", "r"
   var startX = 0, startY = 0;
-  var startPosX = 50, startPosY = 50;
+  var startCrop = null;
+  var canvasRect = null;
 
   function onDown(e) {
     if (coverCropState.ratio === "original") return;
-    dragging = true;
-    frame.style.cursor = "grabbing";
+    var target = e.target;
     var pt = e.touches ? e.touches[0] : e;
+    canvasRect = canvas.getBoundingClientRect();
     startX = pt.clientX;
     startY = pt.clientY;
-    startPosX = coverCropState.posX;
-    startPosY = coverCropState.posY;
+    startCrop = {
+      left: coverCropState.cropLeft,
+      top: coverCropState.cropTop,
+      width: coverCropState.cropWidth,
+      height: coverCropState.cropHeight
+    };
+
+    if (target.classList.contains("crop-handle")) {
+      mode = target.dataset.corner || target.dataset.edge;
+      // If user drags a handle, switch to "free" ratio mode
+      if (coverCropState.ratio !== "original" && coverCropState.ratio !== "free") {
+        coverCropState.ratio = "free";
+        // Add "Free" option to dropdown if not already there
+        var sel = document.getElementById("coverRatio");
+        if (!sel.querySelector('option[value="free"]')) {
+          var opt = document.createElement("option");
+          opt.value = "free";
+          opt.textContent = "Free (custom)";
+          sel.appendChild(opt);
+        }
+        sel.value = "free";
+      }
+    } else if (target === box || target.parentElement === box) {
+      mode = "move";
+    } else {
+      return;
+    }
     e.preventDefault();
+    e.stopPropagation();
   }
 
   function onMove(e) {
-    if (!dragging) return;
+    if (!mode) return;
     var pt = e.touches ? e.touches[0] : e;
-    var rect = frame.getBoundingClientRect();
-    // Multiplier amplifies drag sensitivity so you can reach extreme positions
-    // Use 2x so a full-frame drag covers ~200% positioning range (clamped to 0-100)
-    var sensitivity = 2;
-    var dx = ((pt.clientX - startX) / rect.width) * 100 * sensitivity;
-    var dy = ((pt.clientY - startY) / rect.height) * 100 * sensitivity;
-    coverCropState.posX = Math.max(0, Math.min(100, startPosX - dx));
-    coverCropState.posY = Math.max(0, Math.min(100, startPosY - dy));
-    applyCoverCropPosition();
+    var dx = ((pt.clientX - startX) / canvasRect.width) * 100;
+    var dy = ((pt.clientY - startY) / canvasRect.height) * 100;
+
+    var nL = startCrop.left, nT = startCrop.top, nW = startCrop.width, nH = startCrop.height;
+
+    if (mode === "move") {
+      nL = startCrop.left + dx;
+      nT = startCrop.top + dy;
+    } else if (mode === "tl") {
+      nL = startCrop.left + dx; nT = startCrop.top + dy;
+      nW = startCrop.width - dx; nH = startCrop.height - dy;
+    } else if (mode === "tr") {
+      nT = startCrop.top + dy;
+      nW = startCrop.width + dx; nH = startCrop.height - dy;
+    } else if (mode === "bl") {
+      nL = startCrop.left + dx;
+      nW = startCrop.width - dx; nH = startCrop.height + dy;
+    } else if (mode === "br") {
+      nW = startCrop.width + dx; nH = startCrop.height + dy;
+    } else if (mode === "t") {
+      nT = startCrop.top + dy; nH = startCrop.height - dy;
+    } else if (mode === "b") {
+      nH = startCrop.height + dy;
+    } else if (mode === "l") {
+      nL = startCrop.left + dx; nW = startCrop.width - dx;
+    } else if (mode === "r") {
+      nW = startCrop.width + dx;
+    }
+
+    // Enforce minimum size of 5%
+    if (nW < 5) { if (mode.indexOf("l") !== -1) nL = startCrop.left + startCrop.width - 5; nW = 5; }
+    if (nH < 5) { if (mode.indexOf("t") !== -1) nT = startCrop.top + startCrop.height - 5; nH = 5; }
+
+    // Clamp inside canvas (0-100)
+    nL = Math.max(0, Math.min(100 - nW, nL));
+    nT = Math.max(0, Math.min(100 - nH, nT));
+    nW = Math.max(5, Math.min(100 - nL, nW));
+    nH = Math.max(5, Math.min(100 - nT, nH));
+
+    coverCropState.cropLeft = nL;
+    coverCropState.cropTop = nT;
+    coverCropState.cropWidth = nW;
+    coverCropState.cropHeight = nH;
+
+    applyCropBoxPosition();
+    updateFeaturedPreview();
     e.preventDefault();
   }
 
   function onUp() {
-    if (dragging) {
-      dragging = false;
-      frame.style.cursor = "grab";
-    }
+    mode = null;
   }
 
-  frame.addEventListener("mousedown", onDown);
+  canvas.addEventListener("mousedown", onDown);
   document.addEventListener("mousemove", onMove);
   document.addEventListener("mouseup", onUp);
-  frame.addEventListener("touchstart", onDown, { passive: false });
+  canvas.addEventListener("touchstart", onDown, { passive: false });
   document.addEventListener("touchmove", onMove, { passive: false });
   document.addEventListener("touchend", onUp);
 })();
@@ -1794,13 +1933,14 @@ function updateCoverPreview(url) {
   coverCropState.url = url || "";
   if (!url) {
     coverCropState.ratio = "16:9";
-    coverCropState.posX = 50;
-    coverCropState.posY = 50;
+    coverCropState.cropLeft = 10;
+    coverCropState.cropTop = 10;
+    coverCropState.cropWidth = 80;
+    coverCropState.cropHeight = 45;
     document.getElementById("coverRatio").value = "16:9";
   }
   refreshCoverCropUI();
 }
-
 // Mode switching
 function switchMode(mode) {
   var visual = document.getElementById("blogVisual");
@@ -3176,37 +3316,39 @@ function editBlogPost(i) {
   document.getElementById("blogSlug").value = post.slug || "";
   document.getElementById("blogExcerpt").value = post.excerpt || "";
 
-  // Handle cover — could be string (old format) or object (new format)
+// Handle cover — could be string (old format) or object (new format)
   var coverUrl = "";
   if (typeof post.cover === "string") {
     coverUrl = post.cover;
-    coverCropState = { url: coverUrl, ratio: "16:9", posX: 50, posY: 50 };
+    coverCropState = { url: coverUrl, ratio: "16:9", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
   } else if (post.cover && typeof post.cover === "object") {
     coverUrl = post.cover.url || "";
     coverCropState = {
       url: coverUrl,
       ratio: post.cover.ratio || "16:9",
-      posX: typeof post.cover.x === "number" ? post.cover.x : 50,
-      posY: typeof post.cover.y === "number" ? post.cover.y : 50
+      cropLeft: typeof post.cover.cropLeft === "number" ? post.cover.cropLeft : 10,
+      cropTop: typeof post.cover.cropTop === "number" ? post.cover.cropTop : 10,
+      cropWidth: typeof post.cover.cropWidth === "number" ? post.cover.cropWidth : 80,
+      cropHeight: typeof post.cover.cropHeight === "number" ? post.cover.cropHeight : 45
     };
   } else {
-    coverCropState = { url: "", ratio: "16:9", posX: 50, posY: 50 };
+    coverCropState = { url: "", ratio: "16:9", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
   }
   document.getElementById("blogCover").value = coverUrl;
 
   // Set ratio dropdown
   var ratioSel = document.getElementById("coverRatio");
-  var presetRatios = ["16:9","4:3","1:1","3:4","21:9","original"];
+  var presetRatios = ["16:9","4:3","1:1","3:4","21:9","original","free"];
   if (presetRatios.indexOf(coverCropState.ratio) !== -1) {
+    if (coverCropState.ratio === "free" && !ratioSel.querySelector('option[value="free"]')) {
+      var opt = document.createElement("option");
+      opt.value = "free";
+      opt.textContent = "Free (custom)";
+      ratioSel.appendChild(opt);
+    }
     ratioSel.value = coverCropState.ratio;
-    document.getElementById("coverCustomRatioRow").style.display = "none";
   } else {
-    // custom ratio
-    ratioSel.value = "custom";
-    var parts = coverCropState.ratio.split(":");
-    document.getElementById("coverRatioW").value = parts[0] || "";
-    document.getElementById("coverRatioH").value = parts[1] || "";
-    document.getElementById("coverCustomRatioRow").style.display = "inline-flex";
+    ratioSel.value = "16:9";
   }
 
   document.getElementById("blogTags").value = (post.tags || []).join(", ");
@@ -3255,18 +3397,21 @@ async function saveBlogPost(status) {
   else if (editingBlogIndex >= 0 && blogPosts[editingBlogIndex].date) postDate = blogPosts[editingBlogIndex].date;
   else postDate = new Date().toISOString();
 
-  // Build cover object (or keep as plain string if no crop settings)
+// Build cover object (or keep as plain string if no crop settings)
   var coverData;
   if (!cover) {
     coverData = "";
-  } else if (coverCropState.ratio === "original" && coverCropState.posX === 50 && coverCropState.posY === 50) {
-    coverData = cover; // simple string for backwards compat
+  } else if (coverCropState.ratio === "original") {
+    coverData = cover; // simple string for backwards compat (no crop)
   } else {
     coverData = {
       url: cover,
       ratio: coverCropState.ratio,
-      x: coverCropState.posX,
-      y: coverCropState.posY
+      // Save crop rectangle as percentages of original image
+      cropLeft: coverCropState.cropLeft,
+      cropTop: coverCropState.cropTop,
+      cropWidth: coverCropState.cropWidth,
+      cropHeight: coverCropState.cropHeight
     };
   }
 
