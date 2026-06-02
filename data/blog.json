@@ -3,7 +3,12 @@
     "title": "Best Korean Hair Loss Shampoos for Thinning Hair (6 Picks)",
     "slug": "best-korean-hair-loss-shampoos-for-thinning-hair",
     "excerpt": "The best Korean hair loss shampoos for thinning hair — 6 picks featuring rosemary, caffeine, biotin, and ginseng for fuller-looking hair.",
-    "cover": "https://images.unsplash.com/photo-1769029257460-7052dc5c1731?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "cover": {
+      "url": "https://images.unsplash.com/photo-1769029257460-7052dc5c1731?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "ratio": "16:9",
+      "x": 43.84615384615385,
+      "y": 0
+    },
     "tags": [
       "Hair Care",
       "Korean Hair Care",
