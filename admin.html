@@ -655,52 +655,17 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
         <input type="text" id="blogCover" placeholder="https://...">
       </div>
 
-     <!-- Cover Image Crop Frame UI -->
-      <div class="form-row" id="coverCropSection" style="margin-bottom:14px;display:none;">
-        <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;">
-          <div style="min-width:160px;">
-            <label style="font-size:0.78rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;">ASPECT RATIO PRESET</label>
-            <select id="coverRatio" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;outline:none;">
-              <option value="16:9" selected>16:9 — Widescreen</option>
-              <option value="4:3">4:3 — Classic</option>
-              <option value="1:1">1:1 — Square</option>
-              <option value="3:4">3:4 — Portrait</option>
-              <option value="21:9">21:9 — Cinematic</option>
-              <option value="original">Original (no crop)</option>
-            </select>
-          </div>
-          <button type="button" onclick="resetCoverCrop()" style="padding:7px 14px;background:#fff;color:var(--text-mid);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:Outfit,sans-serif;">Reset</button>
-          <div style="flex:1;text-align:right;font-size:0.78rem;color:var(--text-mid);">
-            <span id="coverCropInfo" style="font-family:monospace;color:var(--blue);"></span>
-          </div>
-        </div>
-
-        <!-- Image canvas with overlay crop frame -->
-        <div id="coverCropCanvas" style="position:relative;width:100%;max-width:780px;margin:0 auto;background:#1a1a1a;border-radius:8px;overflow:hidden;user-select:none;border:2px solid var(--border);">
-          <img id="coverCropImg" src="" alt="" style="display:block;width:100%;height:auto;pointer-events:none;opacity:0.45;" draggable="false">
-          <!-- Crop frame (draggable + resizable rectangle that floats over the image) -->
-          <div id="coverCropBox" style="position:absolute;top:10%;left:10%;width:80%;height:45%;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,0.4);cursor:move;box-sizing:border-box;">
-            <!-- Center indicator -->
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:0.7rem;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,0.7);">DRAG TO MOVE</div>
-            <!-- Corner resize handles -->
-            <div class="crop-handle" data-corner="tl" style="position:absolute;top:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
-            <div class="crop-handle" data-corner="tr" style="position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
-            <div class="crop-handle" data-corner="bl" style="position:absolute;bottom:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
-            <div class="crop-handle" data-corner="br" style="position:absolute;bottom:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
-            <!-- Edge resize handles -->
-            <div class="crop-handle" data-edge="t" style="position:absolute;top:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
-            <div class="crop-handle" data-edge="b" style="position:absolute;bottom:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
-            <div class="crop-handle" data-edge="l" style="position:absolute;left:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
-            <div class="crop-handle" data-edge="r" style="position:absolute;right:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-size:0.78rem;color:var(--text-mid);">
-          💡 Drag the white frame to position. Drag corners or edges to resize the crop area.
-        </div>
+     <!-- Cover Position (controls thumbnail framing only) -->
+      <div class="form-row" style="margin-bottom:14px;">
+        <label>Cover Image Thumbnail Position</label>
+        <select id="blogCoverPosition" style="width:100%;">
+          <option value="center" selected>Center</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+        </select>
+        <small>Controls which part of tall images shows in blog list thumbnails. Cover displays at natural aspect ratio on the article page.</small>
       </div>
-
-      <!-- Fallback minimal preview when no cropping -->
-      <div id="blogCoverPreview" style="display:none;"></div>
+      <div id="blogCoverPreview" style="margin-top:8px;"></div>
 
       <!-- WP Editor -->
       <div class="wp-edit-wrap">
@@ -941,44 +906,7 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
         </select>
       </div>
 
-      <!-- Crop Frame Section (appears when URL is set) -->
-      <div class="form-row" id="mediaCropSection" style="display:none;">
-        <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;">
-          <div style="min-width:160px;">
-            <label style="font-size:0.78rem;font-weight:600;color:var(--text-mid);margin-bottom:4px;display:block;">ASPECT RATIO PRESET</label>
-            <select id="mediaRatio" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:Outfit,sans-serif;font-size:0.85rem;outline:none;">
-              <option value="original" selected>Original (no crop)</option>
-              <option value="16:9">16:9 — Widescreen</option>
-              <option value="4:3">4:3 — Classic</option>
-              <option value="1:1">1:1 — Square</option>
-              <option value="3:4">3:4 — Portrait</option>
-              <option value="21:9">21:9 — Cinematic</option>
-            </select>
-          </div>
-          <button type="button" onclick="resetMediaCrop()" style="padding:7px 14px;background:#fff;color:var(--text-mid);border:1px solid var(--border);border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:Outfit,sans-serif;">Reset</button>
-          <div style="flex:1;text-align:right;font-size:0.78rem;color:var(--text-mid);">
-            <span id="mediaCropInfo" style="font-family:monospace;color:var(--blue);"></span>
-          </div>
-        </div>
-
-        <div id="mediaCropCanvas" style="position:relative;width:100%;background:#1a1a1a;border-radius:8px;overflow:hidden;user-select:none;border:2px solid var(--border);display:none;">
-          <img id="mediaCropImg" src="" alt="" style="display:block;width:100%;height:auto;pointer-events:none;opacity:0.45;" draggable="false">
-          <div id="mediaCropBox" style="position:absolute;top:10%;left:10%;width:80%;height:45%;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,0.4);cursor:move;box-sizing:border-box;">
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:0.7rem;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,0.7);">DRAG TO MOVE</div>
-            <div class="mcrop-handle" data-mcorner="tl" style="position:absolute;top:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
-            <div class="mcrop-handle" data-mcorner="tr" style="position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
-            <div class="mcrop-handle" data-mcorner="bl" style="position:absolute;bottom:-7px;left:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nesw-resize;"></div>
-            <div class="mcrop-handle" data-mcorner="br" style="position:absolute;bottom:-7px;right:-7px;width:14px;height:14px;background:#fff;border:2px solid #1a1a1a;border-radius:50%;cursor:nwse-resize;"></div>
-            <div class="mcrop-handle" data-medge="t" style="position:absolute;top:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
-            <div class="mcrop-handle" data-medge="b" style="position:absolute;bottom:-5px;left:30%;right:30%;height:10px;cursor:ns-resize;"></div>
-            <div class="mcrop-handle" data-medge="l" style="position:absolute;left:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
-            <div class="mcrop-handle" data-medge="r" style="position:absolute;right:-5px;top:30%;bottom:30%;width:10px;cursor:ew-resize;"></div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-size:0.78rem;color:var(--text-mid);">
-          💡 Set a ratio then drag the white frame and resize using corners/edges.
-        </div>
-      </div>
+   
 
       <div class="form-row"><label>Link to</label>
         <select id="mediaLinkTo">
@@ -1667,39 +1595,50 @@ document.getElementById("blogTitle").addEventListener("input", function() {
 });
 
 // ═══════════════════════════════════════════════════════════════
-// COVER IMAGE — Crop Frame Over Image (Instagram-style cropper)
+// COVER IMAGE — Simple URL + Position (no cropping)
+// Cover is stored as object: { url, position }
+// On the live blog post page: displays at natural aspect ratio
+// On blog list thumbnails: object-position uses the position value
 // ═══════════════════════════════════════════════════════════════
-// State stores the CROP RECTANGLE as percentages of the image
-// (left, top, width, height — all 0-100)
-var coverCropState = {
-  url: "",
-  ratio: "16:9",  // current ratio preset or "free" or "original"
-  // Crop rectangle in % of image dimensions
-  cropLeft: 10,
-  cropTop: 10,
-  cropWidth: 80,
-  cropHeight: 45
-};
+function getCoverUrl(cover) {
+  if (typeof cover === "string") return cover;
+  if (cover && cover.url) return cover.url;
+  return "";
+}
+function getCoverPosition(cover) {
+  if (cover && typeof cover === "object" && cover.position) return cover.position;
+  return "center";
+}
 
 document.getElementById("blogCover").addEventListener("input", function() {
-  coverCropState.url = this.value.trim();
-  refreshCoverCropUI();
+  updateFeaturedPreview();
+});
+document.getElementById("blogCoverPosition").addEventListener("change", function() {
+  updateFeaturedPreview();
 });
 
-document.getElementById("coverRatio").addEventListener("change", function() {
-  coverCropState.ratio = this.value;
-  if (this.value === "original") {
-    // Reset crop to full image
-    coverCropState.cropLeft = 0;
-    coverCropState.cropTop = 0;
-    coverCropState.cropWidth = 100;
-    coverCropState.cropHeight = 100;
-  } else if (this.value !== "free") {
-    snapCropToRatio(this.value);
+function updateFeaturedPreview() {
+  var url = document.getElementById("blogCover").value.trim();
+  var preview = document.getElementById("blogCoverPreview");
+  var sidebar = document.getElementById("featuredImagePreview");
+  if (!url) {
+    if (preview) preview.innerHTML = "";
+    if (sidebar) sidebar.innerHTML = '<div style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>';
+    return;
   }
-  refreshCoverCropUI();
-});
+  var safeUrl = url.replace(/"/g, "&quot;");
+  var imgHTML = '<img src="' + safeUrl + '" style="max-width:100%;border-radius:4px;display:block;">';
+  var removeBtn = '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;margin-top:6px;" onclick="document.getElementById(\'blogCover\').value=\'\';updateFeaturedPreview();">Remove featured image</div>';
+  if (preview) preview.innerHTML = imgHTML;
+  if (sidebar) sidebar.innerHTML = imgHTML + removeBtn;
+}
 
+// Compatibility shim — keeps old code paths from breaking
+function updateCoverPreview(url) {
+  if (url !== undefined) document.getElementById("blogCover").value = url || "";
+  updateFeaturedPreview();
+}
+function refreshCoverCropUI() { updateFeaturedPreview(); }
 function snapCropToRatio(ratio) {
   // Adjust current crop box to fit the new ratio
   var parts = ratio.split(":");
@@ -2109,13 +2048,9 @@ function openMediaModal() {
   document.getElementById("mediaUrl").value = "";
   document.getElementById("mediaAlt").value = "";
   document.getElementById("mediaAlign").value = "center";
-  document.getElementById("mediaRatio").value = "original";
   document.getElementById("mediaLinkTo").value = "none";
   document.getElementById("mediaCustomLink").value = "";
   document.getElementById("mediaCustomLinkRow").style.display = "none";
-  // Reset media crop state
-  mediaCropState = { url: "", ratio: "original", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
-  refreshMediaCropUI();
   document.getElementById("mediaModal").classList.add("open");
   setTimeout(function(){document.getElementById("mediaUrl").focus();}, 50);
 }
@@ -2123,236 +2058,20 @@ function closeMediaModal() { document.getElementById("mediaModal").classList.rem
 document.getElementById("mediaLinkTo").addEventListener("change", function(){
   document.getElementById("mediaCustomLinkRow").style.display = this.value === "custom" ? "block" : "none";
 });
+
 // ═══════════════════════════════════════════════════════════════
-// BODY IMAGE — Crop Frame Over Image (matches cover image system)
+// BODY IMAGES — plain <img>, alignment only, no crop
 // ═══════════════════════════════════════════════════════════════
-var mediaCropState = {
-  url: "",
-  ratio: "original",
-  cropLeft: 10,
-  cropTop: 10,
-  cropWidth: 80,
-  cropHeight: 45
-};
-
-document.getElementById("mediaUrl").addEventListener("input", function() {
-  mediaCropState.url = this.value.trim();
-  refreshMediaCropUI();
-});
-
-document.getElementById("mediaRatio").addEventListener("change", function() {
-  mediaCropState.ratio = this.value;
-  if (this.value === "original") {
-    mediaCropState.cropLeft = 0;
-    mediaCropState.cropTop = 0;
-    mediaCropState.cropWidth = 100;
-    mediaCropState.cropHeight = 100;
-  } else if (this.value !== "free") {
-    snapMediaCropToRatio(this.value);
-  }
-  refreshMediaCropUI();
-});
-
-function snapMediaCropToRatio(ratio) {
-  var parts = ratio.split(":");
-  var rW = parseFloat(parts[0]) || 16;
-  var rH = parseFloat(parts[1]) || 9;
-  var img = document.getElementById("mediaCropImg");
-  if (!img.naturalWidth) return;
-  var aspectImg = img.naturalWidth / img.naturalHeight;
-  var aspectTarget = rW / rH;
-  var cx = mediaCropState.cropLeft + mediaCropState.cropWidth / 2;
-  var cy = mediaCropState.cropTop + mediaCropState.cropHeight / 2;
-  var newW = mediaCropState.cropWidth;
-  var newH = (newW * aspectImg) / aspectTarget;
-  if (newH > 100) { newH = 100; newW = (newH * aspectTarget) / aspectImg; }
-  if (newW > 100) { newW = 100; newH = (newW * aspectImg) / aspectTarget; }
-  mediaCropState.cropWidth = newW;
-  mediaCropState.cropHeight = newH;
-  mediaCropState.cropLeft = Math.max(0, Math.min(100 - newW, cx - newW / 2));
-  mediaCropState.cropTop = Math.max(0, Math.min(100 - newH, cy - newH / 2));
-}
-
-function resetMediaCrop() {
-  mediaCropState.cropLeft = 10;
-  mediaCropState.cropTop = 10;
-  mediaCropState.cropWidth = 80;
-  mediaCropState.cropHeight = 45;
-  mediaCropState.ratio = "original";
-  document.getElementById("mediaRatio").value = "original";
-  refreshMediaCropUI();
-}
-
-function refreshMediaCropUI() {
-  var section = document.getElementById("mediaCropSection");
-  var canvas = document.getElementById("mediaCropCanvas");
-  var img = document.getElementById("mediaCropImg");
-  var box = document.getElementById("mediaCropBox");
-
-  if (!mediaCropState.url) {
-    section.style.display = "none";
-    return;
-  }
-
-  section.style.display = "block";
-
-  if (img.src !== mediaCropState.url) {
-    img.onload = function() {
-      if (mediaCropState.ratio !== "original" && mediaCropState.ratio !== "free") {
-        snapMediaCropToRatio(mediaCropState.ratio);
-      }
-      applyMediaCropBoxPosition();
-    };
-    img.src = mediaCropState.url;
-  }
-
-  // Crop box always visible
-  canvas.style.display = "block";
-  img.style.opacity = "0.45";
-
-  applyMediaCropBoxPosition();
-}
-
-function applyMediaCropBoxPosition() {
-  var box = document.getElementById("mediaCropBox");
-  if (!box) return;
-  box.style.left = mediaCropState.cropLeft + "%";
-  box.style.top = mediaCropState.cropTop + "%";
-  box.style.width = mediaCropState.cropWidth + "%";
-  box.style.height = mediaCropState.cropHeight + "%";
-  var info = document.getElementById("mediaCropInfo");
-  if (info) {
-    var img = document.getElementById("mediaCropImg");
-    if (img.naturalWidth && mediaCropState.ratio !== "original") {
-      var pixelW = (mediaCropState.cropWidth / 100) * img.naturalWidth;
-      var pixelH = (mediaCropState.cropHeight / 100) * img.naturalHeight;
-      info.textContent = "Crop: " + Math.round(pixelW) + "×" + Math.round(pixelH);
-    } else {
-      info.textContent = "";
-    }
-  }
-}
-
-// Drag + resize for media crop box
-(function() {
-  var canvas = document.getElementById("mediaCropCanvas");
-  var box = document.getElementById("mediaCropBox");
-  if (!canvas || !box) return;
-
-  var mode = null;
-  var startX = 0, startY = 0;
-  var startCrop = null;
-  var canvasRect = null;
-
-  function onDown(e) {
-    if (mediaCropState.ratio === "original") return;
-    var target = e.target;
-    var pt = e.touches ? e.touches[0] : e;
-    canvasRect = canvas.getBoundingClientRect();
-    startX = pt.clientX;
-    startY = pt.clientY;
-    startCrop = {
-      left: mediaCropState.cropLeft,
-      top: mediaCropState.cropTop,
-      width: mediaCropState.cropWidth,
-      height: mediaCropState.cropHeight
-    };
-
-    if (target.classList.contains("mcrop-handle")) {
-      mode = target.dataset.mcorner || target.dataset.medge;
-      if (mediaCropState.ratio !== "original" && mediaCropState.ratio !== "free") {
-        mediaCropState.ratio = "free";
-        var sel = document.getElementById("mediaRatio");
-        if (!sel.querySelector('option[value="free"]')) {
-          var opt = document.createElement("option");
-          opt.value = "free";
-          opt.textContent = "Free (custom)";
-          sel.appendChild(opt);
-        }
-        sel.value = "free";
-      }
-    } else if (target === box || target.parentElement === box) {
-      mode = "move";
-    } else {
-      return;
-    }
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  function onMove(e) {
-    if (!mode) return;
-    var pt = e.touches ? e.touches[0] : e;
-    var dx = ((pt.clientX - startX) / canvasRect.width) * 100;
-    var dy = ((pt.clientY - startY) / canvasRect.height) * 100;
-
-    var nL = startCrop.left, nT = startCrop.top, nW = startCrop.width, nH = startCrop.height;
-
-    if (mode === "move") {
-      nL = startCrop.left + dx; nT = startCrop.top + dy;
-    } else if (mode === "tl") {
-      nL = startCrop.left + dx; nT = startCrop.top + dy;
-      nW = startCrop.width - dx; nH = startCrop.height - dy;
-    } else if (mode === "tr") {
-      nT = startCrop.top + dy;
-      nW = startCrop.width + dx; nH = startCrop.height - dy;
-    } else if (mode === "bl") {
-      nL = startCrop.left + dx;
-      nW = startCrop.width - dx; nH = startCrop.height + dy;
-    } else if (mode === "br") {
-      nW = startCrop.width + dx; nH = startCrop.height + dy;
-    } else if (mode === "t") {
-      nT = startCrop.top + dy; nH = startCrop.height - dy;
-    } else if (mode === "b") {
-      nH = startCrop.height + dy;
-    } else if (mode === "l") {
-      nL = startCrop.left + dx; nW = startCrop.width - dx;
-    } else if (mode === "r") {
-      nW = startCrop.width + dx;
-    }
-
-    if (nW < 5) { if (mode.indexOf("l") !== -1) nL = startCrop.left + startCrop.width - 5; nW = 5; }
-    if (nH < 5) { if (mode.indexOf("t") !== -1) nT = startCrop.top + startCrop.height - 5; nH = 5; }
-
-    nL = Math.max(0, Math.min(100 - nW, nL));
-    nT = Math.max(0, Math.min(100 - nH, nT));
-    nW = Math.max(5, Math.min(100 - nL, nW));
-    nH = Math.max(5, Math.min(100 - nT, nH));
-
-    mediaCropState.cropLeft = nL;
-    mediaCropState.cropTop = nT;
-    mediaCropState.cropWidth = nW;
-    mediaCropState.cropHeight = nH;
-    applyMediaCropBoxPosition();
-    e.preventDefault();
-  }
-
-  function onUp() { mode = null; }
-
-  canvas.addEventListener("mousedown", onDown);
-  document.addEventListener("mousemove", onMove);
-  document.addEventListener("mouseup", onUp);
-  canvas.addEventListener("touchstart", onDown, { passive: false });
-  document.addEventListener("touchmove", onMove, { passive: false });
-  document.addEventListener("touchend", onUp);
-})();
-
-// ───────────────────────────────────────────────────────────────
-function buildBodyImageHTML(url, alt, align, linkTo, customLink, cropState) {
+function buildBodyImageHTML(url, alt, align, linkTo, customLink) {
   var alignStyle = "";
   if (align === "center") alignStyle = "display:block;margin:12px auto;";
   else if (align === "left") alignStyle = "float:left;margin:8px 16px 8px 0;";
   else if (align === "right") alignStyle = "float:right;margin:8px 0 8px 16px;";
-
-  var baseStyle = "max-width:100%;border-radius:4px;" + alignStyle;
-  var inner = buildCroppedImageHTML(url, alt, cropState, baseStyle);
-
-  if (linkTo === "image") {
-    return '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + inner + '</a>';
-  } else if (linkTo === "custom" && customLink) {
-    return '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + inner + '</a>';
-  }
-  return inner;
+  var imgStyle = "max-width:100%;height:auto;border-radius:4px;" + alignStyle;
+  var img = '<img src="' + url.replace(/"/g, "&quot;") + '" alt="' + (alt || "").replace(/"/g, "&quot;") + '" class="kb-img" style="' + imgStyle + '">';
+  if (linkTo === "image") return '<a href="' + url.replace(/"/g, "&quot;") + '" target="_blank">' + img + '</a>';
+  if (linkTo === "custom" && customLink) return '<a href="' + customLink.replace(/"/g, "&quot;") + '">' + img + '</a>';
+  return img;
 }
 
 function applyMedia() {
@@ -2362,9 +2081,7 @@ function applyMedia() {
   var linkTo = document.getElementById("mediaLinkTo").value;
   var customLink = document.getElementById("mediaCustomLink").value.trim();
   if (!url) { showToast("Image URL required", "error"); return; }
-
-  var finalHTML = buildBodyImageHTML(url, alt, align, linkTo, customLink, mediaCropState);
-
+  var finalHTML = buildBodyImageHTML(url, alt, align, linkTo, customLink);
   var visual = document.getElementById("blogVisual");
   var scrollTop = visual.scrollTop;
   visual.focus();
@@ -2975,92 +2692,8 @@ function tbl2AttachControls() {
 }
 
 document.getElementById("blogVisual").addEventListener("click", function(e) {
-  var cell = e.target.closest("td, th");
-  if (cell && this.contains(cell)) {
-    cell.setAttribute("tabindex", "0");
-    // If cell only contains <br>, place cursor at start so typing works
-    if (cell.innerHTML.trim().toLowerCase() === "<br>") {
-      var range = document.createRange();
-      range.setStart(cell, 0);
-      range.collapse(true);
-      var sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
-    tbl2ShowPanel(cell);
-  } else if (!e.target.closest("#tbl2ControlPanel")) {
-    tbl2HidePanel();
-  }
-});
-
-// Hide panel when clicking elsewhere
-document.addEventListener("click", function(e) {
-  if (!tbl2ControlPanel) return;
-  if (e.target.closest("#tbl2ControlPanel")) return;
-  if (e.target.closest("#blogVisual")) return;
-  tbl2HidePanel();
-});
-
-// ─────────── Tab key navigation between cells ───────────
-document.getElementById("blogVisual").addEventListener("keydown", function(e) {
-  if (e.key !== "Tab") return;
-  var sel = window.getSelection();
-  if (!sel.rangeCount) return;
-  var node = sel.getRangeAt(0).startContainer;
-  if (node.nodeType === 3) node = node.parentElement;
-  var cell = node && node.closest ? node.closest("td, th") : null;
-  if (!cell) return;
-
-  e.preventDefault();
-  var row = cell.parentElement;
-  var allCells = Array.prototype.slice.call(cell.closest("table").querySelectorAll("td, th"));
-  var idx = allCells.indexOf(cell);
-  var next = e.shiftKey ? allCells[idx - 1] : allCells[idx + 1];
-  if (next) {
-    var range = document.createRange();
-    if (next.firstChild) range.selectNodeContents(next);
-    else range.setStart(next, 0);
-    range.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-});
-
-// ─────────── Run enhancement on existing tables when editor loads ───────────
-setTimeout(tbl2EnhanceAll, 500);
-// Also after editor content changes (e.g. switching between draft and new post)
-var _origSetEditorContent = typeof setEditorContent === "function" ? setEditorContent : null;
-if (_origSetEditorContent) {
-  setEditorContent = function(html) {
-    _origSetEditorContent(html);
-    setTimeout(tbl2EnhanceAll, 100);
-  };
-}
-// Word count
-function updateWordCount() {
-  var text = "";
-  if (blogEditorMode === "visual") text = document.getElementById("blogVisual").innerText || "";
-  else text = (document.getElementById("blogContentText").value || "").replace(/<[^>]+>/g, " ");
-  text = text.trim();
-  var words = text ? text.split(/\s+/).length : 0;
-  document.getElementById("wordCount").textContent = words + " words";
-}
-
-// Sync visual <-> text
-document.getElementById("blogVisual").addEventListener("input", function() {
-  document.getElementById("blogContentText").value = this.innerHTML;
-  updateWordCount();
-});
-document.getElementById("blogContentText").addEventListener("input", updateWordCount);
-
-  // ═══════════════════════════════════════════════════════════════
-// Click-to-edit for existing images and links in the editor
-// ═══════════════════════════════════════════════════════════════
-var currentEditTarget = null;
-
-document.getElementById("blogVisual").addEventListener("click", function(e) {
-// IMAGE or CROPPED IMAGE clicked — open media modal pre-filled
-  // Support both legacy .kb-img-cropped (background-image) and new .kb-cropped-wrap (img inside)
+  // IMAGE clicked — open media modal pre-filled
+  // Also handles legacy .kb-img-cropped and .kb-cropped-wrap divs (from old posts)
   var cropDiv = e.target.closest(".kb-img-cropped, .kb-cropped-wrap");
   var isPlainImg = e.target.tagName === "IMG" && !e.target.closest(".kb-product-card") && !e.target.closest("table") && !cropDiv;
 
@@ -3070,43 +2703,25 @@ document.getElementById("blogVisual").addEventListener("click", function(e) {
     var target = cropDiv || e.target;
     currentEditTarget = target;
 
-    var url = cropDiv ? (cropDiv.dataset.url || "") : (target.getAttribute("src") || "");
-    var alt = cropDiv ? (cropDiv.getAttribute("aria-label") || "") : (target.getAttribute("alt") || "");
+    var url = "";
+    var alt = "";
+    if (cropDiv) {
+      url = cropDiv.dataset.url || (cropDiv.querySelector("img") ? cropDiv.querySelector("img").src : "") || "";
+      alt = cropDiv.getAttribute("aria-label") || (cropDiv.querySelector("img") ? cropDiv.querySelector("img").alt : "") || "";
+    } else {
+      url = target.getAttribute("src") || "";
+      alt = target.getAttribute("alt") || "";
+    }
     document.getElementById("mediaUrl").value = url;
     document.getElementById("mediaAlt").value = alt;
 
-    // Detect alignment from style
     var style = target.getAttribute("style") || "";
     var align = "none";
-    if (style.indexOf("margin:12px auto") !== -1 || style.indexOf("display:block;margin") !== -1) align = "center";
+    if (style.indexOf("margin:12px auto") !== -1 || style.indexOf("display:block") !== -1) align = "center";
     else if (style.indexOf("float:left") !== -1) align = "left";
     else if (style.indexOf("float:right") !== -1) align = "right";
     document.getElementById("mediaAlign").value = align;
 
-    // Load crop state
-    if (cropDiv) {
-      mediaCropState = {
-        url: url,
-        ratio: "free",
-        cropLeft: parseFloat(cropDiv.dataset.cropleft) || 10,
-        cropTop: parseFloat(cropDiv.dataset.croptop) || 10,
-        cropWidth: parseFloat(cropDiv.dataset.cropwidth) || 80,
-        cropHeight: parseFloat(cropDiv.dataset.cropheight) || 45
-      };
-      var sel = document.getElementById("mediaRatio");
-      if (!sel.querySelector('option[value="free"]')) {
-        var opt = document.createElement("option");
-        opt.value = "free";
-        opt.textContent = "Free (custom)";
-        sel.appendChild(opt);
-      }
-      sel.value = "free";
-    } else {
-      mediaCropState = { url: url, ratio: "original", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
-      document.getElementById("mediaRatio").value = "original";
-    }
-
-    // Detect link wrapping
     var parentLink = target.parentElement && target.parentElement.tagName === "A" ? target.parentElement : null;
     if (parentLink) {
       var href = parentLink.getAttribute("href") || "";
@@ -3122,8 +2737,6 @@ document.getElementById("blogVisual").addEventListener("click", function(e) {
       document.getElementById("mediaLinkTo").value = "none";
       document.getElementById("mediaCustomLinkRow").style.display = "none";
     }
-
-    refreshMediaCropUI();
 
     var modalFooter = document.querySelector("#mediaModal .wp-modal-footer");
     var insertBtn = modalFooter.querySelector(".wp-publish-btn");
@@ -3167,19 +2780,13 @@ function updateExistingMedia() {
   var customLink = document.getElementById("mediaCustomLink").value.trim();
   if (!url) { showToast("Image URL required", "error"); return; }
 
-  // Build the new HTML
-  var newHTML = buildBodyImageHTML(url, alt, align, linkTo, customLink, mediaCropState);
-
-  // Replace the existing element (img OR cropped div) with the new HTML
-  // First, find the outermost wrapper (the link if it exists, otherwise the element itself)
+  var newHTML = buildBodyImageHTML(url, alt, align, linkTo, customLink);
   var outerEl = currentEditTarget.parentElement && currentEditTarget.parentElement.tagName === "A"
     ? currentEditTarget.parentElement
     : currentEditTarget;
-
   var temp = document.createElement("div");
   temp.innerHTML = newHTML;
-  var newEl = temp.firstChild;
-  outerEl.parentNode.replaceChild(newEl, outerEl);
+  outerEl.parentNode.replaceChild(temp.firstChild, outerEl);
 
   closeMediaModal();
   resetMediaModalButton();
@@ -3441,32 +3048,10 @@ function previewInNewTab() {
   var title = document.getElementById("blogTitle").value || "Untitled";
   var coverUrl = document.getElementById("blogCover").value;
 
-  // Build cover HTML using the current crop state (Instagram-style crop)
   var coverBlockHTML = "";
   if (coverUrl) {
-    if (coverCropState.url === coverUrl && coverCropState.ratio !== "original" && typeof coverCropState.cropWidth === "number") {
-      // Render the cropped region using background-image positioning
-      var cw = coverCropState.cropWidth;
-      var ch = coverCropState.cropHeight;
-      var scaleX = 100 / cw;
-      var scaleY = 100 / ch;
-      var posPercentX = cw >= 100 ? 0 : (coverCropState.cropLeft / (100 - cw) * 100);
-      var posPercentY = ch >= 100 ? 0 : (coverCropState.cropTop / (100 - ch) * 100);
-      var containerStyle =
-        "width:100%;" +
-        "padding-bottom:" + (ch / cw * 100) + "%;" +
-        "background-image:url('" + coverUrl + "');" +
-        "background-size:" + (scaleX * 100) + "% " + (scaleY * 100) + "%;" +
-        "background-position:" + posPercentX + "% " + posPercentY + "%;" +
-        "background-repeat:no-repeat;" +
-        "border-radius:12px;" +
-        "margin-bottom:24px;";
-      coverBlockHTML = '<div style="' + containerStyle + '"></div>';
-    } else {
-      coverBlockHTML = '<img src="' + coverUrl + '" class="cover-img">';
-    }
+    coverBlockHTML = '<img src="' + coverUrl + '" style="width:100%;height:auto;display:block;border-radius:12px;margin-bottom:24px;">';
   }
-
   var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Preview: ' + title + '</title>' +
     '<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
     '<style>' +
@@ -3479,7 +3064,7 @@ function previewInNewTab() {
     'img{max-width:100%;border-radius:10px;margin:16px 0;}' +
     'blockquote{border-left:3px solid var(--accent);padding:12px 20px;margin:16px 0;background:var(--accent-light);border-radius:0 8px 8px 0;font-style:italic;}' +
     'a{color:var(--accent);}' +
-    '.cover-img{width:100%;max-height:400px;object-fit:cover;border-radius:12px;margin-bottom:24px;}' +
+    '.cover-img{width:100%;height:auto;display:block;border-radius:12px;margin-bottom:24px;}' +
     /* Table styling — matches blog-post.html */
     '.tbl2-wrap{margin:24px 0;overflow-x:auto;border-radius:10px;border:1px solid var(--border);background:#fff;}' +
     '.tbl2-wrap table{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff;font-size:0.95rem;}' +
@@ -3559,10 +3144,8 @@ function clearBlogForm() {
   document.getElementById("blogCover").value = "";
   document.getElementById("blogTags").value = "";
   setEditorContent("");
-  coverCropState = { url: "", ratio: "16:9", posX: 50, posY: 50 };
-  document.getElementById("coverRatio").value = "16:9";
-  document.getElementById("coverCustomRatioRow").style.display = "none";
-  refreshCoverCropUI();
+   document.getElementById("blogCoverPosition").value = "center";
+  updateFeaturedPreview();
   document.getElementById("permalinkRow").style.display = "none";
   editingBlogIndex = -1;
   blogPostMeta = { status: "draft", visibility: "public", date: null };
@@ -3579,40 +3162,9 @@ function editBlogPost(i) {
   document.getElementById("blogSlug").value = post.slug || "";
   document.getElementById("blogExcerpt").value = post.excerpt || "";
 
-// Handle cover — could be string (old format) or object (new format)
-  var coverUrl = "";
-  if (typeof post.cover === "string") {
-    coverUrl = post.cover;
-    coverCropState = { url: coverUrl, ratio: "16:9", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
-  } else if (post.cover && typeof post.cover === "object") {
-    coverUrl = post.cover.url || "";
-    coverCropState = {
-      url: coverUrl,
-      ratio: post.cover.ratio || "16:9",
-      cropLeft: typeof post.cover.cropLeft === "number" ? post.cover.cropLeft : 10,
-      cropTop: typeof post.cover.cropTop === "number" ? post.cover.cropTop : 10,
-      cropWidth: typeof post.cover.cropWidth === "number" ? post.cover.cropWidth : 80,
-      cropHeight: typeof post.cover.cropHeight === "number" ? post.cover.cropHeight : 45
-    };
-  } else {
-    coverCropState = { url: "", ratio: "16:9", cropLeft: 10, cropTop: 10, cropWidth: 80, cropHeight: 45 };
-  }
-  document.getElementById("blogCover").value = coverUrl;
-
-  // Set ratio dropdown
-  var ratioSel = document.getElementById("coverRatio");
-  var presetRatios = ["16:9","4:3","1:1","3:4","21:9","original","free"];
-  if (presetRatios.indexOf(coverCropState.ratio) !== -1) {
-    if (coverCropState.ratio === "free" && !ratioSel.querySelector('option[value="free"]')) {
-      var opt = document.createElement("option");
-      opt.value = "free";
-      opt.textContent = "Free (custom)";
-      ratioSel.appendChild(opt);
-    }
-    ratioSel.value = coverCropState.ratio;
-  } else {
-    ratioSel.value = "16:9";
-  }
+// Handle cover — backwards compatible with old format (object with crop) and new format (object with position)
+  document.getElementById("blogCover").value = getCoverUrl(post.cover);
+  document.getElementById("blogCoverPosition").value = getCoverPosition(post.cover);
 
   document.getElementById("blogTags").value = (post.tags || []).join(", ");
   setEditorContent(post.content || "");
@@ -3660,21 +3212,14 @@ async function saveBlogPost(status) {
   else if (editingBlogIndex >= 0 && blogPosts[editingBlogIndex].date) postDate = blogPosts[editingBlogIndex].date;
   else postDate = new Date().toISOString();
 
-// Build cover object (or keep as plain string if no crop settings)
+// Build cover object: { url, position } — simple, no cropping
   var coverData;
   if (!cover) {
     coverData = "";
-  } else if (coverCropState.ratio === "original") {
-    coverData = cover; // simple string for backwards compat (no crop)
   } else {
     coverData = {
       url: cover,
-      ratio: coverCropState.ratio,
-      // Save crop rectangle as percentages of original image
-      cropLeft: coverCropState.cropLeft,
-      cropTop: coverCropState.cropTop,
-      cropWidth: coverCropState.cropWidth,
-      cropHeight: coverCropState.cropHeight
+      position: document.getElementById("blogCoverPosition").value || "center"
     };
   }
 
