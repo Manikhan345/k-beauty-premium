@@ -5,11 +5,7 @@
     "excerpt": "Discover 6 best Korean serums for sensitive skin. Calming, fragrance-free picks featuring centella, ceramide & beta-glucan for redness and barrier repair.",
     "cover": {
       "url": "https://images.unsplash.com/photo-1670201203208-055d6d79db4a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "ratio": "free",
-      "cropLeft": 0,
-      "cropTop": 0,
-      "cropWidth": 100,
-      "cropHeight": 69.02243496287662
+      "position": "bottom"
     },
     "tags": [
       "korean serums",
