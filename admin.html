@@ -3169,6 +3169,7 @@ function editBlogPost(i) {
 // Handle cover — backwards compatible with old format (object with crop) and new format (object with position)
   document.getElementById("blogCover").value = getCoverUrl(post.cover);
   document.getElementById("blogCoverPosition").value = getCoverPosition(post.cover);
+  updateFeaturedPreview();
 
   document.getElementById("blogTags").value = (post.tags || []).join(", ");
   setEditorContent(post.content || "");
