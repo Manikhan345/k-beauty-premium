@@ -650,10 +650,30 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
         <div class="form-row" style="margin:0;"><label>Excerpt</label><input type="text" id="blogExcerpt" placeholder="Short summary..."></div>
         <div class="form-row" style="margin:0;"><label>Tags (comma-separated)</label><input type="text" id="blogTags" placeholder="Skincare, Routine, Guide"></div>
       </div>
-      <div class="form-row" style="margin-bottom:14px;">
+     <div class="form-row" style="margin-bottom:14px;">
         <label>Cover Image URL</label>
-        <input type="text" id="blogCover" placeholder="https://..." oninput="if(typeof updateFeaturedPreview==='function')updateFeaturedPreview();" onpaste="var el=this;setTimeout(function(){if(typeof updateFeaturedPreview==='function')updateFeaturedPreview();},50);">
+        <input type="text" id="blogCover" placeholder="https://..." oninput="syncFeaturedImg(this.value)" onpaste="var el=this;setTimeout(function(){syncFeaturedImg(el.value);},50);">
       </div>
+      <script>
+        function syncFeaturedImg(url) {
+          url = (url || "").trim();
+          var img = document.getElementById('featuredImg');
+          var empty = document.getElementById('featuredImgEmpty');
+          var btn = document.getElementById('featuredImgBtn');
+          if (!img || !empty || !btn) return;
+          if (url) {
+            img.src = url;
+            img.style.display = 'block';
+            empty.style.display = 'none';
+            btn.textContent = 'Change featured image';
+          } else {
+            img.removeAttribute('src');
+            img.style.display = 'none';
+            empty.style.display = 'block';
+            btn.textContent = 'Set featured image';
+          }
+        }
+      </script>
      <!-- Cover Position (controls thumbnail framing only) -->
       <div class="form-row" style="margin-bottom:14px;">
         <label>Cover Image Thumbnail Position</label>
@@ -832,8 +852,9 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
       <div class="wp-meta-box">
         <div class="wp-meta-header">Featured Image</div>
         <div class="wp-meta-body">
-          <div id="featuredImagePreview" style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>
-          <button class="wp-mini-btn" onclick="document.getElementById('blogCover').focus()" style="width:100%;">Set featured image</button>
+          <img id="featuredImg" src="" alt="Featured" style="max-width:100%;height:auto;border-radius:6px;display:none;margin-bottom:8px;">
+          <div id="featuredImgEmpty" style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>
+          <button class="wp-mini-btn" id="featuredImgBtn" onclick="var inp=document.getElementById('blogCover');inp.focus();inp.scrollIntoView({behavior:'smooth',block:'center'});" style="width:100%;">Set featured image</button>
         </div>
       </div>
       
@@ -3149,7 +3170,7 @@ function clearBlogForm() {
   document.getElementById("blogTags").value = "";
   setEditorContent("");
    document.getElementById("blogCoverPosition").value = "center";
-  updateFeaturedPreview();
+  if (typeof syncFeaturedImg === 'function') syncFeaturedImg("");
   document.getElementById("permalinkRow").style.display = "none";
   editingBlogIndex = -1;
   blogPostMeta = { status: "draft", visibility: "public", date: null };
@@ -3167,9 +3188,9 @@ function editBlogPost(i) {
   document.getElementById("blogExcerpt").value = post.excerpt || "";
 
 // Handle cover — backwards compatible with old format (object with crop) and new format (object with position)
-  document.getElementById("blogCover").value = getCoverUrl(post.cover);
+ document.getElementById("blogCover").value = getCoverUrl(post.cover);
   document.getElementById("blogCoverPosition").value = getCoverPosition(post.cover);
-  updateFeaturedPreview();
+  if (typeof syncFeaturedImg === 'function') syncFeaturedImg(getCoverUrl(post.cover));
 
   document.getElementById("blogTags").value = (post.tags || []).join(", ");
   setEditorContent(post.content || "");
