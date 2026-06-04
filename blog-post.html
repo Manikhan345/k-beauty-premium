@@ -15,9 +15,7 @@
 .post-title { font-family: 'Noto Serif Display', serif; font-size: 2.2rem; font-weight: 700; margin: 8px 0 16px; line-height: 1.25; }
 .post-tags { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
 .post-tag { font-size: 0.7rem; background: var(--accent-light); color: var(--accent); padding: 3px 12px; border-radius: 20px; font-weight: 500; }
-.post-cover { width: 100%; border-radius: 12px; margin-bottom: 28px; max-height: 420px; object-fit: cover; }
-/* When inline style sets aspect-ratio, max-height won't apply (aspect-ratio controls size) */
-.post-cover[style*="aspect-ratio"] { max-height: none; height: auto; }
+.post-cover { width: 100%; height: auto; display: block; border-radius: 12px; margin-bottom: 28px; }
 .post-content { font-size: 1.05rem; line-height: 1.8; color: var(--text); }
 .post-content h2 { font-family: 'Noto Serif Display', serif; font-size: 1.5rem; margin: 32px 0 12px; color: var(--text); }
 .post-content h3 { font-family: 'Noto Serif Display', serif; font-size: 1.2rem; margin: 24px 0 10px; color: var(--text); }
@@ -26,23 +24,8 @@
 .post-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
 
 /* ─── IMAGE CROP STYLES (public view) ─── */
-.post-content .kb-img-cropped { display: block; background-color: #f5f5f5; }
-
-/* Legacy classes (for older posts that used Height presets) */
-.post-content .kb-img-small  { height: 200px !important; width: 100%; object-fit: cover; }
-.post-content .kb-img-medium { height: 400px !important; width: 100%; object-fit: cover; }
-.post-content .kb-img-large  { height: 600px !important; width: 100%; object-fit: cover; }
-.post-content .kb-img-hero   { height: 500px !important; width: 100%; object-fit: cover; }
-.post-content .kb-img-cover  { object-fit: cover; }
-.post-content .kb-img-contain{ object-fit: contain; }
-.post-content .kb-img-pos-top    { object-position: center top; }
-.post-content .kb-img-pos-center { object-position: center center; }
-.post-content .kb-img-pos-bottom { object-position: center bottom; }
-@media (max-width: 768px) {
-  .post-content .kb-img-large,
-  .post-content .kb-img-hero { height: 350px !important; }
-  .post-content .kb-img-medium { height: 280px !important; }
-}
+/* Body images display at natural aspect ratio */
+.post-content .kb-img { max-width: 100%; height: auto; border-radius: 4px; }
 .post-content ul, .post-content ol { margin: 0 0 16px; padding-left: 24px; }
 .post-content li { margin-bottom: 6px; }
 .post-content a { color: var(--accent); text-decoration: underline; }
@@ -299,7 +282,7 @@ async function loadBlogPost() {
       "@type": "BlogPosting",
       "headline": post.title,
       "description": post.excerpt || "",
-      "image": post.cover || "",
+      "image": (typeof post.cover === "string" ? post.cover : (post.cover && post.cover.url ? post.cover.url : "")),
       "datePublished": post.date,
       "author": { "@type": "Organization", "name": "K Beauty Premium" },
       "publisher": { "@type": "Organization", "name": "K Beauty Premium" }
@@ -309,41 +292,16 @@ async function loadBlogPost() {
     var dateStr = post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "";
     var tagsHTML = (post.tags || []).map(function(t) { return '<span class="post-tag">' + t + '</span>'; }).join("");
 // Handle cover — could be string (old format) or object (new format)
+  // Handle cover — string or object format, displays at natural aspect ratio
     var coverHTML = '';
-    if (typeof post.cover === "string" && post.cover) {
-      coverHTML = '<img src="' + post.cover + '" alt="' + post.title + '" class="post-cover">';
-    } else if (post.cover && typeof post.cover === "object" && post.cover.url) {
-      var cv = post.cover;
-      var isFullImage = cv.ratio === "original" || typeof cv.cropWidth !== "number" ||
-        (cv.cropLeft === 0 && cv.cropTop === 0 && cv.cropWidth === 100 && cv.cropHeight === 100);
-
-      if (isFullImage) {
-        coverHTML = '<img src="' + cv.url + '" alt="' + post.title + '" class="post-cover">';
-      } else {
-        // PURE CROP — no stretch, no zoom
-        // Wrapper has crop's aspect ratio. Image is sized larger than wrapper and shifted
-        // so only the crop region is visible.
-        var widthScale = 100 / (cv.cropWidth / 100);
-        var leftShift = -(cv.cropLeft / cv.cropWidth) * 100;
-        var topShift = -(cv.cropTop / cv.cropHeight) * (cv.cropHeight / cv.cropWidth) * 100;
-        var wrapStyle =
-          "position:relative;" +
-          "overflow:hidden;" +
-          "width:100%;" +
-          "padding-bottom:" + (cv.cropHeight / cv.cropWidth * 100) + "%;" +
-          "border-radius:12px;" +
-          "margin-bottom:28px;";
-        var imgStyle =
-          "position:absolute;" +
-          "top:" + topShift + "%;" +
-          "left:" + leftShift + "%;" +
-          "width:" + widthScale + "%;" +
-          "height:auto;" +
-          "max-width:none;";
-        coverHTML = '<div class="post-cover-wrap" style="' + wrapStyle + '">' +
-                    '<img src="' + cv.url + '" alt="' + post.title.replace(/"/g, "&quot;") + '" style="' + imgStyle + '">' +
-                    '</div>';
-      }
+    var coverUrl = "";
+    if (typeof post.cover === "string") {
+      coverUrl = post.cover;
+    } else if (post.cover && post.cover.url) {
+      coverUrl = post.cover.url;
+    }
+    if (coverUrl) {
+      coverHTML = '<img src="' + coverUrl + '" alt="' + post.title.replace(/"/g, "&quot;") + '" class="post-cover">';
     }
     var contentHTML = markdownToHTML(post.content || "");
 
