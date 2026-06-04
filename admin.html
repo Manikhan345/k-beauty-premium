@@ -652,9 +652,8 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
       </div>
       <div class="form-row" style="margin-bottom:14px;">
         <label>Cover Image URL</label>
-        <input type="text" id="blogCover" placeholder="https://...">
+        <input type="text" id="blogCover" placeholder="https://..." oninput="if(typeof updateFeaturedPreview==='function')updateFeaturedPreview();" onpaste="var el=this;setTimeout(function(){if(typeof updateFeaturedPreview==='function')updateFeaturedPreview();},50);">
       </div>
-
      <!-- Cover Position (controls thumbnail framing only) -->
       <div class="form-row" style="margin-bottom:14px;">
         <label>Cover Image Thumbnail Position</label>
@@ -1618,19 +1617,24 @@ document.getElementById("blogCoverPosition").addEventListener("change", function
 });
 
 function updateFeaturedPreview() {
-  var url = document.getElementById("blogCover").value.trim();
-  var preview = document.getElementById("blogCoverPreview");
+  var urlEl = document.getElementById("blogCover");
+  var url = urlEl ? (urlEl.value || "").trim() : "";
   var sidebar = document.getElementById("featuredImagePreview");
+  var setBtn = document.querySelector('#featuredImagePreview ~ button, .wp-meta-box .wp-meta-body > button');
+  
+  if (!sidebar) return;
+  
   if (!url) {
-    if (preview) preview.innerHTML = "";
-    if (sidebar) sidebar.innerHTML = '<div style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>';
+    sidebar.innerHTML = '<div style="text-align:center;color:#999;font-size:0.82rem;padding:20px 0;">No image set</div>';
+    if (setBtn) { setBtn.textContent = "Set featured image"; setBtn.style.display = "block"; }
     return;
   }
+  
   var safeUrl = url.replace(/"/g, "&quot;");
-  var imgHTML = '<img src="' + safeUrl + '" style="max-width:100%;border-radius:4px;display:block;">';
-  var removeBtn = '<div style="font-size:0.78rem;color:#a00;text-align:left;cursor:pointer;margin-top:6px;" onclick="document.getElementById(\'blogCover\').value=\'\';updateFeaturedPreview();">Remove featured image</div>';
-  if (preview) preview.innerHTML = imgHTML;
-  if (sidebar) sidebar.innerHTML = imgHTML + removeBtn;
+  sidebar.innerHTML = 
+    '<img src="' + safeUrl + '" style="max-width:100%;height:auto;border-radius:6px;display:block;margin-bottom:8px;">' +
+    '<div style="font-size:0.78rem;color:#a00;text-align:center;cursor:pointer;padding:6px 0;border:1px solid #FED7D7;border-radius:4px;background:#FFF5F5;" onclick="document.getElementById(\'blogCover\').value=\'\';updateFeaturedPreview();">Remove featured image</div>';
+  if (setBtn) { setBtn.style.display = "none"; }
 }
 
 // Compatibility shim — keeps old code paths from breaking
