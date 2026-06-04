@@ -70,9 +70,22 @@ async function loadBlogPosts() {
       return;
     }
 
+   // Helpers to handle cover as string OR object (backwards compat)
+    function getCoverUrl(cover) {
+      if (typeof cover === "string") return cover;
+      if (cover && cover.url) return cover.url;
+      return "";
+    }
+    function getCoverPosition(cover) {
+      if (cover && typeof cover === "object" && cover.position) return cover.position;
+      return "center";
+    }
+
     grid.innerHTML = posts.map(function(post) {
-      var coverHTML = post.cover 
-        ? '<div class="blog-card-img"><img src="' + post.cover + '" alt="' + post.title + '" loading="lazy"></div>' 
+      var coverUrl = getCoverUrl(post.cover);
+      var coverPos = getCoverPosition(post.cover);
+      var coverHTML = coverUrl 
+        ? '<div class="blog-card-img"><img src="' + coverUrl + '" alt="' + post.title.replace(/"/g, "&quot;") + '" loading="lazy" style="object-position:center ' + coverPos + ';"></div>' 
         : '<div class="blog-card-img" style="display:flex;align-items:center;justify-content:center;font-size:3rem;">📝</div>';
       var tagsHTML = (post.tags || []).map(function(t) { return '<span class="blog-tag">' + t + '</span>'; }).join("");
       var dateStr = post.date ? new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "";
