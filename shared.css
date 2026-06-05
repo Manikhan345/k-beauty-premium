@@ -325,7 +325,7 @@ html, body {
    ═══════════════════════════════════════════════════════════════ */
 .trust-hero { background: linear-gradient(180deg, var(--bg) 0%, var(--warm-cream) 100%); padding: 56px 16px 36px; position: relative; overflow: hidden; }
 .trust-hero::before { content: ""; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(183,110,121,0.08), transparent 70%); border-radius: 50%; pointer-events: none; }
-.trust-hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
+.trust-hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: center; position: relative; z-index: 1; }
 
 .trust-eyebrow { font-size: 0.72rem; font-weight: 700; color: var(--accent); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 14px; }
 .trust-headline { font-family: 'Noto Serif Display', serif; font-size: 2.5rem; font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 18px; }
@@ -335,30 +335,39 @@ html, body {
 .trust-criteria li { font-size: 0.84rem; color: var(--text); padding-left: 22px; position: relative; }
 .trust-criteria li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
 
-/* Slider card — glossy glass effect */
+/* Slider card — glossy glass effect with dynamic products */
 .trust-hero-slider { position: relative; }
-.slider-card { background: linear-gradient(180deg, #FFFFFF 0%, #FAF6F2 100%); border-radius: 20px; box-shadow: 0 24px 60px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.10), inset 0 1px 0 rgba(255,255,255,1); padding: 32px; min-height: 320px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.6); }
+.slider-card { background: linear-gradient(180deg, #FFFFFF 0%, #FAF6F2 100%); border-radius: 20px; box-shadow: 0 24px 60px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.10), inset 0 1px 0 rgba(255,255,255,1); padding: 36px; min-height: 380px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.6); display: flex; align-items: center; }
 .slider-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); pointer-events: none; }
 
-.slider-slide { display: none; animation: slideFadeIn 0.6s ease; }
+.slider-loading { width: 100%; text-align: center; padding: 60px 20px; color: var(--text-light); font-size: 0.9rem; }
+
+.slider-slide { display: none; width: 100%; text-decoration: none; color: inherit; cursor: pointer; animation: slideFadeIn 0.6s ease; }
 .slider-slide.active { display: block; }
 @keyframes slideFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-.slide-product { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-.slide-product img { width: 68px; height: 68px; border-radius: 12px; object-fit: contain; background: var(--warm-cream); padding: 6px; box-shadow: var(--shadow-sm); }
-.slide-product-name { font-size: 0.95rem; font-weight: 600; color: var(--text); line-height: 1.3; }
-.slide-product-cat { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+.slide-product { display: flex; gap: 24px; align-items: center; }
+.slide-product-img { flex: 0 0 160px; }
+.slide-product-img img { width: 160px; height: 160px; border-radius: 14px; object-fit: contain; background: var(--warm-cream); padding: 10px; box-shadow: 0 6px 20px rgba(26,20,16,0.06), inset 0 1px 0 rgba(255,255,255,1); transition: transform 0.3s; }
+.slider-slide:hover .slide-product-img img { transform: scale(1.04); }
 
-.slide-rating { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.slide-rating .stars { color: var(--gold); font-size: 1.05rem; letter-spacing: 1px; }
-.slide-rating .rating-num { font-size: 0.82rem; color: var(--text-mid); font-weight: 500; }
+.slide-product-details { flex: 1; min-width: 0; }
+.slide-product-cat { font-size: 0.72rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; margin-bottom: 8px; }
+.slide-product-name { font-size: 1.1rem; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.2s; }
+.slider-slide:hover .slide-product-name { color: var(--accent); }
 
-.slide-quote { font-size: 1.08rem; line-height: 1.5; color: var(--text); font-style: italic; margin-bottom: 14px; font-family: 'Noto Serif Display', serif; }
-.slide-reviewer { font-size: 0.78rem; color: var(--accent); font-weight: 700; letter-spacing: 0.3px; }
+.slide-rating { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; font-size: 1rem; letter-spacing: 1px; }
+.slide-rating .rating-num { font-size: 0.85rem; color: var(--text-mid); font-weight: 600; margin-left: 4px; }
+.slide-rating .review-count { font-size: 0.82rem; color: var(--text-light); font-weight: 500; }
 
-.slider-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+.slide-bought { font-size: 0.78rem; color: #C45500; font-weight: 600; margin-bottom: 12px; }
+
+.slide-cta { display: inline-block; font-size: 0.85rem; font-weight: 600; color: var(--accent); padding-top: 6px; border-top: 1px solid var(--border-soft); margin-top: 4px; }
+.slider-slide:hover .slide-cta { color: var(--accent-dark); }
+
+.slider-dots { display: flex; justify-content: center; gap: 6px; margin-top: 18px; flex-wrap: wrap; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; transition: all 0.3s; padding: 0; }
-.dot.active { background: var(--accent); width: 28px; border-radius: 4px; box-shadow: 0 2px 8px rgba(183,110,121,0.4); }
+.dot.active { background: var(--accent); width: 24px; border-radius: 4px; box-shadow: 0 2px 8px rgba(183,110,121,0.4); }
 
 /* Trust badges strip */
 .trust-badges { max-width: 1200px; margin: 40px auto 0; padding: 0 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; z-index: 1; }
