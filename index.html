@@ -130,14 +130,30 @@
 <script>
 (async function() {
   try {
-    // Wait for shared.js functions to be defined
     while (typeof loadConfig !== 'function' || typeof loadAllProducts !== 'function') {
       await new Promise(function(r) { setTimeout(r, 50); });
     }
     await loadConfig();
     var all = await loadAllProducts();
 
+    // ─── MANUAL REVIEW QUOTES (add quotes here by product ID) ───
+    // Format: "ASIN_OR_PRODUCT_ID": "Quote text here"
+    // If a product ID isn't here, the slide just shows product info without a quote.
+    var REVIEW_QUOTES = {
+      "B0CGTSDXLT": "Literally pulls out the gunk of sebaceous filaments. For oily skin, it's a match made in heaven.",
+      "B07J3QHL27": "My skin feels super clean, pores look refined, complexion noticeably smoother.",
+      "B0D1Q43KQZ": "Lightweight, non-greasy. Melts makeup and sunscreen effortlessly. Leaves skin soft without residue."
+    };
+
+    // ─── NON-KOREAN BRAND BLACKLIST (safety net) ───
+    var EXCLUDED_BRANDS = ['maybelline','garnier','olay','loreal',"l'oreal",'dove','nivea','cerave','cetaphil','native','marc anthony','charlotte tilbury','k18','aveeno','neutrogena','eucerin','pantene','tresemme','herbal essences','redken','olaplex','first aid beauty','urban decay','revlon','covergirl','fenty','rare beauty','huda beauty','nars','smashbox','benefit','clarins','aveda','suave','batiste','schwarzkopf','vaseline','jergens','aquaphor','simple','crest','colgate','sensodyne','clinique','tarte','milani'];
+
     function reviewCount(p) { return parseInt((p.reviews || "0").toString().replace(/[^0-9]/g, "")) || 0; }
+    function isExcludedBrand(name) {
+      if (!name) return false;
+      var lower = name.toLowerCase();
+      return EXCLUDED_BRANDS.some(function(b) { return lower.indexOf(b) !== -1; });
+    }
     function renderStars(r) {
       r = parseFloat(r) || 0;
       var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
@@ -147,14 +163,37 @@
       return '<span style="color:var(--gold)">' + "★".repeat(full) + (half ? "½" : "") + "</span>" + '<span style="color:#ddd">' + "★".repeat(empty) + "</span>";
     }
 
-    // Filter & sort
-    var top = all.filter(function(p) {
+    // 1. Filter: image, ID, rating>=4.4, reviews>=1000, not excluded brand
+    var filtered = all.filter(function(p) {
       if (!p.image || !p.image.toString().trim()) return false;
       if (!p.id || !p._cat) return false;
+      if (isExcludedBrand(p.name)) return false;
       return reviewCount(p) >= 1000 && (parseFloat(p.rating) || 0) >= 4.4;
-    }).sort(function(a, b) {
-      return reviewCount(b) - reviewCount(a);
-    }).slice(0, 10);
+    });
+
+    // 2. Group by category, take TOP product from each category
+    var byCategory = {};
+    filtered.forEach(function(p) {
+      if (!byCategory[p._cat]) byCategory[p._cat] = [];
+      byCategory[p._cat].push(p);
+    });
+    var topPerCat = [];
+    Object.keys(byCategory).forEach(function(cat) {
+      byCategory[cat].sort(function(a, b) { return reviewCount(b) - reviewCount(a); });
+      topPerCat.push(byCategory[cat][0]);
+    });
+
+    // 3. Dedupe by product ID
+    var seen = {};
+    var deduped = topPerCat.filter(function(p) {
+      if (seen[p.id]) return false;
+      seen[p.id] = true;
+      return true;
+    });
+
+    // 4. Sort by review count descending, take top 10
+    deduped.sort(function(a, b) { return reviewCount(b) - reviewCount(a); });
+    var top = deduped.slice(0, 10);
 
     var card = document.getElementById("sliderCard");
     var dotsEl = document.getElementById("sliderDots");
@@ -170,6 +209,8 @@
       var url = "/p/" + p._cat + "/" + p.id;
       var revStr = (p.reviews || "0").toString();
       var safeName = (p.name || "").replace(/"/g, "&quot;");
+      var quote = REVIEW_QUOTES[p.id];
+      var quoteHtml = quote ? '<div class="slide-quote">"' + quote.replace(/"/g, "&quot;") + '"</div><div class="slide-reviewer">— Verified Amazon Purchase</div>' : '';
       return '<a href="' + url + '" class="slider-slide' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '">' +
         '<div class="slide-product">' +
           '<div class="slide-product-img"><img src="' + p.image + '" alt="' + safeName + '" loading="lazy"></div>' +
@@ -178,6 +219,7 @@
             '<div class="slide-product-name">' + p.name + '</div>' +
             '<div class="slide-rating">' + renderStars(p.rating) + '<span class="rating-num">' + (p.rating || '') + '</span><span class="review-count">· ' + revStr + ' reviews</span></div>' +
             (p.bought ? '<div class="slide-bought">🔥 ' + p.bought + '</div>' : '') +
+            quoteHtml +
             '<div class="slide-cta">View product →</div>' +
           '</div>' +
         '</div>' +
