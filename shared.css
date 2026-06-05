@@ -44,6 +44,12 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .search-wrap input:focus { background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.3); }
 .search-wrap .search-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.6); font-size: 1.1rem; }
 
+/* ── STICKY NAV WRAPPER ── */
+#siteNav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 /* ── NAV ── */
 .nav { position: sticky; top: 0; z-index: 100; background: linear-gradient(135deg, #C4956A, #D4A08C); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; box-shadow: 0 2px 8px rgba(196,149,106,0.2); }
 .nav::-webkit-scrollbar { display: none; }
