@@ -149,10 +149,10 @@
     var EXCLUDED_BRANDS = ['maybelline','garnier','olay','loreal',"l'oreal",'dove','nivea','cerave','cetaphil','native','marc anthony','charlotte tilbury','k18','aveeno','neutrogena','eucerin','pantene','tresemme','herbal essences','redken','olaplex','first aid beauty','urban decay','revlon','covergirl','fenty','rare beauty','huda beauty','nars','smashbox','benefit','clarins','aveda','suave','batiste','schwarzkopf','vaseline','jergens','aquaphor','simple','crest','colgate','sensodyne','clinique','tarte','milani'];
 
     function reviewCount(p) { return parseInt((p.reviews || "0").toString().replace(/[^0-9]/g, "")) || 0; }
-    function isExcludedBrand(name) {
+   function isExcludedBrand(name) {
       if (!name) return false;
-      var lower = name.toLowerCase();
-      return EXCLUDED_BRANDS.some(function(b) { return lower.indexOf(b) !== -1; });
+      var lower = name.toLowerCase().trim();
+      return EXCLUDED_BRANDS.some(function(b) { return lower.indexOf(b) === 0; });
     }
     function renderStars(r) {
       r = parseFloat(r) || 0;
@@ -168,7 +168,7 @@
       if (!p.image || !p.image.toString().trim()) return false;
       if (!p.id || !p._cat) return false;
       if (isExcludedBrand(p.name)) return false;
-      return reviewCount(p) >= 1000 && (parseFloat(p.rating) || 0) >= 4.4;
+      return reviewCount(p) >= 100 && (parseFloat(p.rating) || 0) >= 4.0;
     });
 
     // 2. Group by category, take TOP product from each category
