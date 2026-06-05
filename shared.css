@@ -184,7 +184,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 
 /* Stop the entire page from scrolling sideways on mobile */
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
