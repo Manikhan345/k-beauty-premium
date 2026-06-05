@@ -90,69 +90,12 @@
       </ul>
     </div>
 
-    <!-- RIGHT: Auto-slider with reviews -->
+   <!-- RIGHT: Dynamic top products slider -->
     <div class="trust-hero-slider">
       <div class="slider-card" id="sliderCard">
-
-        <!-- Slide 1: Anua -->
-        <div class="slider-slide active" data-slide="0">
-          <div class="slide-product">
-            <img src="REPLACE_WITH_ANUA_IMAGE_URL" alt="Anua Heartleaf Cleansing Oil">
-            <div class="slide-product-info">
-              <div class="slide-product-name">Anua Heartleaf Cleansing Oil</div>
-              <div class="slide-product-cat">Korean Cleansers</div>
-            </div>
-          </div>
-          <div class="slide-rating">
-            <span class="stars">★★★★½</span>
-            <span class="rating-num">4.4 · 27,200 reviews</span>
-          </div>
-          <p class="slide-quote">"Literally pulls out the gunk of sebaceous filaments. For oily skin, it's a match made in heaven."</p>
-          <div class="slide-reviewer">— Verified Amazon Purchase</div>
-        </div>
-
-        <!-- Slide 2: SKIN1004 -->
-        <div class="slider-slide" data-slide="1">
-          <div class="slide-product">
-            <img src="REPLACE_WITH_SKIN1004_IMAGE_URL" alt="SKIN1004 Madagascar Centella Light Cleansing Oil">
-            <div class="slide-product-info">
-              <div class="slide-product-name">SKIN1004 Centella Light Cleansing Oil</div>
-              <div class="slide-product-cat">Sensitive Skin Care</div>
-            </div>
-          </div>
-          <div class="slide-rating">
-            <span class="stars">★★★★½</span>
-            <span class="rating-num">4.6 · 12,300 reviews</span>
-          </div>
-          <p class="slide-quote">"My skin feels super clean, pores look refined, complexion noticeably smoother. Doesn't irritate sensitive skin."</p>
-          <div class="slide-reviewer">— Verified Amazon Purchase</div>
-        </div>
-
-        <!-- Slide 3: Beauty of Joseon -->
-        <div class="slider-slide" data-slide="2">
-          <div class="slide-product">
-            <img src="REPLACE_WITH_BOJ_IMAGE_URL" alt="Beauty of Joseon Ginseng Cleansing Oil">
-            <div class="slide-product-info">
-              <div class="slide-product-name">Beauty of Joseon Ginseng Cleansing Oil</div>
-              <div class="slide-product-cat">Daily Skincare</div>
-            </div>
-          </div>
-          <div class="slide-rating">
-            <span class="stars">★★★★½</span>
-            <span class="rating-num">4.4 · 2,000 reviews</span>
-          </div>
-          <p class="slide-quote">"Lightweight, non-greasy. Melts makeup and sunscreen effortlessly. Leaves skin soft without any residue."</p>
-          <div class="slide-reviewer">— Verified Amazon Purchase</div>
-        </div>
-
+        <div class="slider-loading">Loading top products...</div>
       </div>
-
-      <!-- Dots -->
-      <div class="slider-dots">
-        <button class="dot active" data-dot="0" aria-label="Slide 1"></button>
-        <button class="dot" data-dot="1" aria-label="Slide 2"></button>
-        <button class="dot" data-dot="2" aria-label="Slide 3"></button>
-      </div>
+      <div class="slider-dots" id="sliderDots"></div>
     </div>
 
   </div>
@@ -185,32 +128,95 @@
 </section>
 
 <script>
-(function() {
-  var slides = document.querySelectorAll(".slider-slide");
-  var dots = document.querySelectorAll(".dot");
-  if (slides.length === 0) return;
-  var current = 0;
-  var total = slides.length;
-  var autoplayTimer;
-  function showSlide(i) {
-    slides.forEach(function(s, n) { s.classList.toggle("active", n === i); });
-    dots.forEach(function(d, n) { d.classList.toggle("active", n === i); });
-    current = i;
-  }
-  function nextSlide() { showSlide((current + 1) % total); }
-  function startAutoplay() { autoplayTimer = setInterval(nextSlide, 5000); }
-  function stopAutoplay() { clearInterval(autoplayTimer); }
-  dots.forEach(function(d, i) {
-    d.addEventListener("click", function() {
-      stopAutoplay(); showSlide(i); startAutoplay();
+(async function() {
+  try {
+    // Wait for shared.js functions to be defined
+    while (typeof loadConfig !== 'function' || typeof loadAllProducts !== 'function') {
+      await new Promise(function(r) { setTimeout(r, 50); });
+    }
+    await loadConfig();
+    var all = await loadAllProducts();
+
+    function reviewCount(p) { return parseInt((p.reviews || "0").toString().replace(/[^0-9]/g, "")) || 0; }
+    function renderStars(r) {
+      r = parseFloat(r) || 0;
+      var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
+      var full = Math.floor(rounded);
+      var half = (rounded % 1 !== 0) ? 1 : 0;
+      var empty = 5 - full - half;
+      return '<span style="color:var(--gold)">' + "★".repeat(full) + (half ? "½" : "") + "</span>" + '<span style="color:#ddd">' + "★".repeat(empty) + "</span>";
+    }
+
+    // Filter & sort
+    var top = all.filter(function(p) {
+      if (!p.image || !p.image.toString().trim()) return false;
+      if (!p.id || !p._cat) return false;
+      return reviewCount(p) >= 1000 && (parseFloat(p.rating) || 0) >= 4.4;
+    }).sort(function(a, b) {
+      return reviewCount(b) - reviewCount(a);
+    }).slice(0, 10);
+
+    var card = document.getElementById("sliderCard");
+    var dotsEl = document.getElementById("sliderDots");
+    if (!card || top.length === 0) {
+      if (card) card.innerHTML = '<div class="slider-loading">No products available</div>';
+      return;
+    }
+
+    // Render slides
+    card.innerHTML = top.map(function(p, i) {
+      var catMeta = (typeof CATEGORY_META !== 'undefined' && CATEGORY_META[p._cat]) ? CATEGORY_META[p._cat] : null;
+      var catLabel = catMeta ? catMeta.title.replace(/^[^\w]*/, "").trim() : p._cat;
+      var url = "/p/" + p._cat + "/" + p.id;
+      var revStr = (p.reviews || "0").toString();
+      var safeName = (p.name || "").replace(/"/g, "&quot;");
+      return '<a href="' + url + '" class="slider-slide' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '">' +
+        '<div class="slide-product">' +
+          '<div class="slide-product-img"><img src="' + p.image + '" alt="' + safeName + '" loading="lazy"></div>' +
+          '<div class="slide-product-details">' +
+            '<div class="slide-product-cat">' + catLabel + '</div>' +
+            '<div class="slide-product-name">' + p.name + '</div>' +
+            '<div class="slide-rating">' + renderStars(p.rating) + '<span class="rating-num">' + (p.rating || '') + '</span><span class="review-count">· ' + revStr + ' reviews</span></div>' +
+            (p.bought ? '<div class="slide-bought">🔥 ' + p.bought + '</div>' : '') +
+            '<div class="slide-cta">View product →</div>' +
+          '</div>' +
+        '</div>' +
+      '</a>';
+    }).join("");
+
+    // Render dots
+    dotsEl.innerHTML = top.map(function(_, i) {
+      return '<button class="dot' + (i === 0 ? ' active' : '') + '" data-dot="' + i + '" aria-label="Slide ' + (i + 1) + '"></button>';
+    }).join("");
+
+    // Slider logic
+    var slides = card.querySelectorAll(".slider-slide");
+    var dots = dotsEl.querySelectorAll(".dot");
+    var current = 0;
+    var total = slides.length;
+    var autoplayTimer;
+    function showSlide(i) {
+      slides.forEach(function(s, n) { s.classList.toggle("active", n === i); });
+      dots.forEach(function(d, n) { d.classList.toggle("active", n === i); });
+      current = i;
+    }
+    function nextSlide() { showSlide((current + 1) % total); }
+    function startAutoplay() { clearInterval(autoplayTimer); autoplayTimer = setInterval(nextSlide, 5000); }
+    function stopAutoplay() { clearInterval(autoplayTimer); }
+    dots.forEach(function(d, i) {
+      d.addEventListener("click", function(e) {
+        e.preventDefault(); e.stopPropagation();
+        stopAutoplay(); showSlide(i); startAutoplay();
+      });
     });
-  });
-  var card = document.getElementById("sliderCard");
-  if (card) {
     card.addEventListener("mouseenter", stopAutoplay);
     card.addEventListener("mouseleave", startAutoplay);
+    startAutoplay();
+  } catch (e) {
+    console.error("Hero slider error:", e);
+    var c = document.getElementById("sliderCard");
+    if (c) c.innerHTML = '<div class="slider-loading">Unable to load products. Please refresh.</div>';
   }
-  startAutoplay();
 })();
 </script>
 
