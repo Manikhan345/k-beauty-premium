@@ -337,7 +337,7 @@ html, body {
 
 /* Slider card — glossy glass effect with dynamic products */
 .trust-hero-slider { position: relative; }
-.slider-card { background: linear-gradient(180deg, #FFFFFF 0%, #FAF6F2 100%); border-radius: 20px; box-shadow: 0 24px 60px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.10), inset 0 1px 0 rgba(255,255,255,1); padding: 36px; min-height: 380px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.6); display: flex; align-items: center; }
+.slider-card { background: linear-gradient(180deg, #FFFFFF 0%, #FAF6F2 100%); border-radius: 20px; box-shadow: 0 24px 60px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.10), inset 0 1px 0 rgba(255,255,255,1); padding: 40px; min-height: 440px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.6); display: flex; align-items: center; }
 .slider-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); pointer-events: none; }
 
 .slider-loading { width: 100%; text-align: center; padding: 60px 20px; color: var(--text-light); font-size: 0.9rem; }
@@ -346,9 +346,9 @@ html, body {
 .slider-slide.active { display: block; }
 @keyframes slideFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-.slide-product { display: flex; gap: 24px; align-items: center; }
-.slide-product-img { flex: 0 0 160px; }
-.slide-product-img img { width: 160px; height: 160px; border-radius: 14px; object-fit: contain; background: var(--warm-cream); padding: 10px; box-shadow: 0 6px 20px rgba(26,20,16,0.06), inset 0 1px 0 rgba(255,255,255,1); transition: transform 0.3s; }
+.slide-product { display: flex; gap: 28px; align-items: center; }
+.slide-product-img { flex: 0 0 220px; }
+.slide-product-img img { width: 220px; height: 220px; border-radius: 16px; object-fit: contain; background: var(--warm-cream); padding: 14px; box-shadow: 0 10px 30px rgba(26,20,16,0.08), inset 0 1px 0 rgba(255,255,255,1); transition: transform 0.3s; }
 .slider-slide:hover .slide-product-img img { transform: scale(1.04); }
 
 .slide-product-details { flex: 1; min-width: 0; }
@@ -381,9 +381,15 @@ html, body {
   .trust-hero { padding: 36px 16px 28px; }
   .trust-hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .trust-headline { font-size: 1.8rem; }
-  .slider-card { min-height: 280px; padding: 24px; }
-  .slide-quote { font-size: 1rem; }
+  .slider-card { min-height: 380px; padding: 28px; }
   .trust-badges { grid-template-columns: 1fr; gap: 10px; margin-top: 28px; }
   .trust-badge { padding: 14px 16px; }
   .trust-criteria { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .slide-product { flex-direction: column; gap: 18px; align-items: center; text-align: center; }
+  .slide-product-img { flex: 0 0 auto; }
+  .slide-product-img img { width: 200px; height: 200px; }
+  .slide-rating { justify-content: center; }
+  .slide-cta { display: block; text-align: center; }
 }
