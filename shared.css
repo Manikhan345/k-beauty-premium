@@ -71,7 +71,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .search-wrap .search-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.6); font-size: 1.1rem; }
 
 /* ── STICKY NAV WRAPPER ── */
-#siteNav {
+#siteHeader {
   position: sticky;
   top: 0;
   z-index: 100;
