@@ -149,15 +149,35 @@ async function loadConfig() {
 function renderHeader() {
   var el = document.getElementById("siteHeader");
   if (!el) return;
-  el.innerHTML = '<header class="header">' +
-    '<img src="header-banner.jpeg" alt="Korean skincare and K-beauty products" class="header-bg">' +
-    '<div class="header-overlay"></div>' +
-    '<div class="header-inner">' +
-    '<h1><a href="/">' + SITE_NAME_HTML + '</a></h1>' +
-    '<p class="header-sub">' + SITE_SUBTITLE + '</p>' +
-    '</div>' +
+
+  // Build main nav from top categories
+  var mainCats = ["skincare", "makeup", "haircare", "sunscreen", "serums"];
+  var navLinks = "";
+  mainCats.forEach(function(key) {
+    if (!CATEGORY_META[key]) return;
+    var label = CATEGORY_META[key].title.replace(/^[^\w]*/, "").trim();
+    navLinks += '<a href="/' + key + '">' + label + '</a>';
+  });
+  navLinks += '<a href="/best-sellers">Shop All</a>';
+  navLinks += '<a href="/blog">Blog</a>';
+
+  el.innerHTML =
+    '<header class="site-header">' +
+      '<div class="site-header-inner">' +
+        '<a href="/" class="site-logo">' +
+          '<div class="logo-main">K <span>Beauty</span></div>' +
+          '<div class="logo-tagline">PREMIUM</div>' +
+        '</a>' +
+        '<nav class="site-nav-links">' + navLinks + '</nav>' +
+        '<div class="site-search global-search">' +
+          '<input type="text" id="globalSearchInput" placeholder="Search products, guides..." onkeyup="handleSearchKey(event, this.value)" autocomplete="off">' +
+          '<span class="search-icon" onclick="submitSearch()">🔍</span>' +
+          '<div class="search-results" id="globalSearchResults"></div>' +
+        '</div>' +
+        '<button class="mobile-menu-btn" onclick="openDrawer()" aria-label="Menu">☰</button>' +
+      '</div>' +
     '</header>';
-  // Inject SEO meta tags (canonical, OG, Twitter, schema)
+
   injectSEO();
 }
 
@@ -317,9 +337,8 @@ function renderNav(activePage, searchFunction) {
       '</div>' +
     '</div>';
 
-  el.innerHTML = desktopNav + mobileNav + drawer;
+el.innerHTML = drawer;
 }
-
 function openDrawer() {
   document.getElementById("drawer").classList.add("open");
   document.getElementById("drawerOverlay").classList.add("open");
