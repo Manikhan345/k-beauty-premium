@@ -146,15 +146,16 @@ async function loadConfig() {
 // ═══════════════════════════════════════════════════════════════
 // HEADER
 // ═══════════════════════════════════════════════════════════════
-function renderHeader() {
+async function renderHeader() {
   var el = document.getElementById("siteHeader");
   if (!el) return;
 
-  // Build main nav from top categories
-  var mainCats = ["skincare", "makeup", "haircare", "sunscreen", "serums"];
+  // Wait for config so we can build nav from real categories
+  if (!CONFIG_LOADED) await loadConfig();
+
+  // Build nav dynamically from config.json categories
   var navLinks = "";
-  mainCats.forEach(function(key) {
-    if (!CATEGORY_META[key]) return;
+  Object.keys(CATEGORY_META).forEach(function(key) {
     var label = CATEGORY_META[key].title.replace(/^[^\w]*/, "").trim();
     navLinks += '<a href="/' + key + '">' + label + '</a>';
   });
