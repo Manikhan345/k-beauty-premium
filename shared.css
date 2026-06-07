@@ -447,8 +447,8 @@ html, body {
 /* ═══════════════════════════════════════════════════════════════
    POPULAR GUIDES SECTION
    ═══════════════════════════════════════════════════════════════ */
-.popular-guides { padding: 60px 16px 30px; background: var(--bg); }
-.popular-guides-inner { max-width: 1280px; margin: 0 auto; }
+.popular-guides { padding: 50px 16px 20px; background: transparent; }
+.popular-guides-inner { max-width: 1200px; margin: 0 auto; }
 
 .popular-guides-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
 .popular-guides-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.9rem; font-weight: 700; color: var(--text); margin: 0; }
