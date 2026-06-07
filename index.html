@@ -309,10 +309,21 @@
   } catch (e) {
     console.error("Hero slider error:", e);
     var c = document.getElementById("sliderCard");
-    if (c) c.innerHTML = '<div class="slider-loading">Unable to load products. Please refresh.</div>';
+  if (c) c.innerHTML = '<div class="slider-loading">Unable to load products. Please refresh.</div>';
   }
 })();
 </script>
+
+<!-- ═══ POPULAR GUIDES ═══ -->
+<section class="popular-guides" id="popularGuidesSection" style="display:none;">
+  <div class="popular-guides-inner">
+    <div class="popular-guides-header">
+      <h2>Popular Guides</h2>
+      <a href="/blog" class="popular-guides-link">View all guides →</a>
+    </div>
+    <div class="popular-guides-grid" id="popularGuidesGrid"></div>
+  </div>
+</section>
 
 <!-- TIKTOK CAROUSEL -->
 <section id="tiktokSection" style="display:none;max-width:1200px;margin:28px auto;padding:0 16px;">
@@ -329,16 +340,7 @@
 
 <main class="container" id="mainContent"></main>
 
-<!-- LATEST FROM THE BLOG -->
-<section class="popular-guides" id="popularGuidesSection" style="display:none;">
-  <div class="popular-guides-inner">
-    <div class="popular-guides-header">
-      <h2>Popular Guides</h2>
-      <a href="/blog" class="popular-guides-link">View all guides →</a>
-    </div>
-    <div class="popular-guides-grid" id="popularGuidesGrid"></div>
-  </div>
-</section>
+
 
 <div id="siteFooter"></div>
 
