@@ -443,6 +443,40 @@ html, body {
   .site-search { flex: 1; width: auto; }
   .mobile-menu-btn { display: block; order: 3; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   POPULAR GUIDES SECTION
+   ═══════════════════════════════════════════════════════════════ */
+.popular-guides { padding: 60px 16px 30px; background: var(--bg); }
+.popular-guides-inner { max-width: 1280px; margin: 0 auto; }
+
+.popular-guides-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+.popular-guides-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.9rem; font-weight: 700; color: var(--text); margin: 0; }
+.popular-guides-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+.popular-guides-link:hover { color: var(--accent-dark); }
+
+.popular-guides-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+.guide-card { background: var(--card); border-radius: 16px; box-shadow: 0 6px 24px rgba(26,20,16,0.06), inset 0 1px 0 rgba(255,255,255,1); display: flex; flex-direction: row; overflow: hidden; text-decoration: none; color: inherit; transition: all 0.3s; border: 1px solid var(--border-soft); min-height: 130px; }
+.guide-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.08); border-color: var(--accent-light); }
+
+.guide-card-img-wrap { flex: 0 0 42%; background: var(--warm-cream); overflow: hidden; position: relative; }
+.guide-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
+.guide-card:hover .guide-card-img-wrap img { transform: scale(1.06); }
+.guide-card-img-empty { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-light); }
+
+.guide-card-content { flex: 1; padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.guide-card-title { font-family: 'Noto Serif Display', serif; font-size: 1rem; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.guide-card-excerpt { font-size: 0.8rem; color: var(--text-mid); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+@media (max-width: 1024px) {
+  .popular-guides-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .popular-guides { padding: 40px 16px 20px; }
+  .popular-guides-grid { grid-template-columns: 1fr; }
+  .popular-guides-header h2 { font-size: 1.5rem; }
+}
 @media (max-width: 600px) {
   .logo-tagline { display: none; }
   .logo-main { font-size: 1.4rem; }
