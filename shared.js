@@ -552,11 +552,10 @@ var globalSearchTimer = null;
 
 var globalSearchLoading = null;
 async function loadAllProducts() {
-  if (globalSearchCache) return globalSearchCache;
+  if (globalSearchCache && globalSearchCache.length > 0) return globalSearchCache;
   if (globalSearchLoading) return globalSearchLoading;
-  
+   
   globalSearchLoading = (async function() {
-    globalSearchCache = [];
     var keys = Object.keys(CATEGORY_META);
     var promises = keys.map(function(key) {
       return fetchProducts(CATEGORY_META[key].file).then(function(products) {
