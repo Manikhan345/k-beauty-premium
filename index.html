@@ -515,7 +515,10 @@ async function buildHomepage() {
   // Check for search query FIRST
   var urlParams = new URLSearchParams(window.location.search);
   var searchQuery = urlParams.get("search");
-  if (searchQuery && searchQuery.trim().length >= 2) {
+ if (searchQuery && searchQuery.trim().length >= 2) {
+    // Hide hero when showing search results
+    var hero = document.querySelector(".trust-hero");
+    if (hero) hero.style.display = "none";
     showSearchResults(searchQuery.trim());
     return;
   }
