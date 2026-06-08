@@ -60,14 +60,16 @@
   gtag("config", GA_ID);
 })();
 
-// ── Google AdSense ──
-(function() {
-  var s = document.createElement("script");
-  s.async = true;
-  s.crossOrigin = "anonymous";
-  s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4829107618117363";
-  document.head.appendChild(s);
-})();
+// ── Google AdSense (deferred 3s for better LCP) ──
+window.addEventListener("load", function() {
+  setTimeout(function() {
+    var s = document.createElement("script");
+    s.async = true;
+    s.crossOrigin = "anonymous";
+    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4829107618117363";
+    document.head.appendChild(s);
+  }, 3000);
+});
 
 // ── These are populated from config.json ──
 var SITE_PAGES = {};
@@ -106,10 +108,14 @@ var COPYRIGHT_YEAR = '2026';
 // ═══════════════════════════════════════════════════════════════
 // LOAD CONFIG
 // ═══════════════════════════════════════════════════════════════
+var _configLoadingPromise = null;
 async function loadConfig() {
   if (CONFIG_LOADED) return;
-  try {
-    var resp = await fetch("/config.json");
+  if (_configLoadingPromise) return _configLoadingPromise;
+  
+  _configLoadingPromise = (async function() {
+    try {
+      var resp = await fetch("/config.json");
     if (!resp.ok) throw new Error("Failed to load config.json");
     var config = await resp.json();
     var cats = config.categories || {};
@@ -138,9 +144,13 @@ async function loadConfig() {
     // Fallback to hardcoded defaults if config.json fails
     SITE_PAGES = { home:"/", skincare:"/skincare", serums:"/serums", facemasks:"/facemasks", sunscreen:"/sunscreen", makeup:"/makeup", lipcare:"/lipcare", haircare:"/haircare" };
     CATEGORY_META = { skincare:{title:"🧴 Skincare",file:"/data/skincare.json"}, serums:{title:"💎 Serums & Essences",file:"/data/serums.json"}, facemasks:{title:"🎭 Face Masks",file:"/data/facemasks.json"}, sunscreen:{title:"☀️ Sunscreen / SPF",file:"/data/sunscreen.json"}, makeup:{title:"💄 Makeup",file:"/data/makeup.json"}, lipcare:{title:"👄 Lip Care",file:"/data/lipcare.json"}, haircare:{title:"💇 Hair Care",file:"/data/haircare.json"} };
-    CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
-    CONFIG_LOADED = true;
-  }
+   CATEGORY_TAGS = { skincare:["Cleanser","Moisturizer","Toner","Cream","Exfoliator","Eye Care","Patches","Sets"], serums:["Brightening","Hydrating","Anti-Aging","Acne Care","Pore Care","Vitamin C","Niacinamide","Snail Mucin"], facemasks:["Sheet Mask","Sleeping Mask","Clay Mask","Peel-Off","Pads","Patches","Wash-Off","Hydrogel"], sunscreen:["Cream","Gel","Stick","Tinted","Fluid","Water-Resistant","Tone-Up","Matte"], makeup:["Foundation","Lip Tint","Eye Shadow","Mascara","Brow","Blush","Powder","Eyeliner"], lipcare:["Lip Mask","Lip Tint","Lip Balm","Lip Gloss","Lip Serum","Matte","Glossy","Tinted"], haircare:["Shampoo","Treatment","Hair Serum","Conditioner","Scalp Care","Mask","Oil","Mist"] };
+      CONFIG_LOADED = true;
+    }
+    _configLoadingPromise = null;
+  })();
+  
+  return _configLoadingPromise;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -421,9 +431,14 @@ function renderProductCard(product, btnText, categoryKey) {
   var badgeClass = BADGE_MAP[product.badge] || "";
   var badgeHTML = product.badge ? '<span class="product-badge ' + badgeClass + '">' + product.badge + '</span>' : "";
 
-  var hasImage = product.image && product.image.trim() !== "";
+ var hasImage = product.image && product.image.trim() !== "";
+  // Optimize Amazon image URLs: reduce from 960px to 400px (saves ~60% bandwidth)
+  var imgSrc = product.image || "";
+  if (imgSrc && imgSrc.indexOf('media-amazon.com') !== -1) {
+    imgSrc = imgSrc.replace(/_AC_UL\d+_/, '_AC_UL400_');
+  }
   var imgHTML = hasImage
-    ? '<img src="' + product.image + '" alt="' + product.name + '" loading="lazy">'
+    ? '<img src="' + imgSrc + '" alt="' + product.name + '" width="400" height="400" loading="lazy">'
     : '<div class="placeholder-icon">📦</div>';
 
   var r = parseFloat(product.rating) || 0;
@@ -480,15 +495,28 @@ function renderProductCard(product, btnText, categoryKey) {
     '</div>';
 }
 
+var _productCache = {};
+var _productLoading = {};
 async function fetchProducts(jsonFile) {
-  try {
-    var response = await fetch(jsonFile);
-    if (!response.ok) throw new Error("Failed to load " + jsonFile);
-    return await response.json();
-  } catch (err) {
-    console.error("Error loading products:", err);
-    return [];
-  }
+  if (_productCache[jsonFile]) return _productCache[jsonFile];
+  if (_productLoading[jsonFile]) return _productLoading[jsonFile];
+  
+  _productLoading[jsonFile] = (async function() {
+    try {
+      var response = await fetch(jsonFile);
+      if (!response.ok) throw new Error("Failed to load " + jsonFile);
+      var data = await response.json();
+      _productCache[jsonFile] = data;
+      _productLoading[jsonFile] = null;
+      return data;
+    } catch (err) {
+      console.error("Error loading products:", err);
+      _productLoading[jsonFile] = null;
+      return [];
+    }
+  })();
+  
+  return _productLoading[jsonFile];
 }
 
 // ═══════════════════════════════════════════════════════════════
