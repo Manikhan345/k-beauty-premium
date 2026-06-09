@@ -437,8 +437,8 @@ function renderProductCard(product, btnText, categoryKey) {
   if (imgSrc && imgSrc.indexOf('media-amazon.com') !== -1) {
     imgSrc = imgSrc.replace(/_AC_UL\d+_/, '_AC_UL400_');
   }
-  var imgHTML = hasImage
-    ? '<img src="' + imgSrc + '" alt="' + product.name + '" width="400" height="400" loading="lazy">'
+ var imgHTML = hasImage
+    ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy">'
     : '<div class="placeholder-icon">📦</div>';
 
   var r = parseFloat(product.rating) || 0;
