@@ -495,28 +495,15 @@ function renderProductCard(product, btnText, categoryKey) {
     '</div>';
 }
 
-var _productCache = {};
-var _productLoading = {};
 async function fetchProducts(jsonFile) {
-  if (_productCache[jsonFile]) return _productCache[jsonFile];
-  if (_productLoading[jsonFile]) return _productLoading[jsonFile];
-  
-  _productLoading[jsonFile] = (async function() {
-    try {
-      var response = await fetch(jsonFile);
-      if (!response.ok) throw new Error("Failed to load " + jsonFile);
-      var data = await response.json();
-      _productCache[jsonFile] = data;
-      _productLoading[jsonFile] = null;
-      return data;
-    } catch (err) {
-      console.error("Error loading products:", err);
-      _productLoading[jsonFile] = null;
-      return [];
-    }
-  })();
-  
-  return _productLoading[jsonFile];
+  try {
+    var response = await fetch(jsonFile);
+    if (!response.ok) throw new Error("Failed to load " + jsonFile);
+    return await response.json();
+  } catch (err) {
+    console.error("Error loading products:", err);
+    return [];
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
