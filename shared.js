@@ -108,14 +108,10 @@ var COPYRIGHT_YEAR = '2026';
 // ═══════════════════════════════════════════════════════════════
 // LOAD CONFIG
 // ═══════════════════════════════════════════════════════════════
-var _configLoadingPromise = null;
 async function loadConfig() {
   if (CONFIG_LOADED) return;
-  if (_configLoadingPromise) return _configLoadingPromise;
-  
-  _configLoadingPromise = (async function() {
-    try {
-      var resp = await fetch("/config.json");
+  try {
+    var resp = await fetch("/config.json");
     if (!resp.ok) throw new Error("Failed to load config.json");
     var config = await resp.json();
     var cats = config.categories || {};
