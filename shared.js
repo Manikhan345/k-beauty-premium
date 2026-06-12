@@ -220,20 +220,23 @@ function injectSEO() {
   }
   canonical.setAttribute("href", canonicalURL);
   
-  // Open Graph
-  var ogImage = "https://kbeauty.fun/header-banner.jpeg";
-  setMeta('meta[property="og:type"]', "property", "og:type", "website");
-  setMeta('meta[property="og:url"]', "property", "og:url", canonicalURL);
-  setMeta('meta[property="og:title"]', "property", "og:title", pageTitle);
-  setMeta('meta[property="og:description"]', "property", "og:description", pageDesc);
-  setMeta('meta[property="og:image"]', "property", "og:image", ogImage);
-  setMeta('meta[property="og:site_name"]', "property", "og:site_name", "K Beauty Premium");
-  
-  // Twitter Card
-  setMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
-  setMeta('meta[name="twitter:title"]', "name", "twitter:title", pageTitle);
-  setMeta('meta[name="twitter:description"]', "name", "twitter:description", pageDesc);
-  setMeta('meta[name="twitter:image"]', "name", "twitter:image", ogImage);
+ // Open Graph & Twitter — SKIP for blog/product pages (server-rendered via /api/render-page Edge Function)
+  var isServerRendered = path.indexOf('/blog/') === 0 || path.indexOf('/p/') === 0;
+  if (!isServerRendered) {
+    var ogImage = "https://kbeauty.fun/header-banner.jpeg";
+    setMeta('meta[property="og:type"]', "property", "og:type", "website");
+    setMeta('meta[property="og:url"]', "property", "og:url", canonicalURL);
+    setMeta('meta[property="og:title"]', "property", "og:title", pageTitle);
+    setMeta('meta[property="og:description"]', "property", "og:description", pageDesc);
+    setMeta('meta[property="og:image"]', "property", "og:image", ogImage);
+    setMeta('meta[property="og:site_name"]', "property", "og:site_name", "K Beauty Premium");
+    
+    // Twitter Card
+    setMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
+    setMeta('meta[name="twitter:title"]', "name", "twitter:title", pageTitle);
+    setMeta('meta[name="twitter:description"]', "name", "twitter:description", pageDesc);
+    setMeta('meta[name="twitter:image"]', "name", "twitter:image", ogImage);
+  }
   
   // JSON-LD Structured Data
   var oldSchema = document.getElementById("siteSchema");
