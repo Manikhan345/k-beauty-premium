@@ -270,7 +270,7 @@ async function loadBlogPost() {
     }
 
     // Update page meta
-    document.title = post.title + " — K Beauty Premium Blog";
+    document.title = post.title + " — K Beauty Premium";
     var metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.content = post.excerpt || post.title;
 
