@@ -11,7 +11,7 @@ async function initCategoryPage() {
   var meta = CATEGORY_META[CATEGORY_KEY];
   if (!meta) return;
   document.getElementById("catTitle").textContent = meta.title;
-  document.title = meta.title.replace(/^[^\w]*/, "") + " — K Beauty Premium";
+ 
   var breadcrumb = document.getElementById("breadcrumb");
   if (breadcrumb) breadcrumb.innerHTML = '<a href="/">Home</a> › <span>' + meta.title.replace(/^[^\w]*/, "").trim() + '</span>';
   renderSidebarFilters();
