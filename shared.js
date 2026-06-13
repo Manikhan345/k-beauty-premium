@@ -221,7 +221,7 @@ function injectSEO() {
   canonical.setAttribute("href", canonicalURL);
   
  // Open Graph & Twitter — SKIP for blog/product pages (server-rendered via /api/render-page Edge Function)
-  var isServerRendered = path.indexOf('/blog/') === 0 || path.indexOf('/p/') === 0;
+var isServerRendered = path.indexOf('/blog/') === 0 || path.indexOf('/p/') === 0 || /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/.test(path);
   if (!isServerRendered) {
     var ogImage = "https://kbeauty.fun/header-banner.jpeg";
     setMeta('meta[property="og:type"]', "property", "og:type", "website");
