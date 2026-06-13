@@ -22,7 +22,7 @@
     { "source": "/blog", "destination": "/blog.html" },
     { "source": "/blog/:slug", "destination": "/api/render-page" },
     { "source": "/p/:cat/:id", "destination": "/api/render-page" },
-    { "source": "/:cat(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)", "destination": "/category.html" }
+    { "source": "/:cat(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)", "destination": "/api/render-page" }
   ],
   "trailingSlash": false
 }
