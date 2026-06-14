@@ -132,7 +132,7 @@ async function handleCategory(catSlug, origin) {
 }
 
 function injectBlogMeta(html, post, origin) {
-  const title = post.title + ' — K Beauty Premium';
+  const title = post.title;
   const description = post.excerpt || post.title;
 
   let image = origin + '/header-banner.jpeg';
@@ -159,7 +159,7 @@ function injectBlogMeta(html, post, origin) {
 }
 
 function injectProductMeta(html, product, category, origin) {
-  const title = product.name + ' — K Beauty Premium';
+  const title = product.name;
 
   const ratingStr = product.rating ? product.rating + ' stars' : '';
   const priceStr = (typeof product.price === 'number')
