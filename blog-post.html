@@ -250,6 +250,12 @@ async function loadBlogPost() {
   renderFooter();
 
   var container = document.getElementById("postContainer");
+
+  // If SSR already rendered this page, skip client-side rendering
+  if (container && container.getAttribute("data-ssr") === "true") {
+    return;
+  }
+
   var slug = window.location.pathname.replace(/^\/blog\//, "").replace(/\/$/, "");
 
   if (!slug) {
