@@ -12,6 +12,7 @@
     { "source": "/lipcare", "destination": "/skincare", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/contact", "destination": "/contact.html" },
     { "source": "/privacy", "destination": "/privacy-policy.html" },
