@@ -1,5 +1,35 @@
 [
   {
+    "id": "rhode_by_hailey_bieber_barrier",
+    "name": "Rhode by Hailey Bieber Barrier Restore Cream 30ml / 1.0 oz. White",
+    "price": 34,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "0",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Creams & Moisturizers",
+    "image": "https://m.media-amazon.com/images/I/31Aoyd0KcSL.jpg",
+    "url": "https://amzn.to/4409guF",
+    "bought": "300+ bought in past month",
+    "prime": true
+  },
+  {
+    "id": "rhode_glazing_milk_ceramide_fa",
+    "name": "Rhode Glazing Milk Ceramide Facial Essence, Mini Size",
+    "price": 44.99,
+    "originalPrice": null,
+    "rating": 5,
+    "reviews": "1",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Creams & Moisturizers",
+    "image": "https://m.media-amazon.com/images/I/31Sdbai39NL.jpg",
+    "url": "https://amzn.to/4gkQ8Pa",
+    "bought": "200+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "purito_txa_6_niacinamide_10_fa",
     "name": "PURITO TXA 6% + Niacinamide 10% Facial Serum | for Dark Spots, Hyperpigmentation, Uneven Skin Tone | High-Concentration Tranexamic Acid | Korean Skincare, 30mL 1.01 fl.oz",
     "price": 18.8,
