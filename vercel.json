@@ -45,18 +45,25 @@
       "source": "/lipcare",
       "destination": "/skincare",
       "permanent": true
-    },
-    {
-      "source": "/https://kbeauty.fun/affiliate-disclosure.html",
-      "destination": "https://kbeauty.fun/disclosure",
-      "permanent": true
     }
   ],
   "rewrites": [
-   { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-{ "source": "/sitemap-pages.xml", "destination": "/api/sitemap" },
-{ "source": "/sitemap-blog.xml", "destination": "/api/sitemap" },
-{ "source": "/sitemap-products.xml", "destination": "/api/sitemap" },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/sitemap-pages.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/sitemap-blog.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/sitemap-products.xml",
+      "destination": "/api/sitemap"
+    },
     {
       "source": "/about",
       "destination": "/about.html"
