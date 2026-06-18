@@ -1,29 +1,106 @@
 {
   "outputDirectory": ".",
   "redirects": [
-    { "source": "/category-:cat.html", "destination": "/:cat", "permanent": true },
-    { "source": "/about.html", "destination": "/about", "permanent": true },
-    { "source": "/contact.html", "destination": "/contact", "permanent": true },
-    { "source": "/privacy-policy.html", "destination": "/privacy", "permanent": true },
-    { "source": "/terms-of-service.html", "destination": "/terms", "permanent": true },
-    { "source": "/affiliate-disclosure.html", "destination": "/disclosure", "permanent": true },
-    { "source": "/index.html", "destination": "/", "permanent": true },
-    { "source": "/sunscreen", "destination": "/skincare", "permanent": true },
-    { "source": "/lipcare", "destination": "/skincare", "permanent": true }
+    {
+      "source": "/category-:cat.html",
+      "destination": "/:cat",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy.html",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/terms-of-service.html",
+      "destination": "/terms",
+      "permanent": true
+    },
+    {
+      "source": "/affiliate-disclosure.html",
+      "destination": "/disclosure",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sunscreen",
+      "destination": "/skincare",
+      "permanent": true
+    },
+    {
+      "source": "/lipcare",
+      "destination": "/skincare",
+      "permanent": true
+    },
+    {
+      "source": "/https://kbeauty.fun/affiliate-disclosure.html",
+      "destination": "https://kbeauty.fun/disclosure",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/privacy", "destination": "/privacy-policy.html" },
-    { "source": "/terms", "destination": "/terms-of-service.html" },
-    { "source": "/disclosure", "destination": "/affiliate-disclosure.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/best-sellers", "destination": "/best-sellers.html" },
-    { "source": "/blog", "destination": "/blog.html" },
-    { "source": "/blog/:slug", "destination": "/api/render-page" },
-    { "source": "/p/:cat/:id", "destination": "/api/render-page" },
-    { "source": "/:cat(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)", "destination": "/api/render-page" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy-policy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms-of-service.html"
+    },
+    {
+      "source": "/disclosure",
+      "destination": "/affiliate-disclosure.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/best-sellers",
+      "destination": "/best-sellers.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog.html"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/api/render-page"
+    },
+    {
+      "source": "/p/:cat/:id",
+      "destination": "/api/render-page"
+    },
+    {
+      "source": "/:cat(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)",
+      "destination": "/api/render-page"
+    }
   ],
   "trailingSlash": false
 }
