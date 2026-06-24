@@ -39,9 +39,12 @@ export default async function handler(request) {
   const blogMatch = pathname.match(/^\/blog\/([^\/]+)\/?$/);
   const productMatch = pathname.match(/^\/p\/([^\/]+)\/([^\/]+)\/?$/);
   const categoryMatch = pathname.match(/^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/);
+  const homeMatch = pathname === '/' || pathname === '';
 
   try {
-    if (blogMatch) {
+    if (homeMatch) {
+      return await handleHomepage(origin);
+    } else if (blogMatch) {
       return await handleBlog(blogMatch[1], origin);
     } else if (productMatch) {
       return await handleProduct(productMatch[1], productMatch[2], origin);
@@ -49,7 +52,7 @@ export default async function handler(request) {
       return await handleCategory(categoryMatch[1], origin);
     }
   } catch (e) {
-    const fallbackFile = blogMatch ? 'blog-post.html' : (categoryMatch ? 'category.html' : 'product.html');
+    const fallbackFile = homeMatch ? 'index.html' : (blogMatch ? 'blog-post.html' : (categoryMatch ? 'category.html' : 'product.html'));
     return fallbackTemplate(origin, fallbackFile);
   }
 
@@ -386,6 +389,59 @@ function escapeAttr(s) {
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+async function handleHomepage(origin) {
+  const [blogData, htmlTemplate] = await Promise.all([
+    fetch(`${origin}/data/blog.json`).then(r => r.json()),
+    fetch(`${origin}/index.html`).then(r => r.text())
+  ]);
+
+  const posts = blogData
+    .filter(p => p.status === 'published')
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+    .slice(0, 6);
+
+  const guidesHTML = posts.map(p => {
+    let coverUrl = '';
+    let coverPos = 'center';
+    if (typeof p.cover === 'string') {
+      coverUrl = p.cover;
+    } else if (p.cover && p.cover.url) {
+      coverUrl = p.cover.url;
+      if (p.cover.position) coverPos = p.cover.position;
+    }
+    const safeTitle = escapeAttr(p.title || 'Blog post');
+    const img = coverUrl
+      ? `<img src="${escapeAttr(coverUrl)}" alt="${safeTitle}" loading="lazy" style="object-position:center ${escapeAttr(coverPos)};">`
+      : '<div class="guide-card-img-empty">📝</div>';
+    let excerpt = p.excerpt || '';
+    if (excerpt.length > 80) excerpt = excerpt.substring(0, 80).trim() + '...';
+    return `<a href="/blog/${escapeAttr(p.slug)}" class="guide-card">` +
+      `<div class="guide-card-img-wrap">${img}</div>` +
+      `<div class="guide-card-content">` +
+        `<div class="guide-card-title">${escapeAttr(p.title || 'Untitled')}</div>` +
+        `<div class="guide-card-excerpt">${escapeAttr(excerpt)}</div>` +
+      `</div>` +
+    `</a>`;
+  }).join('');
+
+  let html = htmlTemplate.replace(
+    '<section class="popular-guides" id="popularGuidesSection" style="display:none;">',
+    '<section class="popular-guides" id="popularGuidesSection" data-ssr="true">'
+  );
+
+  html = html.replace(
+    '<div class="popular-guides-grid" id="popularGuidesGrid"></div>',
+    `<div class="popular-guides-grid" id="popularGuidesGrid">${guidesHTML}</div>`
+  );
+
+  return new Response(html, {
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
+    }
+  });
 }
 
 async function fallbackTemplate(origin, file) {
