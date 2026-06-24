@@ -465,6 +465,10 @@ function playTT(i, videoId) {
 }
 // ── POPULAR GUIDES SECTION ──
 async function loadBlogSection() {
+  var ssrSection = document.getElementById("popularGuidesSection");
+  if (ssrSection && ssrSection.getAttribute("data-ssr") === "true") {
+    return;
+  }
   try {
     var resp = await fetch("/data/blog.json");
     if (!resp.ok) return;
