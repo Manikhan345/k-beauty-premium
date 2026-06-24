@@ -48,6 +48,8 @@
     }
   ],
   "rewrites": [
+     { "source": "/", 
+       "destination": "/api/render-page" },
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
