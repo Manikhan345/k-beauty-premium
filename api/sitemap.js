@@ -60,7 +60,9 @@ export default async function handler(req) {
     if (pathname === '/sitemap-products.xml') {
       return await buildProductsSitemap(url.origin, today);
     }
-
+    if (pathname === '/sitemap-routines.xml') {
+      return await buildRoutinesSitemap(url.origin, today);
+    }
     return new Response('Not found', { status: 404 });
   } catch (err) {
     return new Response(`<!-- sitemap error: ${err.message} -->`, {
@@ -71,9 +73,10 @@ export default async function handler(req) {
 }
 
 function buildIndex(today) {
-  const sitemaps = [
+   const sitemaps = [
     SITE + '/sitemap-pages.xml',
     SITE + '/sitemap-blog.xml',
+    SITE + '/sitemap-routines.xml',
     SITE + '/sitemap-products.xml'
   ];
 
@@ -131,4 +134,23 @@ async function buildProductsSitemap(origin, today) {
     }
   }
   return xmlResponse(wrapUrlset(content), 3600);
+}
+
+async function buildRoutinesSitemap(origin, today) {
+  const res = await fetch(`${origin}/data/routines.json`, { cache: 'no-store' });
+  const data = res.ok ? await res.json() : null;
+  const routines = toArray(data, 'routines');
+
+  let content = '';
+  for (const r of routines) {
+    if (!r.slug) continue;
+    if (r.status && r.status !== 'published') continue;
+    if (r.visibility && r.visibility !== 'public') continue;
+    const lastmod = r.date ? String(r.date).split('T')[0] : today;
+    content += urlEntry(`${SITE}/routines/${esc(r.slug)}`, lastmod, 'daily', '0.9');
+  }
+  // Also include the listing page
+  content += urlEntry(`${SITE}/routines`, today, 'daily', '0.9');
+
+  return xmlResponse(wrapUrlset(content), 1800);
 }
