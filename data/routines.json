@@ -6,15 +6,18 @@
     "excerpt": "A 5-step Korean morning routine for oily skin — balances sebum, controls shine, and protects your barrier in under 10 minutes.",
     "skinType": "oily",
     "timeOfDay": "morning",
-    "concern": ["sebum-control", "shine-reduction"],
     "duration": "10 minutes",
     "stepCount": 5,
-    "difficulty": "intermediate",
     "cover": {
       "url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1200&auto=format&fit=crop",
       "position": "center"
     },
-    "tags": ["morning routine", "oily skin", "Korean skincare", "sebum control"],
+    "tags": [
+      "morning routine",
+      "oily skin",
+      "Korean skincare",
+      "sebum control"
+    ],
     "date": "2026-06-24T00:00:00.000Z",
     "status": "published",
     "visibility": "public",
@@ -71,6 +74,7 @@
         "tip": "Use a full quarter-teaspoon for your face. Most people under-apply by 75%."
       }
     ],
-    "outro": "This 5-step routine takes under 10 minutes once you get the rhythm. Stick with it for 4-6 weeks before evaluating — niacinamide and heartleaf both need time to show full effect on sebum regulation."
+    "outro": "This 5-step routine takes under 10 minutes once you get the rhythm. Stick with it for 4-6 weeks before evaluating — niacinamide and heartleaf both need time to show full effect on sebum regulation.",
+    "sources": "AAD Test: https://www.aad.org/\n  NIH Test: https://www.nih.gov/"
   }
 ]
