@@ -1,5 +1,20 @@
 [
   {
+    "id": "_hudson_s_pick_skin1004_madaga",
+    "name": "[Hudson's Pick] SKIN1004 Madagascar Centella Ampoule, Korean Face Serum with Centella Asiatica for Hydrating & Moisturizing, Soothing Facial Serum for Skin Balance, Korean Skin Care, 3.38 fl.oz, 100ml",
+    "price": 13.44,
+    "originalPrice": null,
+    "rating": 4.6,
+    "reviews": "31,777",
+    "badge": "New",
+    "tag": "Face",
+    "subtag": "Serums & Essences",
+    "image": "https://m.media-amazon.com/images/I/61iZUHSBgaL._SL1500_.jpg",
+    "url": "https://amzn.to/3T1U8ua",
+    "bought": "20K+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "rhode_by_hailey_bieber_barrier",
     "name": "Rhode by Hailey Bieber Barrier Restore Cream 30ml / 1.0 oz. White",
     "price": 34,
@@ -5937,21 +5952,6 @@
     "image": "https://m.media-amazon.com/images/I/51ZwtrS5QtL._AC_UL960_FMwebp_QL65_.jpg",
     "url": "https://www.amazon.com/dp/B0CJ3CXTW6?tag=kbeauty000-20",
     "bought": "9K+ bought in past month",
-    "prime": false
-  },
-  {
-    "id": "skin1004_madagascar_centella_a",
-    "name": "SKIN1004 Madagascar Centella Ampoule, Korean Face Serum with Centella Asiatica for Hydrating & Moisturizing Care, Soothing Facial Serum for Skin Balance and Glow, Korean Skin Care, 3.38 fl.oz / 100 ml",
-    "price": 15.69,
-    "originalPrice": null,
-    "rating": 4.7,
-    "reviews": "12,500",
-    "badge": "",
-    "tag": "Face",
-    "subtag": "Serums & Essences",
-    "image": "https://m.media-amazon.com/images/I/61iZUHSBgaL._AC_UL960_FMwebp_QL65_.jpg",
-    "url": "https://www.amazon.com/dp/B06Y15D1LH?tag=kbeauty000-20",
-    "bought": "20K+ bought in past month",
     "prime": false
   },
   {
