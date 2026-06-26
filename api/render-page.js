@@ -447,6 +447,48 @@ async function handleHomepage(origin) {
     `<div class="popular-guides-grid" id="popularGuidesGrid">${guidesHTML}</div>`
   );
 
+  // Also inject routines preview
+  try {
+    const routinesData = await fetch(`${origin}/data/routines.json`).then(r => r.json());
+    const topRoutines = routinesData
+      .filter(r => r.status !== 'draft' && r.visibility !== 'private')
+      .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+      .slice(0, 3);
+
+    if (topRoutines.length > 0) {
+      const routinesHTML = topRoutines.map(r => {
+        let coverUrl = '';
+        let coverPos = 'center';
+        if (typeof r.cover === 'string') {
+          coverUrl = r.cover;
+        } else if (r.cover && r.cover.url) {
+          coverUrl = r.cover.url;
+          if (r.cover.position) coverPos = r.cover.position;
+        }
+        const safeTitle = escapeAttr(r.title || 'Routine');
+        const img = coverUrl
+          ? `<div class="routine-mini-img"><img src="${escapeAttr(coverUrl)}" alt="${safeTitle}" loading="lazy" style="object-position:center ${escapeAttr(coverPos)};"></div>`
+          : '<div class="routine-mini-img"><div class="routine-mini-img-empty">✨</div></div>';
+        const pills = '<div class="routine-mini-pills">' +
+          (r.skinType ? `<span class="routine-mini-pill skin">${escapeAttr(r.skinType)} skin</span>` : '') +
+          (r.timeOfDay ? `<span class="routine-mini-pill time">${escapeAttr(r.timeOfDay)}</span>` : '') +
+        '</div>';
+        return `<a href="/routines/${escapeAttr(r.slug)}" class="routine-mini-card">${img}<div class="routine-mini-content">${pills}<div class="routine-mini-title">${escapeAttr(r.title || 'Untitled')}</div></div></a>`;
+      }).join('');
+
+      html = html.replace(
+        '<section class="routines-preview" id="routinesPreviewSection" style="display:none;">',
+        '<section class="routines-preview" id="routinesPreviewSection" data-ssr="true">'
+      );
+      html = html.replace(
+        '<div class="routines-preview-grid" id="routinesPreviewGrid"></div>',
+        `<div class="routines-preview-grid" id="routinesPreviewGrid">${routinesHTML}</div>`
+      );
+    }
+  } catch(e) {
+    // Routines section silently omitted if JSON fails — homepage still works
+  }
+
   return new Response(html, {
     headers: {
       'content-type': 'text/html; charset=utf-8',
