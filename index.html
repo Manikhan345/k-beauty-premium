@@ -66,6 +66,28 @@
 @keyframes shimmer { to { background-position-x: -200%; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 768px) { .category-section { padding: 16px; margin: 20px 0; } .category-header h2 { font-size: 1.15rem; } .product-scroll .product-card { min-width: 180px; max-width: 180px; } .promo { padding: 24px 16px; } .promo h2 { font-size: 1.3rem; } }
+/* ROUTINES PREVIEW ON HOMEPAGE */
+.routines-preview { padding: 50px 16px 20px; background: transparent; }
+.routines-preview-inner { max-width: 1200px; margin: 0 auto; }
+.routines-preview-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+.routines-preview-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.9rem; font-weight: 700; color: var(--text); margin: 0; }
+.routines-preview-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+.routines-preview-link:hover { color: var(--accent-dark); }
+.routines-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.routine-mini-card { background: var(--card); border-radius: 16px; box-shadow: 0 6px 24px rgba(26,20,16,0.06), inset 0 1px 0 rgba(255,255,255,1); overflow: hidden; text-decoration: none; color: inherit; transition: all 0.3s; border: 1px solid var(--border-soft); display: flex; flex-direction: column; }
+.routine-mini-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.08); border-color: var(--accent-light); }
+.routine-mini-img { width: 100%; aspect-ratio: 16/9; background: var(--warm-cream); overflow: hidden; }
+.routine-mini-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
+.routine-mini-card:hover .routine-mini-img img { transform: scale(1.06); }
+.routine-mini-img-empty { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-light); }
+.routine-mini-content { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 8px; }
+.routine-mini-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.routine-mini-pill { font-size: 0.66rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; letter-spacing: 0.3px; text-transform: capitalize; }
+.routine-mini-pill.skin { background: var(--accent-rose-light); color: var(--accent-dark); }
+.routine-mini-pill.time { background: var(--champagne); color: var(--gold-deep); }
+.routine-mini-title { font-family: 'Noto Serif Display', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; color: var(--text); margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 1024px) { .routines-preview-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .routines-preview { padding: 40px 16px 20px; } .routines-preview-grid { grid-template-columns: 1fr; } .routines-preview-header h2 { font-size: 1.5rem; } }
 </style>
 </head>
 <body>
@@ -178,7 +200,7 @@
     </div>
   </div>
 
-  <!-- ═══ POPULAR GUIDES (inside hero) ═══ -->
+<!-- ═══ POPULAR GUIDES (inside hero) ═══ -->
   <section class="popular-guides" id="popularGuidesSection" style="display:none;">
     <div class="popular-guides-inner">
       <div class="popular-guides-header">
@@ -186,6 +208,17 @@
         <a href="/blog" class="popular-guides-link">View all guides →</a>
       </div>
       <div class="popular-guides-grid" id="popularGuidesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ═══ ROUTINES PREVIEW ═══ -->
+  <section class="routines-preview" id="routinesPreviewSection" style="display:none;">
+    <div class="routines-preview-inner">
+      <div class="routines-preview-header">
+        <h2>Korean Skincare Routines</h2>
+        <a href="/routines" class="routines-preview-link">View all routines →</a>
+      </div>
+      <div class="routines-preview-grid" id="routinesPreviewGrid"></div>
     </div>
   </section>
 
@@ -464,6 +497,50 @@ function playTT(i, videoId) {
   player.style.cursor = "default";
 }
 // ── POPULAR GUIDES SECTION ──
+ async function loadRoutinesSection() {
+  var ssrSection = document.getElementById("routinesPreviewSection");
+  if (ssrSection && ssrSection.getAttribute("data-ssr") === "true") {
+    return;
+  }
+  try {
+    var resp = await fetch("/data/routines.json");
+    if (!resp.ok) throw new Error("No routines");
+    var routines = await resp.json();
+    routines = routines.filter(function(r) { return r.status !== "draft" && r.visibility !== "private"; });
+    routines.sort(function(a, b) { return new Date(b.date || 0) - new Date(a.date || 0); });
+    var top = routines.slice(0, 3);
+    if (top.length === 0) return;
+
+    function getCoverUrl(c) { if (typeof c === "string") return c; if (c && c.url) return c.url; return ""; }
+    function getCoverPos(c) { if (c && typeof c === "object" && c.position) return c.position; return "center"; }
+
+    var section = document.getElementById("routinesPreviewSection");
+    var grid = document.getElementById("routinesPreviewGrid");
+    if (!section || !grid) return;
+
+    grid.innerHTML = top.map(function(r) {
+      var coverUrl = getCoverUrl(r.cover);
+      var coverPos = getCoverPos(r.cover);
+      var img = coverUrl
+        ? '<div class="routine-mini-img"><img src="' + coverUrl + '" alt="' + (r.title || "").replace(/"/g, "&quot;") + '" loading="lazy" style="object-position:center ' + coverPos + ';"></div>'
+        : '<div class="routine-mini-img"><div class="routine-mini-img-empty">✨</div></div>';
+      var pills = '<div class="routine-mini-pills">' +
+        (r.skinType ? '<span class="routine-mini-pill skin">' + r.skinType + ' skin</span>' : '') +
+        (r.timeOfDay ? '<span class="routine-mini-pill time">' + r.timeOfDay + '</span>' : '') +
+      '</div>';
+      return '<a href="/routines/' + r.slug + '" class="routine-mini-card">' +
+        img +
+        '<div class="routine-mini-content">' +
+          pills +
+          '<div class="routine-mini-title">' + (r.title || "Untitled") + '</div>' +
+        '</div>' +
+      '</a>';
+    }).join("");
+    section.style.display = "";
+  } catch(e) {
+    // Silently fail
+  }
+}
 async function loadBlogSection() {
   var ssrSection = document.getElementById("popularGuidesSection");
   if (ssrSection && ssrSection.getAttribute("data-ssr") === "true") {
@@ -532,7 +609,8 @@ async function buildHomepage() {
   loadTikTokCarousel();
 
   // Load blog section
-  loadBlogSection();
+ loadBlogSection();
+  loadRoutinesSection();
 
   // Preload all products in background for instant search
   loadAllProducts();
