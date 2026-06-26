@@ -1,9 +1,9 @@
-// ═══════════════════════════════════════════════════════════════
-// admin-routines.js — Routine Manager for K Beauty Premium admin
+// ===============================================================
+// admin-routines.js -- Routine Manager for K Beauty Premium admin
 // Self-contained: injects its own UI into #tab-routines when opened.
 // Depends on globals from admin.html: token, GITHUB_OWNER, GITHUB_REPO,
 // GITHUB_BRANCH, showToast()
-// ═══════════════════════════════════════════════════════════════
+// ===============================================================
 
 var kbRoutines = [];
 var kbRoutinesSHA = null;
@@ -89,8 +89,8 @@ function buildRoutinesUI() {
     + '        <div class="kbr-row"><label>Image Position</label><select id="kbrCoverPos"><option value="center">Center</option><option value="top">Top</option><option value="bottom">Bottom</option></select></div>'
     + '      </div>'
     + '      <div class="kbr-row-3col">'
-    + '        <div class="kbr-row"><label>Skin Type</label><select id="kbrSkinType"><option value="">— Select —</option><option value="oily">Oily</option><option value="dry">Dry</option><option value="combination">Combination</option><option value="sensitive">Sensitive</option><option value="acne-prone">Acne-prone</option><option value="mature">Mature</option><option value="all">All</option></select></div>'
-    + '        <div class="kbr-row"><label>Time of Day</label><select id="kbrTimeOfDay"><option value="">— Select —</option><option value="morning">Morning</option><option value="evening">Evening</option><option value="weekly">Weekly</option><option value="travel">Travel</option><option value="anytime">Anytime</option></select></div>'
+    + '        <div class="kbr-row"><label>Skin Type</label><select id="kbrSkinType"><option value="">-- Select --</option><option value="oily">Oily</option><option value="dry">Dry</option><option value="combination">Combination</option><option value="sensitive">Sensitive</option><option value="acne-prone">Acne-prone</option><option value="mature">Mature</option><option value="all">All</option></select></div>'
+    + '        <div class="kbr-row"><label>Time of Day</label><select id="kbrTimeOfDay"><option value="">-- Select --</option><option value="morning">Morning</option><option value="evening">Evening</option><option value="weekly">Weekly</option><option value="travel">Travel</option><option value="anytime">Anytime</option></select></div>'
     + '        <div class="kbr-row"><label>Duration</label><input type="text" id="kbrDuration" placeholder="10 minutes"></div>'
     + '      </div>'
     + '      <div class="kbr-row"><label>Tags (comma-separated)</label><input type="text" id="kbrTags" placeholder="morning routine, oily skin, Korean skincare"></div>'
@@ -173,7 +173,7 @@ function addRoutineStep(data) {
     + '<div class="kbr-row"><label>Product Image URL</label><input type="text" class="kbrStepProductImg" value="' + escapeHTMLAttr(d.productImage || "") + '" placeholder="https://m.media-amazon.com/..."></div>'
     + '<div class="kbr-row"><label>Amazon Product URL (affiliate link)</label><input type="text" class="kbrStepProductUrl" value="' + escapeHTMLAttr(d.productUrl || "") + '" placeholder="https://www.amazon.com/dp/..."></div>'
     + '<div class="kbr-row"><label>Why this step?</label><textarea class="kbrStepWhy" placeholder="Explain why this step matters...">' + escapeHTML(d.whyThisStep || "") + '</textarea></div>'
-    + '<div class="kbr-row"><label>Tip (optional)</label><input type="text" class="kbrStepTip" value="' + escapeHTMLAttr(d.tip || "") + '" placeholder="Use lukewarm water — hot water strips your barrier."></div>';
+    + '<div class="kbr-row"><label>Tip (optional)</label><input type="text" class="kbrStepTip" value="' + escapeHTMLAttr(d.tip || "") + '" placeholder="Use lukewarm water -- hot water strips your barrier."></div>';
   container.appendChild(card);
 }
 
@@ -344,7 +344,7 @@ async function pushRoutinesToGitHub(message) {
     }
     var result = await resp.json();
     kbRoutinesSHA = result.content.sha;
-    statusEl.textContent = "✅ Saved! Live in ~30 seconds.";
+    statusEl.textContent = "OK: Saved! Live in ~30 seconds.";
     renderRoutinesList();
     if (window.showToast) showToast(message || "Saved!", "success");
   } catch(e) {
@@ -378,7 +378,7 @@ function renderRoutinesList() {
     else if (r.cover && r.cover.url) coverUrl = r.cover.url;
     var imgHTML = coverUrl
       ? '<img src="' + coverUrl + '" class="kbr-list-img">'
-      : '<div class="kbr-list-img-empty">✨</div>';
+      : '<div class="kbr-list-img-empty">*</div>';
     var statusBadge = r.status === "published"
       ? '<span class="kbr-status-badge kbr-status-published">LIVE</span>'
       : '<span class="kbr-status-badge kbr-status-draft">DRAFT</span>';
@@ -386,7 +386,7 @@ function renderRoutinesList() {
       + imgHTML
       + '<div>'
       + '  <div class="kbr-list-name">' + escapeHTML(r.title || "Untitled") + '</div>'
-      + '  <div class="kbr-list-meta">' + statusBadge + (r.skinType || "") + (r.skinType && r.timeOfDay ? " · " : "") + (r.timeOfDay || "") + " · " + (r.steps || []).length + " steps</div>'
+      + '  <div class="kbr-list-meta">' + statusBadge + (r.skinType || "") + (r.skinType && r.timeOfDay ? " - " : "") + (r.timeOfDay || "") + " - " + (r.steps || []).length + ' steps</div>'
       + '</div>'
       + '<div class="kbr-list-actions">'
       + '  <button class="kbr-edit" onclick="editRoutine(' + realIndex + ')">Edit</button>'
