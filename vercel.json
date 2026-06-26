@@ -48,6 +48,15 @@
     }
   ],
   "rewrites": [
+    { "source": "/routines",
+      "destination": "/api/render-page" },
+    
+    { "source": "/routines/:slug", 
+      "destination": "/api/render-page" },
+    
+    { "source": "/sitemap-routines.xml",
+      "destination": "/api/sitemap" },
+    
      { "source": "/", 
        "destination": "/api/render-page" },
     {
