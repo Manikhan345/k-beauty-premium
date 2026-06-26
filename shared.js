@@ -169,6 +169,7 @@ async function renderHeader() {
   });
   navLinks += '<a href="/best-sellers">Shop All</a>';
   navLinks += '<a href="/blog">Blog</a>';
+  navLinks += '<a href="/routines">Routines</a>';
 
   el.innerHTML =
     '<header class="site-header">' +
@@ -294,8 +295,9 @@ function renderNav(activePage, searchFunction) {
     var cls = key === activePage ? ' class="active"' : '';
     links += '<a href="/' + key + '"' + cls + '>' + label + '</a>';
   });
-  links += '<a href="/best-sellers"' + (activePage === "bestsellers" ? ' class="active"' : '') + '>🏆 Best Sellers</a>';
+ links += '<a href="/best-sellers"' + (activePage === "bestsellers" ? ' class="active"' : '') + '>🏆 Best Sellers</a>';
   links += '<a href="/blog"' + (activePage === "blog" ? ' class="active"' : '') + '>📝 Blog</a>';
+  links += '<a href="/routines"' + (activePage === "routines" ? ' class="active"' : '') + '>✨ Routines</a>';
 
   // Desktop nav - always include global search
   var globalSearchHTML = '<div class="search-wrap global-search"><input type="text" placeholder="Search all products..." id="globalSearchInput" onkeyup="handleSearchKey(event, this.value)" autocomplete="off"><span class="search-icon" onclick="submitSearch()" style="cursor:pointer;">🔍</span><div class="search-results" id="globalSearchResults"></div></div>';
@@ -346,6 +348,7 @@ function renderNav(activePage, searchFunction) {
       '<div class="drawer-section">' +
         '<a class="drawer-link" href="/best-sellers">🏆 Best Sellers</a>' +
         '<a class="drawer-link" href="/blog">📝 Blog</a>' +
+        '<a class="drawer-link" href="/routines">✨ Routines</a>' +
       '</div>' +
     '</div>';
 
@@ -407,6 +410,7 @@ function renderFooter() {
     '<div class="footer-links"><h3>Categories</h3>' + catLinks + '</div>' +
     '<div class="footer-links"><h3>More Pages</h3>' +
     '<a href="/blog">Blog</a>' +
+    '<a href="/routines">Routines</a>' +
     '<a href="/best-sellers">Best Sellers</a>' +
     '<a href="/about">About Us</a>' +
     '<a href="/contact">Contact</a>' +
