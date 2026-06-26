@@ -36,14 +36,20 @@ export default async function handler(request) {
   const pathname = url.pathname;
   const origin = url.origin;
 
-  const blogMatch = pathname.match(/^\/blog\/([^\/]+)\/?$/);
+ const blogMatch = pathname.match(/^\/blog\/([^\/]+)\/?$/);
   const productMatch = pathname.match(/^\/p\/([^\/]+)\/([^\/]+)\/?$/);
   const categoryMatch = pathname.match(/^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/);
   const homeMatch = pathname === '/' || pathname === '';
+  const routineMatch = pathname.match(/^\/routines\/([^\/]+)\/?$/);
+  const routinesListingMatch = pathname === '/routines' || pathname === '/routines/';
 
   try {
     if (homeMatch) {
       return await handleHomepage(origin);
+    } else if (routineMatch) {
+      return await handleRoutine(routineMatch[1], origin);
+    } else if (routinesListingMatch) {
+      return await handleRoutinesListing(origin);
     } else if (blogMatch) {
       return await handleBlog(blogMatch[1], origin);
     } else if (productMatch) {
@@ -52,7 +58,12 @@ export default async function handler(request) {
       return await handleCategory(categoryMatch[1], origin);
     }
   } catch (e) {
-    const fallbackFile = homeMatch ? 'index.html' : (blogMatch ? 'blog-post.html' : (categoryMatch ? 'category.html' : 'product.html'));
+    let fallbackFile = 'index.html';
+    if (routineMatch) fallbackFile = 'routine.html';
+    else if (routinesListingMatch) fallbackFile = 'routines.html';
+    else if (blogMatch) fallbackFile = 'blog-post.html';
+    else if (categoryMatch) fallbackFile = 'category.html';
+    else if (productMatch) fallbackFile = 'product.html';
     return fallbackTemplate(origin, fallbackFile);
   }
 
@@ -442,6 +453,145 @@ async function handleHomepage(origin) {
       'cache-control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
     }
   });
+}
+
+async function handleRoutinesListing(origin) {
+  const [routinesData, htmlTemplate] = await Promise.all([
+    fetch(`${origin}/data/routines.json`).then(r => r.json()),
+    fetch(`${origin}/routines.html`).then(r => r.text())
+  ]);
+
+  const routines = routinesData
+    .filter(r => r.status !== 'draft' && r.visibility !== 'private')
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+  const cardsHTML = routines.map(r => {
+    let coverUrl = '';
+    let coverPos = 'center';
+    if (typeof r.cover === 'string') {
+      coverUrl = r.cover;
+    } else if (r.cover && r.cover.url) {
+      coverUrl = r.cover.url;
+      if (r.cover.position) coverPos = r.cover.position;
+    }
+    const safeTitle = escapeAttr(r.title || 'Routine');
+    const cover = coverUrl
+      ? `<div class="routine-card-img-wrap"><img src="${escapeAttr(coverUrl)}" alt="${safeTitle}" loading="lazy" style="object-position:center ${escapeAttr(coverPos)};"></div>`
+      : '<div class="routine-card-img-wrap"><div class="routine-card-img-empty">✨</div></div>';
+
+    const pills = '<div class="routine-card-pills">' +
+      (r.skinType ? `<span class="routine-pill skin">${escapeAttr(r.skinType)} skin</span>` : '') +
+      (r.timeOfDay ? `<span class="routine-pill time">${escapeAttr(r.timeOfDay)}</span>` : '') +
+      (r.stepCount ? `<span class="routine-pill meta">${escapeAttr(r.stepCount)} steps</span>` : '') +
+      (r.duration ? `<span class="routine-pill meta">${escapeAttr(r.duration)}</span>` : '') +
+    '</div>';
+
+    return `<a href="/routines/${escapeAttr(r.slug)}" class="routine-card">${cover}<div class="routine-card-content">${pills}<div class="routine-card-title">${escapeAttr(r.title || 'Untitled')}</div><div class="routine-card-excerpt">${escapeAttr(r.excerpt || '')}</div><div class="routine-card-cta">View routine →</div></div></a>`;
+  }).join('');
+
+  const finalCards = cardsHTML ||
+    '<div class="routines-empty"><h3>Coming Soon</h3><p>We are building Korean skincare routines for every skin type. Check back soon.</p></div>';
+
+  let html = htmlTemplate.replace(
+    '<div class="routines-grid" id="routinesGrid">',
+    '<div class="routines-grid" id="routinesGrid" data-ssr="true">'
+  );
+
+  html = html.replace(
+    '<div class="routines-loading">Loading routines...</div>',
+    finalCards
+  );
+
+  return new Response(html, {
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
+    }
+  });
+}
+
+async function handleRoutine(slug, origin) {
+  const [routinesData, htmlTemplate] = await Promise.all([
+    fetch(`${origin}/data/routines.json`).then(r => r.json()),
+    fetch(`${origin}/routine.html`).then(r => r.text())
+  ]);
+
+  const routine = routinesData.find(r => r.slug === slug);
+  if (!routine || routine.status === 'draft') {
+    return new Response(htmlTemplate, {
+      status: 404,
+      headers: { 'content-type': 'text/html; charset=utf-8' }
+    });
+  }
+
+  const title = routine.title;
+  const description = routine.excerpt || routine.title;
+  let image = origin + '/header-banner.jpeg';
+  if (typeof routine.cover === 'string') image = routine.cover;
+  else if (routine.cover && routine.cover.url) image = routine.cover.url;
+  const canonicalUrl = origin + '/routines/' + routine.slug;
+
+  let html = rebuildMeta(htmlTemplate, {
+    title, description, image, url: canonicalUrl, type: 'article', extra: ''
+  });
+
+  // Build the routine body HTML
+  const bodyHTML = renderRoutineBody(routine);
+
+  html = html.replace(
+    '<div class="routine-container" id="routineContainer">',
+    '<div class="routine-container" id="routineContainer" data-ssr="true">'
+  );
+
+  html = html.replace(
+    '<div class="routine-loading">Loading routine...</div>',
+    bodyHTML
+  );
+
+  return new Response(html, {
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
+    }
+  });
+}
+
+function renderRoutineBody(r) {
+  let coverUrl = '';
+  if (typeof r.cover === 'string') coverUrl = r.cover;
+  else if (r.cover && r.cover.url) coverUrl = r.cover.url;
+
+  const heroImg = coverUrl
+    ? `<div class="routine-hero-img"><img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(r.title)}"></div>`
+    : '';
+
+  const pills = '<div class="routine-hero-pills">' +
+    (r.skinType ? `<span class="routine-pill skin">${escapeAttr(r.skinType)} skin</span>` : '') +
+    (r.timeOfDay ? `<span class="routine-pill time">${escapeAttr(r.timeOfDay)}</span>` : '') +
+    (r.stepCount ? `<span class="routine-pill meta">${escapeAttr(r.stepCount)} steps</span>` : '') +
+    (r.duration ? `<span class="routine-pill meta">${escapeAttr(r.duration)}</span>` : '') +
+  '</div>';
+
+  const stepsHTML = (r.steps || []).map(s => {
+    const imgHTML = s.productImage
+      ? `<img src="${escapeAttr(s.productImage)}" alt="${escapeAttr(s.productName)}" loading="lazy">`
+      : '<div class="empty">📦</div>';
+    const tipHTML = s.tip ? `<div class="step-tip"><strong>Tip</strong>${escapeAttr(s.tip)}</div>` : '';
+    const waitNum = parseInt(s.waitTime) || 0;
+    const waitHTML = waitNum > 0
+      ? `<div class="step-wait">Wait <strong>${escapeAttr(s.waitTime)} min</strong> before next step</div>`
+      : '<div class="step-wait">Continue immediately</div>';
+    const btnHTML = s.productUrl
+      ? `<a href="${escapeAttr(s.productUrl)}" target="_blank" rel="nofollow noopener" class="btn-amazon">🛒 View on Amazon</a>`
+      : '';
+    return `<div class="step-card"><div class="step-card-header"><div class="step-number">${escapeAttr(s.stepNumber)}</div><div class="step-title">${escapeAttr(s.title)}</div></div><div class="step-body"><div class="step-product-img">${imgHTML}</div><div class="step-info"><div class="step-product-name">${escapeAttr(s.productName)}</div><div class="step-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}</div></div><div class="step-footer">${waitHTML}${btnHTML}</div></div>`;
+  }).join('');
+
+  const outroHTML = r.outro
+    ? `<div class="routine-outro"><h3>The Bottom Line</h3><p>${escapeAttr(r.outro)}</p></div>`
+    : '';
+
+  return `<div class="routine-breadcrumb"><a href="/">Home</a> › <a href="/routines">Routines</a> › <span>${escapeAttr(r.title)}</span></div><div class="routine-hero">${heroImg}<div class="routine-hero-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div><div class="routine-steps">${stepsHTML}</div>${outroHTML}`;
 }
 
 async function fallbackTemplate(origin, file) {
