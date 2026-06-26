@@ -101,9 +101,13 @@ function buildRoutinesUI() {
     + '      <div id="kbrStepsContainer"></div>'
     + '      <button class="kbr-add-step-btn" onclick="addRoutineStep()">+ Add Step</button>'
     + '    </div>'
-    + '    <div class="kbr-form-section">'
+    + '    + '    <div class="kbr-form-section">'
     + '      <h3>Outro (optional)</h3>'
     + '      <div class="kbr-row"><label>Closing paragraph</label><textarea id="kbrOutro" placeholder="Final thoughts on this routine..."></textarea></div>'
+    + '    </div>'
+    + '    <div class="kbr-form-section">'
+    + '      <h3>Sources (one per line)</h3>'
+    + '      <div class="kbr-row"><label>Format: descriptive title followed by URL on each line</label><textarea id="kbrSources" rows="6" placeholder="American Academy of Dermatology - Oily skin care: https://www.aad.org/public/everyday-care/skin-care-basics/dry/oily-skin\nNIH - Niacinamide sebum study: https://pubmed.ncbi.nlm.nih.gov/..."></textarea></div>'
     + '    </div>'
     + '    <div class="kbr-actions">'
     + '      <button class="kbr-btn kbr-btn-primary" id="kbrBtnPublish" onclick="saveRoutine(\'published\')">Publish</button>'
@@ -137,6 +141,8 @@ function newRoutine() {
   document.getElementById("kbrTags").value = "";
   document.getElementById("kbrIntro").value = "";
   document.getElementById("kbrOutro").value = "";
+  var srcEl = document.getElementById("kbrSources");
+  if (srcEl) srcEl.value = "";
   document.getElementById("kbrStepsContainer").innerHTML = "";
   document.getElementById("kbrStatus").textContent = "";
   // Auto-slug from title
@@ -226,7 +232,9 @@ function editRoutine(index) {
   document.getElementById("kbrDuration").value = r.duration || "";
   document.getElementById("kbrTags").value = (r.tags || []).join(", ");
   document.getElementById("kbrIntro").value = r.intro || "";
-  document.getElementById("kbrOutro").value = r.outro || "";
+ document.getElementById("kbrOutro").value = r.outro || "";
+  var srcEl = document.getElementById("kbrSources");
+  if (srcEl) srcEl.value = r.sources || "";
   // Build steps
   var container = document.getElementById("kbrStepsContainer");
   container.innerHTML = "";
@@ -258,6 +266,8 @@ async function saveRoutine(status) {
   var tags = document.getElementById("kbrTags").value.split(",").map(function(t){return t.trim();}).filter(Boolean);
   var intro = document.getElementById("kbrIntro").value.trim();
   var outro = document.getElementById("kbrOutro").value.trim();
+  var sourcesEl = document.getElementById("kbrSources");
+  var sources = sourcesEl ? sourcesEl.value.trim() : "";
   var steps = gatherStepsFromForm();
   var statusEl = document.getElementById("kbrStatus");
 
@@ -302,9 +312,9 @@ async function saveRoutine(status) {
     visibility: "public",
     intro: intro,
     steps: steps,
-    outro: outro
+    outro: outro,
+    sources: sources
   };
-
   if (kbEditingRoutineIndex >= 0) {
     kbRoutines[kbEditingRoutineIndex] = routine;
   } else {
