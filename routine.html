@@ -67,6 +67,15 @@
   .step-footer { justify-content: stretch; }
   .btn-amazon { flex: 1; text-align: center; }
 }
+.routine-sources { background: var(--card); border-radius: 16px; padding: 26px 30px; margin-top: 24px; box-shadow: 0 4px 16px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); }
+.routine-sources h3 { font-family: 'Noto Serif Display', serif; font-size: 1.15rem; margin-bottom: 14px; color: var(--text); }
+.routine-sources ul { list-style: none; padding: 0; margin: 0 0 16px; }
+.routine-sources li { font-size: 0.88rem; line-height: 1.7; padding: 6px 0; border-bottom: 1px solid var(--border-soft); }
+.routine-sources li:last-child { border-bottom: none; }
+.routine-sources li a { color: var(--accent); text-decoration: none; word-break: break-word; }
+.routine-sources li a:hover { color: var(--accent-dark); text-decoration: underline; }
+.routine-disclaimer { font-size: 0.82rem; color: var(--text-mid); line-height: 1.6; padding: 14px; background: var(--warm-cream); border-radius: 8px; margin: 0; }
+.routine-disclaimer strong { color: var(--text); }  
 </style>
 </head>
 <body>
@@ -166,6 +175,21 @@ function renderRoutineHTML(r) {
 
   var outroHTML = r.outro ? '<div class="routine-outro"><h3>The Bottom Line</h3><p>' + esc(r.outro) + '</p></div>' : '';
 
+  var sourcesHTML = '';
+  if (r.sources && r.sources.trim()) {
+    var lines = r.sources.split(/\n/).map(function(l) { return l.trim(); }).filter(Boolean);
+    var items = lines.map(function(line) {
+      var urlMatch = line.match(/(https?:\/\/\S+)/);
+      if (urlMatch) {
+        var url = urlMatch[1];
+        var label = line.replace(url, "").replace(/[\s:-]+$/, "").trim() || url;
+        return '<li><a href="' + esc(url) + '" target="_blank" rel="noopener nofollow">' + esc(label) + '</a></li>';
+      }
+      return '<li>' + esc(line) + '</li>';
+    }).join("");
+    sourcesHTML = '<div class="routine-sources"><h3>Sources &amp; References</h3><ul>' + items + '</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>';
+  }
+
   return '<div class="routine-breadcrumb"><a href="/">Home</a> › <a href="/routines">Routines</a> › <span>' + esc(r.title) + '</span></div>' +
     '<div class="routine-hero">' +
       heroImg +
@@ -176,7 +200,8 @@ function renderRoutineHTML(r) {
       '</div>' +
     '</div>' +
     '<div class="routine-steps">' + stepsHTML + '</div>' +
-    outroHTML;
+    outroHTML +
+    sourcesHTML;
 }
 
 loadRoutine();
