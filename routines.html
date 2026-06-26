@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean Skincare Routines — K Beauty Premium</title>
+<meta name="description" content="Step-by-step Korean skincare routines for every skin type. Morning, evening, and concern-specific routines built around real K-beauty products.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css">
+<style>
+.routines-hero { max-width: 900px; margin: 30px auto 24px; padding: 0 16px; text-align: center; }
+.routines-hero h1 { font-family: 'Noto Serif Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--text); }
+.routines-hero p { color: var(--text-mid); font-size: 0.95rem; margin-top: 10px; max-width: 620px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+.routines-grid { max-width: 1200px; margin: 24px auto 40px; padding: 0 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.routine-card { display: flex; flex-direction: column; background: var(--card); border-radius: 16px; overflow: hidden; box-shadow: 0 6px 24px rgba(26,20,16,0.06), inset 0 1px 0 rgba(255,255,255,1); border: 1px solid var(--border-soft); text-decoration: none; color: inherit; transition: all 0.3s; }
+.routine-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(26,20,16,0.10), 0 4px 12px rgba(183,110,121,0.08); border-color: var(--accent-light); }
+
+.routine-card-img-wrap { width: 100%; aspect-ratio: 16/9; background: var(--warm-cream); overflow: hidden; position: relative; }
+.routine-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
+.routine-card:hover .routine-card-img-wrap img { transform: scale(1.04); }
+.routine-card-img-empty { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--text-light); }
+
+.routine-card-content { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.routine-card-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.routine-pill { font-size: 0.7rem; padding: 3px 10px; border-radius: 12px; font-weight: 600; letter-spacing: 0.3px; text-transform: capitalize; }
+.routine-pill.skin { background: var(--accent-rose-light); color: var(--accent-dark); }
+.routine-pill.time { background: var(--champagne); color: var(--gold-deep); }
+.routine-pill.meta { background: var(--warm-cream); color: var(--text-mid); }
+
+.routine-card-title { font-family: 'Noto Serif Display', serif; font-size: 1.15rem; font-weight: 600; line-height: 1.3; color: var(--text); margin-top: 2px; }
+.routine-card-excerpt { font-size: 0.85rem; color: var(--text-mid); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.routine-card-cta { font-size: 0.85rem; font-weight: 600; color: var(--accent); margin-top: 6px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
+.routine-card:hover .routine-card-cta { color: var(--accent-dark); }
+
+.routines-empty { text-align: center; padding: 80px 20px; color: var(--text-light); grid-column: 1/-1; }
+.routines-empty h3 { font-family: 'Noto Serif Display', serif; font-size: 1.3rem; color: var(--text); margin-bottom: 8px; }
+.routines-loading { text-align: center; padding: 80px 20px; color: var(--text-light); grid-column: 1/-1; }
+
+@media (max-width: 900px) {
+  .routines-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 600px) {
+  .routines-grid { grid-template-columns: 1fr; }
+  .routines-hero h1 { font-size: 1.6rem; }
+  .routine-card-title { font-size: 1.05rem; }
+}
+</style>
+</head>
+<body>
+<div id="siteHeader"></div>
+<div id="siteNav"></div>
+
+<div class="routines-hero">
+  <h1>Korean Skincare Routines</h1>
+  <p>Step-by-step routines built for every skin type and concern. Each routine is a complete daily plan using real Korean products — morning, evening, and everything in between.</p>
+</div>
+
+<div class="routines-grid" id="routinesGrid">
+  <div class="routines-loading">Loading routines...</div>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="/shared.js"></script>
+<script>
+async function loadRoutines() {
+  renderHeader();
+  renderNav("routines");
+  renderFooter();
+
+  var grid = document.getElementById("routinesGrid");
+
+  // Skip if SSR already rendered the grid
+  if (grid.getAttribute("data-ssr") === "true") {
+    return;
+  }
+
+  try {
+    var resp = await fetch("/data/routines.json");
+    if (!resp.ok) throw new Error("No routines data");
+    var routines = await resp.json();
+
+    routines = routines.filter(function(r) { return r.status !== "draft" && r.visibility !== "private"; });
+    routines.sort(function(a, b) { return new Date(b.date || 0) - new Date(a.date || 0); });
+
+    if (routines.length === 0) {
+      grid.innerHTML = '<div class="routines-empty"><h3>Coming Soon</h3><p>We are building Korean skincare routines for every skin type. Check back soon.</p></div>';
+      return;
+    }
+
+    function getCoverUrl(cover) {
+      if (typeof cover === "string") return cover;
+      if (cover && cover.url) return cover.url;
+      return "";
+    }
+    function getCoverPos(cover) {
+      if (cover && typeof cover === "object" && cover.position) return cover.position;
+      return "center";
+    }
+
+    grid.innerHTML = routines.map(function(r) {
+      var coverUrl = getCoverUrl(r.cover);
+      var coverPos = getCoverPos(r.cover);
+      var coverHTML = coverUrl
+        ? '<div class="routine-card-img-wrap"><img src="' + coverUrl + '" alt="' + (r.title || "").replace(/"/g, "&quot;") + '" loading="lazy" style="object-position:center ' + coverPos + ';"></div>'
+        : '<div class="routine-card-img-wrap"><div class="routine-card-img-empty">✨</div></div>';
+
+      var pillsHTML = '<div class="routine-card-pills">' +
+        (r.skinType ? '<span class="routine-pill skin">' + r.skinType + ' skin</span>' : '') +
+        (r.timeOfDay ? '<span class="routine-pill time">' + r.timeOfDay + '</span>' : '') +
+        (r.stepCount ? '<span class="routine-pill meta">' + r.stepCount + ' steps</span>' : '') +
+        (r.duration ? '<span class="routine-pill meta">' + r.duration + '</span>' : '') +
+      '</div>';
+
+      return '<a href="/routines/' + r.slug + '" class="routine-card">' +
+        coverHTML +
+        '<div class="routine-card-content">' +
+          pillsHTML +
+          '<div class="routine-card-title">' + (r.title || "Untitled") + '</div>' +
+          '<div class="routine-card-excerpt">' + (r.excerpt || "") + '</div>' +
+          '<div class="routine-card-cta">View routine →</div>' +
+        '</div>' +
+      '</a>';
+    }).join("");
+
+  } catch(e) {
+    grid.innerHTML = '<div class="routines-empty"><h3>Coming Soon</h3><p>We are building Korean skincare routines for every skin type. Check back soon.</p></div>';
+  }
+}
+loadRoutines();
+</script>
+</body>
+</html>
