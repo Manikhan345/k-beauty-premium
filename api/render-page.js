@@ -633,7 +633,22 @@ function renderRoutineBody(r) {
     ? `<div class="routine-outro"><h3>The Bottom Line</h3><p>${escapeAttr(r.outro)}</p></div>`
     : '';
 
-  return `<div class="routine-breadcrumb"><a href="/">Home</a> › <a href="/routines">Routines</a> › <span>${escapeAttr(r.title)}</span></div><div class="routine-hero">${heroImg}<div class="routine-hero-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div><div class="routine-steps">${stepsHTML}</div>${outroHTML}`;
+  let sourcesHTML = '';
+  if (r.sources && r.sources.trim()) {
+    const lines = r.sources.split(/\n/).map(l => l.trim()).filter(Boolean);
+    const items = lines.map(line => {
+      const urlMatch = line.match(/(https?:\/\/\S+)/);
+      if (urlMatch) {
+        const url = urlMatch[1];
+        const label = line.replace(url, "").replace(/[\s:-]+$/, "").trim() || url;
+        return `<li><a href="${escapeAttr(url)}" target="_blank" rel="noopener nofollow">${escapeAttr(label)}</a></li>`;
+      }
+      return `<li>${escapeAttr(line)}</li>`;
+    }).join("");
+    sourcesHTML = `<div class="routine-sources"><h3>Sources &amp; References</h3><ul>${items}</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>`;
+  }
+
+  return `<div class="routine-breadcrumb"><a href="/">Home</a> › <a href="/routines">Routines</a> › <span>${escapeAttr(r.title)}</span></div><div class="routine-hero">${heroImg}<div class="routine-hero-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div><div class="routine-steps">${stepsHTML}</div>${outroHTML}${sourcesHTML}`;
 }
 
 async function fallbackTemplate(origin, file) {
