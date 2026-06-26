@@ -490,10 +490,13 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
   <span class="icon">📂</span> Category Manager
 </a>
     </div>
-    <div class="sidebar-section">
+<div class="sidebar-section">
       <div class="sidebar-section-title">Content</div>
       <a class="sidebar-link" href="#blog" data-tab="blog" onclick="return sidebarClick(event, 'blog', this)">
     <span class="icon">📝</span> Blog Manager
+  </a>
+      <a class="sidebar-link" href="#routines" data-tab="routines" onclick="return sidebarClick(event, 'routines', this)">
+    <span class="icon">✨</span> Routine Manager
   </a>
       <a class="sidebar-link" href="#tiktok" data-tab="tiktok" onclick="return sidebarClick(event, 'tiktok', this)">
     <span class="icon">🎵</span> TikTok Videos
@@ -618,7 +621,10 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
 </div>
 
 <!-- ═══════════ TAB 3: REDIRECT MANAGER ═══════════ -->
-<!-- BLOG MANAGER TAB -->
+
+      <!-- ═══════════ TAB: ROUTINE MANAGER ═══════════ -->
+<div class="tab-panel" id="tab-routines"></div>
+      <!-- BLOG MANAGER TAB -->
 <div class="tab-panel" id="tab-blog">
 
   <!-- Template loader -->
@@ -1097,6 +1103,7 @@ function switchTab(tabId, btn) {
 function sidebarSwitch(tabId, el) {
   switchTab(tabId, el);
   if (tabId === "blog" && token) { loadBlogPosts(); }
+  if (tabId === "routines" && token) { loadRoutines(); }
   if (tabId === "tiktok" && token) { loadTikTokVideos(); }
   if (tabId === "categories") renderCategoryList();
   if (tabId === "redirects") loadRedirects();
@@ -1122,7 +1129,7 @@ function sidebarClick(event, tabId, el) {
 // Open the correct tab based on URL hash on page load
 function openTabFromHash() {
   var hash = (location.hash || "").replace("#", "");
-  var validTabs = ["products", "categories", "blog", "tiktok", "redirects"];
+  var validTabs = ["products", "categories", "blog", "routines", "tiktok", "redirects"];
   if (!hash || validTabs.indexOf(hash) === -1) hash = "products";
   var link = document.querySelector('.sidebar-link[data-tab="' + hash + '"]');
   sidebarSwitch(hash, link);
@@ -1131,7 +1138,7 @@ function openTabFromHash() {
 // Handle browser back/forward buttons
 window.addEventListener("hashchange", function() {
   var hash = (location.hash || "").replace("#", "");
-  var validTabs = ["products", "categories", "blog", "tiktok", "redirects"];
+  var validTabs = ["products", "categories", "blog", "routines", "tiktok", "redirects"];
   if (!hash || validTabs.indexOf(hash) === -1) hash = "products";
   var link = document.querySelector('.sidebar-link[data-tab="' + hash + '"]');
   if (link) sidebarSwitch(hash, link);
@@ -3669,5 +3676,6 @@ function dupeDelete(groupIndex, cat, productId, hintIndex) {
 checkSavedToken();
 </script>
 <script src="/admin-seo.js"></script>
+<script src="/admin-routines.js"></script>
 </body>
 </html>
