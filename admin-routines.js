@@ -101,7 +101,7 @@ function buildRoutinesUI() {
     + '      <div id="kbrStepsContainer"></div>'
     + '      <button class="kbr-add-step-btn" onclick="addRoutineStep()">+ Add Step</button>'
     + '    </div>'
-    + '    + '    <div class="kbr-form-section">'
+    + '    <div class="kbr-form-section">'
     + '      <h3>Outro (optional)</h3>'
     + '      <div class="kbr-row"><label>Closing paragraph</label><textarea id="kbrOutro" placeholder="Final thoughts on this routine..."></textarea></div>'
     + '    </div>'
