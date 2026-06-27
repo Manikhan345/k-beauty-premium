@@ -116,6 +116,17 @@
   .step-slide.hero-slide, .step-slide:not(.hero-slide):not(.closing-slide) { padding: 20px 16px; }
   .closing-slide-inner { padding: 20px 16px; }
 }
+.related-routines { margin-top: 4px; }
+.related-routines-heading { font-family: 'Noto Serif Display', serif; font-size: 1rem; margin: 0 0 12px; color: var(--text); text-align: center; }
+.related-routines-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.related-routine-card { display: flex; flex-direction: column; background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); text-decoration: none; color: inherit; transition: all 0.25s; }
+.related-routine-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,20,16,0.08); border-color: var(--accent-light); }
+.related-routine-img { width: 100%; aspect-ratio: 16/10; background: var(--warm-cream); overflow: hidden; }
+.related-routine-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.related-routine-img-empty { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--text-light); }
+.related-routine-content { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+.related-routine-title { font-family: 'Noto Serif Display', serif; font-size: 0.85rem; font-weight: 600; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.related-routine-meta { font-size: 0.68rem; color: var(--text-mid); text-transform: capitalize; }
 </style>
 </head>
 <body>
@@ -139,9 +150,9 @@ async function loadRoutine() {
 
   if (container.getAttribute("data-ssr") === "true") {
     initRoutineSlider();
+    loadRelatedRoutines();
     return;
   }
-
   var slug = window.location.pathname.replace(/^\/routines\//, "").replace(/\/$/, "");
   if (!slug) {
     container.innerHTML = '<div class="routine-not-found"><h2>Routine Not Found</h2><p>This routine does not exist.</p><a href="/routines" style="color:var(--accent);">Back to routines</a></div>';
@@ -165,6 +176,7 @@ async function loadRoutine() {
 
     container.innerHTML = renderRoutineHTML(routine);
     initRoutineSlider();
+    loadRelatedRoutines();
   } catch(e) {
     container.innerHTML = '<div class="routine-not-found"><h2>Error Loading Routine</h2><p>Something went wrong.</p><a href="/routines" style="color:var(--accent);">Back to routines</a></div>';
   }
@@ -221,7 +233,8 @@ function renderRoutineHTML(r) {
   var closingSlide = "";
   var hasOutro = r.outro && r.outro.trim();
   var hasSources = r.sources && r.sources.trim();
-  if (hasOutro || hasSources) {
+  var hasRelated = r.relatedRoutines && r.relatedRoutines.trim();
+  if (hasOutro || hasSources || hasRelated) {
     var outroBlock = hasOutro ? '<div class="closing-section"><h3>The Bottom Line</h3><p>' + esc(r.outro) + '</p></div>' : '';
     var sourcesBlock = '';
     if (hasSources) {
@@ -238,11 +251,16 @@ function renderRoutineHTML(r) {
       sourcesBlock = '<div class="closing-section"><h3>Sources &amp; References</h3><ul>' + items + '</ul></div>';
     }
     var disclaimerBlock = '<div class="closing-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</div>';
+    var relatedBlock = '';
+    if (hasRelated) {
+      relatedBlock = '<div class="related-routines" id="relatedRoutinesContainer" data-slugs="' + esc(r.relatedRoutines) + '"><div class="related-routines-heading">Related Routines</div><div class="related-routines-grid" id="relatedRoutinesGrid"></div></div>';
+    }
     closingSlide = '<div class="step-slide closing-slide">' +
       '<div class="closing-slide-inner">' +
         '<div class="closing-slide-header"><div class="label">Routine Complete</div><h2>You finished the routine</h2></div>' +
         outroBlock +
         sourcesBlock +
+        relatedBlock +
         disclaimerBlock +
       '</div>' +
     '</div>';
@@ -265,6 +283,49 @@ function renderRoutineHTML(r) {
     '</div>';
 }
 
+ async function loadRelatedRoutines() {
+  var container = document.getElementById("relatedRoutinesContainer");
+  if (!container) return;
+  var grid = document.getElementById("relatedRoutinesGrid");
+  if (!grid) return;
+
+  var slugsAttr = container.getAttribute("data-slugs");
+  if (!slugsAttr) return;
+  var slugs = slugsAttr.split(/\n/).map(function(s) { return s.trim(); }).filter(Boolean);
+  if (slugs.length === 0) return;
+
+  try {
+    var resp = await fetch("/data/routines.json");
+    if (!resp.ok) return;
+    var allRoutines = await resp.json();
+    var matched = slugs.map(function(slug) {
+      return allRoutines.find(function(r) { return r.slug === slug && r.status === "published"; });
+    }).filter(Boolean);
+
+    if (matched.length === 0) { container.style.display = "none"; return; }
+
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+    grid.innerHTML = matched.map(function(r) {
+      var coverUrl = "";
+      if (typeof r.cover === "string") coverUrl = r.cover;
+      else if (r.cover && r.cover.url) coverUrl = r.cover.url;
+      var img = coverUrl
+        ? '<div class="related-routine-img"><img src="' + esc(coverUrl) + '" alt="' + esc(r.title) + '" loading="lazy"></div>'
+        : '<div class="related-routine-img"><div class="related-routine-img-empty">*</div></div>';
+      var meta = (r.skinType || "") + (r.skinType && r.timeOfDay ? " - " : "") + (r.timeOfDay || "");
+      return '<a href="/routines/' + esc(r.slug) + '" class="related-routine-card">' +
+        img +
+        '<div class="related-routine-content">' +
+          '<div class="related-routine-title">' + esc(r.title) + '</div>' +
+          (meta ? '<div class="related-routine-meta">' + esc(meta) + '</div>' : '') +
+        '</div>' +
+      '</a>';
+    }).join("");
+  } catch(e) {
+    container.style.display = "none";
+  }
+} 
 function initRoutineSlider() {
   var track = document.getElementById("routineSliderTrack");
   var prev = document.getElementById("routinePrev");
