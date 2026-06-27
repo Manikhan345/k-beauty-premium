@@ -17,7 +17,7 @@
 .routine-slider-viewport { overflow: hidden; position: relative; border-radius: 24px; box-shadow: 0 8px 30px rgba(26,20,16,0.06); }
 .routine-slider-track { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; align-items: stretch; }
 
-.step-slide { flex: 0 0 100%; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #FBF7F4 0%, #F8F0EC 100%); min-height: 520px; }
+.step-slide { flex: 0 0 100%; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #FBF7F4 0%, #F8F0EC 100%); min-height: 540px; }
 
 /* HERO slide (slide 1) — vertical layout */
 .step-slide.hero-slide { display: block; padding: 0; background: var(--card); overflow: hidden; }
@@ -32,8 +32,8 @@
 .hero-slide-content h1 { font-family: 'Noto Serif Display', serif; font-size: 1.9rem; font-weight: 700; line-height: 1.25; color: var(--text); margin: 4px 0 14px; }
 .routine-intro { font-size: 0.98rem; line-height: 1.7; color: var(--text-mid); }
 
-/* STEP slide — horizontal layout (image left, content right) */
-.step-slide:not(.hero-slide) { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; padding: 44px 48px; align-items: center; }
+/* STEP slide — horizontal layout */
+.step-slide:not(.hero-slide):not(.closing-slide) { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; padding: 44px 48px; align-items: center; }
 .step-slide-img-wrap { background: #FFFFFF; border-radius: 20px; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
 .step-slide-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .step-slide-img-empty { font-size: 4rem; color: var(--text-light); }
@@ -48,6 +48,23 @@
 .step-slide-amazon { display: inline-block; margin-top: 8px; padding: 12px 26px; background: linear-gradient(to bottom, #FFD814, #F7CA00); border: 1px solid #C49A00; border-radius: 50px; color: #111; font-size: 0.9rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center; width: fit-content; cursor: pointer; transition: all 0.2s; }
 .step-slide-amazon:hover { background: linear-gradient(to bottom, #F7CA00, #E8B900); transform: scale(1.03); }
 
+/* CLOSING slide (last slide) — outro + sources */
+.step-slide.closing-slide { display: block; padding: 0; background: var(--card); }
+.closing-slide-inner { padding: 44px 48px; display: flex; flex-direction: column; gap: 22px; }
+.closing-slide-header { text-align: center; margin-bottom: 8px; }
+.closing-slide-header .label { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; }
+.closing-slide-header h2 { font-family: 'Noto Serif Display', serif; font-size: 1.6rem; margin: 6px 0 0; color: var(--text); }
+.closing-section { background: linear-gradient(135deg, #FBF7F4 0%, #F8F0EC 100%); border-radius: 14px; padding: 22px 26px; }
+.closing-section h3 { font-family: 'Noto Serif Display', serif; font-size: 1.1rem; margin: 0 0 10px; color: var(--text); }
+.closing-section p { font-size: 0.95rem; line-height: 1.7; color: var(--text-mid); margin: 0; }
+.closing-section ul { list-style: none; padding: 0; margin: 0; }
+.closing-section li { font-size: 0.88rem; line-height: 1.6; padding: 7px 0; border-bottom: 1px solid var(--border-soft); }
+.closing-section li:last-child { border-bottom: none; }
+.closing-section li a { color: var(--accent); text-decoration: none; word-break: break-word; }
+.closing-section li a:hover { color: var(--accent-dark); text-decoration: underline; }
+.closing-disclaimer { font-size: 0.82rem; color: var(--text-mid); line-height: 1.6; padding: 14px 16px; background: rgba(255,255,255,0.7); border-left: 3px solid var(--accent); border-radius: 8px; }
+.closing-disclaimer strong { color: var(--text); }
+
 /* Side arrows (overlay) */
 .routine-arrow-side { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: var(--card); border: 1px solid var(--border-soft); border-radius: 50%; width: 48px; height: 48px; font-size: 1.3rem; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-family: inherit; font-weight: 600; }
 .routine-arrow-side:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-50%) scale(1.05); }
@@ -55,26 +72,12 @@
 .routine-arrow-side.prev { left: -24px; }
 .routine-arrow-side.next { right: -24px; }
 
-/* Dots + counter below */
+/* Dots + counter */
 .routine-slider-controls { display: flex; justify-content: center; align-items: center; margin-top: 22px; gap: 18px; flex-wrap: wrap; }
 .routine-dots { display: flex; gap: 8px; align-items: center; }
 .routine-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-soft); border: none; cursor: pointer; transition: all 0.25s; padding: 0; }
 .routine-dot.active { background: var(--accent); width: 28px; border-radius: 12px; }
 .routine-step-counter { font-size: 0.85rem; color: var(--text-mid); font-weight: 600; min-width: 60px; text-align: center; }
-
-.routine-outro { background: var(--card); border-radius: 16px; padding: 26px 30px; margin-top: 32px; box-shadow: 0 4px 16px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); }
-.routine-outro h3 { font-family: 'Noto Serif Display', serif; font-size: 1.2rem; margin-bottom: 10px; color: var(--text); }
-.routine-outro p { font-size: 0.95rem; line-height: 1.7; color: var(--text-mid); }
-
-.routine-sources { background: var(--card); border-radius: 16px; padding: 26px 30px; margin-top: 24px; box-shadow: 0 4px 16px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); }
-.routine-sources h3 { font-family: 'Noto Serif Display', serif; font-size: 1.15rem; margin-bottom: 14px; color: var(--text); }
-.routine-sources ul { list-style: none; padding: 0; margin: 0 0 16px; }
-.routine-sources li { font-size: 0.88rem; line-height: 1.7; padding: 6px 0; border-bottom: 1px solid var(--border-soft); }
-.routine-sources li:last-child { border-bottom: none; }
-.routine-sources li a { color: var(--accent); text-decoration: none; word-break: break-word; }
-.routine-sources li a:hover { color: var(--accent-dark); text-decoration: underline; }
-.routine-disclaimer { font-size: 0.82rem; color: var(--text-mid); line-height: 1.6; padding: 14px; background: var(--warm-cream); border-radius: 8px; margin: 0; }
-.routine-disclaimer strong { color: var(--text); }
 
 .routine-loading { text-align: center; padding: 80px 20px; color: var(--text-light); }
 .routine-not-found { text-align: center; padding: 80px 20px; }
@@ -87,14 +90,16 @@
 }
 @media (max-width: 800px) {
   .step-slide { min-height: auto; }
-  .step-slide:not(.hero-slide) { grid-template-columns: 1fr; padding: 30px 24px; gap: 22px; }
+  .step-slide:not(.hero-slide):not(.closing-slide) { grid-template-columns: 1fr; padding: 30px 24px; gap: 22px; }
   .step-slide-img-wrap { aspect-ratio: 4/3; max-width: 280px; margin: 0 auto; padding: 22px; }
   .step-slide-title { font-size: 1.3rem; }
   .hero-slide-content h1 { font-size: 1.5rem; }
   .hero-slide-content { padding: 22px 22px 26px; }
+  .closing-slide-inner { padding: 28px 22px; }
+  .closing-slide-header h2 { font-size: 1.35rem; }
 }
 @media (max-width: 480px) {
-  .step-slide:not(.hero-slide) { padding: 24px 18px; }
+  .step-slide:not(.hero-slide):not(.closing-slide) { padding: 24px 18px; }
   .routine-arrow-side { width: 40px; height: 40px; font-size: 1.1rem; }
 }
 </style>
@@ -158,7 +163,7 @@ function renderRoutineHTML(r) {
   if (typeof r.cover === "string") coverUrl = r.cover;
   else if (r.cover && r.cover.url) coverUrl = r.cover.url;
 
-  // Hero slide (slide 1) - cover image + title + intro
+  // Hero slide
   var heroImg = coverUrl ? '<div class="hero-slide-img"><img src="' + esc(coverUrl) + '" alt="' + esc(r.title) + '"></div>' : '';
   var pills = '<div class="routine-hero-pills">' +
     (r.skinType ? '<span class="routine-pill skin">' + esc(r.skinType) + ' skin</span>' : '') +
@@ -201,28 +206,42 @@ function renderRoutineHTML(r) {
     '</div>';
   }).join("");
 
-  var outroHTML = r.outro ? '<div class="routine-outro"><h3>The Bottom Line</h3><p>' + esc(r.outro) + '</p></div>' : '';
-
-  var sourcesHTML = '';
-  if (r.sources && r.sources.trim()) {
-    var lines = r.sources.split(/\n/).map(function(l) { return l.trim(); }).filter(Boolean);
-    var items = lines.map(function(line) {
-      var urlMatch = line.match(/(https?:\/\/\S+)/);
-      if (urlMatch) {
-        var url = urlMatch[1];
-        var label = line.replace(url, "").replace(/[\s:-]+$/, "").trim() || url;
-        return '<li><a href="' + esc(url) + '" target="_blank" rel="noopener nofollow">' + esc(label) + '</a></li>';
-      }
-      return '<li>' + esc(line) + '</li>';
-    }).join("");
-    sourcesHTML = '<div class="routine-sources"><h3>Sources &amp; References</h3><ul>' + items + '</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>';
+  // Closing slide (outro + sources)
+  var closingSlide = "";
+  var hasOutro = r.outro && r.outro.trim();
+  var hasSources = r.sources && r.sources.trim();
+  if (hasOutro || hasSources) {
+    var outroBlock = hasOutro ? '<div class="closing-section"><h3>The Bottom Line</h3><p>' + esc(r.outro) + '</p></div>' : '';
+    var sourcesBlock = '';
+    if (hasSources) {
+      var lines = r.sources.split(/\n/).map(function(l) { return l.trim(); }).filter(Boolean);
+      var items = lines.map(function(line) {
+        var urlMatch = line.match(/(https?:\/\/\S+)/);
+        if (urlMatch) {
+          var url = urlMatch[1];
+          var label = line.replace(url, "").replace(/[\s:-]+$/, "").trim() || url;
+          return '<li><a href="' + esc(url) + '" target="_blank" rel="noopener nofollow">' + esc(label) + '</a></li>';
+        }
+        return '<li>' + esc(line) + '</li>';
+      }).join("");
+      sourcesBlock = '<div class="closing-section"><h3>Sources &amp; References</h3><ul>' + items + '</ul></div>';
+    }
+    var disclaimerBlock = '<div class="closing-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</div>';
+    closingSlide = '<div class="step-slide closing-slide">' +
+      '<div class="closing-slide-inner">' +
+        '<div class="closing-slide-header"><div class="label">Routine Complete</div><h2>You finished the routine</h2></div>' +
+        outroBlock +
+        sourcesBlock +
+        disclaimerBlock +
+      '</div>' +
+    '</div>';
   }
 
   return '<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>' + esc(r.title) + '</span></div>' +
     '<div class="routine-slider-section">' +
       '<div class="routine-slider-viewport-wrapper">' +
         '<div class="routine-slider-viewport">' +
-          '<div class="routine-slider-track" id="routineSliderTrack">' + heroSlide + stepSlides + '</div>' +
+          '<div class="routine-slider-track" id="routineSliderTrack">' + heroSlide + stepSlides + closingSlide + '</div>' +
         '</div>' +
         '<button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button>' +
         '<button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button>' +
@@ -231,9 +250,7 @@ function renderRoutineHTML(r) {
         '<div class="routine-dots" id="routineDots"></div>' +
         '<span class="routine-step-counter" id="routineCounter"></span>' +
       '</div>' +
-    '</div>' +
-    outroHTML +
-    sourcesHTML;
+    '</div>';
 }
 
 function initRoutineSlider() {
@@ -249,13 +266,15 @@ function initRoutineSlider() {
   var totalSlides = slides.length;
   if (totalSlides === 0) return;
 
+  var stepSlideEls = track.querySelectorAll(".step-slide:not(.hero-slide):not(.closing-slide)");
+  var totalSteps = stepSlideEls.length;
+
   var currentIndex = 0;
 
   if (dots) {
     var dotsHTML = "";
     for (var i = 0; i < totalSlides; i++) {
-      var label = i === 0 ? "Overview" : "Step " + i;
-      dotsHTML += '<button class="routine-dot' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '" aria-label="Go to ' + label + '"></button>';
+      dotsHTML += '<button class="routine-dot' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '" aria-label="Go to slide ' + (i+1) + '"></button>';
     }
     dots.innerHTML = dotsHTML;
   }
@@ -274,8 +293,10 @@ function initRoutineSlider() {
     prev.disabled = (index === 0);
     next.disabled = (index === totalSlides - 1);
     if (counter) {
-      if (index === 0) counter.textContent = "Overview";
-      else counter.textContent = "Step " + index + " of " + (totalSlides - 1);
+      var current = slides[index];
+      if (current.classList.contains("hero-slide")) counter.textContent = "Overview";
+      else if (current.classList.contains("closing-slide")) counter.textContent = "Summary";
+      else counter.textContent = "Step " + index + " of " + totalSteps;
     }
   }
 
