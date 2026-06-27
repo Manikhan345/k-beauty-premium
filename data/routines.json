@@ -1,5 +1,85 @@
 [
   {
+    "id": "evening-routine-oily-skin",
+    "slug": "evening-routine-oily-skin",
+    "title": "Evening Korean Skincare Routine for Oily Skin",
+    "excerpt": "A 5-step Korean evening routine for oily skin. Double cleanses to remove the day's buildup, then layers lightweight hydration and sebum-regulating actives for overnight repair.",
+    "skinType": "oily",
+    "timeOfDay": "evening",
+    "duration": "12 minutes",
+    "stepCount": 5,
+    "cover": {
+      "url": "https://images.pexels.com/photos/4004464/pexels-photo-4004464.jpeg",
+      "position": "center"
+    },
+    "tags": [
+      "evening routine",
+      "oily skin",
+      "Korean skincare",
+      "double cleansing",
+      "sebum control",
+      "overnight repair"
+    ],
+    "date": "2026-06-27T10:42:06.641Z",
+    "status": "published",
+    "visibility": "public",
+    "intro": "The biggest difference between morning and evening skincare for oily skin is what you're cleaning. Mornings prep clean skin for SPF and the day ahead. Evenings remove a full day's worth of sunscreen, sebum, sweat, and environmental buildup before your skin can repair itself overnight. This 5-step Korean routine starts with double cleansing, a K-beauty hallmark then layers the same proven actives (niacinamide, heartleaf) you used in the morning, finishing with a slightly richer cream designed for overnight barrier repair.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Oil Cleanser",
+        "productName": "Banila Co Clean It Zero Original Cleansing Balm",
+        "productImage": "https://m.media-amazon.com/images/I/31VrZ9l9TyL._SY300_SX300_QL70_FMwebp_.jpg",
+        "productUrl": "https://amzn.to/4eNcAyc",
+        "whyThisStep": "Oil soluble impurities (sunscreen, sebum, makeup, environmental pollutants) need an oil based dissolver to come off cleanly. Water cleansers alone can't fully break down SPF, and leftover sunscreen traps sebum in your pores overnight, causing the breakouts that show up the next morning. An oil cleanser dissolves all of it without stripping your skin barrier  which matters because a stripped barrier triggers more compensatory oil production.",
+        "waitTime": "0",
+        "tip": "Apply on DRY skin, not damp. Water reduces the oil cleanser's ability to break down sunscreen. Massage for 30-60 seconds before adding water to emulsify and rinse."
+      },
+      {
+        "stepNumber": 2,
+        "title": "Water Cleanser",
+        "productName": "ROUND LAB 1025 Dokdo Cleanser",
+        "productImage": "https://m.media-amazon.com/images/I/51n2BJNH-zL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4v4cWXg",
+        "whyThisStep": "After the oil cleanser dissolves oily impurities, a water-based cleanser removes water soluble residue (sweat, dirt, pollution) plus any remaining oily film from step 1. This two-step process is \"double cleansing\" the foundation of Korean evening skincare for oily skin. Together they leave skin truly clean without stripping the barrier. The American Academy of Dermatology specifically warns against harsh single step cleansing for oily skin because it triggers more oil production.",
+        "waitTime": "0",
+        "tip": "Use lukewarm water never hot. Hot water damages the skin barrier and triggers compensatory sebum production."
+      },
+      {
+        "stepNumber": 3,
+        "title": "Hydrating Toner",
+        "productName": "Anua Heartleaf 77% Soothing Toner",
+        "productImage": "https://m.media-amazon.com/images/I/51AeF0suKmL._AC_SL1500_.jpg",
+        "productUrl": "https://amzn.to/4eNzqWr",
+        "whyThisStep": "Restores skin pH after double cleansing and adds the first hydration layer for the night. Heartleaf (Houttuynia cordata) calms any inflammation accumulated during the day. AAD specifically warns against alcohol heavy toners for oily skin, they irritate skin and trigger more oil production. This hydrating toner does the opposite while prepping your skin to absorb the serum that follows.",
+        "waitTime": "1",
+        "tip": "Pat into damp skin with clean hands. Skip cotton pads they create friction and waste product, especially when you're tired at night."
+      },
+      {
+        "stepNumber": 4,
+        "title": "Niacinamide Serum",
+        "productName": "Beauty of Joseon Glow Serum (Propolis + Niacinamide)",
+        "productImage": "https://m.media-amazon.com/images/I/61Rc8GmeBxL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4v06oZK",
+        "whyThisStep": "Continues the sebum regulation work from your morning routine. NIH published research (Draelos et al, double-blind placebo controlled study) confirms topical 2% niacinamide significantly lowers sebum excretion rates after 2-4 weeks of consistent use. Using the same serum morning AND evening doubles your skin's contact time with the active, accelerating results. The propolis in this serum adds an antibacterial benefit important for overnight breakout prevention while you sleep.",
+        "waitTime": "2",
+        "tip": "2-3 drops, same as morning. If you decide to add BHA or retinol later as advanced steps, apply niacinamide on the OFF nights only,  never combine strong actives the same evening."
+      },
+      {
+        "stepNumber": 5,
+        "title": "Night Moisturizer",
+        "productName": "Beauty of Joseon Dynasty Cream",
+        "productImage": "https://m.media-amazon.com/images/I/51CKPzqhNLL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4amhjFz",
+        "whyThisStep": "A slightly richer cream than your morning moisturizer makes sense at night because you don't need SPF layered on top, and your skin loses more water overnight (transepidermal water loss peaks during sleep). This Korean staple is still lightweight enough for oily skin but provides the deeper hydration that overnight repair needs. Skipping this step is the most common mistake people with oily skin make, dehydration triggers compensatory oil production by morning.",
+        "waitTime": "0",
+        "tip": "Apply to slightly damp skin (right after the serum, while still tacky). The moisturizer seals in hydration from previous steps. If your skin still feels tight 5 minutes after applying, you may need to add a hydrating essence between toner and serum."
+      }
+    ],
+    "outro": "This evening routine pairs naturally with the morning oily skin routine  same actives, same brand staples, with double cleansing replacing morning's single cleanse and a slightly richer night cream replacing the SPF step. Give it 4-6 weeks before evaluating sebum reduction. Once your skin is stable, you can optionally introduce a BHA exfoliating toner (2-3x per week, after toner) for pore clearing, or a low-dose retinol on alternate nights for cell turnover. Never combine BHA, retinol, and strong actives on the same evening pick one active per night, with niacinamide as the safe daily default.",
+    "sources": "American Academy of Dermatology - How to control oily skin: https://www.aad.org/public/everyday-care/skin-care-basics/dry/oily-skin\nAmerican Academy of Dermatology - Skin care tips for acne-prone skin: https://www.aad.org/public/diseases/acne/skin-care/tips\nNIH PMC - Oily Skin Review of Treatment Options (Draelos niacinamide study): https://pmc.ncbi.nlm.nih.gov/articles/PMC5605215/\nNIH PMC - Niacinamide From Monotherapy to Adjunctive Therapies: https://pmc.ncbi.nlm.nih.gov/articles/PMC12145734/\nNIH PMC - Salicylic Acid Acne Mechanism Review: https://pmc.ncbi.nlm.nih.gov/articles/PMC11865917/"
+  },
+  {
     "id": "morning-routine-oily-skin",
     "slug": "morning-routine-oily-skin",
     "title": "Morning Korean Skincare Routine for Oily Skin",
