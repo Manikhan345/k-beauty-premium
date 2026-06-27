@@ -12,28 +12,31 @@
 .routine-breadcrumb { font-size: 0.8rem; color: var(--text-light); margin-bottom: 20px; }
 .routine-breadcrumb a { color: var(--accent); text-decoration: none; }
 
-.routine-hero { background: var(--card); border-radius: 18px; overflow: hidden; box-shadow: 0 8px 30px rgba(26,20,16,0.06); margin-bottom: 30px; border: 1px solid var(--border-soft); }
-.routine-hero-img { width: 100%; aspect-ratio: 21/9; background: var(--warm-cream); overflow: hidden; }
-.routine-hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.routine-hero-content { padding: 28px 32px 32px; }
+.routine-slider-section { margin: 10px 0 20px; }
+.routine-slider-viewport-wrapper { position: relative; }
+.routine-slider-viewport { overflow: hidden; position: relative; border-radius: 24px; box-shadow: 0 8px 30px rgba(26,20,16,0.06); }
+.routine-slider-track { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; align-items: stretch; }
+
+.step-slide { flex: 0 0 100%; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #FBF7F4 0%, #F8F0EC 100%); min-height: 520px; }
+
+/* HERO slide (slide 1) — vertical layout */
+.step-slide.hero-slide { display: block; padding: 0; background: var(--card); overflow: hidden; }
+.hero-slide-img { width: 100%; aspect-ratio: 16/9; background: var(--warm-cream); overflow: hidden; }
+.hero-slide-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-slide-content { padding: 28px 36px 36px; }
 .routine-hero-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .routine-pill { font-size: 0.72rem; padding: 4px 12px; border-radius: 14px; font-weight: 600; letter-spacing: 0.3px; text-transform: capitalize; }
 .routine-pill.skin { background: var(--accent-rose-light); color: var(--accent-dark); }
 .routine-pill.time { background: var(--champagne); color: var(--gold-deep); }
 .routine-pill.meta { background: var(--warm-cream); color: var(--text-mid); }
-.routine-hero h1 { font-family: 'Noto Serif Display', serif; font-size: 2rem; font-weight: 700; line-height: 1.25; color: var(--text); margin-bottom: 14px; }
-.routine-intro { font-size: 1rem; line-height: 1.7; color: var(--text-mid); }
+.hero-slide-content h1 { font-family: 'Noto Serif Display', serif; font-size: 1.9rem; font-weight: 700; line-height: 1.25; color: var(--text); margin: 4px 0 14px; }
+.routine-intro { font-size: 0.98rem; line-height: 1.7; color: var(--text-mid); }
 
-.routine-slider-section { margin: 30px 0 20px; }
-.routine-slider-heading { font-family: 'Noto Serif Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 18px; text-align: center; }
-.routine-slider-viewport { overflow: hidden; position: relative; border-radius: 24px; box-shadow: 0 8px 30px rgba(26,20,16,0.06); }
-.routine-slider-track { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
-
-.step-slide { flex: 0 0 100%; width: 100%; display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; padding: 44px 48px; background: linear-gradient(135deg, #FBF7F4 0%, #F8F0EC 100%); align-items: center; box-sizing: border-box; min-height: 460px; }
+/* STEP slide — horizontal layout (image left, content right) */
+.step-slide:not(.hero-slide) { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; padding: 44px 48px; align-items: center; }
 .step-slide-img-wrap { background: #FFFFFF; border-radius: 20px; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
 .step-slide-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .step-slide-img-empty { font-size: 4rem; color: var(--text-light); }
-
 .step-slide-content { display: flex; flex-direction: column; gap: 14px; }
 .step-slide-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; }
 .step-slide-title { font-family: 'Noto Serif Display', serif; font-size: 1.55rem; font-weight: 700; line-height: 1.25; color: var(--text); margin: 0; }
@@ -45,10 +48,15 @@
 .step-slide-amazon { display: inline-block; margin-top: 8px; padding: 12px 26px; background: linear-gradient(to bottom, #FFD814, #F7CA00); border: 1px solid #C49A00; border-radius: 50px; color: #111; font-size: 0.9rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center; width: fit-content; cursor: pointer; transition: all 0.2s; }
 .step-slide-amazon:hover { background: linear-gradient(to bottom, #F7CA00, #E8B900); transform: scale(1.03); }
 
+/* Side arrows (overlay) */
+.routine-arrow-side { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: var(--card); border: 1px solid var(--border-soft); border-radius: 50%; width: 48px; height: 48px; font-size: 1.3rem; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.12); font-family: inherit; font-weight: 600; }
+.routine-arrow-side:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-50%) scale(1.05); }
+.routine-arrow-side:disabled { opacity: 0; pointer-events: none; }
+.routine-arrow-side.prev { left: -24px; }
+.routine-arrow-side.next { right: -24px; }
+
+/* Dots + counter below */
 .routine-slider-controls { display: flex; justify-content: center; align-items: center; margin-top: 22px; gap: 18px; flex-wrap: wrap; }
-.routine-arrow { background: var(--card); border: 1px solid var(--border-soft); border-radius: 50%; width: 46px; height: 46px; font-size: 1.2rem; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.06); flex-shrink: 0; font-family: inherit; }
-.routine-arrow:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(183,110,121,0.25); }
-.routine-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
 .routine-dots { display: flex; gap: 8px; align-items: center; }
 .routine-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-soft); border: none; cursor: pointer; transition: all 0.25s; padding: 0; }
 .routine-dot.active { background: var(--accent); width: 28px; border-radius: 12px; }
@@ -72,17 +80,22 @@
 .routine-not-found { text-align: center; padding: 80px 20px; }
 .routine-not-found h2 { font-family: 'Noto Serif Display', serif; font-size: 1.6rem; margin-bottom: 12px; }
 
+@media (max-width: 900px) {
+  .routine-arrow-side.prev { left: 10px; }
+  .routine-arrow-side.next { right: 10px; }
+  .routine-arrow-side { background: rgba(255,255,255,0.95); }
+}
 @media (max-width: 800px) {
-  .step-slide { grid-template-columns: 1fr; padding: 30px 24px; gap: 22px; min-height: auto; }
+  .step-slide { min-height: auto; }
+  .step-slide:not(.hero-slide) { grid-template-columns: 1fr; padding: 30px 24px; gap: 22px; }
   .step-slide-img-wrap { aspect-ratio: 4/3; max-width: 280px; margin: 0 auto; padding: 22px; }
   .step-slide-title { font-size: 1.3rem; }
-  .routine-hero h1 { font-size: 1.5rem; }
-  .routine-hero-content { padding: 22px 22px 24px; }
-  .routine-slider-heading { font-size: 1.2rem; }
+  .hero-slide-content h1 { font-size: 1.5rem; }
+  .hero-slide-content { padding: 22px 22px 26px; }
 }
 @media (max-width: 480px) {
-  .step-slide { padding: 24px 18px; }
-  .routine-arrow { width: 40px; height: 40px; }
+  .step-slide:not(.hero-slide) { padding: 24px 18px; }
+  .routine-arrow-side { width: 40px; height: 40px; font-size: 1.1rem; }
 }
 </style>
 </head>
@@ -145,16 +158,25 @@ function renderRoutineHTML(r) {
   if (typeof r.cover === "string") coverUrl = r.cover;
   else if (r.cover && r.cover.url) coverUrl = r.cover.url;
 
-  var heroImg = coverUrl ? '<div class="routine-hero-img"><img src="' + esc(coverUrl) + '" alt="' + esc(r.title) + '"></div>' : '';
-
+  // Hero slide (slide 1) - cover image + title + intro
+  var heroImg = coverUrl ? '<div class="hero-slide-img"><img src="' + esc(coverUrl) + '" alt="' + esc(r.title) + '"></div>' : '';
   var pills = '<div class="routine-hero-pills">' +
     (r.skinType ? '<span class="routine-pill skin">' + esc(r.skinType) + ' skin</span>' : '') +
     (r.timeOfDay ? '<span class="routine-pill time">' + esc(r.timeOfDay) + '</span>' : '') +
     (r.stepCount ? '<span class="routine-pill meta">' + esc(r.stepCount) + ' steps</span>' : '') +
     (r.duration ? '<span class="routine-pill meta">' + esc(r.duration) + '</span>' : '') +
   '</div>';
+  var heroSlide = '<div class="step-slide hero-slide">' +
+    heroImg +
+    '<div class="hero-slide-content">' +
+      pills +
+      '<h1>' + esc(r.title) + '</h1>' +
+      (r.intro ? '<div class="routine-intro">' + esc(r.intro) + '</div>' : '') +
+    '</div>' +
+  '</div>';
 
-  var slidesHTML = (r.steps || []).map(function(s) {
+  // Step slides
+  var stepSlides = (r.steps || []).map(function(s) {
     var imgHTML = s.productImage
       ? '<img src="' + esc(s.productImage) + '" alt="' + esc(s.productName) + '" loading="lazy">'
       : '<div class="step-slide-img-empty">[product]</div>';
@@ -197,24 +219,17 @@ function renderRoutineHTML(r) {
   }
 
   return '<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>' + esc(r.title) + '</span></div>' +
-    '<div class="routine-hero">' +
-      heroImg +
-      '<div class="routine-hero-content">' +
-        pills +
-        '<h1>' + esc(r.title) + '</h1>' +
-        (r.intro ? '<div class="routine-intro">' + esc(r.intro) + '</div>' : '') +
-      '</div>' +
-    '</div>' +
     '<div class="routine-slider-section">' +
-      '<div class="routine-slider-heading">The Routine, Step by Step</div>' +
-      '<div class="routine-slider-viewport">' +
-        '<div class="routine-slider-track" id="routineSliderTrack">' + slidesHTML + '</div>' +
+      '<div class="routine-slider-viewport-wrapper">' +
+        '<div class="routine-slider-viewport">' +
+          '<div class="routine-slider-track" id="routineSliderTrack">' + heroSlide + stepSlides + '</div>' +
+        '</div>' +
+        '<button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button>' +
+        '<button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button>' +
       '</div>' +
       '<div class="routine-slider-controls">' +
-        '<button class="routine-arrow" id="routinePrev" aria-label="Previous step">&larr;</button>' +
         '<div class="routine-dots" id="routineDots"></div>' +
         '<span class="routine-step-counter" id="routineCounter"></span>' +
-        '<button class="routine-arrow" id="routineNext" aria-label="Next step">&rarr;</button>' +
       '</div>' +
     '</div>' +
     outroHTML +
@@ -239,7 +254,8 @@ function initRoutineSlider() {
   if (dots) {
     var dotsHTML = "";
     for (var i = 0; i < totalSlides; i++) {
-      dotsHTML += '<button class="routine-dot' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '" aria-label="Go to step ' + (i+1) + '"></button>';
+      var label = i === 0 ? "Overview" : "Step " + i;
+      dotsHTML += '<button class="routine-dot' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '" aria-label="Go to ' + label + '"></button>';
     }
     dots.innerHTML = dotsHTML;
   }
@@ -257,7 +273,10 @@ function initRoutineSlider() {
     }
     prev.disabled = (index === 0);
     next.disabled = (index === totalSlides - 1);
-    if (counter) counter.textContent = (index + 1) + " / " + totalSlides;
+    if (counter) {
+      if (index === 0) counter.textContent = "Overview";
+      else counter.textContent = "Step " + index + " of " + (totalSlides - 1);
+    }
   }
 
   prev.addEventListener("click", function() { goToSlide(currentIndex - 1); });
