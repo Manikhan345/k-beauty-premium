@@ -614,19 +614,19 @@ function renderRoutineBody(r) {
     (r.duration ? `<span class="routine-pill meta">${escapeAttr(r.duration)}</span>` : '') +
   '</div>';
 
-  const stepsHTML = (r.steps || []).map(s => {
+  const slidesHTML = (r.steps || []).map(s => {
     const imgHTML = s.productImage
       ? `<img src="${escapeAttr(s.productImage)}" alt="${escapeAttr(s.productName)}" loading="lazy">`
-      : '<div class="empty">📦</div>';
-    const tipHTML = s.tip ? `<div class="step-tip"><strong>Tip</strong>${escapeAttr(s.tip)}</div>` : '';
+      : '<div class="step-slide-img-empty">[product]</div>';
+    const tipHTML = s.tip ? `<div class="step-slide-tip"><strong>Tip</strong>${escapeAttr(s.tip)}</div>` : '';
     const waitNum = parseInt(s.waitTime) || 0;
     const waitHTML = waitNum > 0
-      ? `<div class="step-wait">Wait <strong>${escapeAttr(s.waitTime)} min</strong> before next step</div>`
-      : '<div class="step-wait">Continue immediately</div>';
+      ? `<div class="step-slide-wait">Wait <strong>${escapeAttr(s.waitTime)} min</strong> before next step</div>`
+      : '<div class="step-slide-wait">Continue immediately</div>';
     const btnHTML = s.productUrl
-      ? `<a href="${escapeAttr(s.productUrl)}" target="_blank" rel="nofollow noopener" class="btn-amazon">🛒 View on Amazon</a>`
+      ? `<a href="${escapeAttr(s.productUrl)}" target="_blank" rel="nofollow noopener" class="step-slide-amazon">View on Amazon</a>`
       : '';
-    return `<div class="step-card"><div class="step-card-header"><div class="step-number">${escapeAttr(s.stepNumber)}</div><div class="step-title">${escapeAttr(s.title)}</div></div><div class="step-body"><div class="step-product-img">${imgHTML}</div><div class="step-info"><div class="step-product-name">${escapeAttr(s.productName)}</div><div class="step-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}</div></div><div class="step-footer">${waitHTML}${btnHTML}</div></div>`;
+    return `<div class="step-slide"><div class="step-slide-img-wrap">${imgHTML}</div><div class="step-slide-content"><div class="step-slide-label">STEP ${escapeAttr(s.stepNumber)} - ${escapeAttr(s.title)}</div><h2 class="step-slide-title">${escapeAttr(s.productName)}</h2><div class="step-slide-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}${waitHTML}${btnHTML}</div></div>`;
   }).join('');
 
   const outroHTML = r.outro
@@ -648,9 +648,8 @@ function renderRoutineBody(r) {
     sourcesHTML = `<div class="routine-sources"><h3>Sources &amp; References</h3><ul>${items}</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>`;
   }
 
-  return `<div class="routine-breadcrumb"><a href="/">Home</a> › <a href="/routines">Routines</a> › <span>${escapeAttr(r.title)}</span></div><div class="routine-hero">${heroImg}<div class="routine-hero-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div><div class="routine-steps">${stepsHTML}</div>${outroHTML}${sourcesHTML}`;
+  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-hero">${heroImg}<div class="routine-hero-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div><div class="routine-slider-section"><div class="routine-slider-heading">The Routine, Step by Step</div><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${slidesHTML}</div></div><div class="routine-slider-controls"><button class="routine-arrow" id="routinePrev" aria-label="Previous step">&larr;</button><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span><button class="routine-arrow" id="routineNext" aria-label="Next step">&rarr;</button></div></div>${outroHTML}${sourcesHTML}`;
 }
-
 async function fallbackTemplate(origin, file) {
   const html = await fetch(`${origin}/${file}`).then(r => r.text()).catch(() => '');
   return new Response(html, {
