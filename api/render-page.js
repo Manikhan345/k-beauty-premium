@@ -604,7 +604,7 @@ function renderRoutineBody(r) {
   else if (r.cover && r.cover.url) coverUrl = r.cover.url;
 
   const heroImg = coverUrl
-    ? `<div class="routine-hero-img"><img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(r.title)}"></div>`
+    ? `<div class="hero-slide-img"><img src="${escapeAttr(coverUrl)}" alt="${escapeAttr(r.title)}"></div>`
     : '';
 
   const pills = '<div class="routine-hero-pills">' +
@@ -614,7 +614,9 @@ function renderRoutineBody(r) {
     (r.duration ? `<span class="routine-pill meta">${escapeAttr(r.duration)}</span>` : '') +
   '</div>';
 
-  const slidesHTML = (r.steps || []).map(s => {
+  const heroSlide = `<div class="step-slide hero-slide">${heroImg}<div class="hero-slide-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div>`;
+
+  const stepSlides = (r.steps || []).map(s => {
     const imgHTML = s.productImage
       ? `<img src="${escapeAttr(s.productImage)}" alt="${escapeAttr(s.productName)}" loading="lazy">`
       : '<div class="step-slide-img-empty">[product]</div>';
@@ -648,7 +650,7 @@ function renderRoutineBody(r) {
     sourcesHTML = `<div class="routine-sources"><h3>Sources &amp; References</h3><ul>${items}</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>`;
   }
 
-  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-hero">${heroImg}<div class="routine-hero-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div><div class="routine-slider-section"><div class="routine-slider-heading">The Routine, Step by Step</div><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${slidesHTML}</div></div><div class="routine-slider-controls"><button class="routine-arrow" id="routinePrev" aria-label="Previous step">&larr;</button><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span><button class="routine-arrow" id="routineNext" aria-label="Next step">&rarr;</button></div></div>${outroHTML}${sourcesHTML}`;
+  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-slider-section"><div class="routine-slider-viewport-wrapper"><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${heroSlide}${stepSlides}</div></div><button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button><button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button></div><div class="routine-slider-controls"><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span></div></div>${outroHTML}${sourcesHTML}`;
 }
 async function fallbackTemplate(origin, file) {
   const html = await fetch(`${origin}/${file}`).then(r => r.text()).catch(() => '');
