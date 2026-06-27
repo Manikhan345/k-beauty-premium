@@ -330,16 +330,27 @@ function initRoutineSlider() {
     else if (e.key === "ArrowRight") { e.preventDefault(); goToSlide(currentIndex + 1); }
   });
 
-  var touchStartX = 0;
+ var touchStartX = 0;
+  var touchStartY = 0;
   var touchEndX = 0;
-  track.addEventListener("touchstart", function(e) {
-    touchStartX = e.changedTouches[0].screenX;
+  var touchEndY = 0;
+
+  var viewport = document.querySelector(".routine-slider-viewport");
+  var touchTarget = viewport || track;
+
+  touchTarget.addEventListener("touchstart", function(e) {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
   }, { passive: true });
-  track.addEventListener("touchend", function(e) {
-    touchEndX = e.changedTouches[0].screenX;
-    var diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) goToSlide(currentIndex + 1);
+
+  touchTarget.addEventListener("touchend", function(e) {
+    touchEndX = e.changedTouches[0].clientX;
+    touchEndY = e.changedTouches[0].clientY;
+    var diffX = touchStartX - touchEndX;
+    var diffY = touchStartY - touchEndY;
+    // Only treat as horizontal swipe if X movement is greater than Y (avoid triggering on vertical scroll)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX > 0) goToSlide(currentIndex + 1);
       else goToSlide(currentIndex - 1);
     }
   }, { passive: true });
