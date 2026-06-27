@@ -105,9 +105,13 @@ function buildRoutinesUI() {
     + '      <h3>Outro (optional)</h3>'
     + '      <div class="kbr-row"><label>Closing paragraph</label><textarea id="kbrOutro" placeholder="Final thoughts on this routine..."></textarea></div>'
     + '    </div>'
-    + '    <div class="kbr-form-section">'
++ '    <div class="kbr-form-section">'
     + '      <h3>Sources (one per line)</h3>'
     + '      <div class="kbr-row"><label>Format: descriptive title followed by URL on each line</label><textarea id="kbrSources" rows="6" placeholder="American Academy of Dermatology - Oily skin care: https://www.aad.org/public/everyday-care/skin-care-basics/dry/oily-skin\nNIH - Niacinamide sebum study: https://pubmed.ncbi.nlm.nih.gov/..."></textarea></div>'
+    + '    </div>'
+    + '    <div class="kbr-form-section">'
+    + '      <h3>Related Routines (one slug per line)</h3>'
+    + '      <div class="kbr-row"><label>Add the slug of each related routine on its own line (e.g., morning-routine-oily-skin)</label><textarea id="kbrRelated" rows="3" placeholder="morning-routine-oily-skin\nevening-routine-acne-prone-skin"></textarea></div>'
     + '    </div>'
     + '    <div class="kbr-actions">'
     + '      <button class="kbr-btn kbr-btn-primary" id="kbrBtnPublish" onclick="saveRoutine(\'published\')">Publish</button>'
@@ -143,6 +147,8 @@ function newRoutine() {
   document.getElementById("kbrOutro").value = "";
   var srcEl = document.getElementById("kbrSources");
   if (srcEl) srcEl.value = "";
+  var relEl = document.getElementById("kbrRelated");
+  if (relEl) relEl.value = "";
   document.getElementById("kbrStepsContainer").innerHTML = "";
   document.getElementById("kbrStatus").textContent = "";
   // Auto-slug from title
@@ -235,6 +241,8 @@ function editRoutine(index) {
  document.getElementById("kbrOutro").value = r.outro || "";
   var srcEl = document.getElementById("kbrSources");
   if (srcEl) srcEl.value = r.sources || "";
+  var relEl = document.getElementById("kbrRelated");
+  if (relEl) relEl.value = r.relatedRoutines || "";
   // Build steps
   var container = document.getElementById("kbrStepsContainer");
   container.innerHTML = "";
@@ -266,8 +274,10 @@ async function saveRoutine(status) {
   var tags = document.getElementById("kbrTags").value.split(",").map(function(t){return t.trim();}).filter(Boolean);
   var intro = document.getElementById("kbrIntro").value.trim();
   var outro = document.getElementById("kbrOutro").value.trim();
-  var sourcesEl = document.getElementById("kbrSources");
+ var sourcesEl = document.getElementById("kbrSources");
   var sources = sourcesEl ? sourcesEl.value.trim() : "";
+  var relatedEl = document.getElementById("kbrRelated");
+  var relatedRoutines = relatedEl ? relatedEl.value.trim() : "";
   var steps = gatherStepsFromForm();
   var statusEl = document.getElementById("kbrStatus");
 
@@ -313,7 +323,8 @@ async function saveRoutine(status) {
     intro: intro,
     steps: steps,
     outro: outro,
-    sources: sources
+    sources: sources,
+    relatedRoutines: relatedRoutines
   };
   if (kbEditingRoutineIndex >= 0) {
     kbRoutines[kbEditingRoutineIndex] = routine;
