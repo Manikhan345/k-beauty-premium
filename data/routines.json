@@ -1,1 +1,81 @@
-[]
+[
+  {
+    "id": "morning-routine-oily-skin",
+    "slug": "morning-routine-oily-skin",
+    "title": "Morning Korean Skincare Routine for Oily Skin",
+    "excerpt": "A dermatologist-aligned 5-step Korean morning routine for oily skin. Balances sebum without stripping, hydrates without weighing skin down, finishes with daily SPF protection.",
+    "skinType": "oily",
+    "timeOfDay": "morning",
+    "duration": "10 minutes",
+    "stepCount": 5,
+    "cover": {
+      "url": "https://images.pexels.com/photos/7479541/pexels-photo-7479541.jpeg",
+      "position": "center"
+    },
+    "tags": [
+      "morning routine",
+      "oily skin",
+      "Korean skincare",
+      "niacinamide",
+      "sebum control"
+    ],
+    "date": "2026-06-27T10:08:12.943Z",
+    "status": "published",
+    "visibility": "public",
+    "intro": "Oily skin is the most common skin type alongside dry, normal, combination, and sensitive (American Academy of Dermatology). The biggest morning challenge is finding balance: stripping oil with harsh cleansers triggers more oil production, but skipping moisturizer and SPF compounds long-term damage. This 5-step Korean routine is built around dermatologist validated principles  gentle cleansing, lightweight hydration, sebum regulating actives, and daily sun protection. It takes about 10 minutes and uses well established Korean drugstore products that suit oily skin without overloading it.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Water Cleanser",
+        "productName": "ROUND LAB 1025 Dokdo Cleanser",
+        "productImage": "https://m.media-amazon.com/images/I/31jkKh-qmlL._SY300_SX300_QL70_FMwebp_.jpg",
+        "productUrl": "https://amzn.to/4v1YYFj",
+        "whyThisStep": "Morning skin needs to be cleansed of overnight sebum and residue from previous skincare. The American Academy of Dermatology recommends a mild, gentle face wash for oily skin  harsh cleansers strip the skin barrier and actually trigger more oil production as a compensatory response. Low pH water cleansers like this one respect the skin's natural acidic state (around 5.5 pH) while removing impurities. This is the foundation for everything that follows.",
+        "waitTime": "0",
+        "tip": "Use lukewarm water, not hot. Hot water temporarily increases oil production and can damage the skin barrier."
+      },
+      {
+        "stepNumber": 2,
+        "title": "Hydrating Toner",
+        "productName": "Anua Heartleaf 77% Soothing Toner",
+        "productImage": "https://m.media-amazon.com/images/I/51AeF0suKmL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+        "productUrl": "https://amzn.to/4f7cP8o",
+        "whyThisStep": "Toner restores skin pH after cleansing and adds a first layer of hydration. For oily skin, AAD specifically warns against alcohol based or \"pore tightening\" toners,  they irritate the skin and worsen oiliness. Heartleaf (Houttuynia cordata) is a well established Korean ingredient with anti-inflammatory properties, calming the redness that often accompanies oily, acne-prone skin without disrupting the barrier.",
+        "waitTime": "1",
+        "tip": "Pat into damp skin with clean hands instead of using cotton pads. Cotton pads create friction and waste product."
+      },
+      {
+        "stepNumber": 3,
+        "title": "Niacinamide Serum",
+        "productName": "Beauty of Joseon Glow Serum (Propolis + Niacinamide)",
+        "productImage": "https://m.media-amazon.com/images/I/61Rc8GmeBxL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/3R1xvWh",
+        "whyThisStep": "Niacinamide is one of the most evidence-backed ingredients for oily skin. A double-blind, placebo-controlled study (Draelos et al, published via NIH PMC) found that topical 2% niacinamide significantly lowered sebum excretion rates after just 2 to 4 weeks of consistent use. NIH research on niacinamide also confirms a dose dependent reduction in sebaceous lipid production in clinical settings. This serum delivers niacinamide alongside propolis (a soothing, antibacterial ingredient), making it well suited for oily skin that's prone to occasional breakouts.",
+        "waitTime": "0",
+        "tip": "2-3 drops total,  more is not more. Apply to slightly damp skin for better absorption. If you're new to niacinamide, start every other morning for the first week."
+      },
+      {
+        "stepNumber": 4,
+        "title": "Lightweight Moisturizer",
+        "productName": "Pyunkang Yul Moisture Cream",
+        "productImage": "https://m.media-amazon.com/images/I/614ynpAE6KL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4eTZuzg",
+        "whyThisStep": "The biggest mistake people with oily skin make is skipping moisturizer. AAD is explicit: even oily skin needs hydration, and skipping this step triggers more oil production as the skin attempts to compensate for water loss. The key is the texture  choose lightweight, water based, non-comedogenic formulas labeled \"oil free.\" This Korean staple uses a thin, water cream texture that hydrates without sitting heavy on oily skin or causing sunscreen to pill on top.",
+        "waitTime": "2",
+        "tip": "If your skin feels even slightly tight after toner, you definitely need this step. A pea sized amount is plenty."
+      },
+      {
+        "stepNumber": 5,
+        "title": "Sunscreen (SPF 30+)",
+        "productName": "Beauty of Joseon Relief Sun Rice + Probiotics SPF 50+ PA++++",
+        "productImage": "https://m.media-amazon.com/images/I/61twZTX9VbL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4aR4enS",
+        "whyThisStep": "Sunscreen is non-negotiable in any morning routine. The American Academy of Dermatology recommends broad-spectrum SPF 30 or higher daily  SPF 30 blocks approximately 97% of UVB rays when properly applied. For oily skin specifically, look for lightweight, non comedogenic formulas that don't pill or feel heavy. This hybrid Korean SPF has become a community favorite because it's lightweight enough to layer under makeup and provides PA++++ (highest UVA rating) protection alongside SPF 50+.",
+        "waitTime": "0",
+        "tip": "Most people apply only 20-50% of the sunscreen needed to actually achieve labeled SPF protection. Use a full quarter teaspoon for your face and neck. Apply 15 minutes before going outside."
+      }
+    ],
+    "outro": "This routine works because each step has a specific job and none of them work against each other. The lightweight layers should absorb cleanly and let your sunscreen sit smoothly on top. Give it 4-6 weeks before judging results — sebum regulation from niacinamide is gradual, not overnight. If your skin still feels greasy by midday, blotting papers between reapplications work better than re-washing your face, which would strip your barrier and trigger more oil. Pair this with a gentle evening routine that includes a low-strength BHA or salicylic acid 2-3 times per week to keep pores clear.",
+    "sources": "American Academy of Dermatology: How to control oily skin: https://www.aad.org/public/everyday-care/skin-care-basics/dry/oily-skin\nAmerican Academy of Dermatology :  How to select a sunscreen: https://www.aad.org/public/everyday-care/sun-protection/shade-clothing-sunscreen/how-to-select-sunscreen\nNIH PMC: Oily Skin Review of Treatment Options (niacinamide study): https://pmc.ncbi.nlm.nih.gov/articles/PMC5605215/\nNIH PMC: Niacinamide from Monotherapy to Adjunctive Therapies: https://pmc.ncbi.nlm.nih.gov/articles/PMC12145734/\nAmerican Academy of Dermatology : Sunscreen FAQs and recommendations: https://www.aad.org/media/stats-sunscreen"
+  }
+]
