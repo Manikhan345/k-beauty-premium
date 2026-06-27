@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Korean Skincare Routine — K Beauty Premium</title>
+<title>Korean Skincare Routine - K Beauty Premium</title>
 <meta name="description" content="">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shared.css">
 <style>
-.routine-container { max-width: 820px; margin: 30px auto; padding: 0 16px; }
+.routine-container { max-width: 1100px; margin: 30px auto; padding: 0 16px; }
 .routine-breadcrumb { font-size: 0.8rem; color: var(--text-light); margin-bottom: 20px; }
 .routine-breadcrumb a { color: var(--accent); text-decoration: none; }
 
@@ -24,49 +24,40 @@
 .routine-hero h1 { font-family: 'Noto Serif Display', serif; font-size: 2rem; font-weight: 700; line-height: 1.25; color: var(--text); margin-bottom: 14px; }
 .routine-intro { font-size: 1rem; line-height: 1.7; color: var(--text-mid); }
 
-.routine-steps { display: flex; flex-direction: column; gap: 20px; }
+.routine-slider-section { margin: 30px 0 20px; }
+.routine-slider-heading { font-family: 'Noto Serif Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 18px; text-align: center; }
+.routine-slider-viewport { overflow: hidden; position: relative; border-radius: 24px; box-shadow: 0 8px 30px rgba(26,20,16,0.06); }
+.routine-slider-track { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
 
-.step-card { background: var(--card); border-radius: 16px; padding: 24px 26px; box-shadow: 0 4px 16px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); position: relative; }
-.step-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-.step-number { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-rose); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Noto Serif Display', serif; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; box-shadow: 0 4px 12px rgba(183,110,121,0.25); }
-.step-title { font-family: 'Noto Serif Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--text); }
+.step-slide { flex: 0 0 100%; width: 100%; display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; padding: 44px 48px; background: linear-gradient(135deg, #FBF7F4 0%, #F8F0EC 100%); align-items: center; box-sizing: border-box; min-height: 460px; }
+.step-slide-img-wrap { background: #FFFFFF; border-radius: 20px; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+.step-slide-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.step-slide-img-empty { font-size: 4rem; color: var(--text-light); }
 
-.step-body { display: grid; grid-template-columns: 140px 1fr; gap: 22px; align-items: start; }
-.step-product-img { width: 140px; height: 140px; border-radius: 12px; background: var(--warm-cream); overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.step-product-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.step-product-img .empty { font-size: 2rem; color: var(--text-light); }
+.step-slide-content { display: flex; flex-direction: column; gap: 14px; }
+.step-slide-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; }
+.step-slide-title { font-family: 'Noto Serif Display', serif; font-size: 1.55rem; font-weight: 700; line-height: 1.25; color: var(--text); margin: 0; }
+.step-slide-why { font-size: 0.92rem; line-height: 1.65; color: var(--text-mid); }
+.step-slide-tip { background: rgba(255,255,255,0.7); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 8px; font-size: 0.85rem; line-height: 1.55; color: var(--text-mid); }
+.step-slide-tip strong { color: var(--accent-dark); display: block; margin-bottom: 3px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.step-slide-wait { font-size: 0.82rem; color: var(--text-mid); }
+.step-slide-wait strong { color: var(--accent); font-weight: 700; }
+.step-slide-amazon { display: inline-block; margin-top: 8px; padding: 12px 26px; background: linear-gradient(to bottom, #FFD814, #F7CA00); border: 1px solid #C49A00; border-radius: 50px; color: #111; font-size: 0.9rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center; width: fit-content; cursor: pointer; transition: all 0.2s; }
+.step-slide-amazon:hover { background: linear-gradient(to bottom, #F7CA00, #E8B900); transform: scale(1.03); }
 
-.step-info { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.step-product-name { font-size: 1rem; font-weight: 600; color: var(--text); line-height: 1.4; }
-.step-why { font-size: 0.92rem; line-height: 1.6; color: var(--text-mid); }
-.step-tip { background: var(--accent-rose-light); border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; color: var(--accent-dark); line-height: 1.5; }
-.step-tip strong { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; margin-bottom: 4px; }
-
-.step-footer { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-soft); flex-wrap: wrap; }
-.step-wait { font-size: 0.85rem; color: var(--text-mid); font-weight: 500; }
-.step-wait strong { color: var(--accent); font-weight: 700; }
-.btn-amazon { display: inline-block; padding: 11px 22px; background: linear-gradient(to bottom, #FFD814, #F7CA00); border: 1px solid #C49A00; border-radius: 50px; color: #111; font-size: 0.88rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-decoration: none; cursor: pointer; transition: all 0.2s; }
-.btn-amazon:hover { background: linear-gradient(to bottom, #F7CA00, #E8B900); transform: scale(1.03); }
+.routine-slider-controls { display: flex; justify-content: center; align-items: center; margin-top: 22px; gap: 18px; flex-wrap: wrap; }
+.routine-arrow { background: var(--card); border: 1px solid var(--border-soft); border-radius: 50%; width: 46px; height: 46px; font-size: 1.2rem; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.06); flex-shrink: 0; font-family: inherit; }
+.routine-arrow:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(183,110,121,0.25); }
+.routine-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+.routine-dots { display: flex; gap: 8px; align-items: center; }
+.routine-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-soft); border: none; cursor: pointer; transition: all 0.25s; padding: 0; }
+.routine-dot.active { background: var(--accent); width: 28px; border-radius: 12px; }
+.routine-step-counter { font-size: 0.85rem; color: var(--text-mid); font-weight: 600; min-width: 60px; text-align: center; }
 
 .routine-outro { background: var(--card); border-radius: 16px; padding: 26px 30px; margin-top: 32px; box-shadow: 0 4px 16px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); }
 .routine-outro h3 { font-family: 'Noto Serif Display', serif; font-size: 1.2rem; margin-bottom: 10px; color: var(--text); }
 .routine-outro p { font-size: 0.95rem; line-height: 1.7; color: var(--text-mid); }
 
-.routine-loading { text-align: center; padding: 80px 20px; color: var(--text-light); }
-.routine-not-found { text-align: center; padding: 80px 20px; }
-.routine-not-found h2 { font-family: 'Noto Serif Display', serif; font-size: 1.6rem; margin-bottom: 12px; }
-.routine-not-found p { color: var(--text-mid); margin-bottom: 18px; }
-
-@media (max-width: 700px) {
-  .routine-hero h1 { font-size: 1.5rem; }
-  .routine-hero-content { padding: 22px 22px 24px; }
-  .step-card { padding: 20px 20px; }
-  .step-body { grid-template-columns: 1fr; gap: 16px; }
-  .step-product-img { width: 100%; height: 200px; max-width: 240px; margin: 0 auto; }
-  .step-title { font-size: 1.15rem; }
-  .step-footer { justify-content: stretch; }
-  .btn-amazon { flex: 1; text-align: center; }
-}
 .routine-sources { background: var(--card); border-radius: 16px; padding: 26px 30px; margin-top: 24px; box-shadow: 0 4px 16px rgba(26,20,16,0.05); border: 1px solid var(--border-soft); }
 .routine-sources h3 { font-family: 'Noto Serif Display', serif; font-size: 1.15rem; margin-bottom: 14px; color: var(--text); }
 .routine-sources ul { list-style: none; padding: 0; margin: 0 0 16px; }
@@ -75,7 +66,24 @@
 .routine-sources li a { color: var(--accent); text-decoration: none; word-break: break-word; }
 .routine-sources li a:hover { color: var(--accent-dark); text-decoration: underline; }
 .routine-disclaimer { font-size: 0.82rem; color: var(--text-mid); line-height: 1.6; padding: 14px; background: var(--warm-cream); border-radius: 8px; margin: 0; }
-.routine-disclaimer strong { color: var(--text); }  
+.routine-disclaimer strong { color: var(--text); }
+
+.routine-loading { text-align: center; padding: 80px 20px; color: var(--text-light); }
+.routine-not-found { text-align: center; padding: 80px 20px; }
+.routine-not-found h2 { font-family: 'Noto Serif Display', serif; font-size: 1.6rem; margin-bottom: 12px; }
+
+@media (max-width: 800px) {
+  .step-slide { grid-template-columns: 1fr; padding: 30px 24px; gap: 22px; min-height: auto; }
+  .step-slide-img-wrap { aspect-ratio: 4/3; max-width: 280px; margin: 0 auto; padding: 22px; }
+  .step-slide-title { font-size: 1.3rem; }
+  .routine-hero h1 { font-size: 1.5rem; }
+  .routine-hero-content { padding: 22px 22px 24px; }
+  .routine-slider-heading { font-size: 1.2rem; }
+}
+@media (max-width: 480px) {
+  .step-slide { padding: 24px 18px; }
+  .routine-arrow { width: 40px; height: 40px; }
+}
 </style>
 </head>
 <body>
@@ -97,14 +105,14 @@ async function loadRoutine() {
 
   var container = document.getElementById("routineContainer");
 
-  // Skip if SSR already rendered
   if (container.getAttribute("data-ssr") === "true") {
+    initRoutineSlider();
     return;
   }
 
   var slug = window.location.pathname.replace(/^\/routines\//, "").replace(/\/$/, "");
   if (!slug) {
-    container.innerHTML = '<div class="routine-not-found"><h2>Routine Not Found</h2><p>This routine doesn\'t exist.</p><a href="/routines" style="color:var(--accent);">← Back to routines</a></div>';
+    container.innerHTML = '<div class="routine-not-found"><h2>Routine Not Found</h2><p>This routine does not exist.</p><a href="/routines" style="color:var(--accent);">Back to routines</a></div>';
     return;
   }
 
@@ -115,17 +123,18 @@ async function loadRoutine() {
     var routine = routines.find(function(r) { return r.slug === slug; });
 
     if (!routine || routine.status === "draft") {
-      container.innerHTML = '<div class="routine-not-found"><h2>Routine Not Found</h2><p>This routine doesn\'t exist or has been removed.</p><a href="/routines" style="color:var(--accent);">← Back to routines</a></div>';
+      container.innerHTML = '<div class="routine-not-found"><h2>Routine Not Found</h2><p>This routine does not exist or has been removed.</p><a href="/routines" style="color:var(--accent);">Back to routines</a></div>';
       return;
     }
 
-    document.title = routine.title + " — K Beauty Premium";
+    document.title = routine.title + " - K Beauty Premium";
     var metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.content = routine.excerpt || routine.title;
 
     container.innerHTML = renderRoutineHTML(routine);
+    initRoutineSlider();
   } catch(e) {
-    container.innerHTML = '<div class="routine-not-found"><h2>Error Loading Routine</h2><p>Something went wrong.</p><a href="/routines" style="color:var(--accent);">← Back to routines</a></div>';
+    container.innerHTML = '<div class="routine-not-found"><h2>Error Loading Routine</h2><p>Something went wrong.</p><a href="/routines" style="color:var(--accent);">Back to routines</a></div>';
   }
 }
 
@@ -145,30 +154,27 @@ function renderRoutineHTML(r) {
     (r.duration ? '<span class="routine-pill meta">' + esc(r.duration) + '</span>' : '') +
   '</div>';
 
-  var stepsHTML = (r.steps || []).map(function(s) {
+  var slidesHTML = (r.steps || []).map(function(s) {
     var imgHTML = s.productImage
       ? '<img src="' + esc(s.productImage) + '" alt="' + esc(s.productName) + '" loading="lazy">'
-      : '<div class="empty">📦</div>';
-    var tipHTML = s.tip ? '<div class="step-tip"><strong>Tip</strong>' + esc(s.tip) + '</div>' : '';
-    var waitHTML = (s.waitTime && parseInt(s.waitTime) > 0)
-      ? '<div class="step-wait">Wait <strong>' + esc(s.waitTime) + ' min</strong> before next step</div>'
-      : '<div class="step-wait">Continue immediately</div>';
-    return '<div class="step-card">' +
-      '<div class="step-card-header">' +
-        '<div class="step-number">' + esc(s.stepNumber) + '</div>' +
-        '<div class="step-title">' + esc(s.title) + '</div>' +
-      '</div>' +
-      '<div class="step-body">' +
-        '<div class="step-product-img">' + imgHTML + '</div>' +
-        '<div class="step-info">' +
-          '<div class="step-product-name">' + esc(s.productName) + '</div>' +
-          '<div class="step-why">' + esc(s.whyThisStep) + '</div>' +
-          tipHTML +
-        '</div>' +
-      '</div>' +
-      '<div class="step-footer">' +
+      : '<div class="step-slide-img-empty">[product]</div>';
+    var tipHTML = s.tip ? '<div class="step-slide-tip"><strong>Tip</strong>' + esc(s.tip) + '</div>' : '';
+    var waitNum = parseInt(s.waitTime) || 0;
+    var waitHTML = waitNum > 0
+      ? '<div class="step-slide-wait">Wait <strong>' + esc(s.waitTime) + ' min</strong> before next step</div>'
+      : '<div class="step-slide-wait">Continue immediately</div>';
+    var btnHTML = s.productUrl
+      ? '<a href="' + esc(s.productUrl) + '" target="_blank" rel="nofollow noopener" class="step-slide-amazon">View on Amazon</a>'
+      : '';
+    return '<div class="step-slide">' +
+      '<div class="step-slide-img-wrap">' + imgHTML + '</div>' +
+      '<div class="step-slide-content">' +
+        '<div class="step-slide-label">STEP ' + esc(s.stepNumber) + ' - ' + esc(s.title) + '</div>' +
+        '<h2 class="step-slide-title">' + esc(s.productName) + '</h2>' +
+        '<div class="step-slide-why">' + esc(s.whyThisStep) + '</div>' +
+        tipHTML +
         waitHTML +
-        (s.productUrl ? '<a href="' + esc(s.productUrl) + '" target="_blank" rel="nofollow noopener" class="btn-amazon">🛒 View on Amazon</a>' : '') +
+        btnHTML +
       '</div>' +
     '</div>';
   }).join("");
@@ -190,7 +196,7 @@ function renderRoutineHTML(r) {
     sourcesHTML = '<div class="routine-sources"><h3>Sources &amp; References</h3><ul>' + items + '</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>';
   }
 
-  return '<div class="routine-breadcrumb"><a href="/">Home</a> › <a href="/routines">Routines</a> › <span>' + esc(r.title) + '</span></div>' +
+  return '<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>' + esc(r.title) + '</span></div>' +
     '<div class="routine-hero">' +
       heroImg +
       '<div class="routine-hero-content">' +
@@ -199,9 +205,94 @@ function renderRoutineHTML(r) {
         (r.intro ? '<div class="routine-intro">' + esc(r.intro) + '</div>' : '') +
       '</div>' +
     '</div>' +
-    '<div class="routine-steps">' + stepsHTML + '</div>' +
+    '<div class="routine-slider-section">' +
+      '<div class="routine-slider-heading">The Routine, Step by Step</div>' +
+      '<div class="routine-slider-viewport">' +
+        '<div class="routine-slider-track" id="routineSliderTrack">' + slidesHTML + '</div>' +
+      '</div>' +
+      '<div class="routine-slider-controls">' +
+        '<button class="routine-arrow" id="routinePrev" aria-label="Previous step">&larr;</button>' +
+        '<div class="routine-dots" id="routineDots"></div>' +
+        '<span class="routine-step-counter" id="routineCounter"></span>' +
+        '<button class="routine-arrow" id="routineNext" aria-label="Next step">&rarr;</button>' +
+      '</div>' +
+    '</div>' +
     outroHTML +
     sourcesHTML;
+}
+
+function initRoutineSlider() {
+  var track = document.getElementById("routineSliderTrack");
+  var prev = document.getElementById("routinePrev");
+  var next = document.getElementById("routineNext");
+  var dots = document.getElementById("routineDots");
+  var counter = document.getElementById("routineCounter");
+
+  if (!track || !prev || !next) return;
+
+  var slides = track.querySelectorAll(".step-slide");
+  var totalSlides = slides.length;
+  if (totalSlides === 0) return;
+
+  var currentIndex = 0;
+
+  if (dots) {
+    var dotsHTML = "";
+    for (var i = 0; i < totalSlides; i++) {
+      dotsHTML += '<button class="routine-dot' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '" aria-label="Go to step ' + (i+1) + '"></button>';
+    }
+    dots.innerHTML = dotsHTML;
+  }
+
+  function goToSlide(index) {
+    if (index < 0 || index >= totalSlides) return;
+    currentIndex = index;
+    track.style.transform = "translateX(-" + (index * 100) + "%)";
+    if (dots) {
+      var allDots = dots.querySelectorAll(".routine-dot");
+      for (var j = 0; j < allDots.length; j++) {
+        if (j === index) allDots[j].classList.add("active");
+        else allDots[j].classList.remove("active");
+      }
+    }
+    prev.disabled = (index === 0);
+    next.disabled = (index === totalSlides - 1);
+    if (counter) counter.textContent = (index + 1) + " / " + totalSlides;
+  }
+
+  prev.addEventListener("click", function() { goToSlide(currentIndex - 1); });
+  next.addEventListener("click", function() { goToSlide(currentIndex + 1); });
+
+  if (dots) {
+    dots.addEventListener("click", function(e) {
+      var btn = e.target.closest(".routine-dot");
+      if (!btn) return;
+      var idx = parseInt(btn.dataset.slide, 10);
+      goToSlide(idx);
+    });
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+    if (e.key === "ArrowLeft") { e.preventDefault(); goToSlide(currentIndex - 1); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); goToSlide(currentIndex + 1); }
+  });
+
+  var touchStartX = 0;
+  var touchEndX = 0;
+  track.addEventListener("touchstart", function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  track.addEventListener("touchend", function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    var diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToSlide(currentIndex + 1);
+      else goToSlide(currentIndex - 1);
+    }
+  }, { passive: true });
+
+  goToSlide(0);
 }
 
 loadRoutine();
