@@ -631,10 +631,11 @@ function renderRoutineBody(r) {
     return `<div class="step-slide"><div class="step-slide-img-wrap">${imgHTML}</div><div class="step-slide-content"><div class="step-slide-label">STEP ${escapeAttr(s.stepNumber)} - ${escapeAttr(s.title)}</div><h2 class="step-slide-title">${escapeAttr(s.productName)}</h2><div class="step-slide-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}${waitHTML}${btnHTML}</div></div>`;
   }).join('');
 
-  let closingSlide = '';
+ let closingSlide = '';
   const hasOutro = r.outro && r.outro.trim();
   const hasSources = r.sources && r.sources.trim();
-  if (hasOutro || hasSources) {
+  const hasRelated = r.relatedRoutines && r.relatedRoutines.trim();
+  if (hasOutro || hasSources || hasRelated) {
     const outroBlock = hasOutro ? `<div class="closing-section"><h3>The Bottom Line</h3><p>${escapeAttr(r.outro)}</p></div>` : '';
     let sourcesBlock = '';
     if (hasSources) {
@@ -651,9 +652,12 @@ function renderRoutineBody(r) {
       sourcesBlock = `<div class="closing-section"><h3>Sources &amp; References</h3><ul>${items}</ul></div>`;
     }
     const disclaimerBlock = `<div class="closing-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</div>`;
-    closingSlide = `<div class="step-slide closing-slide"><div class="closing-slide-inner"><div class="closing-slide-header"><div class="label">Routine Complete</div><h2>You finished the routine</h2></div>${outroBlock}${sourcesBlock}${disclaimerBlock}</div></div>`;
+    let relatedBlock = '';
+    if (hasRelated) {
+      relatedBlock = `<div class="related-routines" id="relatedRoutinesContainer" data-slugs="${escapeAttr(r.relatedRoutines)}"><div class="related-routines-heading">Related Routines</div><div class="related-routines-grid" id="relatedRoutinesGrid"></div></div>`;
+    }
+    closingSlide = `<div class="step-slide closing-slide"><div class="closing-slide-inner"><div class="closing-slide-header"><div class="label">Routine Complete</div><h2>You finished the routine</h2></div>${outroBlock}${sourcesBlock}${relatedBlock}${disclaimerBlock}</div></div>`;
   }
-
   return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-slider-section"><div class="routine-swipe-hint"><span>&larr;</span><span>Swipe to navigate</span><span>&rarr;</span></div><div class="routine-slider-viewport-wrapper"><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${heroSlide}${stepSlides}${closingSlide}</div></div><button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button><button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button></div><div class="routine-slider-controls"><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span></div></div>`;
 }
 async function fallbackTemplate(origin, file) {
