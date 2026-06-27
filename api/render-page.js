@@ -631,26 +631,30 @@ function renderRoutineBody(r) {
     return `<div class="step-slide"><div class="step-slide-img-wrap">${imgHTML}</div><div class="step-slide-content"><div class="step-slide-label">STEP ${escapeAttr(s.stepNumber)} - ${escapeAttr(s.title)}</div><h2 class="step-slide-title">${escapeAttr(s.productName)}</h2><div class="step-slide-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}${waitHTML}${btnHTML}</div></div>`;
   }).join('');
 
-  const outroHTML = r.outro
-    ? `<div class="routine-outro"><h3>The Bottom Line</h3><p>${escapeAttr(r.outro)}</p></div>`
-    : '';
-
-  let sourcesHTML = '';
-  if (r.sources && r.sources.trim()) {
-    const lines = r.sources.split(/\n/).map(l => l.trim()).filter(Boolean);
-    const items = lines.map(line => {
-      const urlMatch = line.match(/(https?:\/\/\S+)/);
-      if (urlMatch) {
-        const url = urlMatch[1];
-        const label = line.replace(url, "").replace(/[\s:-]+$/, "").trim() || url;
-        return `<li><a href="${escapeAttr(url)}" target="_blank" rel="noopener nofollow">${escapeAttr(label)}</a></li>`;
-      }
-      return `<li>${escapeAttr(line)}</li>`;
-    }).join("");
-    sourcesHTML = `<div class="routine-sources"><h3>Sources &amp; References</h3><ul>${items}</ul><p class="routine-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</p></div>`;
+  let closingSlide = '';
+  const hasOutro = r.outro && r.outro.trim();
+  const hasSources = r.sources && r.sources.trim();
+  if (hasOutro || hasSources) {
+    const outroBlock = hasOutro ? `<div class="closing-section"><h3>The Bottom Line</h3><p>${escapeAttr(r.outro)}</p></div>` : '';
+    let sourcesBlock = '';
+    if (hasSources) {
+      const lines = r.sources.split(/\n/).map(l => l.trim()).filter(Boolean);
+      const items = lines.map(line => {
+        const urlMatch = line.match(/(https?:\/\/\S+)/);
+        if (urlMatch) {
+          const url = urlMatch[1];
+          const label = line.replace(url, "").replace(/[\s:-]+$/, "").trim() || url;
+          return `<li><a href="${escapeAttr(url)}" target="_blank" rel="noopener nofollow">${escapeAttr(label)}</a></li>`;
+        }
+        return `<li>${escapeAttr(line)}</li>`;
+      }).join("");
+      sourcesBlock = `<div class="closing-section"><h3>Sources &amp; References</h3><ul>${items}</ul></div>`;
+    }
+    const disclaimerBlock = `<div class="closing-disclaimer"><strong>Not medical advice.</strong> General skincare guidance for educational purposes. Patch test new products. Consult a dermatologist for persistent concerns or specific conditions.</div>`;
+    closingSlide = `<div class="step-slide closing-slide"><div class="closing-slide-inner"><div class="closing-slide-header"><div class="label">Routine Complete</div><h2>You finished the routine</h2></div>${outroBlock}${sourcesBlock}${disclaimerBlock}</div></div>`;
   }
 
-  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-slider-section"><div class="routine-slider-viewport-wrapper"><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${heroSlide}${stepSlides}</div></div><button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button><button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button></div><div class="routine-slider-controls"><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span></div></div>${outroHTML}${sourcesHTML}`;
+  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-slider-section"><div class="routine-slider-viewport-wrapper"><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${heroSlide}${stepSlides}${closingSlide}</div></div><button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button><button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button></div><div class="routine-slider-controls"><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span></div></div>`;
 }
 async function fallbackTemplate(origin, file) {
   const html = await fetch(`${origin}/${file}`).then(r => r.text()).catch(() => '');
