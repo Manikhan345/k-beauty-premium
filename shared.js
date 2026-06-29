@@ -211,8 +211,9 @@ function loadAdsterra() {
 
   window._adsterraLoaded = true;
 
-  // ─── 1. POPUNDER (30021534) — fires on every 3rd click ───
-  // Persist click count across page navigation via sessionStorage
+ // ─── 1. POPUNDER (30021534) — fires on every 3rd click ───
+  // Strategy: Track clicks. On click #2, load the script so it's ready.
+  // On click #3, the loaded script fires on this very click.
   var popunderLoaded = false;
   function loadPopunderScript() {
     if (popunderLoaded) return;
@@ -225,11 +226,8 @@ function loadAdsterra() {
   document.addEventListener("click", function(e) {
     var clicks = parseInt(sessionStorage.getItem("kb_click_count") || "0", 10) + 1;
     sessionStorage.setItem("kb_click_count", String(clicks));
-    // On 2nd click: preload script so it's ready
+    // Load on click #2 so script is ready when click #3 happens
     if (clicks === 2) loadPopunderScript();
-    // On 3rd click: ensure script is loaded (popunder fires via Adsterra's own logic)
-    // On 6th, 9th, 12th clicks: Adsterra's frequency cap handles repeat suppression
-    if (clicks >= 3 && (clicks % 3 === 0)) loadPopunderScript();
   }, { passive: true });
 
   // ─── 2. SIDEBAR BANNER 160x600 (30021539) — desktop only, sticky right side ───
