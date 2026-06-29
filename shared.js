@@ -190,10 +190,6 @@ async function renderHeader() {
 
   injectSEO();
 }
-// ═══════════════════════════════════════════════════════════════
-// ADSTERRA AD INJECTION
-// 3 ads per page: Popunder (3rd-click trigger) + Sidebar Banner + Native Banner
-// ═══════════════════════════════════════════════════════════════
 function loadAdsterra() {
   if (window._adsterraLoaded) return;
 
@@ -211,106 +207,152 @@ function loadAdsterra() {
 
   window._adsterraLoaded = true;
 
- // ─── 1. POPUNDER (30021534) — fires on every 3rd click ───
-  // Strategy: Track clicks. On click #2, load the script so it's ready.
-  // On click #3, the loaded script fires on this very click.
+  // ─── ADSTERRA KEYS ───
+  var BANNER_SIDEBAR_KEY = "ae8b3878027dd9b2ae0d78bd9ceb88dd"; // 160x600 sidebar
+  var BANNER_728_KEY = "f0acd9612a6a56e257bbeaf0d39ca1c1";    // 728x90 inline
+  var BANNER_300_KEY = "1d6d65355b3d8ae72a5a04ff32a09432";    // 300x250 inline
+
+  // ─── HELPER: Iframe-wrapped Adsterra banner (avoids atOptions conflicts) ───
+  function createIframeBanner(key, width, height) {
+    var iframe = document.createElement("iframe");
+    iframe.style.cssText = "border: none; width: " + width + "px; height: " + height + "px; max-width: 100%; display: block;";
+    iframe.setAttribute("scrolling", "no");
+    iframe.setAttribute("frameborder", "0");
+    iframe.src = "about:blank";
+
+    iframe.addEventListener("load", function onLoad() {
+      iframe.removeEventListener("load", onLoad);
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        doc.open();
+        doc.write(
+          "<!DOCTYPE html><html><head>" +
+          "<style>body{margin:0;padding:0;overflow:hidden;}</style>" +
+          "</head><body>" +
+          "<scr" + "ipt>atOptions={key:\"" + key + "\",format:\"iframe\",height:" + height + ",width:" + width + ",params:{}};</scr" + "ipt>" +
+          "<scr" + "ipt src=\"https://www.highperformanceformat.com/" + key + "/invoke.js\"></scr" + "ipt>" +
+          "</body></html>"
+        );
+        doc.close();
+      } catch(e) {}
+    });
+
+    return iframe;
+  }
+
+  function makeBannerWrapper(key, width, height) {
+    var wrap = document.createElement("div");
+    wrap.className = "kbn-banner-wrap";
+    wrap.style.cssText = "margin: 36px auto; max-width: " + width + "px; text-align: center; padding: 0 16px;";
+
+    var label = document.createElement("div");
+    label.textContent = "Advertisement";
+    label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 4px;";
+    wrap.appendChild(label);
+
+    var holder = document.createElement("div");
+    holder.style.cssText = "display: flex; justify-content: center; overflow: hidden;";
+    holder.appendChild(createIframeBanner(key, width, height));
+    wrap.appendChild(holder);
+
+    return wrap;
+  }
+
+  function waitForElement(getter, callback, maxTries) {
+    maxTries = maxTries || 80;
+    var tries = 0;
+    var interval = setInterval(function() {
+      var el = typeof getter === "function" ? getter() : document.querySelector(getter);
+      tries++;
+      if (el) {
+        clearInterval(interval);
+        callback(el);
+      } else if (tries >= maxTries) {
+        clearInterval(interval);
+      }
+    }, 100);
+  }
+
+  // ─── 1. POPUNDER — fires on 3rd click ───
   var popunderLoaded = false;
-  function loadPopunderScript() {
+  function loadPopunder() {
     if (popunderLoaded) return;
     popunderLoaded = true;
-    var popScript = document.createElement("script");
-    popScript.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
-    popScript.async = true;
-    document.head.appendChild(popScript);
+    var s = document.createElement("script");
+    s.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
+    s.async = true;
+    document.head.appendChild(s);
   }
-  document.addEventListener("click", function(e) {
+  document.addEventListener("click", function() {
     var clicks = parseInt(sessionStorage.getItem("kb_click_count") || "0", 10) + 1;
     sessionStorage.setItem("kb_click_count", String(clicks));
-    // Load on click #2 so script is ready when click #3 happens
-    if (clicks === 2) loadPopunderScript();
+    if (clicks === 2) loadPopunder();
   }, { passive: true });
 
-  // ─── 2. SIDEBAR BANNER 160x600 (30021539) — desktop only, sticky right side ───
-  // Only render on screens >= 1280px wide (enough space for sidebar without overlapping content)
+  // ─── 2. SIDEBAR BANNER 160x600 — desktop only ───
   if (window.innerWidth >= 1280) {
-    var sidebarWrapper = document.createElement("div");
-    sidebarWrapper.id = "adsterra-sidebar-banner";
-    sidebarWrapper.style.cssText = [
-      "position: fixed",
-      "right: 16px",
-      "top: 50%",
-      "transform: translateY(-50%)",
-      "width: 160px",
-      "height: 620px",
-      "z-index: 50",
-      "display: flex",
-      "flex-direction: column",
-      "align-items: center",
-      "gap: 4px"
-    ].join("; ");
+    var sidebarWrap = document.createElement("div");
+    sidebarWrap.id = "adsterra-sidebar-banner";
+    sidebarWrap.style.cssText = "position: fixed; right: 16px; top: 50%; transform: translateY(-50%); width: 160px; z-index: 50; display: flex; flex-direction: column; align-items: center; gap: 4px;";
 
-    var adLabel = document.createElement("div");
-    adLabel.textContent = "Advertisement";
-    adLabel.style.cssText = "font-size: 0.6rem; color: #888; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif;";
-    sidebarWrapper.appendChild(adLabel);
+    var sidebarLabel = document.createElement("div");
+    sidebarLabel.textContent = "Advertisement";
+    sidebarLabel.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif;";
+    sidebarWrap.appendChild(sidebarLabel);
 
-    var sidebarHolder = document.createElement("div");
-    sidebarHolder.id = "adsterra-sidebar-holder";
-    sidebarHolder.style.cssText = "width: 160px; height: 600px;";
-    sidebarWrapper.appendChild(sidebarHolder);
-
-    // Adsterra iframe-format banner requires atOptions then invoke.js
-    var configScript = document.createElement("script");
-    configScript.textContent =
-      "atOptions = {" +
-        "'key' : 'ae8b3878027dd9b2ae0d78bd9ceb88dd'," +
-        "'format' : 'iframe'," +
-        "'height' : 600," +
-        "'width' : 160," +
-        "'params' : {}" +
-      "};";
-
-    var invokeScript = document.createElement("script");
-    invokeScript.src = "https://www.highperformanceformat.com/ae8b3878027dd9b2ae0d78bd9ceb88dd/invoke.js";
-
-    sidebarHolder.appendChild(configScript);
-    sidebarHolder.appendChild(invokeScript);
-    document.body.appendChild(sidebarWrapper);
+    sidebarWrap.appendChild(createIframeBanner(BANNER_SIDEBAR_KEY, 160, 600));
+    document.body.appendChild(sidebarWrap);
   }
 
-  // ─── 3. NATIVE BANNER (30021535) — injected into body content ───
-  var nativeWrapper = document.createElement("div");
-  nativeWrapper.id = "adsterra-native-banner";
-  nativeWrapper.style.cssText = "margin: 30px auto; max-width: 900px; padding: 0 16px;";
+  // ─── 3. INLINE BANNERS — placed by page type ───
+  var path = window.location.pathname;
 
-  var nativeScript = document.createElement("script");
-  nativeScript.async = true;
-  nativeScript.setAttribute("data-cfasync", "false");
-  nativeScript.src = "https://pl30122034.effectivecpmnetwork.com/9a8f3d45a5e3972afdd106f84d915a32/invoke.js";
+  // HOMEPAGE: 2x 728x90 banners
+  if (path === "/" || path === "") {
+    // Banner 1: After Routines Preview (between routines and TikTok videos)
+    waitForElement(function() {
+      var s = document.getElementById("routinesPreviewSection");
+      if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
+      return null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_728_KEY, 728, 90);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    });
 
-  var nativeContainer = document.createElement("div");
-  nativeContainer.id = "container-9a8f3d45a5e3972afdd106f84d915a32";
-
-  nativeWrapper.appendChild(nativeScript);
-  nativeWrapper.appendChild(nativeContainer);
-
-  var insertTarget = document.querySelector(".routine-container") ||
-                     document.querySelector(".blog-grid") ||
-                     document.querySelector(".section-product-grid") ||
-                     document.querySelector("main") ||
-                     document.getElementById("siteFooter");
-
-  if (insertTarget && insertTarget.parentNode) {
-    insertTarget.parentNode.insertBefore(nativeWrapper, insertTarget.nextSibling);
-  } else {
-    document.body.appendChild(nativeWrapper);
+    // Banner 2: Mid-categories (after 3rd category section)
+    waitForElement(function() {
+      var sections = document.querySelectorAll("#mainContent .category-section");
+      return sections.length >= 3 ? sections[2] : null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_728_KEY, 728, 90);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    });
   }
-}
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", loadAdsterra);
-} else {
-  loadAdsterra();
+  // CATEGORY PAGE: 1x 300x250 banner mid-grid
+  var catRegex = /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/;
+  if (catRegex.test(path)) {
+    waitForElement(function() {
+      var grid = document.querySelector(".section-product-grid, .product-grid");
+      if (!grid) return null;
+      var cards = grid.children;
+      return cards.length >= 8 ? cards[7] : null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_300_KEY, 300, 250);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    });
+  }
+
+  // PRODUCT PAGE: 1x 300x250 banner mid-content
+  if (/^\/p\/[^\/]+\/[^\/]+\/?$/.test(path)) {
+    waitForElement(".product-detail, .product-detail-content, .product-page-container, main", function(el) {
+      var children = el.children;
+      if (children.length === 0) return;
+      var middleIdx = Math.floor(children.length / 2);
+      var wrap = makeBannerWrapper(BANNER_300_KEY, 300, 250);
+      el.insertBefore(wrap, children[middleIdx]);
+    });
+  }
 }
 function injectSEO() {
   var path = window.location.pathname;
