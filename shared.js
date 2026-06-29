@@ -190,7 +190,62 @@ async function renderHeader() {
 
   injectSEO();
 }
+// ═══════════════════════════════════════════════════════════════
+// ADSTERRA AD INJECTION
+// Loads 3 ads per page: Popunder + Social Bar + Native Banner
+// ═══════════════════════════════════════════════════════════════
+function loadAdsterra() {
+  if (window._adsterraLoaded) return;
+  window._adsterraLoaded = true;
 
+  // 1. POPUNDER (30021534) — fires on first click anywhere
+  var popunderScript = document.createElement("script");
+  popunderScript.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
+  popunderScript.async = true;
+  document.head.appendChild(popunderScript);
+
+  // 2. SOCIAL BAR (30021543) — sticky bottom bar
+  var socialBarScript = document.createElement("script");
+  socialBarScript.src = "https://pl30122042.effectivecpmnetwork.com/92/7a/e7/927ae721799bf79ff0353bbf3d014745.js";
+  socialBarScript.async = true;
+  document.head.appendChild(socialBarScript);
+
+  // 3. NATIVE BANNER (30021535) — injected into body content
+  var nativeWrapper = document.createElement("div");
+  nativeWrapper.id = "adsterra-native-banner";
+  nativeWrapper.style.cssText = "margin: 30px auto; max-width: 900px; padding: 0 16px;";
+
+  var nativeScript = document.createElement("script");
+  nativeScript.async = true;
+  nativeScript.setAttribute("data-cfasync", "false");
+  nativeScript.src = "https://pl30122034.effectivecpmnetwork.com/9a8f3d45a5e3972afdd106f84d915a32/invoke.js";
+
+  var nativeContainer = document.createElement("div");
+  nativeContainer.id = "container-9a8f3d45a5e3972afdd106f84d915a32";
+
+  nativeWrapper.appendChild(nativeScript);
+  nativeWrapper.appendChild(nativeContainer);
+
+  // Find best injection point — try main content areas first
+  var insertTarget = document.querySelector(".routine-container") ||
+                     document.querySelector(".blog-grid") ||
+                     document.querySelector(".section-product-grid") ||
+                     document.querySelector("main") ||
+                     document.getElementById("siteFooter");
+
+  if (insertTarget && insertTarget.parentNode) {
+    insertTarget.parentNode.insertBefore(nativeWrapper, insertTarget.nextSibling);
+  } else {
+    document.body.appendChild(nativeWrapper);
+  }
+}
+
+// Auto-load after DOM ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadAdsterra);
+} else {
+  loadAdsterra();
+}
 function injectSEO() {
   var path = window.location.pathname;
   var canonicalURL = "https://kbeauty.fun" + (path === "/" ? "/" : path.replace(/\/$/, ""));
