@@ -196,6 +196,27 @@ async function renderHeader() {
 // ═══════════════════════════════════════════════════════════════
 function loadAdsterra() {
   if (window._adsterraLoaded) return;
+   // Skip ads for admins/testers
+  // Method 1: localStorage flag (manual override)
+  if (localStorage.getItem("kb_no_ads") === "1") return;
+  // Method 2: Admin pages
+  if (window.location.pathname.indexOf("/admin") === 0) return;
+  // Method 3: Localhost development
+  if (window.location.hostname === "localhost") return;
+  // Method 4: ?admin URL parameter — sets flag and skips
+  if (window.location.search.indexOf("admin") !== -1) {
+    localStorage.setItem("kb_no_ads", "1");
+    return;
+  }
+  // Method 5: Coming from /admin page — auto-skip
+  if (document.referrer && document.referrer.indexOf("/admin") !== -1) {
+    localStorage.setItem("kb_no_ads", "1");
+    return;
+  }
+  // Method 6: ?showads URL parameter — clears flag (for testing ads later)
+  if (window.location.search.indexOf("showads") !== -1) {
+    localStorage.removeItem("kb_no_ads");
+  }
   window._adsterraLoaded = true;
 
   // 1. POPUNDER (30021534) — fires on first click anywhere
