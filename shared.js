@@ -192,46 +192,95 @@ async function renderHeader() {
 }
 // ═══════════════════════════════════════════════════════════════
 // ADSTERRA AD INJECTION
-// Loads 3 ads per page: Popunder + Social Bar + Native Banner
+// 3 ads per page: Popunder (3rd-click trigger) + Sidebar Banner + Native Banner
 // ═══════════════════════════════════════════════════════════════
 function loadAdsterra() {
   if (window._adsterraLoaded) return;
-   // Skip ads for admins/testers
-  // Method 1: localStorage flag (manual override)
+
+  // Skip ads for admins/testers
   if (localStorage.getItem("kb_no_ads") === "1") return;
-  // Method 2: Admin pages
   if (window.location.pathname.indexOf("/admin") === 0) return;
-  // Method 3: Localhost development
   if (window.location.hostname === "localhost") return;
-  // Method 4: ?admin URL parameter — sets flag and skips
-  if (window.location.search.indexOf("admin") !== -1) {
+  if (window.location.search.indexOf("noads") !== -1) {
     localStorage.setItem("kb_no_ads", "1");
     return;
   }
-  // Method 5: Coming from /admin page — auto-skip
-  if (document.referrer && document.referrer.indexOf("/admin") !== -1) {
-    localStorage.setItem("kb_no_ads", "1");
-    return;
-  }
-  // Method 6: ?showads URL parameter — clears flag (for testing ads later)
   if (window.location.search.indexOf("showads") !== -1) {
     localStorage.removeItem("kb_no_ads");
   }
+
   window._adsterraLoaded = true;
 
-  // 1. POPUNDER (30021534) — fires on first click anywhere
-  var popunderScript = document.createElement("script");
-  popunderScript.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
-  popunderScript.async = true;
-  document.head.appendChild(popunderScript);
+  // ─── 1. POPUNDER (30021534) — fires on every 3rd click ───
+  // Persist click count across page navigation via sessionStorage
+  var popunderLoaded = false;
+  function loadPopunderScript() {
+    if (popunderLoaded) return;
+    popunderLoaded = true;
+    var popScript = document.createElement("script");
+    popScript.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
+    popScript.async = true;
+    document.head.appendChild(popScript);
+  }
+  document.addEventListener("click", function(e) {
+    var clicks = parseInt(sessionStorage.getItem("kb_click_count") || "0", 10) + 1;
+    sessionStorage.setItem("kb_click_count", String(clicks));
+    // On 2nd click: preload script so it's ready
+    if (clicks === 2) loadPopunderScript();
+    // On 3rd click: ensure script is loaded (popunder fires via Adsterra's own logic)
+    // On 6th, 9th, 12th clicks: Adsterra's frequency cap handles repeat suppression
+    if (clicks >= 3 && (clicks % 3 === 0)) loadPopunderScript();
+  }, { passive: true });
 
-  // 2. SOCIAL BAR (30021543) — sticky bottom bar
-  var socialBarScript = document.createElement("script");
-  socialBarScript.src = "https://pl30122042.effectivecpmnetwork.com/92/7a/e7/927ae721799bf79ff0353bbf3d014745.js";
-  socialBarScript.async = true;
-  document.head.appendChild(socialBarScript);
+  // ─── 2. SIDEBAR BANNER 160x600 (30021539) — desktop only, sticky right side ───
+  // Only render on screens >= 1280px wide (enough space for sidebar without overlapping content)
+  if (window.innerWidth >= 1280) {
+    var sidebarWrapper = document.createElement("div");
+    sidebarWrapper.id = "adsterra-sidebar-banner";
+    sidebarWrapper.style.cssText = [
+      "position: fixed",
+      "right: 16px",
+      "top: 50%",
+      "transform: translateY(-50%)",
+      "width: 160px",
+      "height: 620px",
+      "z-index: 50",
+      "display: flex",
+      "flex-direction: column",
+      "align-items: center",
+      "gap: 4px"
+    ].join("; ");
 
-  // 3. NATIVE BANNER (30021535) — injected into body content
+    var adLabel = document.createElement("div");
+    adLabel.textContent = "Advertisement";
+    adLabel.style.cssText = "font-size: 0.6rem; color: #888; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif;";
+    sidebarWrapper.appendChild(adLabel);
+
+    var sidebarHolder = document.createElement("div");
+    sidebarHolder.id = "adsterra-sidebar-holder";
+    sidebarHolder.style.cssText = "width: 160px; height: 600px;";
+    sidebarWrapper.appendChild(sidebarHolder);
+
+    // Adsterra iframe-format banner requires atOptions then invoke.js
+    var configScript = document.createElement("script");
+    configScript.textContent =
+      "atOptions = {" +
+        "'key' : 'ae8b3878027dd9b2ae0d78bd9ceb88dd'," +
+        "'format' : 'iframe'," +
+        "'height' : 600," +
+        "'width' : 160," +
+        "'params' : {}" +
+      "};";
+
+    var invokeScript = document.createElement("script");
+    invokeScript.src = "https://www.highperformanceformat.com/ae8b3878027dd9b2ae0d78bd9ceb88dd/invoke.js";
+
+    sidebarHolder.appendChild(configScript);
+    sidebarHolder.appendChild(invokeScript);
+    document.body.appendChild(sidebarWrapper);
+  }
+
+  // ─── 3. NATIVE BANNER (30021535) — injected into body content ───
   var nativeWrapper = document.createElement("div");
   nativeWrapper.id = "adsterra-native-banner";
   nativeWrapper.style.cssText = "margin: 30px auto; max-width: 900px; padding: 0 16px;";
@@ -247,7 +296,6 @@ function loadAdsterra() {
   nativeWrapper.appendChild(nativeScript);
   nativeWrapper.appendChild(nativeContainer);
 
-  // Find best injection point — try main content areas first
   var insertTarget = document.querySelector(".routine-container") ||
                      document.querySelector(".blog-grid") ||
                      document.querySelector(".section-product-grid") ||
@@ -261,7 +309,6 @@ function loadAdsterra() {
   }
 }
 
-// Auto-load after DOM ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", loadAdsterra);
 } else {
