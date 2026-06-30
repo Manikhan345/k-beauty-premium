@@ -413,7 +413,27 @@ function loadAdsterra() {
       el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
     }, 100);
   }
+
+  // ABOVE FOOTER: Native banner between page content and footer
+  // Active on: Homepage, Routines listing, Individual routine pages, Blog listing
+  var showAboveFooter = false;
+  if (path === "/" || path === "") showAboveFooter = true;
+  if (path === "/routines" || path === "/routines/") showAboveFooter = true;
+  if (/^\/routines\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
+  if (path === "/blog" || path === "/blog/") showAboveFooter = true;
+
+  if (showAboveFooter) {
+    waitForElement(function() {
+      var f = document.getElementById("siteFooter");
+      // Only return footer once it has been rendered (renderFooter ran)
+      if (f && f.firstChild) return f;
+      return null;
+    }, function(el) {
+      el.parentNode.insertBefore(createNativeBannerEl(), el);
+    }, 100);
+  }
 }
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", loadAdsterra);
 } else {
