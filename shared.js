@@ -210,11 +210,13 @@ function loadAdsterra() {
   // ─── ADSTERRA KEYS ───
   var BANNER_160x600_KEY = "ae8b3878027dd9b2ae0d78bd9ceb88dd"; // sidebar (desktop)
   var BANNER_728x90_KEY  = "f0acd9612a6a56e257bbeaf0d39ca1c1"; // wide horizontal
-  var BANNER_468x60_KEY  = "3d047ca946f2a9405481c0fd794c0e3f"; // smaller horizontal (above footer)
+  var BANNER_468x60_KEY  = "3d047ca946f2a9405481c0fd794c0e3f"; // smaller horizontal
   var BANNER_300x250_KEY = "1d6d65355b3d8ae72a5a04ff32a09432"; // medium rectangle
-  var NATIVE_BANNER_KEY  = "9a8f3d45a5e3972afdd106f84d915a32"; // native (used ONCE per site)
+  var BANNER_320x50_KEY  = "8eb1151083ad6406a30c19c1a533265f"; // mobile leaderboard
+  var BANNER_160x300_KEY = "5091c1884d130d0fa92109f8cb33ef04"; // mobile rectangle
+  var NATIVE_BANNER_KEY  = "9a8f3d45a5e3972afdd106f84d915a32"; // native (once per site)
 
-  // ─── HELPER: Iframe-wrapped iframe-format banner (avoids atOptions conflicts) ───
+  // ─── HELPER: Iframe-wrapped iframe-format banner ───
   function createIframeBanner(key, width, height) {
     var iframe = document.createElement("iframe");
     iframe.style.cssText = "border: none; width: " + width + "px; height: " + height + "px; max-width: 100%; display: block;";
@@ -243,24 +245,46 @@ function loadAdsterra() {
   }
 
   function makeBannerWrapper(key, width, height) {
+    // ─── MOBILE SWAP: under 600px, use 320x50 for horizontal banners ───
+    var isMobile = window.innerWidth < 600;
+    if (isMobile && (width === 728 || width === 468)) {
+      key = BANNER_320x50_KEY;
+      width = 320;
+      height = 50;
+    }
+
     var wrap = document.createElement("div");
     wrap.className = "kbn-banner-wrap";
     wrap.style.cssText = "margin: 36px auto; max-width: " + width + "px; text-align: center; padding: 0 16px;";
 
     var label = document.createElement("div");
+    label.className = "kbn-banner-label";
     label.textContent = "Advertisement";
     label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 4px;";
     wrap.appendChild(label);
 
     var holder = document.createElement("div");
     holder.style.cssText = "display: flex; justify-content: center; overflow: hidden;";
-    holder.appendChild(createIframeBanner(key, width, height));
+    var iframe = createIframeBanner(key, width, height);
+    holder.appendChild(iframe);
     wrap.appendChild(holder);
+
+    // ─── AUTO-HIDE empty banners after 6 seconds ───
+    setTimeout(function() {
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!doc || !doc.body || doc.body.children.length === 0 || doc.body.offsetHeight < 10) {
+          wrap.style.display = "none";
+        }
+      } catch(e) {
+        // Cross-origin means an ad iframe loaded — leave wrap visible
+      }
+    }, 6000);
 
     return wrap;
   }
 
-  // ─── HELPER: Native Banner element (single instance per page, no iframe wrap) ───
+  // ─── HELPER: Native Banner (single instance per page, no iframe wrap) ───
   function createNativeBannerEl() {
     var wrap = document.createElement("div");
     wrap.className = "kbn-native-wrap";
@@ -336,7 +360,7 @@ function loadAdsterra() {
 
   // HOMEPAGE: Native Banner + 728x90 mid-categories
   if (path === "/" || path === "") {
-    // Native Banner (the ONLY one on the site) — between Routines Preview and TikTok
+    // Native Banner — between Routines Preview and TikTok
     waitForElement(function() {
       var s = document.getElementById("routinesPreviewSection");
       if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
@@ -422,11 +446,296 @@ function loadAdsterra() {
     }, 100);
   }
 
-  // ABOVE FOOTER: 468x60 banner on selected pages
+  // ABOVE FOOTER: 468x60 banner (auto-swaps to 320x50 on mobile)
+  // Now includes blog posts
   var showAboveFooter = false;
   if (path === "/" || path === "") showAboveFooter = true;
   if (catRegex.test(path)) showAboveFooter = true;
   if (path === "/blog" || path === "/blog/") showAboveFooter = true;
+  if (/^\/blog\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
+  if (path === "/best-sellers" || path === "/best-sellers/") showAboveFooter = true;
+  if (path === "/routines" || path === "/routines/") showAboveFooter = true;
+  if (/^\/routines\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
+
+  if (showAboveFooter) {
+    waitForElement(function() {
+      var f = document.getElementById("siteFooter");
+      if (f && f.firstChild) return f;
+      return null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_468x60_KEY, 468, 60);
+      el.parentNode.insertBefore(wrap, el);
+    }, 100);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadAdsterra);
+} else {
+  loadAdsterra();
+}function loadAdsterra() {
+  if (window._adsterraLoaded) return;
+
+  // Skip ads for admins/testers
+  if (localStorage.getItem("kb_no_ads") === "1") return;
+  if (window.location.pathname.indexOf("/admin") === 0) return;
+  if (window.location.hostname === "localhost") return;
+  if (window.location.search.indexOf("noads") !== -1) {
+    localStorage.setItem("kb_no_ads", "1");
+    return;
+  }
+  if (window.location.search.indexOf("showads") !== -1) {
+    localStorage.removeItem("kb_no_ads");
+  }
+
+  window._adsterraLoaded = true;
+
+  // ─── ADSTERRA KEYS ───
+  var BANNER_160x600_KEY = "ae8b3878027dd9b2ae0d78bd9ceb88dd"; // sidebar (desktop)
+  var BANNER_728x90_KEY  = "f0acd9612a6a56e257bbeaf0d39ca1c1"; // wide horizontal
+  var BANNER_468x60_KEY  = "3d047ca946f2a9405481c0fd794c0e3f"; // smaller horizontal
+  var BANNER_300x250_KEY = "1d6d65355b3d8ae72a5a04ff32a09432"; // medium rectangle
+  var BANNER_320x50_KEY  = "8eb1151083ad6406a30c19c1a533265f"; // mobile leaderboard
+  var BANNER_160x300_KEY = "5091c1884d130d0fa92109f8cb33ef04"; // mobile rectangle
+  var NATIVE_BANNER_KEY  = "9a8f3d45a5e3972afdd106f84d915a32"; // native (once per site)
+
+  // ─── HELPER: Iframe-wrapped iframe-format banner ───
+  function createIframeBanner(key, width, height) {
+    var iframe = document.createElement("iframe");
+    iframe.style.cssText = "border: none; width: " + width + "px; height: " + height + "px; max-width: 100%; display: block;";
+    iframe.setAttribute("scrolling", "no");
+    iframe.setAttribute("frameborder", "0");
+    iframe.src = "about:blank";
+
+    iframe.addEventListener("load", function onLoad() {
+      iframe.removeEventListener("load", onLoad);
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        doc.open();
+        doc.write(
+          "<!DOCTYPE html><html><head>" +
+          "<style>body{margin:0;padding:0;overflow:hidden;}</style>" +
+          "</head><body>" +
+          "<scr" + "ipt>atOptions={key:\"" + key + "\",format:\"iframe\",height:" + height + ",width:" + width + ",params:{}};</scr" + "ipt>" +
+          "<scr" + "ipt src=\"https://www.highperformanceformat.com/" + key + "/invoke.js\"></scr" + "ipt>" +
+          "</body></html>"
+        );
+        doc.close();
+      } catch(e) {}
+    });
+
+    return iframe;
+  }
+
+  function makeBannerWrapper(key, width, height) {
+    // ─── MOBILE SWAP: under 600px, use 320x50 for horizontal banners ───
+    var isMobile = window.innerWidth < 600;
+    if (isMobile && (width === 728 || width === 468)) {
+      key = BANNER_320x50_KEY;
+      width = 320;
+      height = 50;
+    }
+
+    var wrap = document.createElement("div");
+    wrap.className = "kbn-banner-wrap";
+    wrap.style.cssText = "margin: 36px auto; max-width: " + width + "px; text-align: center; padding: 0 16px;";
+
+    var label = document.createElement("div");
+    label.className = "kbn-banner-label";
+    label.textContent = "Advertisement";
+    label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 4px;";
+    wrap.appendChild(label);
+
+    var holder = document.createElement("div");
+    holder.style.cssText = "display: flex; justify-content: center; overflow: hidden;";
+    var iframe = createIframeBanner(key, width, height);
+    holder.appendChild(iframe);
+    wrap.appendChild(holder);
+
+    // ─── AUTO-HIDE empty banners after 6 seconds ───
+    setTimeout(function() {
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!doc || !doc.body || doc.body.children.length === 0 || doc.body.offsetHeight < 10) {
+          wrap.style.display = "none";
+        }
+      } catch(e) {
+        // Cross-origin means an ad iframe loaded — leave wrap visible
+      }
+    }, 6000);
+
+    return wrap;
+  }
+
+  // ─── HELPER: Native Banner (single instance per page, no iframe wrap) ───
+  function createNativeBannerEl() {
+    var wrap = document.createElement("div");
+    wrap.className = "kbn-native-wrap";
+    wrap.style.cssText = "margin: 36px auto; max-width: 900px; padding: 0 16px; grid-column: 1 / -1;";
+
+    var label = document.createElement("div");
+    label.textContent = "Advertisement";
+    label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 6px; text-align: center;";
+    wrap.appendChild(label);
+
+    var nativeScript = document.createElement("script");
+    nativeScript.async = true;
+    nativeScript.setAttribute("data-cfasync", "false");
+    nativeScript.src = "https://pl30122034.effectivecpmnetwork.com/" + NATIVE_BANNER_KEY + "/invoke.js";
+
+    var nativeContainer = document.createElement("div");
+    nativeContainer.id = "container-" + NATIVE_BANNER_KEY;
+
+    wrap.appendChild(nativeScript);
+    wrap.appendChild(nativeContainer);
+
+    return wrap;
+  }
+
+  function waitForElement(getter, callback, maxTries) {
+    maxTries = maxTries || 80;
+    var tries = 0;
+    var interval = setInterval(function() {
+      var el = typeof getter === "function" ? getter() : document.querySelector(getter);
+      tries++;
+      if (el) {
+        clearInterval(interval);
+        callback(el);
+      } else if (tries >= maxTries) {
+        clearInterval(interval);
+      }
+    }, 100);
+  }
+
+  // ─── 1. POPUNDER — fires on 3rd click ───
+  var popunderLoaded = false;
+  function loadPopunder() {
+    if (popunderLoaded) return;
+    popunderLoaded = true;
+    var s = document.createElement("script");
+    s.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
+    s.async = true;
+    document.head.appendChild(s);
+  }
+  document.addEventListener("click", function() {
+    var clicks = parseInt(sessionStorage.getItem("kb_click_count") || "0", 10) + 1;
+    sessionStorage.setItem("kb_click_count", String(clicks));
+    if (clicks === 2) loadPopunder();
+  }, { passive: true });
+
+  // ─── 2. SIDEBAR BANNER 160x600 — desktop only ───
+  if (window.innerWidth >= 1280) {
+    var sidebarWrap = document.createElement("div");
+    sidebarWrap.id = "adsterra-sidebar-banner";
+    sidebarWrap.style.cssText = "position: fixed; right: 16px; top: 50%; transform: translateY(-50%); width: 160px; z-index: 50; display: flex; flex-direction: column; align-items: center; gap: 4px;";
+
+    var sidebarLabel = document.createElement("div");
+    sidebarLabel.textContent = "Advertisement";
+    sidebarLabel.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif;";
+    sidebarWrap.appendChild(sidebarLabel);
+
+    sidebarWrap.appendChild(createIframeBanner(BANNER_160x600_KEY, 160, 600));
+    document.body.appendChild(sidebarWrap);
+  }
+
+  // ─── 3. INLINE BANNERS — unique ad unit per placement ───
+  var path = window.location.pathname;
+
+  // HOMEPAGE: Native Banner + 728x90 mid-categories
+  if (path === "/" || path === "") {
+    // Native Banner — between Routines Preview and TikTok
+    waitForElement(function() {
+      var s = document.getElementById("routinesPreviewSection");
+      if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
+      return null;
+    }, function(el) {
+      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+    }, 100);
+
+    // 728x90 — mid-categories (after 3rd category section)
+    waitForElement(function() {
+      var sections = document.querySelectorAll("#mainContent .category-section");
+      return sections.length >= 3 ? sections[2] : null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    }, 100);
+  }
+
+  // CATEGORY PAGES: 300x250 after 8th product
+  var catRegex = /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/;
+  if (catRegex.test(path)) {
+    waitForElement(function() {
+      var grid = document.getElementById("productGrid");
+      if (!grid) return null;
+      var cards = grid.querySelectorAll(".product-card");
+      return cards.length >= 8 ? cards[7] : null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_300x250_KEY, 300, 250);
+      wrap.style.gridColumn = "1 / -1";
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    }, 100);
+  }
+
+  // PRODUCT PAGES: 300x250 before "You Might Also Like"
+  if (/^\/p\/[^\/]+\/[^\/]+\/?$/.test(path)) {
+    waitForElement(function() {
+      var relSection = document.getElementById("relatedSection");
+      if (relSection && relSection.style.display !== "none") return relSection;
+      return null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_300x250_KEY, 300, 250);
+      el.parentNode.insertBefore(wrap, el);
+    }, 100);
+  }
+
+  // BLOG LISTING: 300x250 between 3rd and 4th card
+  if (path === "/blog" || path === "/blog/") {
+    waitForElement(function() {
+      var grid = document.getElementById("blogGrid");
+      if (!grid) return null;
+      var cards = grid.querySelectorAll(".blog-card");
+      return cards.length >= 3 ? cards[2] : null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_300x250_KEY, 300, 250);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    }, 100);
+  }
+
+  // BLOG POST: 728x90 mid-article
+  if (/^\/blog\/[^\/]+\/?$/.test(path)) {
+    waitForElement(function() {
+      var content = document.querySelector(".post-content");
+      if (!content || content.children.length < 4) return null;
+      return content;
+    }, function(el) {
+      var children = el.children;
+      var middleIdx = Math.floor(children.length / 2);
+      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
+      el.insertBefore(wrap, children[middleIdx]);
+    }, 100);
+  }
+
+  // BEST SELLERS: 728x90 between 2nd and 3rd category block
+  if (path === "/best-sellers" || path === "/best-sellers/") {
+    waitForElement(function() {
+      var content = document.getElementById("bestsellerContent");
+      if (!content) return null;
+      var blocks = content.querySelectorAll(".bs-category-block");
+      return blocks.length >= 2 ? blocks[1] : null;
+    }, function(el) {
+      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
+    }, 100);
+  }
+
+  // ABOVE FOOTER: 468x60 banner (auto-swaps to 320x50 on mobile)
+  // Now includes blog posts
+  var showAboveFooter = false;
+  if (path === "/" || path === "") showAboveFooter = true;
+  if (catRegex.test(path)) showAboveFooter = true;
+  if (path === "/blog" || path === "/blog/") showAboveFooter = true;
+  if (/^\/blog\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
   if (path === "/best-sellers" || path === "/best-sellers/") showAboveFooter = true;
   if (path === "/routines" || path === "/routines/") showAboveFooter = true;
   if (/^\/routines\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
@@ -448,7 +757,6 @@ if (document.readyState === "loading") {
 } else {
   loadAdsterra();
 }
-
 function injectSEO() {
   var path = window.location.pathname;
   var canonicalURL = "https://kbeauty.fun" + (path === "/" ? "/" : path.replace(/\/$/, ""));
