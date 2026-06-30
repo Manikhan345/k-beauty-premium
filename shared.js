@@ -304,54 +304,114 @@ function loadAdsterra() {
     document.body.appendChild(sidebarWrap);
   }
 
-  // ─── 3. INLINE BANNERS — placed by page type ───
+  // ─── 3. INLINE BANNERS — strategically placed by page type ───
   var path = window.location.pathname;
 
-  // HOMEPAGE: 2x 728x90 banners
+  // HELPER: Create Native Banner element (reusable across page types)
+  function createNativeBannerEl() {
+    var wrap = document.createElement("div");
+    wrap.className = "kbn-native-wrap";
+    wrap.style.cssText = "margin: 36px auto; max-width: 900px; padding: 0 16px; grid-column: 1 / -1;";
+
+    var label = document.createElement("div");
+    label.textContent = "Advertisement";
+    label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 6px; text-align: center;";
+    wrap.appendChild(label);
+
+    var nativeScript = document.createElement("script");
+    nativeScript.async = true;
+    nativeScript.setAttribute("data-cfasync", "false");
+    nativeScript.src = "https://pl30122034.effectivecpmnetwork.com/9a8f3d45a5e3972afdd106f84d915a32/invoke.js";
+
+    var nativeContainer = document.createElement("div");
+    nativeContainer.id = "container-9a8f3d45a5e3972afdd106f84d915a32";
+
+    wrap.appendChild(nativeScript);
+    wrap.appendChild(nativeContainer);
+
+    return wrap;
+  }
+
+  // HOMEPAGE: Native banner + 728x90 inline
   if (path === "/" || path === "") {
-    // Banner 1: After Routines Preview (between routines and TikTok videos)
+    // Banner 1: NATIVE BANNER — between Routines Preview and TikTok videos
     waitForElement(function() {
       var s = document.getElementById("routinesPreviewSection");
       if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
       return null;
     }, function(el) {
-      var wrap = makeBannerWrapper(BANNER_728_KEY, 728, 90);
-      el.parentNode.insertBefore(wrap, el.nextSibling);
-    });
+      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+    }, 100);
 
-    // Banner 2: Mid-categories (after 3rd category section)
+    // Banner 2: 728x90 — mid-categories (after 3rd category section)
     waitForElement(function() {
       var sections = document.querySelectorAll("#mainContent .category-section");
       return sections.length >= 3 ? sections[2] : null;
     }, function(el) {
       var wrap = makeBannerWrapper(BANNER_728_KEY, 728, 90);
       el.parentNode.insertBefore(wrap, el.nextSibling);
-    });
+    }, 100);
   }
 
-  // CATEGORY PAGE: 1x 300x250 banner mid-grid
+  // CATEGORY PAGES: Native banner after 8th product (spans full grid row)
   var catRegex = /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/;
   if (catRegex.test(path)) {
     waitForElement(function() {
-      var grid = document.querySelector(".section-product-grid, .product-grid");
+      var grid = document.getElementById("productGrid");
       if (!grid) return null;
-      var cards = grid.children;
+      var cards = grid.querySelectorAll(".product-card");
       return cards.length >= 8 ? cards[7] : null;
     }, function(el) {
-      var wrap = makeBannerWrapper(BANNER_300_KEY, 300, 250);
-      el.parentNode.insertBefore(wrap, el.nextSibling);
-    });
+      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+    }, 100);
   }
 
-  // PRODUCT PAGE: 1x 300x250 banner mid-content
+  // PRODUCT PAGES: Native banner before "You Might Also Like" section
   if (/^\/p\/[^\/]+\/[^\/]+\/?$/.test(path)) {
-    waitForElement(".product-detail, .product-detail-content, .product-page-container, main", function(el) {
+    waitForElement(function() {
+      var relSection = document.getElementById("relatedSection");
+      if (relSection && relSection.style.display !== "none") return relSection;
+      return null;
+    }, function(el) {
+      el.parentNode.insertBefore(createNativeBannerEl(), el);
+    }, 100);
+  }
+
+  // BLOG LISTING: Native banner between 3rd and 4th blog card
+  if (path === "/blog" || path === "/blog/") {
+    waitForElement(function() {
+      var grid = document.getElementById("blogGrid");
+      if (!grid) return null;
+      var cards = grid.querySelectorAll(".blog-card");
+      return cards.length >= 3 ? cards[2] : null;
+    }, function(el) {
+      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+    }, 100);
+  }
+
+  // BLOG POST: Native banner mid-article
+  if (/^\/blog\/[^\/]+\/?$/.test(path)) {
+    waitForElement(function() {
+      var content = document.querySelector(".post-content");
+      if (!content || content.children.length < 4) return null;
+      return content;
+    }, function(el) {
       var children = el.children;
-      if (children.length === 0) return;
       var middleIdx = Math.floor(children.length / 2);
-      var wrap = makeBannerWrapper(BANNER_300_KEY, 300, 250);
-      el.insertBefore(wrap, children[middleIdx]);
-    });
+      el.insertBefore(createNativeBannerEl(), children[middleIdx]);
+    }, 100);
+  }
+
+  // BEST SELLERS: Native banner between 2nd and 3rd category block
+  if (path === "/best-sellers" || path === "/best-sellers/") {
+    waitForElement(function() {
+      var content = document.getElementById("bestsellerContent");
+      if (!content) return null;
+      var blocks = content.querySelectorAll(".bs-category-block");
+      return blocks.length >= 2 ? blocks[1] : null;
+    }, function(el) {
+      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+    }, 100);
   }
 }
 if (document.readyState === "loading") {
