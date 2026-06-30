@@ -354,6 +354,12 @@ function loadAdsterra() {
     });
   }
 }
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadAdsterra);
+} else {
+  loadAdsterra();
+}
+
 function injectSEO() {
   var path = window.location.pathname;
   var canonicalURL = "https://kbeauty.fun" + (path === "/" ? "/" : path.replace(/\/$/, ""));
