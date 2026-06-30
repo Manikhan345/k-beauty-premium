@@ -208,11 +208,13 @@ function loadAdsterra() {
   window._adsterraLoaded = true;
 
   // ─── ADSTERRA KEYS ───
-  var BANNER_SIDEBAR_KEY = "ae8b3878027dd9b2ae0d78bd9ceb88dd"; // 160x600 sidebar
-  var BANNER_728_KEY = "f0acd9612a6a56e257bbeaf0d39ca1c1";    // 728x90 inline
-  var BANNER_300_KEY = "1d6d65355b3d8ae72a5a04ff32a09432";    // 300x250 inline
+  var BANNER_160x600_KEY = "ae8b3878027dd9b2ae0d78bd9ceb88dd"; // sidebar (desktop)
+  var BANNER_728x90_KEY  = "f0acd9612a6a56e257bbeaf0d39ca1c1"; // wide horizontal
+  var BANNER_468x60_KEY  = "3d047ca946f2a9405481c0fd794c0e3f"; // smaller horizontal (above footer)
+  var BANNER_300x250_KEY = "1d6d65355b3d8ae72a5a04ff32a09432"; // medium rectangle
+  var NATIVE_BANNER_KEY  = "9a8f3d45a5e3972afdd106f84d915a32"; // native (used ONCE per site)
 
-  // ─── HELPER: Iframe-wrapped Adsterra banner (avoids atOptions conflicts) ───
+  // ─── HELPER: Iframe-wrapped iframe-format banner (avoids atOptions conflicts) ───
   function createIframeBanner(key, width, height) {
     var iframe = document.createElement("iframe");
     iframe.style.cssText = "border: none; width: " + width + "px; height: " + height + "px; max-width: 100%; display: block;";
@@ -254,6 +256,31 @@ function loadAdsterra() {
     holder.style.cssText = "display: flex; justify-content: center; overflow: hidden;";
     holder.appendChild(createIframeBanner(key, width, height));
     wrap.appendChild(holder);
+
+    return wrap;
+  }
+
+  // ─── HELPER: Native Banner element (single instance per page, no iframe wrap) ───
+  function createNativeBannerEl() {
+    var wrap = document.createElement("div");
+    wrap.className = "kbn-native-wrap";
+    wrap.style.cssText = "margin: 36px auto; max-width: 900px; padding: 0 16px; grid-column: 1 / -1;";
+
+    var label = document.createElement("div");
+    label.textContent = "Advertisement";
+    label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 6px; text-align: center;";
+    wrap.appendChild(label);
+
+    var nativeScript = document.createElement("script");
+    nativeScript.async = true;
+    nativeScript.setAttribute("data-cfasync", "false");
+    nativeScript.src = "https://pl30122034.effectivecpmnetwork.com/" + NATIVE_BANNER_KEY + "/invoke.js";
+
+    var nativeContainer = document.createElement("div");
+    nativeContainer.id = "container-" + NATIVE_BANNER_KEY;
+
+    wrap.appendChild(nativeScript);
+    wrap.appendChild(nativeContainer);
 
     return wrap;
   }
@@ -300,41 +327,16 @@ function loadAdsterra() {
     sidebarLabel.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif;";
     sidebarWrap.appendChild(sidebarLabel);
 
-    sidebarWrap.appendChild(createIframeBanner(BANNER_SIDEBAR_KEY, 160, 600));
+    sidebarWrap.appendChild(createIframeBanner(BANNER_160x600_KEY, 160, 600));
     document.body.appendChild(sidebarWrap);
   }
 
-  // ─── 3. INLINE BANNERS — strategically placed by page type ───
+  // ─── 3. INLINE BANNERS — unique ad unit per placement ───
   var path = window.location.pathname;
 
-  // HELPER: Create Native Banner element (reusable across page types)
-  function createNativeBannerEl() {
-    var wrap = document.createElement("div");
-    wrap.className = "kbn-native-wrap";
-    wrap.style.cssText = "margin: 36px auto; max-width: 900px; padding: 0 16px; grid-column: 1 / -1;";
-
-    var label = document.createElement("div");
-    label.textContent = "Advertisement";
-    label.style.cssText = "font-size: 0.6rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; font-family: sans-serif; margin-bottom: 6px; text-align: center;";
-    wrap.appendChild(label);
-
-    var nativeScript = document.createElement("script");
-    nativeScript.async = true;
-    nativeScript.setAttribute("data-cfasync", "false");
-    nativeScript.src = "https://pl30122034.effectivecpmnetwork.com/9a8f3d45a5e3972afdd106f84d915a32/invoke.js";
-
-    var nativeContainer = document.createElement("div");
-    nativeContainer.id = "container-9a8f3d45a5e3972afdd106f84d915a32";
-
-    wrap.appendChild(nativeScript);
-    wrap.appendChild(nativeContainer);
-
-    return wrap;
-  }
-
-  // HOMEPAGE: Native banner + 728x90 inline
+  // HOMEPAGE: Native Banner + 728x90 mid-categories
   if (path === "/" || path === "") {
-    // Banner 1: NATIVE BANNER — between Routines Preview and TikTok videos
+    // Native Banner (the ONLY one on the site) — between Routines Preview and TikTok
     waitForElement(function() {
       var s = document.getElementById("routinesPreviewSection");
       if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
@@ -343,17 +345,17 @@ function loadAdsterra() {
       el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
     }, 100);
 
-    // Banner 2: 728x90 — mid-categories (after 3rd category section)
+    // 728x90 — mid-categories (after 3rd category section)
     waitForElement(function() {
       var sections = document.querySelectorAll("#mainContent .category-section");
       return sections.length >= 3 ? sections[2] : null;
     }, function(el) {
-      var wrap = makeBannerWrapper(BANNER_728_KEY, 728, 90);
+      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
       el.parentNode.insertBefore(wrap, el.nextSibling);
     }, 100);
   }
 
-  // CATEGORY PAGES: Native banner after 8th product (spans full grid row)
+  // CATEGORY PAGES: 300x250 after 8th product
   var catRegex = /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/;
   if (catRegex.test(path)) {
     waitForElement(function() {
@@ -362,22 +364,25 @@ function loadAdsterra() {
       var cards = grid.querySelectorAll(".product-card");
       return cards.length >= 8 ? cards[7] : null;
     }, function(el) {
-      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+      var wrap = makeBannerWrapper(BANNER_300x250_KEY, 300, 250);
+      wrap.style.gridColumn = "1 / -1";
+      el.parentNode.insertBefore(wrap, el.nextSibling);
     }, 100);
   }
 
-  // PRODUCT PAGES: Native banner before "You Might Also Like" section
+  // PRODUCT PAGES: 300x250 before "You Might Also Like"
   if (/^\/p\/[^\/]+\/[^\/]+\/?$/.test(path)) {
     waitForElement(function() {
       var relSection = document.getElementById("relatedSection");
       if (relSection && relSection.style.display !== "none") return relSection;
       return null;
     }, function(el) {
-      el.parentNode.insertBefore(createNativeBannerEl(), el);
+      var wrap = makeBannerWrapper(BANNER_300x250_KEY, 300, 250);
+      el.parentNode.insertBefore(wrap, el);
     }, 100);
   }
 
-  // BLOG LISTING: Native banner between 3rd and 4th blog card
+  // BLOG LISTING: 300x250 between 3rd and 4th card
   if (path === "/blog" || path === "/blog/") {
     waitForElement(function() {
       var grid = document.getElementById("blogGrid");
@@ -385,11 +390,12 @@ function loadAdsterra() {
       var cards = grid.querySelectorAll(".blog-card");
       return cards.length >= 3 ? cards[2] : null;
     }, function(el) {
-      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+      var wrap = makeBannerWrapper(BANNER_300x250_KEY, 300, 250);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
     }, 100);
   }
 
-  // BLOG POST: Native banner mid-article
+  // BLOG POST: 728x90 mid-article
   if (/^\/blog\/[^\/]+\/?$/.test(path)) {
     waitForElement(function() {
       var content = document.querySelector(".post-content");
@@ -398,11 +404,12 @@ function loadAdsterra() {
     }, function(el) {
       var children = el.children;
       var middleIdx = Math.floor(children.length / 2);
-      el.insertBefore(createNativeBannerEl(), children[middleIdx]);
+      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
+      el.insertBefore(wrap, children[middleIdx]);
     }, 100);
   }
 
-  // BEST SELLERS: Native banner between 2nd and 3rd category block
+  // BEST SELLERS: 728x90 between 2nd and 3rd category block
   if (path === "/best-sellers" || path === "/best-sellers/") {
     waitForElement(function() {
       var content = document.getElementById("bestsellerContent");
@@ -410,26 +417,28 @@ function loadAdsterra() {
       var blocks = content.querySelectorAll(".bs-category-block");
       return blocks.length >= 2 ? blocks[1] : null;
     }, function(el) {
-      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
+      el.parentNode.insertBefore(wrap, el.nextSibling);
     }, 100);
   }
 
-  // ABOVE FOOTER: Native banner between page content and footer
-  // Active on: Homepage, Routines listing, Individual routine pages, Blog listing
+  // ABOVE FOOTER: 468x60 banner on selected pages
   var showAboveFooter = false;
   if (path === "/" || path === "") showAboveFooter = true;
+  if (catRegex.test(path)) showAboveFooter = true;
+  if (path === "/blog" || path === "/blog/") showAboveFooter = true;
+  if (path === "/best-sellers" || path === "/best-sellers/") showAboveFooter = true;
   if (path === "/routines" || path === "/routines/") showAboveFooter = true;
   if (/^\/routines\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
-  if (path === "/blog" || path === "/blog/") showAboveFooter = true;
 
   if (showAboveFooter) {
     waitForElement(function() {
       var f = document.getElementById("siteFooter");
-      // Only return footer once it has been rendered (renderFooter ran)
       if (f && f.firstChild) return f;
       return null;
     }, function(el) {
-      el.parentNode.insertBefore(createNativeBannerEl(), el);
+      var wrap = makeBannerWrapper(BANNER_468x60_KEY, 468, 60);
+      el.parentNode.insertBefore(wrap, el);
     }, 100);
   }
 }
