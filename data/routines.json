@@ -1,5 +1,85 @@
 [
   {
+    "id": "morning-routine-acne-prone-skin",
+    "slug": "morning-routine-acne-prone-skin",
+    "title": "Morning Korean Skincare Routine for Acne Prone Skin",
+    "excerpt": "A 5 step Korean morning routine for acne-prone skin. Gentle BHA exfoliation, centella calming, and non-comedogenic SPF to control breakouts without over-stripping skin.",
+    "skinType": "acne-prone",
+    "timeOfDay": "morning",
+    "duration": "8 minutes",
+    "stepCount": 5,
+    "cover": {
+      "url": "https://www.pexels.com/photo/close-up-photo-of-woman-s-side-profile-9253761/",
+      "position": "center"
+    },
+    "tags": [
+      "morning routine",
+      "acne-prone skin",
+      "Korean skincare",
+      "salicylic acid",
+      "oil control"
+    ],
+    "date": "2026-07-02T11:52:21.390Z",
+    "status": "published",
+    "visibility": "public",
+    "intro": "Acne-prone skin needs a different morning approach than general oily skin not more products, but more targeted ones. The AAD's updated acne guidelines point to two consistent truths: over cleansing and over exfoliating make breakouts worse, not better, while gentle, consistent use of proven ingredients like salicylic acid (BHA) and non-comedogenic sunscreen make the biggest difference over time. This 5 step morning routine leans on that research pairing a gentle BHA cleanser with calming centella asiatica and finishing with sunscreen formulated specifically not to clog pores, since skipping SPF is one of the most common mistakes that prolongs acne marks and irritation.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Gentle BHA Cleanser",
+        "productName": "COSRX Salicylic Acid Daily Gentle Cleanser",
+        "productImage": "https://m.media-amazon.com/images/I/61ic3PbK8oL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/44aB0wB",
+        "whyThisStep": "Dermatologists specifically warn against harsh scrubs and abrasive cleansers for acne prone skin, which inflame the skin and worsen breakouts. This gentle, low strength salicylic acid cleanser removes excess oil while starting gentle BHA exfoliation from the very first step without the stripping effect of harsher acne washes.",
+        "waitTime": "0",
+        "tip": "Use fingertips only, never a washcloth or cleansing brush. Physical friction is one of the most common ways people unknowingly worsen acne prone skin."
+      },
+      {
+        "stepNumber": 2,
+        "title": "BHA Leave-On Exfoliant",
+        "productName": "COSRX BHA Blackhead Power Liquid",
+        "productImage": "https://m.media-amazon.com/images/I/61YxQHrEIcL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4gQWG8j",
+        "whyThisStep": "Salicylic acid is lipid soluble, meaning it can penetrate directly into oil clogged pores in a way water soluble acids can't. Research shows it works through multiple mechanisms at once: dissolving the debris that clogs follicles, exfoliating dead skin cells that would otherwise trap oil, and calming existing inflammation. Using a leave-on BHA in the morning (rather than just relying on the cleanser) gives it enough contact time to actually work.",
+        "waitTime": "1",
+        "tip": "Start with 2-3x per week if you're new to leave-on BHA, not daily. Over exfoliating is one of the most common mistakes that worsens irritation rather than clearing skin faster."
+      },
+      {
+        "stepNumber": 3,
+        "title": "Centella Calming Serum",
+        "productName": "Purito Centella Unscented Serum",
+        "productImage": "https://m.media-amazon.com/images/I/51fNP-39wcL._SX679_.jpg",
+        "productUrl": "https://amzn.to/3QVglJU",
+        "whyThisStep": "Centella asiatica has documented anti-inflammatory activity, and clinical studies specifically show topical centella extract reduces acne lesion counts, attributed to a combination of anti-inflammatory action, antimicrobial effects against skin flora, and support for epidermal barrier repair. This step calms any irritation from the BHA before layering on moisturizer, which matters because a compromised skin barrier is a known trigger for more breakouts, not fewer.",
+        "waitTime": "2",
+        "tip": "Pat in gently, don't rub. If your skin feels tight or reactive after BHA, this step should feel soothing if it stings, dilute by applying to slightly damp skin."
+      },
+      {
+        "stepNumber": 4,
+        "title": "Oil-Free Moisturizer",
+        "productName": "Round Lab Birch Juice Moisturizing Cream",
+        "productImage": "https://m.media-amazon.com/images/I/619dBL3GnLL._SL1200_.jpg",
+        "productUrl": "https://amzn.to/4vO2Ivo",
+        "whyThisStep": "Skipping moisturizer is one of the most common acne mistakes  dehydrated skin can actually produce more oil to compensate, leading to more breakouts, not fewer. The key is choosing oil free, non comedogenic formulas designed specifically for acne-prone skin, which this lightweight Korean staple delivers without the heaviness of Western cream formulas.",
+        "waitTime": "1",
+        "tip": "A pea-sized amount is enough. If your skin still looks shiny 10 minutes after application, you're using too much acne-prone skin needs hydration, not extra oil on the surface."
+      },
+      {
+        "stepNumber": 5,
+        "title": "Non-Comedogenic SPF",
+        "productName": "Beauty of Joseon Relief Sun Rice + Probiotics SPF50+",
+        "productImage": "https://m.media-amazon.com/images/I/31Hu2QXP5FL._SY300_SX300_QL70_FMwebp_.jpg",
+        "productUrl": "https://amzn.to/4vsVT1n",
+        "whyThisStep": "Broad spectrum SPF 30 or higher is essential daily for acne-prone skin not optional. This matters even more for anyone using BHA, since exfoliating acids increase sun sensitivity. Non-comedogenic formulas like this one are specifically designed not to clog pores, addressing the common (and understandable) worry that sunscreen will trigger more breakouts.",
+        "waitTime": "0",
+        "tip": "Apply as the last step, always. Layering sunscreen under other products reduces its protection significantly."
+      }
+    ],
+    "outro": "Give this routine 6-8 weeks before judging results that's the realistic timeline dermatologists cite for visible improvement, and switching products before then usually just resets the clock. If your skin tolerates the BHA step well after 2-3 weeks at 2-3x per week, you can gradually increase to daily. This routine pairs naturally with an evening version, where double cleansing and a slightly stronger treatment step can do more of the heavy lifting overnight. Persistent or worsening acne, or any breakouts leaving dark marks or scars, is a sign to consult a board-certified dermatologist rather than adjusting the routine further on your own.",
+    "sources": "American Academy of Dermatology :Skin care for acne-prone skin (aad.org)\nNIH/PMC : Salicylic acid mechanisms in acne management (pmc.ncbi.nlm.nih.gov)",
+    "relatedRoutines": "morning-routine-oily-skin"
+  },
+  {
     "id": "evening-routine-oily-skin",
     "slug": "evening-routine-oily-skin",
     "title": "Evening Korean Skincare Routine for Oily Skin",
