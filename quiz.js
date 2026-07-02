@@ -1,5 +1,5 @@
 /* ============================================================
-   FIND YOUR K-BEAUTY MATCH — Product Quiz
+   FIND YOUR K-BEAUTY MATCH - Product Quiz
    kbeauty.fun
 
    Depends on globals already loaded by shared.js on this site:
@@ -57,13 +57,33 @@
   };
 
   var CATEGORY_KEYWORDS = {
+    // kept only as a text-search fallback if the exact tag/subtag match
+    // below ever comes up empty for a product not yet tagged correctly
     cleanser: ["cleanser", "cleansing", "face wash", "foam"],
     serum: ["serum", "ampoule", "essence"],
     moisturizer: ["moisturizer", "moisturiser", "cream", "lotion"],
     sunscreen: ["sunscreen", "spf", "sun cream", "sun stick"]
-    // "routine" (full routine) intentionally has no product keyword filter —
-    // handled separately by routine matching below
   };
+
+  // Exact tag/subtag pairs, matching config.json's real taxonomy.
+  // This is now the PRIMARY way category filtering works (precise),
+  // not text-guessing on product names.
+  var CATEGORY_TAG_MAP = {
+    cleanser: { tag: "Face", subtag: "Cleansers" },
+    serum: { tag: "Face", subtag: "Serums & Essences" },
+    moisturizer: { tag: "Face", subtag: "Creams & Moisturizers" },
+    sunscreen: { tag: "Sunscreens & Tanning", subtag: "Sunscreens" }
+    // "routine" intentionally has no entry -> no product-type filter applied
+  };
+
+  // Builds the same URL pattern category.js already reads via
+  // urlParams.get("tag") / urlParams.get("subtag") - e.g.
+  // /skincare?tag=Face&subtag=Serums%20%26%20Essences
+  function categoryDeepLink(categoryAnswer) {
+    var mapping = CATEGORY_TAG_MAP[categoryAnswer];
+    if (!mapping) return "/skincare";
+    return "/skincare?tag=" + encodeURIComponent(mapping.tag) + "&subtag=" + encodeURIComponent(mapping.subtag);
+  }
 
   // ---------- QUESTIONS ----------
   var QUESTIONS = [
@@ -129,33 +149,33 @@
     ".kb-quiz-close:hover{background:#f2f2f2;}",
     ".kb-quiz-inner{padding:32px 26px 26px;}",
     ".kb-quiz-eyebrow{font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;",
-    "color:var(--accent,#b8896b);font-weight:600;margin-bottom:8px;}",
+    "color:#E8447A;font-weight:600;margin-bottom:8px;}",
     ".kb-quiz-title{font-family:'Noto Serif Display',serif;font-size:1.4rem;",
     "margin:0 0 10px;color:#2a221d;line-height:1.3;}",
     ".kb-quiz-sub{font-size:0.92rem;color:var(--text-light,#777);margin-bottom:22px;line-height:1.5;}",
     ".kb-quiz-btn{display:block;width:100%;text-align:left;padding:14px 16px;margin-bottom:10px;",
     "border:1.5px solid #e8e0da;border-radius:10px;background:#fff;font-family:'Outfit',sans-serif;",
     "font-size:0.95rem;font-weight:500;color:#2a221d;cursor:pointer;transition:all .15s ease;}",
-    ".kb-quiz-btn:hover{border-color:var(--accent,#b8896b);background:#fbf6f2;}",
-    ".kb-quiz-start{background:var(--accent,#b8896b);color:#fff;border:none;padding:14px 20px;",
+    ".kb-quiz-btn:hover{border-color:#E8447A;background:#fff5f8;}",
+    ".kb-quiz-start{background:linear-gradient(135deg,#FF6B8A,#E8447A);color:#fff;border:none;padding:14px 20px;",
     "border-radius:10px;font-size:0.98rem;font-weight:600;cursor:pointer;width:100%;",
     "font-family:'Outfit',sans-serif;margin-top:4px;}",
     ".kb-quiz-start:hover{opacity:0.92;}",
     ".kb-quiz-progress{display:flex;gap:6px;margin-bottom:22px;}",
     ".kb-quiz-progress span{height:4px;flex:1;background:#eee3db;border-radius:2px;overflow:hidden;}",
-    ".kb-quiz-progress span i{display:block;height:100%;width:0%;background:var(--accent,#b8896b);",
+    ".kb-quiz-progress span i{display:block;height:100%;width:0%;background:#E8447A;",
     "transition:width .2s ease;}",
     ".kb-quiz-progress span.kb-done i{width:100%;}",
     ".kb-quiz-results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 18px;}",
     ".kb-quiz-results-grid .product-card{font-size:0.82rem;}",
     ".kb-quiz-routine-card{background:#fbf6f2;border:1.5px solid #eee3db;border-radius:12px;",
     "padding:14px 16px;margin-bottom:16px;}",
-    ".kb-quiz-routine-card a{color:var(--accent,#b8896b);font-weight:600;text-decoration:none;",
+    ".kb-quiz-routine-card a{color:#E8447A;font-weight:600;text-decoration:none;",
     "font-size:0.92rem;}",
-    ".kb-quiz-browse{display:block;text-align:center;padding:12px;border:1.5px solid #e8e0da;",
-    "border-radius:10px;color:#2a221d;text-decoration:none;font-size:0.9rem;font-weight:600;",
+    ".kb-quiz-browse{display:block;text-align:center;padding:12px;border:1.5px solid #E8447A;",
+    "border-radius:10px;color:#E8447A;text-decoration:none;font-size:0.9rem;font-weight:600;",
     "margin-top:4px;}",
-    ".kb-quiz-browse:hover{background:#fbf6f2;}",
+    ".kb-quiz-browse:hover{background:#fff5f8;}",
     "@media(max-width:480px){.kb-quiz-results-grid{grid-template-columns:1fr 1fr;}",
     ".kb-quiz-inner{padding:26px 18px 20px;}}"
   ].join("");
@@ -220,17 +240,40 @@
     return reviewCount(p) >= 50 && (parseFloat(p.rating) || 0) >= 4.0;
   }
 
+  // HARD gate: does this product actually belong to the chosen category?
+  // Primary check: exact tag/subtag match against config.json taxonomy.
+  // Fallback: loose keyword search, only used if the exact match finds
+  // nothing at all (e.g. a product mistagged or missing subtag).
+  function matchesCategory(p, category) {
+    var mapping = CATEGORY_TAG_MAP[category];
+    if (!mapping) return true; // "routine" (or unknown) -> no product-type filter
+    return p.tag === mapping.tag && p.subtag === mapping.subtag;
+  }
+
+  function matchesCategoryLoose(p, category) {
+    var keywords = CATEGORY_KEYWORDS[category];
+    if (!keywords) return true;
+    var subtag = (p.subtag || "").toLowerCase();
+    var tag = (p.tag || "").toLowerCase();
+    var name = (p.name || "").toLowerCase();
+    for (var i = 0; i < keywords.length; i++) {
+      var k = keywords[i];
+      if (subtag.indexOf(k) !== -1 || tag.indexOf(k) !== -1 || name.indexOf(k) !== -1) return true;
+    }
+    return false;
+  }
+
   function scoreProducts(products, opts) {
-    // opts: { skinType, concern, category, useSkinType, useCategory }
+    // opts: { skinType, concern, useSkinType, useConcern, budget }
+    // Category is NOT scored here anymore -- it's a hard filter applied
+    // before this function ever runs (see getResults below). This only
+    // ranks within whatever pool it's given.
     return products
       .filter(baseQualityFilter)
       .map(function (p) {
         var score = 0;
-        if (opts.concern) score += textMatchScore(p, CONCERN_KEYWORDS[opts.concern]);
+        if (opts.useConcern && opts.concern) score += textMatchScore(p, CONCERN_KEYWORDS[opts.concern]);
         if (opts.useSkinType && opts.skinType) score += textMatchScore(p, SKINTYPE_KEYWORDS[opts.skinType]);
-        if (opts.useCategory && opts.category && CATEGORY_KEYWORDS[opts.category]) {
-          score += textMatchScore(p, CATEGORY_KEYWORDS[opts.category]);
-        }
         return { p: p, score: score };
       })
       .filter(function (row) { return row.score > 0; })
@@ -245,11 +288,28 @@
   function getResults(allProducts, ans) {
     var skincare = allProducts.filter(function (p) { return p._cat === "skincare"; });
 
-    // Fallback chain: full match -> drop skin type -> drop category -> best sellers
+    // STEP 1: hard-filter to the chosen category first (serum picks only see
+    // serums, cleanser picks only see cleansers, etc). "routine" / unknown
+    // category = no product-type filter, same as before.
+    var hasCategoryFilter = !!(ans.category && CATEGORY_TAG_MAP[ans.category]);
+    var categoryPool = hasCategoryFilter
+      ? skincare.filter(function (p) { return matchesCategory(p, ans.category); })
+      : skincare;
+
+    // If exact tag/subtag match came up thin (e.g. catalog gaps), widen
+    // with a loose keyword match before giving up on the category entirely.
+    if (hasCategoryFilter && categoryPool.length < RESULT_LIMIT) {
+      var looseMatches = skincare.filter(function (p) {
+        return matchesCategory(p, ans.category) || matchesCategoryLoose(p, ans.category);
+      });
+      if (looseMatches.length > categoryPool.length) categoryPool = looseMatches;
+    }
+
+    // STEP 2: within that category pool, rank by skin type + concern match,
+    // loosening gradually if too few results.
     var attempts = [
-      { useSkinType: true, useCategory: true },
-      { useSkinType: false, useCategory: true },
-      { useSkinType: false, useCategory: false }
+      { useSkinType: true, useConcern: true },
+      { useSkinType: false, useConcern: true }
     ];
 
     var results = [];
@@ -257,23 +317,37 @@
       var opts = {
         skinType: ans.skinType,
         concern: ans.concern,
-        category: ans.category,
         budget: ans.budget,
         useSkinType: attempts[i].useSkinType,
-        useCategory: attempts[i].useCategory
+        useConcern: attempts[i].useConcern
       };
-      results = scoreProducts(skincare, opts);
+      results = scoreProducts(categoryPool, opts);
       if (results.length >= RESULT_LIMIT) break;
-      if (results.length > 0 && i === attempts.length - 1) break;
     }
 
-    // Final fallback: best sellers in skincare, budget-respecting if possible
-    if (results.length === 0) {
-      var bestSellers = skincare
+    // STEP 3: still not enough? fall back to best sellers WITHIN the category
+    // pool (so a serum pick still only ever shows serums).
+    if (results.length < RESULT_LIMIT) {
+      var bestSellers = categoryPool
         .filter(baseQualityFilter)
         .filter(function (p) { return passesBudget(p, ans.budget); })
         .sort(function (a, b) { return reviewCount(b) - reviewCount(a); });
-      results = bestSellers.length ? bestSellers : skincare.filter(baseQualityFilter).sort(function (a, b) { return reviewCount(b) - reviewCount(a); });
+      var existingIds = {};
+      results.forEach(function (p) { existingIds[p.id] = true; });
+      bestSellers.forEach(function (p) {
+        if (!existingIds[p.id] && results.length < RESULT_LIMIT) {
+          results.push(p);
+          existingIds[p.id] = true;
+        }
+      });
+    }
+
+    // STEP 4: absolute last resort -- only if the category pool itself was
+    // too small to fill results (rare, e.g. very few serums in catalog).
+    // Widens to all skincare rather than showing nothing, but this should
+    // be uncommon with 800-1000+ products.
+    if (results.length === 0 && hasCategoryFilter) {
+      results = skincare.filter(baseQualityFilter).sort(function (a, b) { return reviewCount(b) - reviewCount(a); });
     }
 
     return results.slice(0, RESULT_LIMIT);
@@ -314,7 +388,7 @@
       '<div class="kb-quiz-inner">' +
         '<div class="kb-quiz-eyebrow">60-second match</div>' +
         '<h2 class="kb-quiz-title">Find Your K-Beauty Match</h2>' +
-        '<p class="kb-quiz-sub">Answer 4 quick questions and we\'ll match you with Korean skincare picks suited to your skin — plus your ideal routine if we\'ve got one.</p>' +
+        '<p class="kb-quiz-sub">Answer 4 quick questions and we\'ll match you with Korean skincare picks suited to your skin - plus your ideal routine if we\'ve got one.</p>' +
         '<button class="kb-quiz-start" id="kbQuizStartBtn">Start Quiz →</button>' +
       "</div>"
     );
@@ -353,7 +427,10 @@
         "</div>";
     }
 
-    var browseUrl = (typeof SITE_PAGES !== "undefined" && SITE_PAGES.skincare) ? SITE_PAGES.skincare : "/skincare";
+    var browseUrl = categoryDeepLink(ans.category);
+    var browseLabel = (ans.category && CATEGORY_TAG_MAP[ans.category])
+      ? "Browse More " + (CATEGORY_TAG_MAP[ans.category].subtag) + " \u2192"
+      : "Browse More Skincare \u2192";
 
     return (
       '<div class="kb-quiz-inner">' +
@@ -361,7 +438,7 @@
         '<h2 class="kb-quiz-title">Picked for your skin</h2>' +
         routineHTML +
         '<div class="kb-quiz-results-grid">' + cardsHTML + "</div>" +
-        '<a class="kb-quiz-browse" href="' + browseUrl + '">Browse More Skincare →</a>' +
+        '<a class="kb-quiz-browse" href="' + browseUrl + '">' + browseLabel + '</a>' +
       "</div>"
     );
   }
