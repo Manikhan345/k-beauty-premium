@@ -1,5 +1,95 @@
 [
   {
+    "id": "evening-routine-acne-prone-skin",
+    "slug": "evening-routine-acne-prone-skin",
+    "title": "Evening Korean Skincare Routine for Acne Prone Skin",
+    "excerpt": "A gentle 6 step Korean evening routine for acne prone skin. Double cleansing removes the day's buildup, then calming and treatment steps help your skin heal overnight.",
+    "skinType": "acne-prone",
+    "timeOfDay": "evening",
+    "duration": "12 minutes",
+    "stepCount": 6,
+    "cover": {
+      "url": "https://images.pexels.com/photos/6338374/pexels-photo-6338374.jpeg",
+      "position": "center"
+    },
+    "tags": [
+      "evening routine",
+      "acne prone skin",
+      "Korean skincare",
+      "double cleansing",
+      "salicylic acid"
+    ],
+    "date": "2026-07-02T12:37:38.319Z",
+    "status": "published",
+    "visibility": "public",
+    "intro": "Evenings matter more than most people think for acne prone skin. During the day your skin builds up sweat, oil, and sunscreen, and none of that comes off with just water and a quick wash. This routine starts with double cleansing, a Korean skincare habit that removes the day's buildup properly, then uses the same gentle salicylic acid and calming centella from your morning routine, since using them twice a day gives them more time to work. Night is also a good time for treatment steps like this, since you do not need to worry about sun exposure the way you do in the morning.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Oil Cleanser",
+        "productName": "Banila Co Clean It Zero",
+        "productImage": "https://m.media-amazon.com/images/I/612gVWhzqSL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4ePvMew",
+        "whyThisStep": "Sunscreen, oil, and dirt from the day do not fully wash away with water based cleanser alone. An oil cleanser breaks all of that down first, so your second cleanse can actually clean your skin instead of just moving buildup around.",
+        "waitTime": "0",
+        "tip": "Massage it into dry skin before adding any water. Adding water too early stops the oil cleanser from working properly."
+      },
+      {
+        "stepNumber": 2,
+        "title": "Gentle Cleanser",
+        "productName": "COSRX Salicylic Acid Daily Gentle Cleanser",
+        "productImage": "https://m.media-amazon.com/images/I/31fYbzBafXL._SY300_SX300_QL70_FMwebp_.jpg",
+        "productUrl": "https://amzn.to/4atkQSz",
+        "whyThisStep": "This second cleanse removes sweat, dirt, and anything the oil cleanser missed. It has a small amount of salicylic acid in it too, which starts working on clogged pores gently, without scrubbing or stripping your skin.",
+        "waitTime": "0",
+        "tip": "Use fingertips only, never a washcloth. This matters even more at night when your skin has been through a full day."
+      },
+      {
+        "stepNumber": 3,
+        "title": "BHA Liquid",
+        "productName": "COSRX BHA Blackhead Power Liquid",
+        "productImage": "https://m.media-amazon.com/images/I/61YxQHrEIcL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4wmeWef",
+        "whyThisStep": "Salicylic acid works by slipping inside oily pores and clearing out what is stuck there. Night is actually a good time to use it, since you do not need to think about sun exposure the way you do during the day.",
+        "waitTime": "1",
+        "tip": "If you are already using this in the morning, only use it once a day total at first, either morning or night, not both, until your skin gets used to it."
+      },
+      {
+        "stepNumber": 4,
+        "title": "Calming Serum",
+        "productName": "Purito Centella Unscented Serum",
+        "productImage": "https://m.media-amazon.com/images/I/51fNP-39wcL._SL1080_.jpg",
+        "productUrl": "https://amzn.to/4fd03oW",
+        "whyThisStep": "Centella has been studied for calming red, irritated skin and reducing the number of pimples over time. Using the same calming serum both morning and night gives your skin more consistent support while it works to repair itself overnight.",
+        "waitTime": "2",
+        "tip": "Pat it in gently. If your skin feels warm or a little sensitive after the BHA step, this should feel soothing right away."
+      },
+      {
+        "stepNumber": 5,
+        "title": "Night Moisturizer",
+        "productName": "Beauty of Joseon Dynasty Cream",
+        "productImage": "https://m.media-amazon.com/images/I/51CKPzqhNLL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4ePw9Ws",
+        "whyThisStep": "Skipping moisturizer at night is still a mistake, even for oily or acne prone skin. When skin becomes dry, your body makes more oil to make up for it, which can lead to more breakouts. This cream is light enough for acne prone skin but still gives your skin real hydration overnight.",
+        "waitTime": "0",
+        "tip": "Apply to slightly damp skin right after your serum. This helps seal in everything from the steps before it."
+      },
+      {
+        "stepNumber": 6,
+        "title": "Spot Treatment (as needed)",
+        "productName": "COSRX Acne Pimple Master Patch",
+        "productImage": "https://m.media-amazon.com/images/I/61od74JWShL._SL1500_.jpg",
+        "productUrl": "https://amzn.to/4eQ6mil",
+        "whyThisStep": "For any active pimples, a hydrocolloid patch protects the area overnight and helps it heal faster, without you touching or picking at it while you sleep. Touching or picking at breakouts is one of the most common causes of scarring and dark marks.",
+        "waitTime": "0",
+        "tip": "Apply to clean, dry skin as the very last step, after moisturizer. Only use it on active spots, not as a daily full face step."
+      }
+    ],
+    "outro": "This evening routine pairs naturally with the morning acne prone routine. Same gentle salicylic acid and centella, with double cleansing added to properly remove the day's buildup, and a spot patch for anything active. Give it 4 to 8 weeks before judging results, the same timeline as the morning routine. If your skin handles the BHA step well after a few weeks using it once a day, you can talk to a dermatologist about whether adding it both morning and night makes sense for you. Persistent or worsening breakouts, or any that leave dark marks or scars, are a sign to see a board certified dermatologist rather than adjusting the routine further on your own.",
+    "sources": "AAD Skin care for acne prone skin: https://www.aad.org/public/diseases/acne/skin-care\nAAD Tips for managing acne: https://www.aad.org/public/diseases/acne/skin-care/tips\nAAD Moisturizer and acne: https://www.aad.org/public/diseases/acne/skin-care/moisturizer\nAAD Acne diagnosis and treatment: https://www.aad.org/public/diseases/acne/derm-treat/treat\nNIH Salicylic acid as a peeling agent: https://pmc.ncbi.nlm.nih.gov/articles/PMC4554394/\nNIH Centella asiatica therapeutic applications: https://pmc.ncbi.nlm.nih.gov/articles/PMC12298232/",
+    "relatedRoutines": "morning-routine-acne-prone-skin\nevening-routine-oily-skin"
+  },
+  {
     "id": "morning-routine-acne-prone-skin",
     "slug": "morning-routine-acne-prone-skin",
     "title": "Morning Korean Skincare Routine for Acne Prone Skin",
