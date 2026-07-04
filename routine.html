@@ -32,11 +32,14 @@
 .hero-slide-content h1 { font-family: 'Noto Serif Display', serif; font-size: 1.65rem; font-weight: 700; line-height: 1.2; color: var(--text); margin: 4px 0 6px; }
 .routine-intro { font-size: 0.92rem; line-height: 1.62; color: var(--text-mid); }
 
-/* STEP slide — horizontal */
+/* STEP slide -- horizontal */
 .step-slide:not(.hero-slide):not(.closing-slide) { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; padding: 32px 40px; align-items: center; }
+.step-slide-img-col { display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center; }
 .step-slide-img-wrap { background: #FFFFFF; border-radius: 18px; aspect-ratio: 1/1; max-height: 360px; display: flex; align-items: center; justify-content: center; padding: 26px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
 .step-slide-img-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .step-slide-img-empty { font-size: 3.5rem; color: var(--text-light); }
+.step-slide-ad-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; background: rgba(255,255,255,0.5); border-radius: 12px; overflow: hidden; }
+.step-slide-ad-label { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 4px; }
 .step-slide-content { display: flex; flex-direction: column; gap: 12px; }
 .step-slide-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; }
 .step-slide-title { font-family: 'Noto Serif Display', serif; font-size: 1.4rem; font-weight: 700; line-height: 1.22; color: var(--text); margin: 0; }
@@ -47,6 +50,7 @@
 .step-slide-wait strong { color: var(--accent); font-weight: 700; }
 .step-slide-amazon { display: inline-block; margin-top: 4px; padding: 10px 22px; background: linear-gradient(to bottom, #FFD814, #F7CA00); border: 1px solid #C49A00; border-radius: 50px; color: #111; font-size: 0.86rem; font-weight: 700; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center; width: fit-content; cursor: pointer; transition: all 0.2s; }
 .step-slide-amazon:hover { background: linear-gradient(to bottom, #F7CA00, #E8B900); transform: scale(1.03); }
+
 
 /* CLOSING slide */
 .step-slide.closing-slide { display: block; padding: 0; background: var(--card); }
@@ -106,7 +110,9 @@
 
   /* Step slides stack */
   .step-slide:not(.hero-slide):not(.closing-slide) { grid-template-columns: 1fr; padding: 22px 20px; gap: 16px; }
+  .step-slide-img-col { gap: 10px; }
   .step-slide-img-wrap { aspect-ratio: 4/3; max-width: 240px; max-height: 200px; margin: 0 auto; padding: 18px; }
+  .step-slide-ad-slot { min-height: 80px; max-width: 280px; margin: 0 auto; width: 100%; }
   .step-slide-title { font-size: 1.2rem; }
 
   .closing-slide-inner { padding: 22px 20px; }
@@ -218,12 +224,16 @@ function renderRoutineHTML(r) {
       ? '<a href="' + esc(s.productUrl) + '" target="_blank" rel="nofollow noopener" class="step-slide-amazon">View on Amazon</a>'
       : '';
     return '<div class="step-slide">' +
-      '<div class="step-slide-img-wrap">' + imgHTML + '</div>' +
+      '<div class="step-slide-img-col">' +
+        '<div class="step-slide-img-wrap">' + imgHTML + '</div>' +
+        '<div class="step-slide-ad-slot" data-ad-slot="step-a"><div class="step-slide-ad-label">Advertisement</div></div>' +
+      '</div>' +
       '<div class="step-slide-content">' +
         '<div class="step-slide-label">STEP ' + esc(s.stepNumber) + ' - ' + esc(s.title) + '</div>' +
         '<h2 class="step-slide-title">' + esc(s.productName) + '</h2>' +
         '<div class="step-slide-why">' + esc(s.whyThisStep) + '</div>' +
         tipHTML +
+        '<div class="step-slide-ad-slot" data-ad-slot="step-b"><div class="step-slide-ad-label">Advertisement</div></div>' +
         waitHTML +
         btnHTML +
       '</div>' +
@@ -342,6 +352,12 @@ function initRoutineSlider() {
   var stepSlideEls = track.querySelectorAll(".step-slide:not(.hero-slide):not(.closing-slide)");
   var totalSteps = stepSlideEls.length;
 
+  if (typeof window.kbRenderAdSlot === "function") {
+    track.querySelectorAll(".step-slide-ad-slot").forEach(function(slot) {
+      window.kbRenderAdSlot(slot, 320, 50);
+    });
+  }
+
   var currentIndex = 0;
 
   if (dots) {
@@ -370,6 +386,9 @@ function initRoutineSlider() {
       if (current.classList.contains("hero-slide")) counter.textContent = "Overview";
       else if (current.classList.contains("closing-slide")) counter.textContent = "Summary";
       else counter.textContent = "Step " + index + " of " + totalSteps;
+    }
+    if (slides[index] && slides[index].classList.contains("closing-slide")) {
+      if (typeof window.kbFireSmartlinkMilestone === "function") window.kbFireSmartlinkMilestone();
     }
   }
 
