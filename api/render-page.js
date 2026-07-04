@@ -628,7 +628,7 @@ function renderRoutineBody(r) {
     const btnHTML = s.productUrl
       ? `<a href="${escapeAttr(s.productUrl)}" target="_blank" rel="nofollow noopener" class="step-slide-amazon">View on Amazon</a>`
       : '';
-    return `<div class="step-slide"><div class="step-slide-img-wrap">${imgHTML}</div><div class="step-slide-content"><div class="step-slide-label">STEP ${escapeAttr(s.stepNumber)} - ${escapeAttr(s.title)}</div><h2 class="step-slide-title">${escapeAttr(s.productName)}</h2><div class="step-slide-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}${waitHTML}${btnHTML}</div></div>`;
+    return `<div class="step-slide"><div class="step-slide-img-col"><div class="step-slide-img-wrap">${imgHTML}</div><div class="step-slide-ad-slot" data-ad-slot="step-a"><div class="step-slide-ad-label">Advertisement</div></div></div><div class="step-slide-content"><div class="step-slide-label">STEP ${escapeAttr(s.stepNumber)} - ${escapeAttr(s.title)}</div><h2 class="step-slide-title">${escapeAttr(s.productName)}</h2><div class="step-slide-why">${escapeAttr(s.whyThisStep)}</div>${tipHTML}<div class="step-slide-ad-slot" data-ad-slot="step-b"><div class="step-slide-ad-label">Advertisement</div></div>${waitHTML}${btnHTML}</div></div>`;
   }).join('');
 
  let closingSlide = '';
