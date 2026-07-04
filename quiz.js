@@ -475,6 +475,7 @@
       var routine = findMatchingRoutine(routines, answers);
       cardEl.innerHTML = renderResults(results, routine, answers);
       logQuizCompletion(answers, results.length);
+      if (typeof window.kbFireSmartlinkMilestone === "function") window.kbFireSmartlinkMilestone();
     }).catch(function () {
       cardEl.innerHTML = '<div class="kb-quiz-inner"><p class="kb-quiz-sub">Something went wrong loading your matches. Please try again shortly.</p></div>';
     });
