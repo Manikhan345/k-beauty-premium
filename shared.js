@@ -331,17 +331,7 @@ function loadAdsterra() {
     }, 100);
   }
 
-  // ─── 1. POPUNDER — fires on 3rd click ───
-  var popunderLoaded = false;
-  function loadPopunder() {
-    if (popunderLoaded) return;
-    popunderLoaded = true;
-    var s = document.createElement("script");
-    s.src = "https://pl30122033.effectivecpmnetwork.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
-    s.async = true;
-    document.head.appendChild(s);
-  }
-
+  // ─── 1. SMARTLINK — fires on 3rd click (replaces popunder) ───
   var smartlinkFiredClick = false;
   function fireSmartlinkFromClick() {
     if (smartlinkFiredClick) return;
@@ -357,17 +347,14 @@ function loadAdsterra() {
   }
   window.kbFireSmartlinkMilestone = fireSmartlinkMilestone;
 
+  // Fresh per-page counter. Starts at 0 on every page load (a plain
+  // variable, NOT sessionStorage), so "3rd click" always means the 3rd
+  // click on THIS page, not clicks carried over from another page.
+  var pageClicks = 0;
+
   document.addEventListener("click", function(e) {
-    var clicks = parseInt(sessionStorage.getItem("kb_click_count") || "0", 10) + 1;
-    sessionStorage.setItem("kb_click_count", String(clicks));
-    if (clicks !== 2) return;
-    var isRoutinePage = window.location.pathname.indexOf("/routines/") === 0;
-    var isInsideQuiz = e.target && e.target.closest && e.target.closest("#kbQuizOverlay");
-    if (isRoutinePage || isInsideQuiz) {
-      fireSmartlinkFromClick();
-    } else {
-      loadPopunder();
-    }
+    pageClicks++;
+    if (pageClicks === 3) fireSmartlinkFromClick();
   }, { passive: true });
 
   // ─── 2. SIDEBAR BANNER 160x600 — desktop only ───
