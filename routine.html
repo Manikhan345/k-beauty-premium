@@ -352,11 +352,18 @@ function initRoutineSlider() {
   var stepSlideEls = track.querySelectorAll(".step-slide:not(.hero-slide):not(.closing-slide)");
   var totalSteps = stepSlideEls.length;
 
-  if (typeof window.kbRenderAdSlot === "function") {
-    track.querySelectorAll(".step-slide-ad-slot").forEach(function(slot) {
-      window.kbRenderAdSlot(slot, 320, 50);
-    });
-  }
+  (function renderStepAdsWhenReady(attemptsLeft) {
+    if (typeof window.kbRenderAdSlot === "function") {
+      track.querySelectorAll(".step-slide-ad-slot").forEach(function(slot) {
+        if (!slot.hasChildNodes() || slot.children.length <= 1) {
+          window.kbRenderAdSlot(slot, 320, 50);
+        }
+      });
+      return;
+    }
+    if (attemptsLeft <= 0) return;
+    setTimeout(function() { renderStepAdsWhenReady(attemptsLeft - 1); }, 150);
+  })(30); // retries for up to ~4.5 seconds while waiting for shared.js to finish loading
 
   var currentIndex = 0;
 
