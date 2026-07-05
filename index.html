@@ -362,7 +362,7 @@
 
 
 <!-- TIKTOK CAROUSEL -->
-<section id="tiktokSection" style="display:none;max-width:1200px;margin:28px auto;padding:0 16px;">
+<section id="tiktokSection" style="max-width:1200px;margin:28px auto;padding:0 16px;min-height:300px;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--accent-light);">
     <h2 style="font-family:'Noto Serif Display',serif;font-size:1.4rem;font-weight:600;">🎬 K-Beauty Videos</h2>
     <a href="https://www.tiktok.com/@kbeautypremium" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;">Follow on TikTok →</a>
@@ -380,10 +380,10 @@
 
 <div id="siteFooter"></div>
 
-<script defer src="/shared.js"></script>
+<script src="/shared.js"></script>
  <script src="/quiz.js" defer></script>
 <script>
-
+renderHeader();
 
 var HOMEPAGE_LIMIT = 10;
 
@@ -460,15 +460,16 @@ function getTopRandomProducts(products, limit) {
 
 // ── TIKTOK VIDEO SECTION ──
 async function loadTikTokCarousel() {
+  var section = document.getElementById("tiktokSection");
   try {
     var resp = await fetch("/data/tiktok.json");
-    if (!resp.ok) return;
+    if (!resp.ok) { if (section) section.style.display = "none"; return; }
     var videos = await resp.json();
-    if (!videos || !videos.length) return;
+    if (!videos || !videos.length) { if (section) section.style.display = "none"; return; }
 
-    var section = document.getElementById("tiktokSection");
     var container = document.getElementById("tiktokScroll");
     section.style.display = "block";
+    section.style.minHeight = "";
 
     container.innerHTML = videos.map(function(v, i) {
       var caption = v.caption || "K-Beauty Video";
@@ -490,7 +491,7 @@ async function loadTikTokCarousel() {
 
     setupTikTokAutoplay();
 
-  } catch(e) {}
+  } catch(e) { if (section) section.style.display = "none"; }
 }
 
 function playTT(i, videoId) {
@@ -645,8 +646,33 @@ async function buildHomepage() {
     return;
   }
 
-  // Load TikTok videos
-  loadTikTokCarousel();
+  // Load TikTok videos ONLY when user scrolls near the section
+  // (keeps heavy TikTok player code off the initial page load for speed)
+  (function deferTikTok() {
+    var ttSection = document.getElementById("tiktokSection");
+    if (!ttSection) return;
+    var loaded = false;
+    function triggerLoad() {
+      if (loaded) return;
+      loaded = true;
+      loadTikTokCarousel();
+      window.removeEventListener("scroll", onScroll);
+    }
+    function onScroll() {
+      var rect = ttSection.getBoundingClientRect();
+      // load when section is within 800px of the viewport
+      if (rect.top < window.innerHeight + 800) triggerLoad();
+    }
+    if (typeof IntersectionObserver !== "undefined") {
+      var io = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) { triggerLoad(); io.disconnect(); }
+      }, { rootMargin: "800px" });
+      io.observe(ttSection);
+    } else {
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+  })();
 
   // Load blog section
  loadBlogSection();
@@ -760,15 +786,7 @@ function loadMoreResults() {
     wrap.style.display = "none";
   }
 }
-function kbStartHomepage() {
-  renderHeader();
-  buildHomepage();
-}
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", kbStartHomepage);
-} else {
-  kbStartHomepage();
-}
+buildHomepage();
 </script>
 </body>
 </html>
