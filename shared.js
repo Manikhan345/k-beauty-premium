@@ -504,11 +504,9 @@ async function loadAdsterra() {
   }
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", loadAdsterra);
-} else {
-  loadAdsterra();
-}
+window.addEventListener("load", function() {
+  setTimeout(loadAdsterra, 3000);
+});
 function injectSEO() {
   var path = window.location.pathname;
   var canonicalURL = "https://kbeauty.fun" + (path === "/" ? "/" : path.replace(/\/$/, ""));
@@ -761,9 +759,8 @@ function renderProductCard(product, btnText, categoryKey) {
     imgSrc = imgSrc.replace(/_AC_UL\d+_/, '_AC_UL400_');
   }
  var imgHTML = hasImage
-    ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy">'
+    ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy" width="400" height="400">'
     : '<div class="placeholder-icon">📦</div>';
-
   var r = parseFloat(product.rating) || 0;
   var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
   var full = Math.floor(rounded);
