@@ -681,8 +681,8 @@ async function buildHomepage() {
  loadBlogSection();
   loadRoutinesSection();
 
-  // Preload all products in background for instant search
-  loadAllProducts();
+  // Preload all products in background for instant search (delayed 5s)
+  setTimeout(loadAllProducts, 5000);
 
   var main = document.getElementById("mainContent");
   var categories = Object.keys(CATEGORY_META);
