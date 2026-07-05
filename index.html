@@ -380,10 +380,10 @@
 
 <div id="siteFooter"></div>
 
-<script src="/shared.js"></script>
+<script defer src="/shared.js"></script>
  <script src="/quiz.js" defer></script>
 <script>
-renderHeader();
+
 
 var HOMEPAGE_LIMIT = 10;
 
@@ -786,7 +786,15 @@ function loadMoreResults() {
     wrap.style.display = "none";
   }
 }
-buildHomepage();
+function kbStartHomepage() {
+  renderHeader();
+  buildHomepage();
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", kbStartHomepage);
+} else {
+  kbStartHomepage();
+}
 </script>
 </body>
 </html>
