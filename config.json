@@ -209,12 +209,12 @@
     }
   },
   "adSettings": {
-    "sidebar": false,
-    "footer": false,
-    "nativeBanner": false,
-    "homepageBanners": false,
-    "stepCardBanners": false,
-    "smartlinkClick": false,
-    "smartlinkMilestone": false
+    "sidebar": true,
+    "footer": true,
+    "nativeBanner": true,
+    "homepageBanners": true,
+    "stepCardBanners": true,
+    "smartlinkClick": true,
+    "smartlinkMilestone": true
   }
 }
