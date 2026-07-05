@@ -76,6 +76,9 @@ var SITE_PAGES = {};
 var CATEGORY_META = {};
 var CATEGORY_TAGS = {};
 var CONFIG_LOADED = false;
+var AD_SETTINGS = {};
+// An ad is enabled unless config.adSettings explicitly sets it to false.
+function adEnabled(key) { return AD_SETTINGS[key] !== false; }
 
 // ── STATIC CONFIG ──
 var FOOTER_PAGES = {
@@ -119,6 +122,7 @@ async function loadConfig() {
       if (!resp.ok) throw new Error("Failed to load config.json");
       var config = await resp.json();
       var cats = config.categories || {};
+      AD_SETTINGS = config.adSettings || {};
       
       SITE_PAGES = { home: "/" };
       CATEGORY_META = {};
@@ -190,8 +194,12 @@ async function renderHeader() {
 
   injectSEO();
 }
-function loadAdsterra() {
+async function loadAdsterra() {
   if (window._adsterraLoaded) return;
+
+  // Ensure ad settings are loaded from config before deciding what to show.
+  // If config isn't loaded yet, wait for it (default is all-ads-on if it fails).
+  try { if (!CONFIG_LOADED && typeof loadConfig === "function") await loadConfig(); } catch(e) {}
 
   // Skip ads for admins/testers
   if (localStorage.getItem("kb_no_ads") === "1") return;
@@ -218,6 +226,7 @@ function loadAdsterra() {
   var SMARTLINK_URL = "https://www.effectivecpmnetwork.com/peb8adx7x8?key=d6929e561542e42037ce44b23a2cf603";
   window.kbRenderAdSlot = function(container, width, height) {
     if (!container) return;
+    if (!adEnabled("stepCardBanners")) return;
     try {
       container.appendChild(createIframeBanner(BANNER_320x50_KEY, width || 320, height || 50));
     } catch(e) {}
@@ -335,6 +344,7 @@ function loadAdsterra() {
   var smartlinkFiredClick = false;
   function fireSmartlinkFromClick() {
     if (smartlinkFiredClick) return;
+    if (!adEnabled("smartlinkClick")) return;
     smartlinkFiredClick = true;
     try { window.open(SMARTLINK_URL, "_blank"); } catch(e) {}
   }
@@ -342,6 +352,7 @@ function loadAdsterra() {
   var smartlinkFiredMilestone = false;
   function fireSmartlinkMilestone() {
     if (smartlinkFiredMilestone) return;
+    if (!adEnabled("smartlinkMilestone")) return;
     smartlinkFiredMilestone = true;
     try { window.open(SMARTLINK_URL, "_blank"); } catch(e) {}
   }
@@ -358,7 +369,7 @@ function loadAdsterra() {
   }, { passive: true });
 
   // ─── 2. SIDEBAR BANNER 160x600 — desktop only ───
-  if (window.innerWidth >= 1280) {
+  if (adEnabled("sidebar") && window.innerWidth >= 1280) {
     var sidebarWrap = document.createElement("div");
     sidebarWrap.id = "adsterra-sidebar-banner";
     sidebarWrap.style.cssText = "position: fixed; right: 16px; top: 50%; transform: translateY(-50%); width: 160px; z-index: 50; display: flex; flex-direction: column; align-items: center; gap: 4px;";
@@ -374,30 +385,36 @@ function loadAdsterra() {
 
   // ─── 3. INLINE BANNERS — unique ad unit per placement ───
   var path = window.location.pathname;
+  var catRegex = /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/;
 
   // HOMEPAGE: Native Banner + 728x90 mid-categories
   if (path === "/" || path === "") {
     // Native Banner — between Routines Preview and TikTok
-    waitForElement(function() {
-      var s = document.getElementById("routinesPreviewSection");
-      if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
-      return null;
-    }, function(el) {
-      el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
-    }, 100);
+    if (adEnabled("nativeBanner")) {
+      waitForElement(function() {
+        var s = document.getElementById("routinesPreviewSection");
+        if (s && (s.style.display !== "none" || s.getAttribute("data-ssr") === "true")) return s;
+        return null;
+      }, function(el) {
+        el.parentNode.insertBefore(createNativeBannerEl(), el.nextSibling);
+      }, 100);
+    }
 
     // 728x90 — mid-categories (after 3rd category section)
-    waitForElement(function() {
-      var sections = document.querySelectorAll("#mainContent .category-section");
-      return sections.length >= 3 ? sections[2] : null;
-    }, function(el) {
-      var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
-      el.parentNode.insertBefore(wrap, el.nextSibling);
-    }, 100);
+    if (adEnabled("homepageBanners")) {
+      waitForElement(function() {
+        var sections = document.querySelectorAll("#mainContent .category-section");
+        return sections.length >= 3 ? sections[2] : null;
+      }, function(el) {
+        var wrap = makeBannerWrapper(BANNER_728x90_KEY, 728, 90);
+        el.parentNode.insertBefore(wrap, el.nextSibling);
+      }, 100);
+    }
   }
 
+  // CATEGORY / PRODUCT / BLOG / BEST-SELLER inline banners
+  if (adEnabled("homepageBanners")) {
   // CATEGORY PAGES: 300x250 after 8th product
-  var catRegex = /^\/(skincare|makeup|haircare|fragrance|foothandnailcare|bathbody)\/?$/;
   if (catRegex.test(path)) {
     waitForElement(function() {
       var grid = document.getElementById("productGrid");
@@ -462,6 +479,7 @@ function loadAdsterra() {
       el.parentNode.insertBefore(wrap, el.nextSibling);
     }, 100);
   }
+  } // end homepageBanners guard
 
   // ABOVE FOOTER: 468x60 banner (auto-swaps to 320x50 on mobile)
   // Now includes blog posts
@@ -474,7 +492,7 @@ function loadAdsterra() {
   if (path === "/routines" || path === "/routines/") showAboveFooter = true;
   if (/^\/routines\/[^\/]+\/?$/.test(path)) showAboveFooter = true;
 
-  if (showAboveFooter) {
+  if (showAboveFooter && adEnabled("footer")) {
     waitForElement(function() {
       var f = document.getElementById("siteFooter");
       if (f && f.firstChild) return f;

@@ -507,6 +507,9 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
       <a class="sidebar-link" href="#redirects" data-tab="redirects" onclick="return sidebarClick(event, 'redirects', this)">
     <span class="icon">🔀</span> Redirects
   </a>
+      <a class="sidebar-link" href="#adsettings" data-tab="adsettings" onclick="return sidebarClick(event, 'adsettings', this)">
+    <span class="icon">📢</span> Ad Settings
+  </a>
     </div>
     <div class="sidebar-section" style="margin-top:auto;padding:16px;">
       <a href="https://kbeauty.fun" target="_blank" class="sidebar-link" style="color:rgba(255,255,255,0.4);font-size:0.78rem;">
@@ -1044,6 +1047,24 @@ body.wp-fullscreen .wp-edit-wrap .wp-visual-area, body.wp-fullscreen .wp-edit-wr
   </div>
 </div>
 
+<div class="tab-panel" id="tab-adsettings">
+  <div class="panel">
+    <h2>📢 Ad Placement Controls</h2>
+    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:6px;">Turn each ad placement on or off across the whole site. Turning ads OFF makes the site faster; turning them ON increases ad impressions. Changes go live after you click Save and the site redeploys.</p>
+    <p style="font-size:0.78rem;color:#b8560b;background:#fff6ec;border:1px solid #f0d9bf;border-radius:6px;padding:8px 10px;margin-bottom:16px;">Tip: For fast SEO pages, turn the heavier ads (Step Card Banners) OFF. For paid arbitrage traffic, turn them ON.</p>
+
+    <div id="adSettingsList" style="display:flex;flex-direction:column;gap:2px;">
+      <!-- toggles injected by JS -->
+      <p style="color:var(--text-mid);">Loading...</p>
+    </div>
+
+    <div style="margin-top:18px;display:flex;align-items:center;gap:12px;">
+      <button class="btn-green" id="btnSaveAdSettings" onclick="saveAdSettings()">Save Ad Settings</button>
+      <span id="adSettingsStatus" style="font-size:0.8rem;color:var(--text-mid);"></span>
+    </div>
+  </div>
+</div>
+
 </div><!-- end tab-content -->
   </div><!-- end admin-main -->
 </div><!-- end admin-layout -->
@@ -1107,6 +1128,7 @@ function sidebarSwitch(tabId, el) {
   if (tabId === "tiktok" && token) { loadTikTokVideos(); }
   if (tabId === "categories") renderCategoryList();
   if (tabId === "redirects") loadRedirects();
+  if (tabId === "adsettings") renderAdSettings();
   var sidebar = document.getElementById("adminSidebar");
   var overlay = document.getElementById("adminOverlay");
   if (sidebar) sidebar.classList.remove("open");
@@ -1194,6 +1216,68 @@ async function saveConfig() {
     configSHA = result.content.sha;
     return true;
   } catch(e) { return false; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AD SETTINGS
+// ═══════════════════════════════════════════════════════════════
+// Each entry: key (stored in config), label, description.
+// Default is ON (true) if not present in config, so existing behavior
+// is unchanged until the admin explicitly turns something off.
+var AD_PLACEMENTS = [
+  { key: "sidebar",       label: "Sidebar Banner (160x600)",   desc: "Desktop only, fixed right side. Light." },
+  { key: "footer",        label: "Footer Banner (468x60 / 320x50)", desc: "Above the footer on most pages. Light." },
+  { key: "nativeBanner",  label: "Native Banner (homepage)",    desc: "One native banner on the homepage." },
+  { key: "homepageBanners", label: "Homepage Inline Banners (728x90 / 300x250)", desc: "Mid-page banners on homepage/category/blog." },
+  { key: "stepCardBanners", label: "Routine Step-Card Banners", desc: "Two banners per routine step. HEAVIER - turn off for fast SEO pages." },
+  { key: "smartlinkClick", label: "Smartlink on 3rd Click",     desc: "Opens Smartlink in a background tab on the 3rd click." },
+  { key: "smartlinkMilestone", label: "Smartlink on Summary / Quiz Result", desc: "Opens Smartlink when a routine summary or quiz result is reached." }
+];
+
+function getAdSettings() {
+  if (!configRaw) return {};
+  if (!configRaw.adSettings) configRaw.adSettings = {};
+  return configRaw.adSettings;
+}
+
+function renderAdSettings() {
+  var listEl = document.getElementById("adSettingsList");
+  if (!listEl) return;
+  if (!configRaw) { listEl.innerHTML = '<p style="color:var(--text-mid);">Connect to GitHub first.</p>'; return; }
+  var settings = getAdSettings();
+  listEl.innerHTML = AD_PLACEMENTS.map(function(p) {
+    // default ON when undefined
+    var isOn = settings[p.key] !== false;
+    return '<label style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;background:#fff;">' +
+      '<input type="checkbox" data-adkey="' + p.key + '" ' + (isOn ? "checked" : "") + ' style="margin-top:3px;width:18px;height:18px;flex-shrink:0;">' +
+      '<span>' +
+        '<span style="display:block;font-weight:600;font-size:0.9rem;color:var(--text);">' + p.label + '</span>' +
+        '<span style="display:block;font-size:0.78rem;color:var(--text-mid);margin-top:2px;">' + p.desc + '</span>' +
+      '</span>' +
+    '</label>';
+  }).join("");
+}
+
+async function saveAdSettings() {
+  var statusEl = document.getElementById("adSettingsStatus");
+  var btn = document.getElementById("btnSaveAdSettings");
+  if (!configRaw) { if (statusEl) statusEl.textContent = "Connect to GitHub first."; return; }
+  var settings = getAdSettings();
+  document.querySelectorAll("#adSettingsList input[data-adkey]").forEach(function(cb) {
+    settings[cb.getAttribute("data-adkey")] = cb.checked;
+  });
+  configRaw.adSettings = settings;
+  if (btn) { btn.disabled = true; btn.textContent = "Saving..."; }
+  if (statusEl) statusEl.textContent = "Saving...";
+  var ok = await saveConfig();
+  if (btn) { btn.disabled = false; btn.textContent = "Save Ad Settings"; }
+  if (ok) {
+    if (statusEl) statusEl.textContent = "Saved. Live in ~1 minute after redeploy.";
+    showToast("Ad settings saved!", "success");
+  } else {
+    if (statusEl) statusEl.textContent = "Save failed. Check connection.";
+    showToast("Failed to save ad settings", "error");
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
