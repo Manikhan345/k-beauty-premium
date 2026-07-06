@@ -521,24 +521,8 @@ function pauseTT(i) {
 }
 
 function setupTikTokAutoplay() {
-  var container = document.getElementById("tiktokScroll");
-  if (!container || typeof IntersectionObserver === "undefined") return;
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      var player = entry.target;
-      var i = parseInt(player.getAttribute("data-index"), 10);
-      var videoId = player.getAttribute("data-video-id");
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
-        playTT(i, videoId);
-      } else {
-        pauseTT(i);
-      }
-    });
-  }, { root: container, threshold: [0, 0.6, 1] });
-
-  container.querySelectorAll(".tt-player").forEach(function(el) {
-    observer.observe(el);
-  });
+  // Autoplay disabled — videos only play on user click (saves 1.4MB+ JS load)
+  // Click handler already exists via onclick="playTT(...)" on the play button
 }
 // ── POPULAR GUIDES SECTION ──
  async function loadRoutinesSection() {
