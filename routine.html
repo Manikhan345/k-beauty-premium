@@ -354,16 +354,27 @@ function initRoutineSlider() {
 
   (function renderStepAdsWhenReady(attemptsLeft) {
     if (typeof window.kbRenderAdSlot === "function") {
-      track.querySelectorAll(".step-slide-ad-slot").forEach(function(slot) {
-        if (!slot.hasChildNodes() || slot.children.length <= 1) {
+      var slots = track.querySelectorAll(".step-slide-ad-slot");
+      slots.forEach(function(slot) {
+        if (!slot.querySelector("iframe")) {
           window.kbRenderAdSlot(slot, 320, 50);
         }
       });
+      setTimeout(function() {
+        slots.forEach(function(slot) {
+          if (!slot.querySelector("iframe")) { slot.style.display = "none"; }
+        });
+      }, 1500);
       return;
     }
-    if (attemptsLeft <= 0) return;
+    if (attemptsLeft <= 0) {
+      track.querySelectorAll(".step-slide-ad-slot").forEach(function(slot) {
+        slot.style.display = "none";
+      });
+      return;
+    }
     setTimeout(function() { renderStepAdsWhenReady(attemptsLeft - 1); }, 150);
-  })(30); // retries for up to ~4.5 seconds while waiting for shared.js to finish loading
+  })(30);
 
   var currentIndex = 0;
 
