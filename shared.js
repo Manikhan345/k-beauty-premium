@@ -759,7 +759,7 @@ function renderProductCard(product, btnText, categoryKey) {
     imgSrc = imgSrc.replace(/_AC_UL\d+_/, '_AC_UL400_');
   }
  var imgHTML = hasImage
-    ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy" width="400" height="400">'
+    ? '<img src="' + imgSrc + '" alt="' + product.name + '" loading="lazy" width="300" height="300">'
     : '<div class="placeholder-icon">📦</div>';
   var r = parseFloat(product.rating) || 0;
   var rounded = (r % 1 < 0.25) ? Math.floor(r) : (r % 1 < 0.75) ? Math.floor(r) + 0.5 : Math.ceil(r);
