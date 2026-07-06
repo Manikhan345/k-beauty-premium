@@ -80,6 +80,31 @@ var AD_SETTINGS = {};
 // An ad is enabled unless config.adSettings explicitly sets it to false.
 function adEnabled(key) { return AD_SETTINGS[key] !== false; }
 
+function createIframeBanner(key, width, height) {
+  var iframe = document.createElement("iframe");
+  iframe.style.cssText = "border: none; width: " + width + "px; height: " + height + "px; max-width: 100%; display: block;";
+  iframe.setAttribute("scrolling", "no");
+  iframe.setAttribute("frameborder", "0");
+  iframe.src = "about:blank";
+  iframe.addEventListener("load", function onLoad() {
+    iframe.removeEventListener("load", onLoad);
+    try {
+      var doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write(
+        "<!DOCTYPE html><html><head>" +
+        "<style>body{margin:0;padding:0;overflow:hidden;}</style>" +
+        "</head><body>" +
+        "<scr" + "ipt>atOptions={key:\"" + key + "\",format:\"iframe\",height:" + height + ",width:" + width + ",params:{}};</scr" + "ipt>" +
+        "<scr" + "ipt src=\"https://www.highperformanceformat.com/" + key + "/invoke.js\"></scr" + "ipt>" +
+        "</body></html>"
+      );
+      doc.close();
+    } catch(e) {}
+  });
+  return iframe;
+}
+
 // Creates an isolated iframe banner (top level so it is reusable everywhere).
 
 
