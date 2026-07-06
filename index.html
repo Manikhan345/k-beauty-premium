@@ -314,7 +314,7 @@
       var quoteHtml = quote ? '<div class="slide-quote">"' + quote.replace(/"/g, "&quot;") + '"</div><div class="slide-reviewer">— Verified Amazon Purchase</div>' : '';
       return '<a href="' + url + '" class="slider-slide' + (i === 0 ? ' active' : '') + '" data-slide="' + i + '">' +
         '<div class="slide-product">' +
-          '<div class="slide-product-img"><img src="' + p.image + '" alt="' + safeName + '" loading="lazy"></div>' +
+          '<div class="slide-product-img"><img src="' + p.image + '" alt="' + safeName + '" loading="' + (i === 0 ? "eager" : "lazy") + '" fetchpriority="' + (i === 0 ? "high" : "auto") + '"></div>' +
           '<div class="slide-product-details">' +
             '<div class="slide-product-cat">' + catLabel + '</div>' +
             '<div class="slide-product-name">' + p.name + '</div>' +
