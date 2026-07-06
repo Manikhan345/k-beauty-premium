@@ -340,16 +340,9 @@ async function loadAdsterra() {
     }, 100);
   }
 
-  // ─── 1. SMARTLINK — fires on 3rd click (replaces popunder) ───
-  var smartlinkFiredClick = false;
-  function fireSmartlinkFromClick() {
-    if (smartlinkFiredClick) return;
-    if (!adEnabled("smartlinkClick")) return;
-    smartlinkFiredClick = true;
-    try { window.open(SMARTLINK_URL, "_blank"); } catch(e) {}
-  }
-
+  // ─── SMARTLINK — fires ONLY on the Summary slide / quiz result ───
   var smartlinkFiredMilestone = false;
+   
   function fireSmartlinkMilestone() {
     if (smartlinkFiredMilestone) return;
     if (!adEnabled("smartlinkMilestone")) return;
@@ -358,15 +351,7 @@ async function loadAdsterra() {
   }
   window.kbFireSmartlinkMilestone = fireSmartlinkMilestone;
 
-  // Fresh per-page counter. Starts at 0 on every page load (a plain
-  // variable, NOT sessionStorage), so "3rd click" always means the 3rd
-  // click on THIS page, not clicks carried over from another page.
-  var pageClicks = 0;
 
-  document.addEventListener("click", function(e) {
-    pageClicks++;
-    if (pageClicks === 3) fireSmartlinkFromClick();
-  }, { passive: true });
 
   // ─── 2. SIDEBAR BANNER 160x600 — desktop only ───
   if (adEnabled("sidebar") && window.innerWidth >= 1280) {
