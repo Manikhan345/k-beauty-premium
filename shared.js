@@ -80,6 +80,25 @@ var AD_SETTINGS = {};
 // An ad is enabled unless config.adSettings explicitly sets it to false.
 function adEnabled(key) { return AD_SETTINGS[key] !== false; }
 
+// Creates an isolated iframe banner (top level so it is reusable everywhere).
+
+
+// Renders a step-card banner. Top level so it is ALWAYS available, and
+// self-guards so it never renders when ads are suppressed.
+window.kbRenderAdSlot = function(container, width, height) {
+  if (!container) return;
+  try {
+    if (localStorage.getItem("kb_no_ads") === "1") return;
+    if (window.location.pathname.indexOf("/admin") === 0) return;
+    if (window.location.hostname === "localhost") return;
+    if (window.location.search.indexOf("noads") !== -1) return;
+  } catch(e) {}
+  if (!adEnabled("stepCardBanners")) return;
+  try {
+    var STEP_BANNER_KEY = "8eb1151083ad6406a30c19c1a533265f";
+    container.appendChild(createIframeBanner(STEP_BANNER_KEY, width || 320, height || 50));
+  } catch(e) {}
+};
 // ── STATIC CONFIG ──
 var FOOTER_PAGES = {
   about: "/about",
@@ -224,13 +243,7 @@ async function loadAdsterra() {
   var BANNER_160x300_KEY = "5091c1884d130d0fa92109f8cb33ef04"; // mobile rectangle
   var NATIVE_BANNER_KEY  = "9a8f3d45a5e3972afdd106f84d915a32"; // native (once per site)
   var SMARTLINK_URL = "https://www.effectivecpmnetwork.com/peb8adx7x8?key=d6929e561542e42037ce44b23a2cf603";
-  window.kbRenderAdSlot = function(container, width, height) {
-    if (!container) return;
-    if (!adEnabled("stepCardBanners")) return;
-    try {
-      container.appendChild(createIframeBanner(BANNER_320x50_KEY, width || 320, height || 50));
-    } catch(e) {}
-  };
+ 
 
   // ─── HELPER: Iframe-wrapped iframe-format banner ───
   function createIframeBanner(key, width, height) {
