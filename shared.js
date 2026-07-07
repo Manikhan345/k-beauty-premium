@@ -121,13 +121,13 @@ window.kbRenderAdSlot = function(container, width, height) {
   if (!adEnabled("stepCardBanners")) return;
   try {
     // Each slot type uses a UNIQUE ad unit so Adsterra counts them separately.
-    var slotType = container.getAttribute("data-ad-slot");
+   var slotType = container.getAttribute("data-ad-slot");
     if (slotType === "step-a") {
-      // 300x250 medium rectangle (unit 30021537)
-      container.appendChild(createIframeBanner("1d6d65355b3d8ae72a5a04ff32a09432", 300, 250));
-    } else {
-      // step-b: 160x300 mobile rectangle (unit 30021538)
+      // 160x300 small rectangle (unit 30021538)
       container.appendChild(createIframeBanner("5091c1884d130d0fa92109f8cb33ef04", 160, 300));
+    } else {
+      // step-b: 300x250 rectangle (unit 30021537) — avoids mobile 320x50 footer collision
+      container.appendChild(createIframeBanner("1d6d65355b3d8ae72a5a04ff32a09432", 300, 250));
     }
   } catch(e) {}
 };
