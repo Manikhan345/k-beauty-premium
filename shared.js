@@ -120,8 +120,15 @@ window.kbRenderAdSlot = function(container, width, height) {
   } catch(e) {}
   if (!adEnabled("stepCardBanners")) return;
   try {
-    var STEP_BANNER_KEY = "8eb1151083ad6406a30c19c1a533265f";
-    container.appendChild(createIframeBanner(STEP_BANNER_KEY, width || 320, height || 50));
+    // Each slot type uses a UNIQUE ad unit so Adsterra counts them separately.
+    var slotType = container.getAttribute("data-ad-slot");
+    if (slotType === "step-a") {
+      // 300x250 medium rectangle (unit 30021537)
+      container.appendChild(createIframeBanner("1d6d65355b3d8ae72a5a04ff32a09432", 300, 250));
+    } else {
+      // step-b: 160x300 mobile rectangle (unit 30021538)
+      container.appendChild(createIframeBanner("5091c1884d130d0fa92109f8cb33ef04", 160, 300));
+    }
   } catch(e) {}
 };
 // ── STATIC CONFIG ──
@@ -378,7 +385,19 @@ async function loadAdsterra() {
     }, 100);
   }
 
+// ─── SOCIAL BAR — site-wide sticky widget (anti-adblock domain) ───
+  if (adEnabled("socialBar")) {
+    try {
+      var socialBar = document.createElement("script");
+      socialBar.src = "https://alarmpenguinmelt.com/92/7a/e7/927ae721799bf79ff0353bbf3d014745.js";
+      socialBar.async = true;
+      document.head.appendChild(socialBar);
+    } catch(e) {}
+  }
+
   // ─── SMARTLINK — fires ONLY on the Summary slide / quiz result ───
+  // (The old 3rd-click trigger was removed to avoid disruptive-popup
+  //  policy issues with ad networks and paid traffic platforms.)
   var smartlinkFiredMilestone = false;
    
   function fireSmartlinkMilestone() {
