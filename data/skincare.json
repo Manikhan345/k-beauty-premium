@@ -1,5 +1,35 @@
 [
   {
+    "id": "beef_tallow_sunscreen_with_cle",
+    "name": "Beef Tallow Sunscreen with Clear Zinc: Non-Toxic SPF 30 Sunscreen for Face & Body, Natural Sunblock with Nourishing Tallow & Botanical Extracts 2 Fl Oz",
+    "price": 19.99,
+    "originalPrice": null,
+    "rating": 4.3,
+    "reviews": "64",
+    "badge": "New",
+    "tag": "Sunscreens & Tanning",
+    "subtag": "Sunscreens",
+    "image": "https://m.media-amazon.com/images/I/614rygIxDwL._SL1500_.jpg",
+    "url": "https://amzn.to/4aGSlRu",
+    "bought": "200+ bought in past month",
+    "prime": true
+  },
+  {
+    "id": "thank_you_farmer_sun_project_s",
+    "name": "Thank You Farmer Sun Project Shimmer Sun Essence SPF 30 40 Milliliter",
+    "price": 28,
+    "originalPrice": null,
+    "rating": 4.5,
+    "reviews": "118",
+    "badge": "New",
+    "tag": "Sunscreens & Tanning",
+    "subtag": "Sunscreens",
+    "image": "https://m.media-amazon.com/images/I/51EAXf5Y3tL._SL1500_.jpg",
+    "url": "https://amzn.to/4aJLQxb",
+    "bought": "50+ bought in past month",
+    "prime": true
+  },
+  {
     "id": "la_roche_posay_anthelios_uv_su",
     "name": "La Roche Posay Anthelios UV Sunscreen SPF 50, Daily Sunscreen for Face in 3 Formulas, UV Tone with Niacinamide, UV Hydra with Hyaluronic Acid, UV Clear with Azelaic Acid, Broad Spectrum Invisible SPF",
     "price": 39.97,
