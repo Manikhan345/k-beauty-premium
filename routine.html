@@ -99,18 +99,21 @@
   /* Hide side arrows on mobile, show swipe hint instead */
  /* Keep arrows visible on mobile as tappable buttons */
   /* Mobile: move arrows OUT of the card, below it, so they never cover content */
-  .routine-arrow-side {
+ .routine-arrow-side {
     display: flex;
-    position: static;
-    transform: none;
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
+  .routine-arrow-side.prev { left: 2px; right: auto; }
+  .routine-arrow-side.next { right: 2px; left: auto; }
   .routine-arrow-side:hover:not(:disabled) { transform: none; }
   .routine-slider-wrap { position: relative; padding-bottom: 8px; }
   .routine-controls-row {
