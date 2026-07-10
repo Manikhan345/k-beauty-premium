@@ -86,6 +86,7 @@ function buildRoutinesUI() {
     + '      <div class="kbr-row"><label>Excerpt (short description)</label><textarea id="kbrExcerpt" placeholder="A 5-step Korean morning routine for oily skin..."></textarea></div>'
     + '      <div class="kbr-row-2col">'
     + '        <div class="kbr-row"><label>Cover Image URL</label><input type="text" id="kbrCover" placeholder="https://..."></div>'
+    + '        <div class="kbr-row"><label>Ad Thumbnail Image URL (shown as first slide for paid traffic — leave blank to skip)</label><input type="text" id="kbrThumbnail" placeholder="https://kbeauty.fun/images/thumb.png"></div>'
     + '        <div class="kbr-row"><label>Image Position</label><select id="kbrCoverPos"><option value="center">Center</option><option value="top">Top</option><option value="bottom">Bottom</option></select></div>'
     + '      </div>'
     + '      <div class="kbr-row-3col">'
@@ -137,8 +138,9 @@ function newRoutine() {
   document.getElementById("kbrTitle").value = "";
   document.getElementById("kbrSlug").value = "";
   document.getElementById("kbrExcerpt").value = "";
-  document.getElementById("kbrCover").value = "";
+ document.getElementById("kbrCover").value = "";
   document.getElementById("kbrCoverPos").value = "center";
+  document.getElementById("kbrThumbnail").value = "";
   document.getElementById("kbrSkinType").value = "";
   document.getElementById("kbrTimeOfDay").value = "";
   document.getElementById("kbrDuration").value = "";
@@ -233,6 +235,7 @@ function editRoutine(index) {
   else if (r.cover && r.cover.url) { coverUrl = r.cover.url; if (r.cover.position) coverPos = r.cover.position; }
   document.getElementById("kbrCover").value = coverUrl;
   document.getElementById("kbrCoverPos").value = coverPos;
+  document.getElementById("kbrThumbnail").value = r.thumbnailImage || "";
   document.getElementById("kbrSkinType").value = r.skinType || "";
   document.getElementById("kbrTimeOfDay").value = r.timeOfDay || "";
   document.getElementById("kbrDuration").value = r.duration || "";
@@ -266,8 +269,9 @@ async function saveRoutine(status) {
   var title = document.getElementById("kbrTitle").value.trim();
   var slug = document.getElementById("kbrSlug").value.trim();
   var excerpt = document.getElementById("kbrExcerpt").value.trim();
-  var cover = document.getElementById("kbrCover").value.trim();
+ var cover = document.getElementById("kbrCover").value.trim();
   var coverPos = document.getElementById("kbrCoverPos").value;
+  var thumbnailImage = document.getElementById("kbrThumbnail").value.trim();
   var skinType = document.getElementById("kbrSkinType").value;
   var timeOfDay = document.getElementById("kbrTimeOfDay").value;
   var duration = document.getElementById("kbrDuration").value.trim();
@@ -316,6 +320,7 @@ async function saveRoutine(status) {
     duration: duration,
     stepCount: steps.length,
     cover: coverData,
+    thumbnailImage: thumbnailImage,
     tags: tags,
     date: routineDate,
     status: status,
