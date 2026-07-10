@@ -614,8 +614,12 @@ function renderRoutineBody(r) {
     (r.duration ? `<span class="routine-pill meta">${escapeAttr(r.duration)}</span>` : '') +
   '</div>';
 
-  const heroSlide = `<div class="step-slide hero-slide">${heroImg}<div class="hero-slide-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div>`;
+ const heroSlide = `<div class="step-slide hero-slide">${heroImg}<div class="hero-slide-content">${pills}<h1>${escapeAttr(r.title)}</h1>${r.intro ? `<div class="routine-intro">${escapeAttr(r.intro)}</div>` : ''}</div></div>`;
 
+  // Optional image-only thumbnail slide, shown FIRST (for paid traffic CTR)
+  const thumbSlide = r.thumbnailImage
+    ? `<div class="step-slide thumb-slide"><img class="thumb-slide-img" src="${escapeAttr(r.thumbnailImage)}" alt="${escapeAttr(r.title)}"><div class="thumb-click-hint"><span class="thumb-arrow">&rarr;</span><span>Click here</span></div></div>`
+    : '';
   const stepSlides = (r.steps || []).map(s => {
     const imgHTML = s.productImage
       ? `<img src="${escapeAttr(s.productImage)}" alt="${escapeAttr(s.productName)}" loading="lazy">`
@@ -658,7 +662,7 @@ function renderRoutineBody(r) {
     }
     closingSlide = `<div class="step-slide closing-slide"><div class="closing-slide-inner"><div class="closing-slide-header"><div class="label">Routine Complete</div><h2>You finished the routine</h2></div>${outroBlock}${sourcesBlock}${relatedBlock}${disclaimerBlock}</div></div>`;
   }
-  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-slider-section"><div class="routine-swipe-hint"><span>&larr;</span><span>Swipe to navigate</span><span>&rarr;</span></div><div class="routine-slider-viewport-wrapper"><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${heroSlide}${stepSlides}${closingSlide}</div></div><button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button><button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button></div><div class="routine-slider-controls"><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span></div></div>`;
+  return `<div class="routine-breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/routines">Routines</a> &rsaquo; <span>${escapeAttr(r.title)}</span></div><div class="routine-slider-section"><div class="routine-swipe-hint"><span>&larr;</span><span>Swipe to navigate</span><span>&rarr;</span></div><div class="routine-slider-viewport-wrapper"><div class="routine-slider-viewport"><div class="routine-slider-track" id="routineSliderTrack">${thumbSlide}${heroSlide}${stepSlides}${closingSlide}</div></div><button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button><button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button></div><div class="routine-slider-controls"><div class="routine-dots" id="routineDots"></div><span class="routine-step-counter" id="routineCounter"></span></div></div>`;
 }
 async function fallbackTemplate(origin, file) {
   const html = await fetch(`${origin}/${file}`).then(r => r.text()).catch(() => '');
