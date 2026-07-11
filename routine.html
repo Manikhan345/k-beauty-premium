@@ -33,8 +33,6 @@
 .routine-intro { font-size: 0.92rem; line-height: 1.62; color: var(--text-mid); }
 
 /* STEP slide -- horizontal */
-.step-slide:not(.hero-slide):not(.closing-slide):not(.thumb-slide) { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; padding: 32px 40px; align-items: center; }
-
 /* ── Ad thumbnail slide (first slide, image only) ── */
 .step-slide.thumb-slide {
   display: flex;
@@ -51,39 +49,42 @@
   object-fit: cover;
   display: block;
 }
-.thumb-click-hint {
+/* Small "click here" hint attached to the next arrow, shown only on slide 0 */
+.arrow-click-hint {
+  display: none;
   position: absolute;
-  bottom: 24px;
-  right: 24px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  top: 50%;
+  right: 56px;
+  transform: translateY(-50%);
   background: var(--accent);
   color: #fff;
-  padding: 10px 18px;
+  padding: 5px 12px;
   border-radius: 999px;
+  font-size: 0.78rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-  animation: thumbPulse 1.4s ease-in-out infinite;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  animation: arrowHintPulse 1.3s ease-in-out infinite;
   pointer-events: none;
-  z-index: 5;
+  z-index: 6;
 }
-.thumb-arrow {
-  font-size: 1.2rem;
-  animation: thumbNudge 1.4s ease-in-out infinite;
+.arrow-click-hint::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid var(--accent);
 }
-@keyframes thumbPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-}
-@keyframes thumbNudge {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(5px); }
+@keyframes arrowHintPulse {
+  0%, 100% { transform: translateY(-50%) translateX(0); opacity: 1; }
+  50% { transform: translateY(-50%) translateX(-4px); opacity: 0.85; }
 }
 @media (max-width: 800px) {
   .thumb-slide-img { max-height: 420px; }
-  .thumb-click-hint { bottom: 14px; right: 14px; padding: 8px 14px; font-size: 0.85rem; }
+  .arrow-click-hint { right: 40px; font-size: 0.7rem; padding: 4px 9px; }
 }
 .step-slide-img-col { display: flex; flex-direction: column; gap: 14px; height: 100%; justify-content: center; }
 .step-slide-img-wrap { background: #FFFFFF; border-radius: 18px; aspect-ratio: 1/1; max-height: 360px; display: flex; align-items: center; justify-content: center; padding: 26px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
@@ -185,7 +186,7 @@
   .routine-intro { font-size: 0.88rem; }
 
   /* Step slides stack */
- .step-slide:not(.hero-slide):not(.closing-slide):not(.thumb-slide) { grid-template-columns: 1fr; padding: 22px 44px; gap: 16px; }
+ .step-slide:not(.hero-slide):not(.closing-slide) { grid-template-columns: 1fr; padding: 22px 44px; gap: 16px; }
   .step-slide-img-col { gap: 10px; }
   .step-slide-img-wrap { aspect-ratio: 4/3; max-width: 240px; max-height: 200px; margin: 0 auto; padding: 18px; }
   .step-slide-ad-slot { min-height: 260px; max-width: 320px; margin: 0 auto; width: 100%; }
@@ -195,7 +196,7 @@
   .closing-slide-header h2 { font-size: 1.2rem; }
 }
 @media (max-width: 480px) {
- .step-slide.hero-slide, .step-slide:not(.hero-slide):not(.closing-slide):not(.thumb-slide) { padding: 20px 42px; }
+ .step-slide.hero-slide, .step-slide:not(.hero-slide):not(.closing-slide) { padding: 20px 42px; }
   .closing-slide-inner { padding: 20px 16px; }
 }
 .related-routines { margin-top: 0; }
@@ -280,7 +281,7 @@ function renderRoutineHTML(r) {
   '</div>';
 
   var thumbSlide = r.thumbnailImage
-    ? '<div class="step-slide thumb-slide"><img class="thumb-slide-img" src="' + escapeHTMLAttr(r.thumbnailImage) + '" alt="' + escapeHTMLAttr(r.title || "") + '"><div class="thumb-click-hint"><span class="thumb-arrow">&rarr;</span><span>Click here</span></div></div>'
+    ? '<div class="step-slide thumb-slide"><img class="thumb-slide-img" src="' + escapeHTMLAttr(r.thumbnailImage) + '" alt="' + escapeHTMLAttr(r.title || "") + '"></div>'
     : '';
   var heroSlide = '<div class="step-slide hero-slide">' +
     heroImg +
@@ -365,6 +366,7 @@ function renderRoutineHTML(r) {
         '</div>' +
         '<button class="routine-arrow-side prev" id="routinePrev" aria-label="Previous">&larr;</button>' +
         '<button class="routine-arrow-side next" id="routineNext" aria-label="Next">&rarr;</button>' +
+        '<span class="arrow-click-hint" id="arrowClickHint">Click here</span>' +
       '</div>' +
       '<div class="routine-slider-controls">' +
         '<div class="routine-dots" id="routineDots"></div>' +
@@ -470,10 +472,11 @@ function goToSlide(index) {
     if (index < 0 || index >= totalSlides) return;
     currentIndex = index;
 
-    // Once the user moves off the thumbnail slide, remove the "Click here" hint
-    if (index > 0) {
-      var hint = document.querySelector(".thumb-click-hint");
-      if (hint) hint.remove();
+    // The "click here" arrow hint shows ONLY on the thumbnail slide (slide 0)
+    var arrowHint = document.getElementById("arrowClickHint");
+    if (arrowHint) {
+      var hasThumb = !!document.querySelector(".thumb-slide");
+      arrowHint.style.display = (index === 0 && hasThumb) ? "block" : "none";
     }
     track.style.transform = "translateX(-" + (index * 100) + "%)";
     if (dots) {
