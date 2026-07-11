@@ -33,6 +33,8 @@
 .routine-intro { font-size: 0.92rem; line-height: 1.62; color: var(--text-mid); }
 
 /* STEP slide -- horizontal */
+.step-slide:not(.hero-slide):not(.closing-slide):not(.thumb-slide) { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; padding: 32px 40px; align-items: center; }
+
 /* ── Ad thumbnail slide (first slide, image only) ── */
 .step-slide.thumb-slide {
   display: flex;
@@ -79,9 +81,6 @@
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(5px); }
 }
-.thumb-arrow { font-size: 1.2rem; animation: thumbNudge 1.4s ease-in-out infinite; }
-@keyframes thumbPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-@keyframes thumbNudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
 @media (max-width: 800px) {
   .thumb-slide-img { max-height: 420px; }
   .thumb-click-hint { bottom: 14px; right: 14px; padding: 8px 14px; font-size: 0.85rem; }
@@ -186,7 +185,7 @@
   .routine-intro { font-size: 0.88rem; }
 
   /* Step slides stack */
- .step-slide:not(.hero-slide):not(.closing-slide) { grid-template-columns: 1fr; padding: 22px 44px; gap: 16px; }
+ .step-slide:not(.hero-slide):not(.closing-slide):not(.thumb-slide) { grid-template-columns: 1fr; padding: 22px 44px; gap: 16px; }
   .step-slide-img-col { gap: 10px; }
   .step-slide-img-wrap { aspect-ratio: 4/3; max-width: 240px; max-height: 200px; margin: 0 auto; padding: 18px; }
   .step-slide-ad-slot { min-height: 260px; max-width: 320px; margin: 0 auto; width: 100%; }
@@ -196,7 +195,7 @@
   .closing-slide-header h2 { font-size: 1.2rem; }
 }
 @media (max-width: 480px) {
- .step-slide.hero-slide, .step-slide:not(.hero-slide):not(.closing-slide) { padding: 20px 42px; }
+ .step-slide.hero-slide, .step-slide:not(.hero-slide):not(.closing-slide):not(.thumb-slide) { padding: 20px 42px; }
   .closing-slide-inner { padding: 20px 16px; }
 }
 .related-routines { margin-top: 0; }
