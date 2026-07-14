@@ -459,7 +459,9 @@ async function handleHomepage(origin) {
       const routinesHTML = topRoutines.map(r => {
         let coverUrl = '';
         let coverPos = 'center';
-        if (typeof r.cover === 'string') {
+        if (r.thumbnailImage) {
+          coverUrl = r.thumbnailImage;
+        } else if (typeof r.cover === 'string') {
           coverUrl = r.cover;
         } else if (r.cover && r.cover.url) {
           coverUrl = r.cover.url;
