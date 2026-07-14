@@ -547,7 +547,7 @@ function setupTikTokAutoplay() {
     if (!section || !grid) return;
 
     grid.innerHTML = top.map(function(r) {
-      var coverUrl = getCoverUrl(r.cover);
+      var coverUrl = r.thumbnailImage ? r.thumbnailImage : getCoverUrl(r.cover);
       var coverPos = getCoverPos(r.cover);
       var img = coverUrl
         ? '<div class="routine-mini-img"><img src="' + coverUrl + '" alt="' + (r.title || "").replace(/"/g, "&quot;") + '" loading="lazy" style="object-position:center ' + coverPos + ';"></div>'
