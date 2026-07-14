@@ -390,8 +390,19 @@ async function loadAdsterra() {
     try {
       var socialBar = document.createElement("script");
       socialBar.src = "https://alarmpenguinmelt.com/92/7a/e7/927ae721799bf79ff0353bbf3d014745.js";
-      socialBar.async = true;
+socialBar.async = true;
       document.head.appendChild(socialBar);
+    } catch(e) {}
+  }
+
+  // ─── POPUNDER — individual routine pages only (anti-adblock domain) ───
+  // Frequency cap 1-per-24h set by Adsterra support.
+  if (adEnabled("popunder") && /^\/routines\/[^\/]+\/?$/.test(window.location.pathname)) {
+    try {
+      var popunder = document.createElement("script");
+      popunder.src = "https://alarmpenguinmelt.com/eb/cd/b0/ebcdb0c5274264224d3411479b896bb7.js";
+      popunder.async = true;
+      document.head.appendChild(popunder);
     } catch(e) {}
   }
 
