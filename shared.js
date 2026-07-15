@@ -801,7 +801,7 @@ function renderFooter() {
 // PRODUCT CARD RENDERER
 // ═══════════════════════════════════════════════════════════════
 function renderProductCard(product, btnText, categoryKey) {
-  var btnLabel = btnText || "View on Amazon";
+  var btnLabel = btnText || "Buy on Amazon";
   var badgeClass = BADGE_MAP[product.badge] || "";
   var badgeHTML = product.badge ? '<span class="product-badge ' + badgeClass + '">' + product.badge + '</span>' : "";
 
