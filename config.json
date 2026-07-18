@@ -213,7 +213,7 @@
     "footer": true,
     "nativeBanner": true,
     "homepageBanners": true,
-    "stepCardBanners": true,
+    "stepCardBanners": false,
     "smartlinkClick": true,
     "smartlinkMilestone": true
   }
