@@ -43,6 +43,11 @@
 .btn-category:hover { background: var(--accent-light); border-color: var(--accent); }
 
 .divider { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+  .product-description { font-size: 0.95rem; line-height: 1.7; color: var(--text-mid); margin: 4px 0 8px; }
+.product-description p { margin: 0 0 0.8em; }
+.product-description strong { color: var(--text); font-weight: 600; }
+.product-description ul, .product-description ol { margin: 0 0 0.8em 1.4em; }
+.product-description h2, .product-description h3 { font-family: 'Noto Serif Display', serif; margin: 0.6em 0 0.3em; }
 
 /* Related Products */
 .related-section { max-width: 1200px; margin: 40px auto; padding: 0 16px; }
@@ -305,7 +310,8 @@ function renderProductDetail(p, cat) {
         (p.prime ? '<div class="prime-tag">✓ Prime FREE Delivery</div>' : '') +
         '<hr class="divider">' +
         tagHTML +
-        '<a href="' + (p.url || '#') + '" class="btn-amazon" target="_blank" rel="nofollow noopener">🛒 Buy on Amazon</a>'
+        (p.description ? '<div class="product-description">' + p.description + '</div>' : '') +
+        '<a href="' + (p.url || '#') + '" class="btn-amazon" target="_blank" rel="nofollow noopener">🛒 Buy on Amazon</a>' +
         '<a href="/' + cat + '" class="btn-category">← Browse more ' + catLabel + '</a>' +
       '</div>' +
     '</div>';
