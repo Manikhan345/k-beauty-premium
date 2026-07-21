@@ -558,7 +558,7 @@ socialBar.async = true;
 }
 
 window.addEventListener("load", function() {
-  setTimeout(loadAdsterra, 3000);
+  setTimeout(loadAdsterra, 1000);
 });
 function injectSEO() {
   var path = window.location.pathname;
