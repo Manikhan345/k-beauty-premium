@@ -187,14 +187,11 @@
   .routine-intro { font-size: 0.88rem; }
 
   /* Step slides stack */
-.step-slide:not(.hero-slide):not(.closing-slide) { display: flex; flex-direction: column; padding: 22px 18px; gap: 14px; }
-  .step-slide:not(.hero-slide):not(.closing-slide) .step-slide-img-wrap { order: -1; width: 100%; max-width: 260px; margin: 0 auto; aspect-ratio: 1/1; }
-  .step-slide:not(.hero-slide):not(.closing-slide) .step-slide-content { width: 100%; }
-  .step-slide-img-col { gap: 10px; }
- .step-slide-img-wrap { padding: 12px; }
+.step-slide:not(.hero-slide):not(.closing-slide) { display: flex !important; flex-direction: column !important; padding: 22px 18px; gap: 14px; }
+  .step-slide:not(.hero-slide):not(.closing-slide) .step-slide-img-wrap { order: -1 !important; width: 100% !important; max-width: 240px !important; margin: 0 auto !important; aspect-ratio: 1/1; padding: 12px; }
+  .step-slide:not(.hero-slide):not(.closing-slide) .step-slide-content { width: 100% !important; order: 0 !important; }
   .step-slide-ad-slot { min-height: 260px; max-width: 320px; margin: 0 auto; width: 100%; }
   .step-slide-title { font-size: 1.2rem; }
-
   .closing-slide-inner { padding: 22px 20px; }
   .closing-slide-header h2 { font-size: 1.2rem; }
 }
