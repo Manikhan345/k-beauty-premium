@@ -21,7 +21,7 @@
 
 /* HERO slide — horizontal layout, image left text right */
 .step-slide.hero-slide { display: grid; grid-template-columns: 1fr 1.1fr; gap: 30px; padding: 32px 40px; align-items: center; background: var(--card); }
-.hero-slide-img { width: 100%; height: 380px; border-radius: 18px; background: var(--warm-cream); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+.hero-slide-img { width: 100%; max-width: 440px; aspect-ratio: 4 / 5; height: auto; margin: 0 auto; border-radius: 18px; background: var(--warm-cream); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
 .hero-slide-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero-slide-content { display: flex; flex-direction: column; gap: 12px; }
 .routine-hero-pills { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -182,7 +182,7 @@
 
   /* Hero stacks: image top, content bottom */
   .step-slide.hero-slide { grid-template-columns: 1fr; padding: 22px 20px; gap: 16px; }
-  .hero-slide-img { height: 200px; max-width: 320px; margin: 0 auto; }
+ .hero-slide-img { max-width: 300px; aspect-ratio: 4 / 5; height: auto; margin: 0 auto; }
   .hero-slide-content h1 { font-size: 1.3rem; }
   .routine-intro { font-size: 0.88rem; }
 
